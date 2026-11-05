@@ -101,7 +101,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .tag.g{color:var(--green);border-color:var(--green)} .tag.b{color:var(--red);border-color:var(--red)} .tag.m{color:var(--gold);border-color:var(--gold)}
 
 /* sheets */
-.ov{position:fixed;inset:0;background:rgba(8,6,4,.8);display:flex;align-items:flex-end;justify-content:center;z-index:50;padding-top:max(10px,env(safe-area-inset-top,0px))}
+.ov{position:fixed;inset:0;background:rgba(8,6,4,.8);display:flex;align-items:flex-end;justify-content:center;z-index:90;padding-top:max(10px,env(safe-area-inset-top,0px))}
 .sheet{background:var(--panel);border:3px solid var(--line);border-bottom:none;width:100%;max-width:540px;max-height:100%;overflow:auto;
   padding:14px max(14px,env(safe-area-inset-right,0px)) calc(14px + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:10px;animation:up .16s ease-out}
 @keyframes up{from{transform:translateY(24px);opacity:.4}}
@@ -2370,7 +2370,7 @@ start();
 })();
 </script>
 
-<div id="cm-ver" style="position:fixed;left:0;right:0;bottom:max(0px,calc(env(safe-area-inset-bottom,0px) - 16px));text-align:center;font:8px/8px 'Press Start 2P',monospace;color:#a8957d;opacity:.7;pointer-events:none;z-index:40">v8 · 05 nov 2026</div>
+<div id="cm-ver" style="position:fixed;left:0;right:0;bottom:max(0px,calc(env(safe-area-inset-bottom,0px) - 16px));text-align:center;font:8px/8px 'Press Start 2P',monospace;color:#a8957d;opacity:.7;pointer-events:none;z-index:40">v9 · 05 nov 2026</div>
 <script>
 if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
 </script>
