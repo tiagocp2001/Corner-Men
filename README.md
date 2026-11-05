@@ -1,4 +1,4 @@
-# Ginásio Esperança
+# Corner Men
 
 Jogo de gestão de um ginásio de boxe, em pixel art. Joga-se no browser, funciona offline e pode ser adicionado ao ecrã principal do telemóvel.
 
