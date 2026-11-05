@@ -139,6 +139,11 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .sty.on{border-color:var(--gold)}
 .sty b{font-family:var(--f-display);font-size:7px;font-weight:400}
 .pips{display:flex;gap:2px;margin:2px 0}.pips i{width:12px;height:5px;background:#3a2d22;border:1px solid #5a4632}.pips i.f{background:var(--gold);border-color:var(--gold)}.pips i.x{opacity:.25}
+.menu{display:flex;flex-direction:column;gap:8px;align-items:stretch;text-align:center;padding:6px 0}
+.menu .mtitle{font-family:var(--f-display);font-size:22px;color:var(--gold);letter-spacing:.06em;text-shadow:3px 3px 0 #8f2a1b;margin:6px 0 2px}
+.menu .mlogo{display:flex;justify-content:center;margin-bottom:6px}
+.menu .btn small{display:block;font-family:var(--f-body);font-size:12px;letter-spacing:0;margin-top:4px;opacity:.85}
+.snd{font-size:9px!important;padding:5px 7px!important}
 .rdot{position:absolute;top:3px;right:3px;width:7px;height:7px;background:var(--red);border-radius:50%}
 .sumr{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:var(--panel2);border:2px solid var(--line);padding:6px 8px}
 .fatbox{display:grid;grid-template-columns:1fr 1fr;gap:4px 8px;background:var(--panel2);border:2px solid var(--line);padding:6px 8px}
@@ -215,7 +220,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
 <div id="app">
   <div class="hud" id="hud"></div>
-  <div class="screen" id="gymScreen"><canvas class="px" id="gym" width="240" height="136"></canvas><div class="tagl" id="tagl"></div><button class="snd" id="sndBtn"></button></div>
+  <div class="screen" id="gymScreen"><canvas class="px" id="gym" width="240" height="136"></canvas><div class="tagl" id="tagl"></div><button class="snd" id="pauseBtn" aria-label="Pausa">II</button></div>
   <div class="panel" id="panel"></div>
   <div class="nav" id="nav"></div>
 </div>
@@ -236,7 +241,7 @@ const fmt=n=>Math.round(n).toLocaleString('pt-PT');
 /* ================= DATA ================= */
 const CATS=['Pena','Superpena','Ligeiro','Pesado'];
 const CAT_KG={Pena:'57 kg',Superpena:'59 kg',Ligeiro:'61 kg',Pesado:'+91 kg'};
-const TUNE=Object.assign({hitDiv:350,hvy:1.55,resK:.3,qk:.45,mk:.45,cleanMul:6,normMul:.45,cleanP:.02,forK:.04,judge:.8,giftK:.35,train:.2,decay:.3,decayFloor:.88,formK:1,dmg:.88,edge:.25,sagg:0,hprec:6,flash:.4,ctr:.2,ctrA:.3,sdA:-.02,sdD:.1,sdC:.02,tdA:.03,tdB:.08,pc:.8,scm:.5,hd:.5,bdm:.5,cr:20,dk:30,dr:.55,topD:.13,sfB:.42,sfK:.116,rch:.03,fitP:.015,fitN:.006},window.__TUNE||{});
+const TUNE=Object.assign({hitDiv:350,hvy:1.55,resK:.3,qk:.45,mk:.45,cleanMul:6,normMul:.45,cleanP:.02,forK:.04,judge:.8,giftK:.35,train:.2,decay:.3,decayFloor:.88,formK:1,dmg:.88,edge:.25,sagg:0,hprec:6,flash:.4,ctr:.2,ctrA:.3,sdA:-.02,sdD:.1,sdC:.02,tdA:.03,tdB:.08,pc:.8,scm:.5,hd:.5,bdm:.5,cr:20,dk:30,dr:.55,topD:.13,punD:.12,punF:.4,ctrK:.06,inCtr:.3,inCl:.2,sfB:.42,sfK:.116,rch:.03,fitP:.015,fitN:.006},window.__TUNE||{});
 const CATMOD={Pena:{vol:1.25,dmg:.85,flash:.6,cost:.9},Superpena:{vol:1.15,dmg:.92,flash:.8,cost:.95},Ligeiro:{vol:1,dmg:1,flash:1,cost:1},Pesado:{vol:.75,dmg:1.3,flash:1.8,cost:1.25}};
 CATMOD.Pesado.dmg=TUNE.hvy;
 const GIFTS={
@@ -252,17 +257,17 @@ function fmods(x){const m={...(CATMOD[x.cat]||CATMOD.Ligeiro),chin:1};const g=x.
   if(g==='motor'){m.cost*=1-TUNE.mk*gk}
   if(g==='queixo'){m.chin=1-TUNE.qk*gk}
   return m}
-const STYLES=['In-fighter','Outboxer','Contra-atacante'];
+const STYLES=['In-fighter','Outboxer','Puncher'];
 const STYLE_MAP={'Agressivo':'In-fighter','Defensivo':'Outboxer'};
 function migrateStyles(o){if(o&&STYLE_MAP[o.style])o.style=STYLE_MAP[o.style]}
 function edge(a,b){
-  if((a==='In-fighter'&&b==='Outboxer')||(a==='Outboxer'&&b==='Contra-atacante')||(a==='Contra-atacante'&&b==='In-fighter'))return 1;
+  if((a==='In-fighter'&&b==='Outboxer')||(a==='Outboxer'&&b==='Puncher')||(a==='Puncher'&&b==='In-fighter'))return 1;
   if(a===b)return 0;return -1;
 }
 /* ---- body (height/reach) and style levels ---- */
 const H_BASE={Pena:170,Superpena:172,Ligeiro:175,Pesado:190};
-const STY0=()=>({'In-fighter':0,'Outboxer':0,'Contra-atacante':0});
-const STY_COACH={'In-fighter':'cIn','Outboxer':'cOut','Contra-atacante':'cCtr'};
+const STY0=()=>({'In-fighter':0,'Outboxer':0,'Puncher':0});
+const STY_COACH={'In-fighter':'cIn','Outboxer':'cOut','Puncher':'cPun'};
 function rollBody(cat){const h=(H_BASE[cat]||175)+RI(-7,7);return{h,r:h+RI(-3,8)}}
 function bodyRel(x){const b=H_BASE[x.cat]||175;return((x.h||b)-b)+(((x.r||b+2.5)-(x.h||b))-2.5)*.8}
 function bodyType(x){const v=bodyRel(x);return v<=-3.5?'Compacto':v>=3.5?'Longo':'Médio'}
@@ -288,7 +293,7 @@ function bodyLine(x){return `${cm(x.h)} · alcance ${cm(x.r)} · corpo ${bodyTyp
 /* fight-side helpers */
 function sf(x){return TUNE.sfB+TUNE.sfK*clamp(x.slv||1,0,5)}
 function skillF(x,ks){const v=ks.reduce((t,k)=>t+(x.skills[k]||0),0)/ks.length;return clamp((v-1)/3.5,.15,1)}
-function topF(x){const dl=((x.def&&(x.def.bloqueio+x.def.esquiva+x.def.clinch))||1)/3,sl=Object.values(x.skills).reduce((t,v)=>t+(v||0),0)/6;return 1/(1+TUNE.topD*Math.max(0,dl+sl-5))}
+function topF(x){const dl=((x.def&&(x.def.bloqueio+x.def.esquiva+x.def.clinch))||1)/3,sl=Object.values(x.skills).reduce((t,v)=>t+(v||0),0)/Math.max(6,Object.keys(x.skills).length);return 1/(1+TUNE.topD*Math.max(0,dl+sl-5))}
 function phys(att,def,k,body){
   const d=clamp(((att.r||175)-(def.r||175))/12,-1,1);let b=0;
   const longP=(k==='jab'||k==='direto')&&!body;
@@ -334,7 +339,7 @@ const TR={
   bola:{n:'Bola medicinal',eq:'bola',g:{resistencia:2.2,defesa:1},f:12,d:'Aguentar golpes'},
   estIn:{n:'Estilo In-fighter',eq:null,up:'cIn',sty:'In-fighter',g:{},f:12,d:'Aprende o estilo In-fighter'},
   estOut:{n:'Estilo Outboxer',eq:null,up:'cOut',sty:'Outboxer',g:{},f:11,d:'Aprende o estilo Outboxer'},
-  estCtr:{n:'Estilo Contra-ataque',eq:null,up:'cCtr',sty:'Contra-atacante',g:{},f:10,d:'Aprende o contra-ataque'},
+  estPun:{n:'Estilo Puncher',eq:null,up:'cPun',sty:'Puncher',g:{},f:12,d:'Aprende o estilo Puncher'},
   descanso:{n:'Descanso',eq:null,g:{},f:-22,d:'Baixa a fadiga'}
 };
 const EQ={
@@ -354,11 +359,11 @@ const UPG=[
   {id:'treinador',n:'Treinador assistente',cost:2000,d:'+20% nos treinos, segura os pads, ensina o Gancho. Salário 60 €/semana.'},
   {id:'cIn',n:'Treinador de In-fighter',cost:1500,coach:true,d:'Ensina o estilo In-fighter: pressão, trabalho de corpo, entrar por baixo. Novo treino no plano. Salário 40 €/semana.'},
   {id:'cOut',n:'Treinador de Outboxer',cost:1500,coach:true,d:'Ensina o estilo Outboxer: jab, distância e pés. Novo treino no plano. Salário 40 €/semana.'},
-  {id:'cCtr',n:'Treinador de Contra-ataque',cost:1500,coach:true,d:'Ensina o estilo Contra-atacante: ler, esquivar e responder. Novo treino no plano. Salário 40 €/semana.'},
+  {id:'cPun',n:'Treinador de Puncher',cost:1500,coach:true,d:'Ensina o estilo Puncher: pés plantados, escolher o momento e bater pesado. Novo treino no plano. Salário 40 €/semana.'},
   {id:'ringue',n:'Ringue a sério',cost:6000,d:'+6 popularidade, +3 lugares. O sparring rende mais. Renda +20 €/semana.'}
 ];
 const SKILLS={jab:{n:'Jab',d:.7,h:.08},direto:{n:'Direto',d:1.05,h:0},gancho:{n:'Gancho',d:1.4,h:-.07},uppercut:{n:'Uppercut',d:1.3,h:-.03},
-  corpoDireto:{n:'Direto ao corpo',d:.85,h:.03,body:true,anim:'direto',arm:'R'},figado:{n:'Gancho ao fígado',d:1.1,h:-.03,body:true,anim:'gancho',arm:'L',liver:true}};
+  corpoDireto:{n:'Direto ao corpo',d:.85,h:.03,body:true,anim:'direto',arm:'R'},figado:{n:'Gancho ao fígado',d:1.1,h:-.03,body:true,anim:'gancho',arm:'L',liver:true},contra:{n:'Contra-golpe',d:1.15,h:.06,anim:'direto',arm:'R',counter:true}};
 const DEFS={bloqueio:{n:'Bloqueio'},esquiva:{n:'Esquiva lateral'},clinch:{n:'Clinch'}};
 const COMBOS=[
   {id:'umdois',n:'Um-dois',seq:['jab','direto'],req:{jab:1,direto:1}},
@@ -385,7 +390,7 @@ const DAYS=['SEGUNDA','TERÇA','QUARTA','QUINTA','SEXTA','SÁBADO'];
 
 /* ================= STATE ================= */
 let S=null;
-const KEY='ginasio-esperanca-v5';
+const KEY='corner-men-v6';
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function load(){try{const t=localStorage.getItem(KEY);return t?JSON.parse(t):null}catch(e){return null}}
 function look(){return{skin:pick(SKINS),hair:pick(HAIRS),trunk:pick(TRUNKS)}}
@@ -394,7 +399,7 @@ function makeAthlete(cat,o={}){
   const bd=o.h?{h:o.h,r:o.r}:rollBody(cat);
   const a={h:bd.h,r:bd.r,id:'a'+Date.now()+RI(0,9999),name:o.name||pick(FIRST)+' '+pick(LAST),nick:o.nick||pick(NICKS),age:o.age||RI(16,21),cat,
     style:o.style||styleForBody(bodyType({cat,h:bd.h,r:bd.r})),trait:o.trait||pick(Object.keys(TRAITS)),salary:o.salary||RI(30,45),look:o.look||look(),
-    attrs:{},cap:{},pot,fatigue:0,conf:55,injury:0,skills:{jab:1,direto:0,gancho:0,uppercut:0,corpoDireto:0,figado:0},xp:{jab:0,direto:0,gancho:0,uppercut:0,corpoDireto:0,figado:0},def:{bloqueio:1,esquiva:0,clinch:0},dxp:{bloqueio:0,esquiva:0,clinch:0},combos:[],recovery:0,
+    attrs:{},cap:{},pot,fatigue:0,conf:55,injury:0,skills:{jab:1,direto:0,gancho:0,uppercut:0,corpoDireto:0,figado:0,contra:0},xp:{jab:0,direto:0,gancho:0,uppercut:0,corpoDireto:0,figado:0,contra:0},def:{bloqueio:1,esquiva:0,clinch:0},dxp:{bloqueio:0,esquiva:0,clinch:0},combos:[],recovery:0,
     rec:{w:0,l:0,d:0,ko:0},tier:0,rank:10,titles:[],fight:null,offers:[],plan:['saco','corrida','sparring'],gift:o.gift===undefined?rollGift(cat):o.gift,giftKnown:false,weeks:0,hint:null,base:{},peak:{},lastT:{},tlog:[],refusals:0};
   for(const[k]of ATTRS){a.attrs[k]=RI(8,20)+(o.boost||0);a.cap[k]=clamp(pot+RI(-12,12),28,99)}
   if(o.attrs)Object.assign(a.attrs,o.attrs);
@@ -408,7 +413,7 @@ function starStr(n){return '★'.repeat(n)+'☆'.repeat(5-n)}
 function potRange(a){const s=stars(a.pot),m=S.up.treinador?0:1;const lo=clamp(s-m,1,5),hi=clamp(s+m,1,5);return lo===hi?starStr(lo):starStr(lo)+' a '+starStr(hi)}
 function newGame(){
   const st0=[RI(9,16),RI(9,16),RI(9,16),RI(9,16),RI(9,16)];{let sum=st0.reduce((t,v)=>t+v,0);while(sum<62){st0[RI(0,4)]++;sum++}while(sum>62){const i=RI(0,4);if(st0[i]>8){st0[i]--;sum--}}}
-  const cat0=pick(CATS),bd0=rollBody(cat0);let sty0=styleForBody(bodyType({cat:cat0,...bd0}));while(styleFit({cat:cat0,...bd0},sty0)<0)sty0=styleForBody(bodyType({cat:cat0,...bd0}));
+  const cat0='Pena',bd0=rollBody(cat0);let sty0=styleForBody(bodyType({cat:cat0,...bd0}));while(styleFit({cat:cat0,...bd0},sty0)<0)sty0=styleForBody(bodyType({cat:cat0,...bd0}));
   const rui=makeAthlete(cat0,{h:bd0.h,r:bd0.r,style:sty0,age:RI(17,20),salary:35,pot:RI(64,76),slv:2,look:{...look(),trunk:'#d4452f'},attrs:Object.fromEntries(ATTRS.map(([k],i)=>[k,st0[i]]))});
   S={week:1,money:500,pop:5,members:4,up:{},eq:{saco:1,sparring:1,corda:0,pera:0,pads:0,pesos:0,esquiva:0,pneu:0,bola:0},
     roster:[rui],sel:0,tab:'gym',sub:'ficha',shopSub:'eq',
@@ -470,10 +475,11 @@ function makeOpp(a,title){
   const r=t.base+RI(-4,6)+Math.min(rv.lvl,6)+(12-a.rank)*.9+(title?6:0);
   const bd=rollBody(a.cat);const st=styleForBody(bodyType({cat:a.cat,...bd}));
   const used=S.roster.map(x=>x.nick);const o={name:pick(FIRST)+' '+pick(LAST),nick:pick(NICKS.filter(n=>!used.includes(n))),academy:rv.n,style:st,look:{...look(),trunk:pick(TRUNKS.filter(c=>c!==a.look.trunk))},attrs:{},
-    skills:{jab:1+Math.floor(r/25),direto:r>22?1+Math.floor(r/30):0,gancho:r>34?1+Math.floor(r/40):0,uppercut:r>28?1+Math.floor(r/38):0,corpoDireto:r>30?1+Math.floor(r/45):0,figado:r>40?1+Math.floor(r/50):0},def:{bloqueio:1+Math.floor(r/30),esquiva:r>26?1+Math.floor(r/40):0,clinch:r>22?1+Math.floor(r/45):0},rating:0,trait:pick(Object.keys(TRAITS))};
+    skills:{jab:1+Math.floor(r/25),direto:r>22?1+Math.floor(r/30):0,gancho:r>34?1+Math.floor(r/40):0,uppercut:r>28?1+Math.floor(r/38):0,corpoDireto:r>30?1+Math.floor(r/45):0,figado:r>40?1+Math.floor(r/50):0,contra:r>30?Math.min(5,1+Math.floor((r-30)/12)):0},def:{bloqueio:1+Math.floor(r/30),esquiva:r>26?1+Math.floor(r/40):0,clinch:r>22?1+Math.floor(r/45):0},rating:0,trait:pick(Object.keys(TRAITS))};
   for(const[k]of ATTRS)o.attrs[k]=clamp(r+RI(-7,7),5,99);
-  if(st==='In-fighter')o.attrs.forca+=4;if(st==='Outboxer')o.attrs.defesa+=4;if(st==='Contra-atacante')o.attrs.velocidade+=4;
+  if(st==='In-fighter')o.attrs.forca+=4;if(st==='Outboxer')o.attrs.defesa+=4;if(st==='Puncher')o.attrs.forca+=4;
   o.rating=rating(o);o.made=S.week;o.cat=a.cat;o.gift=rollGift(a.cat);o.h=bd.h;o.r=bd.r;initBody(o,clamp(a.tier+1+RI(0,1)+(title?1:0),1,5));
+  if(a.tier>=2){const others=shuffle(STYLES.filter(x=>x!==o.style));others.slice(0,a.tier>=3?2:1).forEach(x=>{o.sty[x]=Math.min(styleCap(o,x),Math.max(1,o.sty[o.style]-RI(0,1)))})}
   const n=clamp(Math.round(RI(0,3)+a.tier*4+(r-14)/5),0,40);const w=Math.round(n*R(.5,.85));
   o.rec={w,l:n-w,ko:Math.round(w*R(.2,.6))};
   o.fk=n>=4&&Math.random()<clamp((o.attrs.tecnica-35)/60,0,.6)?RI(1,Math.max(1,Math.floor(n/4))):0;
@@ -500,7 +506,7 @@ function showScout(o,a,when){
   const rows=ATTRS.map(([k,nm])=>{const[lo,hi]=sc.attrs[k];const mine=a.attrs[k];
     return `<div class="stat" style="grid-template-columns:78px 1fr 54px"><span>${nm}</span><div class="bar" style="height:12px"><i style="left:${clamp(lo,0,100)}%;width:${clamp(hi-lo,1,100)}%;background:var(--blue);opacity:.75"></i><b style="position:absolute;top:-2px;bottom:-2px;width:2px;left:${clamp(mine,0,99)}%;background:var(--gold)"></b></div><span class="num" style="font-size:16px">${lo}–${hi}</span></div>`}).join('');
   const weeks=S.week-o.made;
-  return info(`FICHA DE ${o.nick.toUpperCase()}`,`<div class="r" style="grid-template-columns:1fr"><div><strong>${o.name} "${o.nick}"</strong><p>${o.academy} · ${o.style} ${styleLv(o,o.style)} · ${o.rec.w}V ${o.rec.l}D (${o.rec.ko} KO)</p><p>${bodyLine(o)} · ${(()=>{const d=Math.round((o.r||0)-(a.r||0));return d>0?`<span class="warn">+${d} cm de alcance que ${a.nick}</span>`:d<0?`<span class="good">${d} cm de alcance que ${a.nick}</span>`:'mesmo alcance'})()}</p></div></div>
+  return info(`FICHA DE ${o.nick.toUpperCase()}`,`<div class="r" style="grid-template-columns:1fr"><div><strong>${o.name} "${o.nick}"</strong><p>${o.academy} · ${o.style} ${styleLv(o,o.style)}${n>=5&&o.sty?STYLES.filter(x=>x!==o.style&&styleLv(o,x)>0).map(x=>` · também ${x}`).join(''):''} · ${o.rec.w}V ${o.rec.l}D (${o.rec.ko} KO)</p><p>${bodyLine(o)} · ${(()=>{const d=Math.round((o.r||0)-(a.r||0));return d>0?`<span class="warn">+${d} cm de alcance que ${a.nick}</span>`:d<0?`<span class="good">${d} cm de alcance que ${a.nick}</span>`:'mesmo alcance'})()}</p></div></div>
     <p class="hint">${prec} (${n} luta${n===1?'':'s'} vista${n===1?'':'s'}). Barra azul: onde achamos que está. Linha dourada: ${a.nick}.</p>
     <div class="stats">${rows}</div>
     <p class="hint">Golpes que já lhe vimos: ${sc.skills.map(k=>SKILLS[k].n).join(', ')||'nenhum registo'}.</p>
@@ -586,7 +592,7 @@ let busy=false;
 function render(){
   if(!S)return;
   $('#hud').innerHTML=`<div><small>DINHEIRO</small><b>${fmt(S.money)} €</b></div><div><small>POPULAR.</small><b>${Math.round(S.pop)}</b></div><div><small>SÓCIOS</small><b>${S.members}/${capacity()}</b></div><div><small>SEMANA</small><b>${S.week}</b></div>`;
-  $('#tagl').style.display='none';{const sb=$('#sndBtn');if(sb)sb.textContent=sndLabel()}
+  $('#tagl').style.display='none';
   const nOff=S.roster.reduce((t,a)=>t+a.offers.length,0),nRev=S.roster.filter(needsReview).length;
   const tabs=[['gym','GINÁSIO'],['ath','ATLETAS'],['go',''],['fights','LUTAS'],['shop','LOJA']];
   $('#nav').innerHTML=tabs.map(([id,n])=>id==='go'
@@ -652,7 +658,7 @@ function panelGym(){
   return `<div class="kv"><div><small>ENTRADAS/SEM</small><b class="good">+${fmt(fees)} €</b></div><div><small>DESPESAS/SEM</small><b class="warn">-${fmt(sal)} €</b></div><div><small>SALDO/SEM</small><b class="${fees-sal>=0?'good':'warn'}">${fees-sal>=0?'+':''}${fmt(fees-sal)} €</b></div></div>
   ${fights?`<h3>LUTAS MARCADAS</h3><div class="rows">${fights}</div>`:`<div class="empty">Nenhuma luta marcada. Vê as propostas em Lutas.</div>`}
   <h3>DIÁRIO</h3><div class="log">${S.log.map(l=>`<span><b>S${l.w}</b> ${l.t}</span>`).join('')}</div>
-  <div class="row2"><button class="btn" id="helpBtn">COMO JOGAR</button><button class="btn" id="resetBtn">NOVO JOGO</button></div>`;
+  <div class="row2"><button class="btn" id="helpBtn">COMO JOGAR</button><button class="btn" id="menuBtn">MENU</button></div>`;
 }
 function panelAth(){
   const a=cur();const t=TIERS[a.tier];
@@ -733,6 +739,7 @@ function lockReason(a,k){
   if(k==='uppercut'){if(!S.eq.pads)return 'precisa de pads';if(a.attrs.forca<25)return 'força 25';if(a.attrs.tecnica<25)return 'técnica 25';return 'a aprender'}
   if(k==='corpoDireto')return (a.skills.direto||0)<2?'direto nv 2':'a aprender';
   if(k==='figado'){if((a.skills.gancho||0)<2)return 'gancho nv 2';if(a.attrs.forca<30)return 'força 30';return 'a aprender'}
+  if(k==='contra'){if(a.attrs.tecnica<25)return 'técnica 25';if(!(a.def&&a.def.esquiva))return 'esquiva lateral nv 1';return 'a aprender'}
   if(k==='esquiva'){if(!S.eq.esquiva)return 'precisa de corda de esquiva';if(a.attrs.velocidade<20)return 'velocidade 20';return 'a aprender'}
   if(k==='clinch')return a.attrs.resistencia<20?'resistência 20':'a aprender';
   return '';
@@ -764,6 +771,7 @@ function checkUnlocks(a){
   if(!a.skills.uppercut&&S.eq.pads&&a.attrs.forca>=25&&a.attrs.tecnica>=25){a.skills.uppercut=1;out.push('Uppercut')}
   if(!a.skills.corpoDireto&&(a.skills.direto||0)>=2){a.skills.corpoDireto=1;out.push('Direto ao corpo')}
   if(!a.skills.figado&&(a.skills.gancho||0)>=2&&a.attrs.forca>=30){a.skills.figado=1;out.push('Gancho ao fígado')}
+  if(!a.skills.contra&&a.attrs.tecnica>=25&&a.def&&a.def.esquiva>=1){a.skills.contra=1;a.xp.contra=a.xp.contra||0;out.push('Contra-golpe')}
   a.def=a.def||{bloqueio:1,esquiva:0,clinch:0};
   if(!a.def.esquiva&&S.eq.esquiva&&a.attrs.velocidade>=20){a.def.esquiva=1;out.push('Esquiva lateral')}
   if(!a.def.clinch&&a.attrs.resistencia>=20){a.def.clinch=1;out.push('Clinch')}
@@ -788,7 +796,7 @@ function help(){
 /* ================= INPUT ================= */
 document.addEventListener('click',e=>{
   const t=e.target.closest('button');if(!t||!S)return;
-  if(t.id==='sndBtn'||t.id==='sndF'){SFX.setOn(!SFX.on);t.textContent=sndLabel();SFX.play('click');return}
+  if(t.id==='pauseBtn'||t.id==='pauseF'){SFX.play('click');pauseMenu();return}
   if(!t.disabled)SFX.play('click');
   const d=t.dataset;
   if(d.tab){S.tab=d.tab;render();return}
@@ -811,6 +819,7 @@ document.addEventListener('click',e=>{
     S.roster.forEach(checkUnlocks);note(`Compraste: ${u.n}.`);render();return}
   if(t.id==='goBtn'){advanceWeek();return}
   if(t.id==='helpBtn'){help();return}
+  if(t.id==='menuBtn'){pauseMenu();return}
   if(t.id==='resetBtn'){const m=modal(`<h2>COMEÇAR DE NOVO?</h2><p class="hint">Perdes todo o progresso deste ginásio.</p><div class="row2"><button class="btn" id="rNo">CANCELAR</button><button class="btn red" id="rYes">APAGAR TUDO</button></div>`);
     m.querySelector('#rNo').onclick=closeModal;m.querySelector('#rYes').onclick=async()=>{ENT=[];occ={};newGame();closeModal();await setupGym();render()};return}
 });
@@ -889,6 +898,7 @@ async function advanceWeek(){
       const m=(id==='sparring'&&S.up.ringue)?1.25:1;
       for(const[k,b]of Object.entries(t.g))gain(a,k,b,q,m);
       if(t.sty)addStyleXP(a,t.sty,Math.round(4*q),up,true);
+      if(id==='sparring'&&a.skills.contra>0){a.xp.contra=(a.xp.contra||0)+Math.round(2*q);while(a.skills.contra<5&&a.xp.contra>=a.skills.contra*8){a.xp.contra-=a.skills.contra*8;a.skills.contra++;up.push(`Contra-golpe nv ${a.skills.contra}`)}}
       if(id==='sparring')addStyleXP(a,a.style,Math.max(1,Math.round(1.4*q*m)),up,false);
       if(t.xp){const known=Object.keys(SKILLS).filter(k=>a.skills[k]>0);let pts=Math.round(5*q);
         while(pts-->0){const k=pick(known);a.xp[k]++;while(a.skills[k]<5&&a.xp[k]>=a.skills[k]*8){a.xp[k]-=a.skills[k]*8;a.skills[k]++;up.push(`${SKILLS[k].n} nv ${a.skills[k]}`)}}}
@@ -1139,9 +1149,17 @@ function drawGym(now){
   const cv=$('#gym');if(!cv||!S)return;const x=cv.getContext('2d');
   const t=now/1000;
   const painted=S.up.pintura;
-  x.fillStyle=painted?'#7b3e2c':'#4b4038';x.fillRect(0,0,240,62);
-  if(painted){x.fillStyle='#e8b13a';x.fillRect(0,50,240,3);x.fillStyle='#5f2e20';for(let i=0;i<240;i+=12)x.fillRect(i,0,1,50)}
-  else{x.fillStyle='#3c332c';x.fillRect(150,8,14,10);x.fillRect(66,40,20,6);x.fillRect(206,4,6,18);x.fillStyle='#2b241f';x.fillRect(178,14,1,12);x.fillRect(179,25,6,1)}
+  if(painted){
+    x.fillStyle='#7b3e2c';x.fillRect(0,0,240,62);x.fillStyle='rgba(0,0,0,.09)';for(let i=0;i<240;i+=24)x.fillRect(i,3,1,40);
+    x.fillStyle='#5f2e20';x.fillRect(0,0,240,3);x.fillStyle='#e8b13a';x.fillRect(0,43,240,2);
+    x.fillStyle='#4a2a1a';x.fillRect(0,45,240,13);x.fillStyle='#5a3521';for(let i=0;i<240;i+=12)x.fillRect(i+1,47,10,9);x.fillStyle='rgba(255,220,160,.08)';for(let i=0;i<240;i+=12)x.fillRect(i+1,47,10,1);
+  }else{
+    x.fillStyle='#3a302a';x.fillRect(0,0,240,62);
+    const BC=['#5a4436','#553f32','#5e4a3b','#4f3c30','#58463a'];
+    for(let r=0;r<12;r++){const y=r*5;for(let i=-(r%2)*6;i<240;i+=12){x.fillStyle=BC[((i*7+r*13)>>>0)%5];x.fillRect(i+1,y+1,11,4)}}
+    x.fillStyle='rgba(20,14,10,.28)';x.fillRect(0,0,240,58);
+    x.fillStyle='rgba(30,40,30,.35)';x.fillRect(150,6,16,14);x.fillRect(146,20,10,8);x.fillRect(204,2,9,24);x.fillRect(60,36,14,10);
+    x.fillStyle='#2b241f';x.fillRect(178,14,1,12);x.fillRect(179,25,6,1);x.fillRect(30,6,1,9);x.fillRect(31,14,5,1);x.fillRect(84,48,1,6)}
   x.fillStyle='#1e2a33';x.fillRect(166,8,26,20);x.fillStyle='#7aa6c2';x.fillRect(168,10,10,7);x.fillRect(180,10,10,7);x.fillRect(168,19,10,7);x.fillRect(180,19,10,7);
   // level poster
   {const lv=level(),px0=195,py0=11;
@@ -1156,12 +1174,31 @@ function drawGym(now){
    const ink=painted?'#8f2a1b':'#f1e5d0';const L=pxLines(S.gymName||'Ginásio Esperança',13).slice(0,2);
    if(L.length===1)pxText(x,L[0],sx+16+26,sy+6,ink,1,'center');else{pxText(x,L[0],sx+16+26,sy+3,ink,1,'center');pxText(x,L[1],sx+16+26,sy+9,ink,1,'center')}}
   x.fillStyle='#8fa3ad';x.fillRect(100,30,34,22);x.fillStyle='#b9cad1';x.fillRect(102,32,6,18);x.fillStyle='#2b241f';x.fillRect(99,29,36,1);x.fillRect(99,52,36,1);
+  x.fillStyle='rgba(255,255,255,.18)';x.fillRect(110,32,2,18);x.fillRect(113,32,1,18);
+  // whiteboard with the week's plan
+  x.fillStyle='#6b6b6b';x.fillRect(63,28,32,19);x.fillStyle='#e3e8e5';x.fillRect(64,29,30,17);pxText(x,'TREINO',79,30,'#b7311f',1,'center');
+  x.fillStyle='#2d6db3';for(let i=0;i<3;i++){x.fillRect(66,37+i*3,4+((i*5)%7),1);x.fillRect(76,37+i*3,10-((i*3)%5),1)}x.fillStyle='#1b1410';x.fillRect(70,46,6,1);x.fillStyle='#d4452f';x.fillRect(77,46,3,1);
+  // fight poster (left)
+  x.fillStyle='#1b140c';x.fillRect(2,8,13,19);x.fillStyle=painted?'#d4452f':'#9a3626';x.fillRect(3,9,11,17);x.fillStyle='#f1e5d0';x.fillRect(3,9,11,4);pxText(x,'BOX',8,9,'#1b140c',1,'center');
+  x.fillStyle='#1b140c';x.fillRect(5,15,3,3);x.fillRect(9,15,3,3);x.fillRect(4,18,5,6);x.fillRect(8,18,5,6);x.fillStyle='#e8b13a';x.fillRect(3,24,11,2);
+  // lockers (with new changing rooms) or an old cabinet + poster
+  if(S.up.balneario){for(let i=0;i<3;i++){const lx=158+i*11;x.fillStyle='#2a3a48';x.fillRect(lx,32,10,26);x.fillStyle='#3b5266';x.fillRect(lx+1,33,8,24);x.fillStyle='#22303c';x.fillRect(lx+2,35,6,1);x.fillRect(lx+2,37,6,1);x.fillRect(lx+2,39,6,1);x.fillStyle='#c9ccd0';x.fillRect(lx+7,45,1,3)}x.fillStyle='#e6e6e6';x.fillRect(181,29,9,5);x.fillRect(183,34,5,1)}
+  else{x.fillStyle='#3a2a1e';x.fillRect(160,40,16,18);x.fillStyle='#4e3a2a';x.fillRect(161,41,14,7);x.fillRect(161,49,14,8);x.fillStyle='#c9b06a';x.fillRect(167,44,2,1);x.fillRect(167,52,2,1);
+    x.fillStyle='#e6e6e6';x.fillRect(179,36,10,8);x.fillStyle='#d4452f';x.fillRect(183,37,2,6);x.fillRect(181,39,6,2);
+    x.fillStyle='#1b140c';x.fillRect(161,31,13,8);x.fillStyle='#e8b13a';x.fillRect(162,32,11,6);pxText(x,'SAB',167,33,'#1b140c',1,'center')}
   x.fillStyle='#2b241f';x.fillRect(216,30,22,32);x.fillStyle='#3d2e22';x.fillRect(218,32,18,30);x.fillStyle='#e8b13a';x.fillRect(233,46,2,2);
   x.fillStyle='#7aa6c2';x.fillRect(208,52,6,8);x.fillStyle='#ddd';x.fillRect(207,60,8,4);
   x.fillStyle='#2b1f17';x.fillRect(0,58,240,4);
-  for(let r=0,y=62;y<136;r++,y+=6){x.fillStyle=r%2?'#5e4029':'#634430';x.fillRect(0,y,240,6);x.fillStyle='#4e3420';x.fillRect(0,y,240,1);
-    for(let i=(r*17)%30;i<240;i+=30)x.fillRect(i,y,1,6);x.fillStyle='rgba(255,220,170,.05)';x.fillRect(0,y+1,240,1)}
+  {const PC=painted?['#6a4a30','#704f34','#654630','#73533a']:['#5e4029','#634430','#5a3d27','#664633'];
+  for(let r=0,y=62;y<136;r++,y+=6){const off=(r*17)%30;
+    for(let i=off-30;i<240;i+=30){x.fillStyle=PC[((i*3+r*7)>>>0)%4];x.fillRect(i,y,30,6)}
+    x.fillStyle='#4e3420';x.fillRect(0,y,240,1);for(let i=off;i<240;i+=30)x.fillRect(i,y,1,6);
+    x.fillStyle='rgba(255,220,170,.06)';x.fillRect(0,y+1,240,1);
+    x.fillStyle='rgba(0,0,0,.08)';for(let i=off+7;i<240;i+=30)if(((i+r)%3)===0)x.fillRect(i,y+3,3,1)}
+  x.fillStyle='rgba(0,0,0,.12)';x.fillRect(80,88,70,12);x.fillRect(96,100,40,10);}
+  x.fillStyle='rgba(0,0,0,.3)';x.fillRect(9,86,62,2);x.fillRect(11,124,62,2);
   x.fillStyle='#2a2a2c';x.fillRect(8,66,62,20);x.fillRect(10,98,62,26);x.fillStyle='#333336';for(let i=8;i<70;i+=10)x.fillRect(i,66,1,20);for(let i=10;i<72;i+=10)x.fillRect(i,98,1,26);
+  x.fillStyle=painted?'#e8b13a':'#8a7a3a';x.fillRect(8,66,62,1);x.fillRect(10,98,62,1);x.fillStyle='rgba(255,255,255,.05)';x.fillRect(8,67,62,1);x.fillRect(10,99,62,1);
   // wall details: lamps, clock, belts shelf, rules board
   for(const lx of[40,120,200]){x.fillStyle='#222';x.fillRect(lx,0,1,6);x.fillStyle='#3a3a3a';x.fillRect(lx-4,6,9,3);x.fillStyle='#fff3c9';x.fillRect(lx-3,9,7,1)}
   x.fillStyle='#e6dcc8';x.fillRect(146,32,10,10);x.fillStyle='#2b241f';x.fillRect(150,34,1,4);x.fillRect(150,37,3,1);x.fillRect(145,31,12,1);x.fillRect(145,42,12,1);
@@ -1211,6 +1248,8 @@ function drawGym(now){
   for(const e of ENT){if(e.kind!=='c'||!e.say||performance.now()>e.sayUntil||(e.id==='pro'&&occ['pads0']))continue;
     const w=e.say.length*4+3,bx=clamp(Math.round(e.x-w/2),1,239-w),by=Math.round(e.y)-27;x.fillStyle='#1b140c';x.fillRect(bx-1,by-1,w+2,9);x.fillStyle='#f1e5d0';x.fillRect(bx,by,w,7);x.fillRect(Math.round(e.x),by+7,2,2);pxText(x,e.say,bx+2,by+1,'#1b140c')}
   for(const lx of[40,120,200]){const g=x.createRadialGradient(lx,10,2,lx,90,80);g.addColorStop(0,'rgba(255,236,190,.16)');g.addColorStop(1,'rgba(255,236,190,0)');x.fillStyle=g;x.beginPath();x.moveTo(lx-4,10);x.lineTo(lx+4,10);x.lineTo(lx+46,136);x.lineTo(lx-46,136);x.fill()}
+  {x.fillStyle='rgba(200,225,255,.06)';x.beginPath();x.moveTo(166,28);x.lineTo(192,28);x.lineTo(160,136);x.lineTo(118,136);x.fill();
+   x.fillStyle='rgba(255,250,230,.55)';for(let i=0;i<9;i++){const ph=(t*.05+i*.137)%1,yy=30+ph*100,xx=176-ph*34+Math.sin(t*.7+i*2.1)*6;x.fillRect(Math.round(xx),Math.round(yy),1,1)}}
   const vg=x.createRadialGradient(120,80,40,120,80,150);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.35)');x.fillStyle=vg;x.fillRect(0,0,240,136);
 }
 let lastT=performance.now();
@@ -1242,6 +1281,7 @@ const LINES={
   hit_direto:['Direto de {a} em cheio!','{a} solta a direita e acerta!','Que direto de {a}!','{a} entra com o direto e {d} sente.','Direita pela linha do meio. Bom golpe de {a}.'],
   hit_gancho:['Gancho de {a} ao queixo!','{a} roda o gancho e acerta em cheio!','Gancho por cima da guarda de {d}!','Gancho curto de {a}, a cabeça de {d} roda.'],
   hit_uppercut:['Uppercut de {a} por baixo da guarda!','{a} levanta {d} com um uppercut!','Uppercut curto e seco de {a}!'],
+  hit_contra:['Contra-golpe de {a} em cheio!','{a} castiga a falha com um contra-golpe!','{d} falha e {a} responde logo. Que contra!','Timing perfeito: contra-golpe de {a}!'],
   body:['{a} vai ao corpo. Isso tira o fôlego.','Golpe ao fígado de {a}! {d} encolhe-se.','{a} trabalha o corpo de {d}.'],
   clean:['QUE GOLPE! {a} apanhou {d} em cheio!','Isso doeu! {d} está abanado!','Golpe perfeito de {a}! O público levanta-se!','Em cheio! {d} nem viu de onde veio!'],
   block:['{d} fecha a guarda e bloqueia.','Bloqueado. {d} está atento.','{a} bate na guarda de {d}.','Boa defesa de {d}, apanha tudo nas luvas.'],
@@ -1276,7 +1316,7 @@ function line(type,v){
 }
 function fighter(src,mine){
   initBody(src,src.tier!=null?2:3);const fst=(mine&&src.fstyle&&styleLv(src,src.fstyle)>0)?src.fstyle:src.style;
-  return{h:src.h,r:src.r,sty:src.sty,slv:Math.max(1,styleLv(src,fst)),armX:clamp(Math.round(((src.r-src.h)-2.5)/3),-1,2),hs:clamp((src.h||175)/178,.9,1.12),name:src.name,nick:src.nick,style:fst,trait:src.trait,look:src.look,mine,...src.attrs,skills:{jab:1,direto:0,gancho:0,uppercut:0,corpoDireto:0,figado:0,...src.skills},def:{bloqueio:1,esquiva:0,clinch:0,...(src.def||{})},src,cat:src.cat||'Ligeiro',gift:src.gift||null,
+  return{h:src.h,r:src.r,sty:src.sty,slv:Math.max(1,styleLv(src,fst)),armX:clamp(Math.round(((src.r-src.h)-2.5)/3),-1,2),hs:clamp((src.h||175)/178,.9,1.12),name:src.name,nick:src.nick,style:fst,trait:src.trait,look:src.look,mine,...src.attrs,skills:{jab:1,direto:0,gancho:0,uppercut:0,corpoDireto:0,figado:0,contra:0,...src.skills},def:{bloqueio:1,esquiva:0,clinch:0,...(src.def||{})},src,cat:src.cat||'Ligeiro',gift:src.gift||null,
     hp:100,st:mine?clamp(100-(src.fatigue||0)*.5,40,100):100,kd:0,cut:0,conf:mine?src.conf:60,strat:'Equilibrado',
     rs:newRS(),tot:{thrown:0,landed:0,power:0,dmg:0},card:0,dmgTaken:0,
     pos:{x:mine?60:180,y:mine?132:44,tx:mine?60:180,ty:mine?132:44},an:{pose:'guard',t0:0,dur:1,arm:'L'},lastArm:'R',flash:0};
@@ -1291,7 +1331,7 @@ function startFight(a,done){
   F.me.form=formOf(a).sc*TUNE.formK;F.op.form=0;F.venue=venueIdx({tier:a.tier,title:f.title});
   F.op.strat=f.opp.style==='In-fighter'?'Pressão':f.opp.style==='Outboxer'?'Cautela':'Equilibrado';
   $('#fightRoot').innerHTML=`<div class="fight">
-    <div class="stagew"><div class="stage"><canvas class="px" id="ring" width="240" height="240"></canvas><button class="snd" id="sndF">${sndLabel()}</button>
+    <div class="stagew"><div class="stage"><canvas class="px" id="ring" width="240" height="240"></canvas><button class="snd" id="pauseF" aria-label="Pausa">II</button>
       <div class="fhead"><div class="fside" id="fL"></div><div class="fclock" id="fClock"></div><div class="fside rt" id="fR"></div></div></div></div>
     <div class="booth" id="booth"><div class="fcom" id="fcom" aria-live="polite"></div><div class="caster"><canvas id="caster" width="40" height="48"></canvas><span>ZÉ DO MICRO</span></div></div>
     <div class="fctl" id="fctl"></div></div>`;
@@ -1345,7 +1385,7 @@ function drawCaster(now){
 }
 function spd(){return F.fast?.3:1}
 function slowF(){return F.zoom&&performance.now()<F.zoom.until?2.4:1}
-async function fsleep(ms,count=true){if(count)F.ft+=ms;await sleep(ms*spd()*slowF());hud()}
+async function fsleep(ms,count=true){if(count)F.ft+=ms;await sleep(ms*spd()*slowF());while(F&&F.paused)await sleep(120);hud()}
 function act(x,pose,dur,extra={}){x.an={pose,t0:performance.now(),dur:Math.max(1,dur*spd()*slowF()),arm:extra.arm||x.an.arm,side:extra.side||1,body:!!extra.body}}
 async function waitArrive(maxMs){
   const t0=performance.now();
@@ -1413,6 +1453,14 @@ async function ceremony(){
     await sleep(4800);
   }else{F.ref.pose='stand';act(win,'celebrate',99999);await sleep(win.mine?2400:1600)}
 }
+function opSwitch(){
+  const op=F.op,me=F.me,tier=F.a.tier;if(tier<2||!op.sty)return;
+  const cur=edge(op.style,me.style);if(!(op.card<me.card||cur<0))return;
+  if(Math.random()>[0,0,.4,.6][tier])return;
+  const opts=STYLES.filter(x=>x!==op.style&&styleLv(op,x)>=2&&edge(x,me.style)>cur).sort((p,q)=>edge(q,me.style)-edge(p,me.style)||styleLv(op,q)-styleLv(op,p));
+  if(!opts.length)return;op.style=opts[0];op.slv=styleLv(op,op.style);
+  say(`O canto de ${op.nick} mexe-se: ele muda para ${op.style}!`,'sys');
+}
 async function runFight(){
   const fc=$('#fctl');
   await enterRing();
@@ -1432,7 +1480,7 @@ async function runFight(){
     toCorners();
     await waitArrive(2500);if(!F.over&&F.round<F.rounds){act(F.me,'sit',99999);act(F.op,'sit',99999);if(F.crew)setCrew('break')}
     await fsleep(400,false);
-    if(F.round<F.rounds){const c=await corner();if(c==='towel'){F.over={win:false,how:'toalha'};say(`Atiras a toalha. ${F.me.nick} está salvo, mas perde.`,'sys');break}if(F.over)break;await preTalk(true)}
+    if(F.round<F.rounds){const c=await corner();if(c==='towel'){F.over={win:false,how:'toalha'};say(`Atiras a toalha. ${F.me.nick} está salvo, mas perde.`,'sys');break}if(F.over)break;opSwitch();await preTalk(true)}
   }
   if(!F.over){
     const a=F.me.card,b=F.op.card;
@@ -1470,15 +1518,15 @@ const TACTICS={
       {n:'Fintar para abrir a guarda',need:'tecnica',t:['Finta em cima, bate em baixo.','Faz-lhe mexer as mãos com fintas e entra.']},
       {n:'Duelo de jab',need:'tecnica',t:['Ganha-lhe o duelo de jab à distância.','Jab dobrado, sempre. Ele não vai responder.']}
     ]},
-  'Contra-atacante':{
+  'Puncher':{
     good:[
-      {n:'Paciência e jab',need:'tecnica',t:['Não entres primeiro. Jab e paciência.','Ele vive dos teus erros. Jab e mais nada.']},
-      {n:'Guarda alta, não morder',need:'defesa',t:['Ele está à espera que ataques mal. Guarda alta e não mordas o isco.','Não caias nas fintas dele. Guarda sempre em cima.']},
-      {n:'Fintar e atacar depois',need:'velocidade',t:['Finta, deixa-o mostrar o contra, e entra a seguir.','Faz-lhe a finta, ele responde ao ar, e tu entras.']}
+      {n:'Mexer e não parar',need:'velocidade',t:['Ele precisa de te ter parado. Mexe-te sempre.','Nunca fiques à frente dele. Pés, pés, pés.']},
+      {n:'Jab e sair',need:'tecnica',t:['Jab e sai pelo lado. Não lhe dês o alvo que ele quer.','Mantém-no na ponta do jab. Ele não chega lá.']},
+      {n:'Não trocar com ele',need:'defesa',t:['Não troques golpe a golpe. É isso que ele quer.','Guarda em cima e não aceites a guerra.']}
     ],
     half:[
-      {n:'Ataques curtos e sair',need:'velocidade',t:['Entra, bate dois e sai antes que ele responda.','Combinações curtas e fora da distância.']},
-      {n:'Ir ao corpo',need:'forca',t:['Ao corpo ele não contra-ataca tão bem.','Baixa e trabalha-lhe o tronco.']}
+      {n:'Cansá-lo primeiro',need:'resistencia',t:['Faz-lhe gastar os braços. A mão pesada cansa.','Deixa-o falhar uns quantos e depois vai.']},
+      {n:'Ir ao corpo',need:'forca',t:['Ao corpo ele baixa as mãos.','Trabalha-lhe o tronco para tirar força ao soco.']}
     ]}
 };
 const MENTAL=[
@@ -1633,29 +1681,29 @@ function scoreRound(){
   F.me.card+=ms;F.op.card+=os;F.lastScore=[ms,os];
 }
 function choosePunch(x,i){
-  const ks=Object.keys(x.skills).filter(k=>x.skills[k]>0);
+  const ks=Object.keys(x.skills).filter(k=>x.skills[k]>0&&k!=='contra');
   if(i===0&&Math.random()<(x.style==='Outboxer'?.75:x.style==='In-fighter'?.35:.5))return 'jab';
-  if(x.style==='Contra-atacante'&&i>0){const pw=ks.filter(k=>k!=='jab');if(pw.length&&Math.random()<.6)return pick(pw)}
+  if(x.style==='Puncher'&&i>0){const pw=ks.filter(k=>k!=='jab');if(pw.length&&Math.random()<.6)return pick(pw)}
   return pick(ks);
 }
 async function footwork(){
   const{me,op}=F;
-  const sw=x=>x.style==='In-fighter'?1.9:x.style==='Outboxer'?.55:.8;
+  const sw=x=>x.style==='In-fighter'?1.9:x.style==='Outboxer'?.55:.7;
   const aM=STRAT[me.strat].agg*sw(me),aO=STRAT[op.strat].agg*sw(op);
   const presser=Math.random()<aM/(aM+aO)?me:op,prey=presser===me?op:me;
   const v={x:presser.nick,y:prey.nick};
   let pC=.42,pR=.76;
   if(presser.style==='In-fighter'){pC=.22;pR=.62}
   if(prey.style==='Outboxer'){pC+=.2;pR=Math.min(.95,pR+.12)}
-  if(prey.style==='Contra-atacante'){pC=Math.max(pC,.55);pR=Math.max(pR,.82)}
+  if(prey.style==='Puncher'){pC=Math.max(pC,.55);pR=Math.max(pR,.82)}
   const r=Math.random();let zone,msg=null;
   if(r<pC){
     zone='center';
     const ang=Math.atan2(presser.pos.y-prey.pos.y,presser.pos.x-prey.pos.x)+R(-1,1);
-    const cs=prey.style==='Contra-atacante'?8:24;pair(prey,presser,120+R(-cs,cs),88+R(-cs*.75,cs*.75),ang,prey.style==='Outboxer'?56:46);
+    const cs=prey.style==='Puncher'?8:24;pair(prey,presser,120+R(-cs,cs),88+R(-cs*.75,cs*.75),ang,prey.style==='Outboxer'?56:46);
     if(F.zone!=='center')msg=line('center',v);
     else if(prey.style==='Outboxer'&&Math.random()<.4)msg=line('circle',v);
-    else if(prey.style==='Contra-atacante'&&Math.random()<.4)msg=line('wait',v);
+    else if(prey.style==='Puncher'&&Math.random()<.4)msg=line('wait',v);
   }else if(r<.76){
     zone='ropes';
     const side=RI(0,3);let px,py,ang;
@@ -1698,7 +1746,7 @@ async function exchange(){
     const res=await punch(att,def,k,strat,1,i===n-1,seq&&i>0?.06:0);
     if(F.over)return;
     if(res==='hit'||res==='clean')landed++;
-    if((res==='slip'||res==='duck')&&def.style==='Contra-atacante'&&Math.random()<.5*sf(def)/.74*(att.style==='Outboxer'?TUNE.ctr:att.style==='In-fighter'?TUNE.ctrA:1)){say(line('counter',{d:def.nick}),def.mine?'me':'');await punch(def,att,choosePunch(def,1),def.strat,1.15,true);if(F.over)return;break}
+    if((res==='slip'||res==='duck'||res==='block')&&(def.skills.contra||0)>0&&Math.random()<Math.min(.18,TUNE.ctrK*def.skills.contra/5*(.6+def.velocidade/150)*(res==='block'?.35:1)*(def.style!=='In-fighter'?1.2:1)*(att.style==='In-fighter'?1-TUNE.inCtr-(att.slv>=4?TUNE.inCl:0):1))){say(line('counter',{d:def.nick}),def.mine?'me':'');await punch(def,att,'contra',def.strat,1,true);if(F.over)return;if(Math.random()<.5)break}
     if(res==='block'&&Math.random()<.35)break;
   }
   if(n>=2&&landed>=2)say(line('combo',{a:att.nick,n:landed}),att.mine?'me':'');
@@ -1723,7 +1771,7 @@ async function punch(att,def,k,strat,bonus,talk,flow=0){
   const lv=att.skills[k]||1,sk=SKILLS[k];let e=edge(att.style,def.style);e*=e>0?sf(att):sf(def);const fx=x=>Math.max(x.baseFix||0,x.roundFix||0);if(att.mine&&e<0)e*=1-fx(att);if(def.mine&&e>0)e*=1-fx(def);const ar=att.rb||{},dr=def.rb||{};
   let hit=.5+(att.tecnica+att.velocidade-def.defesa-def.velocidade)/TUNE.hitDiv+sk.h+lv*.025+e*.05*TUNE.edge+phys(att,def,k,!!sk.body)-STRAT[def.strat].def-(def.style==='In-fighter'?TUNE.sdA:def.style==='Outboxer'?TUNE.sdD:TUNE.sdC)*sf(def)/.74+(att.st<=30?-.1:att.st<70?-.03:0)+(def.st<=30?TUNE.tdB:def.st<70?TUNE.tdA:0)+(att.conf-50)/500+(att.hitB||0)+(att.tacB||0)+(ar.hit||0)-(dr.def||0)+flow+(att.form||0)*.04-((def.def&&def.def.bloqueio)||0)*.008-((def.def&&def.def.esquiva)||0)*.012;
   hit=clamp(hit,.12,.9);
-  att.st=clamp(att.st-(TUNE.pc+STRAT[strat].cost*TUNE.scm)*(1.5-att.resistencia/100*TUNE.resK-(1-TUNE.resK)*.35)*(att.calm===true?.85:att.calm?.93:1)*(ar.stam||1)*fmods(att).cost*(1-(att.form||0)*.1),0,100);
+  att.st=clamp(att.st-(TUNE.pc+STRAT[strat].cost*TUNE.scm)*(att.style==='Puncher'?1-.15*sf(att):1)*(1.5-att.resistencia/100*TUNE.resK-(1-TUNE.resK)*.35)*(att.calm===true?.85:att.calm?.93:1)*(ar.stam||1)*fmods(att).cost*(1-(att.form||0)*.1),0,100);
   att.rs.thrown++;att.tot.thrown++;
   const arm=sk.arm||(k==='jab'?'L':k==='direto'?'R':(att.lastArm==='L'?'R':'L'));att.lastArm=arm;
   const body=!!sk.body||((k==='gancho'||k==='direto')&&Math.random()<(ar.body||0));
@@ -1734,8 +1782,8 @@ async function punch(att,def,k,strat,bonus,talk,flow=0){
   const u=unit(att,def);
   let res;
   if(Math.random()<hit){
-    let dmg=(3+att.forca*TUNE.forK+lv*.9)*sk.d*(.55+.45*att.st/100)*R(.75,1.25)*(1+e*.1*TUNE.edge)*STRAT[strat].dmg*bonus*(1+(ar.dmg||0))*fmods(att).dmg*(fmods(def).chin<1&&!body?1-.15*TUNE.giftK:1)*TUNE.dmg;
-    const clean=!body&&Math.random()<.05+TUNE.cleanP+lv*.012+(k==='gancho'||k==='uppercut'?.03:0);dmg*=clean?TUNE.cleanMul:TUNE.normMul;
+    let dmg=(3+att.forca*TUNE.forK+lv*.9)*sk.d*(att.style==='Puncher'?1+TUNE.punD*sf(att)*(def.style==='Outboxer'?.4:1):1)*(.55+.45*att.st/100)*R(.75,1.25)*(1+e*.1*TUNE.edge)*STRAT[strat].dmg*bonus*(1+(ar.dmg||0))*fmods(att).dmg*(fmods(def).chin<1&&!body?1-.15*TUNE.giftK:1)*TUNE.dmg;
+    const clean=!body&&Math.random()<.05+TUNE.cleanP+lv*.012+(k==='gancho'||k==='uppercut'?.03:0)+(sk.counter?.02:0);dmg*=clean?TUNE.cleanMul:TUNE.normMul;
     if(body){dmg*=.75;def.st=clamp(def.st-(sk.liver?9:sk.body?7:5)*TUNE.bdm,0,100)}
     const chin=1.3-def.resistencia/100;
     dmg*=(1.15-def.resistencia/250*TUNE.resK-(1-TUNE.resK)*.14);dmg*=TUNE.dk/(TUNE.dk+def.resistencia*TUNE.dr);dmg*=topF(def);
@@ -1752,15 +1800,15 @@ async function punch(att,def,k,strat,bonus,talk,flow=0){
     if(!F.over&&(clean||sk.liver)){
       const base={jab:.01,direto:.045,uppercut:.08,gancho:.09,figado:.025}[k]||0;
       let pf=base*(.5+att.tecnica/60*TUNE.resK+(1-TUNE.resK)*.58)*(1+(lv-1)*.25)*(.8+att.forca/150)*(bonus>1?2:1)*clamp(1.4-def.resistencia/100*TUNE.resK-(1-TUNE.resK)*.35,.5,1.4)*(def.st<=30?1.5:def.st<70?1.15:1)*(def.hp<50?1.3:1)*fmods(att).flash*fmods(def).chin;
-      pf*=topF(def);
+      pf*=topF(def);if(att.style==='Puncher')pf*=1+TUNE.punF*sf(att)*(def.style==='Outboxer'?.4:1);
       if(Math.random()<Math.min(.18,pf*TUNE.flash)){await knockdown(def,att,sk.liver?'liver':'flash');return res}
     }
     if(def.hp<25&&Math.random()<.5){act(def,'stagger',800);say(line('stagger',v));await fsleep(750)}
   }else{
     const r=Math.random();
-    let W=def.style==='Outboxer'?[.5,.25,.25]:def.style==='Contra-atacante'?[.18,.72,.1]:[.55,.35,.1];
+    let W=def.style==='Outboxer'?[.4,.4,.2]:def.style==='Puncher'?[.6,.25,.15]:[.5,.35,.15];
     {const dd=def.def||{bloqueio:1,esquiva:1};const b=W[0]*(.6+.2*(dd.bloqueio||0)),sl=(dd.esquiva||0)>0?W[1]*(.6+.2*dd.esquiva):0,bk=W[2]+.1;const tt=b+sl+bk;W=[b/tt,sl/tt,bk/tt]}
-    if(k==='gancho'&&r<(def.style==='Contra-atacante'?.6:.4)){res='duck';act(def,'duck',dur*1.2)}
+    if(k==='gancho'&&r<(def.style==='In-fighter'?.6:.4)){res='duck';act(def,'duck',dur*1.2)}
     else if(r<W[0]){res='block';act(def,'block',dur*1.3)}
     else if(r<W[0]+W[1]){res='slip';act(def,'slip',dur*1.2,{side:Math.random()<.5?1:-1})}
     else{res='back';act(def,'guard',1);setT(def,def.pos.x+u.dx*12,def.pos.y+u.dy*12)}
@@ -1904,7 +1952,7 @@ function drawFighter(c,cx,gy,face,lk,gl,f,now,t){
   }
   let ux=0,uy=0,lead='guard',rear='guard',aY=0;
   const st=f.style;const tier=f.st>=70?1:f.st>30?2:3;
-  if(st==='In-fighter'){lead='tight';rear='tight'}else if(st==='Outboxer'){lead='jabready';rear='guard'}else if(st==='Contra-atacante'){lead='lowlead';rear='high'}
+  if(st==='In-fighter'){lead='tight';rear='tight'}else if(st==='Outboxer'){lead='jabready';rear='guard'}else if(st==='Puncher'){lead='guard';rear='loaded'}
   switch(pose){
     case 'jab':ux=2;lead='ext';break;
     case 'direto':ux=4;rear='ext';if(an.body){uy=3;}break;
@@ -1928,7 +1976,7 @@ function drawFighter(c,cx,gy,face,lk,gl,f,now,t){
       if(tier===1){
         if(st==='In-fighter'){ux=Math.round(Math.sin(t*5)*2);uy=Math.sin(t*10)>0?1:0}
         else if(st==='Outboxer'){uy=Math.sin(t*8)>0?-1:0;ux=Math.sin(t*2.2)>0?0:-1}
-        else ux=Math.sin(t*2)>0?0:-1;
+        else ux=Math.sin(t*1.3)>0?0:-1;
       }else if(tier===2){uy=1+(Math.sin(t*3.4)>0?1:0);aY=2}
       else{ux=2;uy=2+(Math.sin(t*2.6)>0?2:0);lead='tlow';rear='tlow'}
       break;
@@ -1953,6 +2001,7 @@ function drawFighter(c,cx,gy,face,lk,gl,f,now,t){
       case 'tlow':if(r){T(0,-38,4,5,A);T(1,-38,6,6,G)}else{T(6,-36,3,5,A);T(8,-36,6,6,G)}break;
       case 'lowlead':T(6,-37,3,6,A);T(7,-32,5,5,G);break;
       case 'ext':if(r){T(1,-43,18+AX,3,A);T(18+AX,-46,7,7,G)}else{T(5,-42,15+AX,3,A);T(19+AX,-45,7,7,G)}break;
+      case 'loaded':if(r){T(-3,-40+aY,4,6,A);T(-3,-46+aY,6,6,G)}else{T(6,-40+aY,3,5,A);T(9,-46+aY,6,6,G)}break;
       case 'jabready':T(6,-42+aY,8+Math.max(0,AX),3,A);T(13+Math.max(0,AX),-45+aY,6,6,G);break;
       case 'hook':if(r){T(2,-47,12,3,A);T(12,-52,7,7,G)}else{T(5,-45,9,3,A);T(12,-50,7,7,G)}break;
       case 'upper':if(r){T(2,-41,3,9,A);T(4,-54,7,7,G)}else{T(6,-41,3,9,A);T(9,-55,7,7,G)}break;
@@ -2205,7 +2254,7 @@ function ringLoop(now){
   if(!ARENA)buildArena();
   if(F.count!==F._cnt){F._cnt=F.count;if(F.count)SFX.play('count',F.count)}
   const c=cv.getContext('2d');const t=now/1000;
-  const dt=Math.min(.05,(now-(F.lt||now))/1000);F.lt=now;const mul=(F.fast?3.3:1)/slowF();
+  const dt=Math.min(.05,(now-(F.lt||now))/1000);F.lt=now;const mul=F.paused?0:(F.fast?3.3:1)/slowF();
   const mv=(o,sp)=>{const dx=o.tx-o.x,dy=o.ty-o.y,d=Math.hypot(dx,dy);const v=sp*dt*mul*(d>30?1:.55+.45*d/30);if(d<=v||d<.01){o.x=o.tx;o.y=o.ty}else{o.x+=dx/d*v;o.y+=dy/d*v}};
   for(const x of[F.me,F.op])mv(x.pos,x.robe?40:(x.an.pose==='hurt'||x.an.pose==='hurtBody'?90:70)*(x.st>=70?1:x.st>30?.82:.6));
   refFollow();
@@ -2269,9 +2318,45 @@ function ringLoop(now){
 }
 
 /* ================= BOOT ================= */
+/* ---- start / pause menu ---- */
+function menu(mode){
+  return new Promise(res=>{
+    const saved=mode==='start'?load():S;const hasSave=!!(saved&&saved.roster);
+    const main=()=>{
+      const m=modal(`<div class="menu"><div class="mtitle">CORNER MEN</div>
+        <div class="mlogo">${logoImg((saved&&saved.logo)||0,40)}</div>
+        ${mode==='start'?(hasSave?`<button class="btn gold big" id="mCont">CONTINUAR<small>${(saved.gymName||'Ginásio Esperança')} · semana ${saved.week}</small></button>`:''):`<button class="btn gold big" id="mCont">${mode==='fight'?'VOLTAR À LUTA':'VOLTAR AO JOGO'}</button>`}
+        ${mode!=='fight'?`<button class="btn big ${mode==='start'&&!hasSave?'gold':''}" id="mNew">NOVO JOGO</button>`:''}
+        <button class="btn" id="mSet">DEFINIÇÕES</button>
+        ${mode!=='fight'?'<button class="btn" id="mHelp">COMO JOGAR</button>':''}</div>`);
+      const q=id=>m.querySelector(id);
+      if(q('#mCont'))q('#mCont').onclick=()=>{$('#modalRoot').innerHTML='';if(S)render();res('cont')};
+      if(q('#mNew'))q('#mNew').onclick=()=>{if(!hasSave){$('#modalRoot').innerHTML='';res('new');return}
+        const c=modal(`<div class="menu"><h2>COMEÇAR DE NOVO?</h2><p class="hint">Perdes todo o progresso de ${saved.gymName||'este ginásio'}.</p><div class="row2"><button class="btn" id="rNo">CANCELAR</button><button class="btn red" id="rYes">APAGAR E COMEÇAR</button></div></div>`);
+        c.querySelector('#rNo').onclick=main;c.querySelector('#rYes').onclick=()=>{$('#modalRoot').innerHTML='';res('new')}};
+      q('#mSet').onclick=sett;
+      if(q('#mHelp'))q('#mHelp').onclick=async()=>{await help();main()};
+    };
+    const sett=()=>{
+      const m=modal(`<div class="menu"><h2>DEFINIÇÕES</h2>
+        <button class="btn big ${SFX.on?'gold':''}" id="mSnd">SOM: ${SFX.on?'LIGADO':'DESLIGADO'}</button>
+        <button class="btn" id="mBack">VOLTAR</button></div>`);
+      m.querySelector('#mSnd').onclick=()=>{SFX.setOn(!SFX.on);SFX.play('click');sett()};
+      m.querySelector('#mBack').onclick=main;
+    };
+    main();
+  });
+}
+async function pauseMenu(){
+  if(F){F.paused=true;const r=await menu('fight');F.paused=false;return r}
+  const r=await menu('pause');
+  if(r==='new'){ENT=[];occ={};newGame();render();await setupGym();render()}
+}
+
 async function start(){
   try{document.fonts&&document.fonts.ready.then(()=>{ARENA=null})}catch(e){}
-  S=load();
+  const choice=await menu('start');
+  S=choice==='new'?null:load();
   let fresh=false;if(!S||!S.roster){newGame();fresh=true}
   S.gymName=S.gymName||'Ginásio Esperança';S.logo=S.logo||0;
   for(const a of S.roster){migrateStyles(a);initBody(a,2);if(a.fight){migrateStyles(a.fight.opp);initBody(a.fight.opp,clamp(a.tier+1,1,5))}for(const o of a.offers||[]){migrateStyles(o.opp);initBody(o.opp,clamp(a.tier+1,1,5))}}
@@ -2285,7 +2370,7 @@ start();
 })();
 </script>
 
-<div id="cm-ver" style="position:fixed;left:0;right:0;bottom:max(0px,calc(env(safe-area-inset-bottom,0px) - 16px));text-align:center;font:8px/8px 'Press Start 2P',monospace;color:#a8957d;opacity:.7;pointer-events:none;z-index:40">v7 · 05 nov 2026</div>
+<div id="cm-ver" style="position:fixed;left:0;right:0;bottom:max(0px,calc(env(safe-area-inset-bottom,0px) - 16px));text-align:center;font:8px/8px 'Press Start 2P',monospace;color:#a8957d;opacity:.7;pointer-events:none;z-index:40">v8 · 05 nov 2026</div>
 <script>
 if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
 </script>
