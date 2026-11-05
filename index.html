@@ -1,0 +1,1821 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#17130f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ginásio">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Ginásio Esperança</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pixelify+Sans:wght@400;600;700&family=VT323&display=swap">
+<style>
+/* Layout: one fixed phone screen — HUD, gym window, switchable panel, bottom menu. Nothing scrolls the page. */
+:root{
+  --bg:#17130f; --panel:#231c16; --panel2:#2e251d; --line:#463a2d;
+  --fg:#f1e5d0; --muted:#a8957d; --red:#d4452f; --gold:#e8b13a; --blue:#5b8fc4; --green:#74b35d;
+  --f-display:'Press Start 2P', ui-monospace, monospace;
+  --f-body:'Pixelify Sans', system-ui, sans-serif;
+  --f-mono:'VT323', ui-monospace, monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:var(--bg)}
+body{color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.3;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+#app{height:100%;max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:8px;
+  padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px));padding-block:8px 0}
+h2,h3{font-family:var(--f-display);font-weight:400;margin:0;letter-spacing:.02em;text-wrap:balance}
+h2{font-size:11px;line-height:1.6}
+h3{font-size:8px;color:var(--muted);letter-spacing:.1em}
+p{margin:0}
+.hud{display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr;gap:5px;flex:none}
+.hud div{background:var(--panel);border:2px solid var(--line);padding:4px 6px;min-width:0}
+.hud small{display:block;font-family:var(--f-display);font-size:6px;color:var(--muted);letter-spacing:.08em;margin-bottom:2px}
+.hud b{font-family:var(--f-mono);font-size:20px;font-weight:400;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.screen{position:relative;border:3px solid #0b0907;outline:2px solid var(--line);background:#000;line-height:0;flex:none}
+canvas.px{width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges;display:block}
+.tagl{position:absolute;left:5px;top:5px;line-height:1;font-family:var(--f-display);font-size:7px;background:rgba(0,0,0,.65);color:var(--fg);padding:4px 5px}
+.dayover{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:8px;gap:6px;line-height:1;pointer-events:none}
+.dayover b{font-family:var(--f-display);font-size:11px;background:rgba(0,0,0,.7);padding:6px 8px;color:var(--gold);font-weight:400}
+.skip{position:absolute;right:5px;bottom:5px;line-height:1}
+.panel{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:8px}
+.scrolly{overflow:auto;min-height:0;flex:1;display:flex;flex-direction:column;gap:6px}
+.nav{flex:none;display:grid;grid-template-columns:1fr 1fr 1.25fr 1fr 1fr;gap:4px;padding-bottom:max(8px,env(safe-area-inset-bottom,0px))}
+.nav button{background:var(--panel);border:2px solid var(--line);color:var(--muted);font-family:var(--f-display);font-size:7px;padding:12px 2px 10px;cursor:pointer;line-height:1.4;position:relative}
+.nav button.on{color:var(--fg);border-color:var(--gold);background:var(--panel2)}
+.nav button.go{background:var(--gold);color:#1b140c;border-color:#9c7420;border-bottom-width:4px}
+.nav button.go:disabled{opacity:.5}
+.nav button.go.fightgo{background:var(--red);border-color:#8f2a1b;color:#fff}
+.badge{position:absolute;top:-6px;right:-3px;background:var(--red);color:#fff;font-size:7px;padding:3px 4px;font-family:var(--f-display)}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;flex:none}
+.seg button{background:var(--panel);border:2px solid var(--line);color:var(--muted);padding:6px 4px;font-family:var(--f-body);font-size:13px;cursor:pointer;min-width:0;line-height:1.2}
+.seg button b{display:block;font-family:var(--f-display);font-size:6px;letter-spacing:.08em;margin-bottom:2px;font-weight:400}
+.seg button.on{background:var(--panel2);color:var(--fg);border-color:var(--gold)}
+.seg button:disabled{opacity:.45}
+.card{background:var(--panel);border:2px solid var(--line);padding:9px 10px;display:flex;flex-direction:column;gap:7px}
+.who{display:flex;gap:10px;align-items:center}
+.who canvas{width:48px;height:48px;image-rendering:pixelated;border:2px solid var(--line);background:#3a2d22;flex:none}
+.nm{font-family:var(--f-display);font-size:9px;line-height:1.5}
+.nm em{font-style:normal;color:var(--gold)}
+.meta{color:var(--muted);font-size:13px}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chip{border:2px solid var(--line);padding:1px 5px;font-size:12px;background:var(--panel2)}
+.chip.gold{border-color:var(--gold);color:var(--gold)}
+.chip.lock{opacity:.5}
+.stats{display:grid;gap:3px}
+.stat{display:grid;grid-template-columns:78px 1fr 26px;gap:7px;align-items:center;font-size:13px}
+.bar{height:8px;background:#120e0b;border:1px solid var(--line);position:relative;overflow:hidden}
+.bar i{position:absolute;inset:0 auto 0 0;background:var(--fg)}
+.bar.red i{background:var(--red)} .bar.gold i{background:var(--gold)} .bar.blue i{background:var(--blue)} .bar.green i{background:var(--green)}
+.num{font-family:var(--f-mono);font-size:18px;text-align:right;font-variant-numeric:tabular-nums;line-height:1}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.warn{color:var(--red);font-size:13px}
+.good{color:var(--green)}
+.btn{background:var(--panel2);color:var(--fg);border:2px solid var(--line);border-bottom-width:4px;font-family:var(--f-display);font-size:8px;padding:10px 6px 8px;cursor:pointer;line-height:1.5;text-align:center}
+.btn:active:not(:disabled){transform:translateY(2px);border-bottom-width:2px}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.btn.red{background:var(--red);border-color:#8f2a1b;color:#fff}
+.btn.gold{background:var(--gold);border-color:#9c7420;color:#1b140c}
+.btn.big{font-size:10px;padding:14px 8px 12px;width:100%}
+button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.slots{display:grid;gap:6px}
+.slot{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;background:var(--panel2);border:2px solid var(--line);padding:8px 10px;cursor:pointer;color:var(--fg);text-align:left;font-family:var(--f-body);font-size:14px}
+.slot .n{font-family:var(--f-display);font-size:10px;color:var(--gold)}
+.slot strong{display:block;font-family:var(--f-display);font-size:8px;font-weight:400;margin-bottom:3px;line-height:1.5}
+.slot span.meta{font-size:12px}
+.slot em{font-style:normal;font-family:var(--f-display);font-size:7px;color:var(--muted)}
+.rows{display:flex;flex-direction:column;gap:5px}
+.r{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:var(--panel2);border:2px solid var(--line);padding:6px 8px;min-width:0}
+.r strong{font-family:var(--f-display);font-size:7px;font-weight:400;line-height:1.6;display:block}
+.r p{font-size:12px;color:var(--muted)}
+.r .btn{font-size:7px;padding:8px 6px 6px;white-space:nowrap}
+.log{background:#0f0c09;border:2px solid var(--line);padding:6px 8px;font-family:var(--f-mono);font-size:17px;line-height:1.05;color:var(--muted);display:flex;flex-direction:column;gap:2px;min-height:0;overflow:hidden;flex:1}
+.log span:first-child{color:var(--fg)}
+.log b{color:var(--gold);font-weight:400}
+.kv{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.kv div{background:var(--panel);border:2px solid var(--line);padding:5px 7px}
+.kv small{display:block;font-family:var(--f-display);font-size:6px;color:var(--muted);letter-spacing:.08em;margin-bottom:3px}
+.kv b{font-family:var(--f-mono);font-size:19px;font-weight:400;line-height:1}
+.empty{color:var(--muted);font-size:14px;padding:8px 2px}
+.tag{font-size:11px;padding:0 5px;border:2px solid var(--line)}
+.tag.g{color:var(--green);border-color:var(--green)} .tag.b{color:var(--red);border-color:var(--red)} .tag.m{color:var(--gold);border-color:var(--gold)}
+
+/* sheets */
+.ov{position:fixed;inset:0;background:rgba(8,6,4,.8);display:flex;align-items:flex-end;justify-content:center;z-index:50;padding-top:max(10px,env(safe-area-inset-top,0px))}
+.sheet{background:var(--panel);border:3px solid var(--line);border-bottom:none;width:100%;max-width:540px;max-height:100%;overflow:auto;
+  padding:14px max(14px,env(safe-area-inset-right,0px)) calc(14px + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:10px;animation:up .16s ease-out}
+@keyframes up{from{transform:translateY(24px);opacity:.4}}
+@media (prefers-reduced-motion:reduce){.sheet{animation:none}}
+.hint{color:var(--muted);font-size:14px}
+.pick{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.pick button{background:var(--panel2);border:2px solid var(--line);color:var(--fg);padding:8px 5px;cursor:pointer;text-align:left;font-family:var(--f-body);font-size:12px;line-height:1.2;min-height:62px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.pick button strong{font-family:var(--f-display);font-size:7px;font-weight:400;line-height:1.5}
+.pick button span{color:var(--muted)}
+.pick button.on{border-color:var(--gold)}
+.pick button:disabled{opacity:.4}
+.lossw{color:var(--gold)} .lossr{color:var(--red)} .mini small .lossw,.mini small .lossr{font-size:9px}
+.plancard{gap:3px;padding:7px 9px;font-size:12px;overflow:auto;min-height:0} .plancard .meta,.plancard .warn{font-size:12px;line-height:1.3}
+.planbox{grid-template-columns:1fr auto!important;padding:9px 10px!important}
+.planbox .pl{display:block;font-size:14px;color:var(--fg);margin-top:2px}
+.planbox em.ed{font-style:normal;font-family:var(--f-display);font-size:7px;color:#1b140c;background:var(--gold);padding:7px 8px;line-height:1.5;text-align:center}
+.plan3{grid-template-columns:repeat(3,1fr)}
+.plan3 .slot{grid-template-columns:1fr;gap:3px;padding:6px 7px;align-content:start;min-width:0}
+.plan3 .slot .n{font-size:6px;color:var(--muted)}
+.plan3 .slot strong{margin:0}
+.plan3 .slot span.meta{font-size:11px;line-height:1.25}
+.panel .card .btn.keep{padding:6px;font-size:7px}
+.seg .wk{font-size:10px;opacity:.85}
+.seg.sub2 button{padding:4px;font-family:var(--f-display);font-size:7px;letter-spacing:.06em}
+.rdot{position:absolute;top:3px;right:3px;width:7px;height:7px;background:var(--red);border-radius:50%}
+.sumr{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:var(--panel2);border:2px solid var(--line);padding:6px 8px}
+.fatbox{display:grid;grid-template-columns:1fr 1fr;gap:4px 8px;background:var(--panel2);border:2px solid var(--line);padding:6px 8px}
+.fatbox .fl{display:flex;flex-direction:column;gap:3px}
+.fatbox small{font-family:var(--f-display);font-size:6px;color:var(--muted);letter-spacing:.06em}
+.fatbox b{font-family:var(--f-mono);font-size:20px;font-weight:400;line-height:1}
+.fatbox p{grid-column:1/-1;font-size:12px;color:var(--muted)}
+.mini{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
+.mini div{background:var(--panel2);border:2px solid var(--line);padding:4px 5px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.mini small{font-family:var(--f-display);font-size:6px;color:var(--muted);letter-spacing:.06em}
+.mini b{font-family:var(--f-mono);font-size:20px;font-weight:400;line-height:1}
+.mini .low{border-color:var(--red)} .mini .low small{color:var(--red)}
+.pick button em{font-style:normal;color:var(--gold);font-size:12px}
+.rep{display:flex;flex-direction:column;gap:6px}
+.rep .r{grid-template-columns:1fr}
+.rep .r p{color:var(--fg);font-size:13px}
+.stars{color:var(--gold);letter-spacing:1px}
+.talent canvas{width:84px;height:84px;image-rendering:pixelated;border:2px solid var(--line);background:#3a2d22;align-self:center}
+.quote{font-size:14px;color:var(--muted);text-align:center;font-style:italic}
+
+/* fight */
+.fight{position:fixed;inset:0;z-index:70;background:#0c0a08;display:flex;flex-direction:column;gap:6px;
+  padding:max(8px,env(safe-area-inset-top,0px)) max(10px,env(safe-area-inset-right,0px)) max(8px,env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px))}
+.fight>*{max-width:520px;width:100%;margin:0 auto}
+.fight .bar i.v{transition:width .7s ease}
+.fight .bar i.pv{position:absolute;top:0;bottom:0;width:0}
+.fight .bar.gold i.pv{background:rgba(255,236,170,.65)} .fight .bar.red i.pv{background:rgba(255,170,150,.65)}
+.fight .fside.rt .bar i.pv{display:none}
+.fhead{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;flex:none}
+.fside{display:flex;flex-direction:column;gap:3px;min-width:0}
+.fside.rt{text-align:right}
+.fside.rt .bar i{left:auto;right:0}
+.fname{font-family:var(--f-display);font-size:7px;line-height:1.5;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fclock{text-align:center;font-family:var(--f-display);font-size:7px;color:var(--muted);line-height:1.8}
+.fclock b{display:block;font-family:var(--f-mono);font-size:26px;font-weight:400;color:var(--fg);line-height:1}
+.booth{display:grid;grid-template-columns:1fr 74px;gap:6px;flex:none;height:64px;min-height:0}
+.booth.big{flex:1;height:auto;grid-template-columns:1fr 34%}
+.fcom{background:#0f0c09;border:2px solid var(--line);padding:5px 8px;font-family:var(--f-mono);font-size:18px;line-height:1.05;display:flex;flex-direction:column;justify-content:flex-end;gap:3px;overflow:hidden;min-height:0}
+.booth.big .fcom{font-size:18px;gap:5px;padding:8px 10px}
+.caster{background:#1a1410;border:2px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:4px;min-height:0;overflow:hidden}
+.caster canvas{width:100%;height:auto;max-height:100%;image-rendering:pixelated;min-height:0}
+.caster span{font-family:var(--f-display);font-size:6px;color:var(--muted);letter-spacing:.06em;white-space:nowrap}
+.booth:not(.big) .caster span{display:none}
+.fcom div{opacity:.55} .fcom div:last-child{opacity:1}
+.fcom .sys{color:var(--gold)} .fcom .me{color:#ff9a86} .fcom .ok{color:#8fe07a} .fcom .half{color:#f2c94c} .fcom .bad{color:#ff6b5a} .fcom .info{color:#9cc4ec}
+.stagew{display:flex;justify-content:center;flex:none}
+.stage{position:relative;line-height:0;border:3px solid #0b0907;outline:2px solid var(--line);border-radius:4px;overflow:hidden}
+.fight canvas.px{height:min(54vh,calc(min(100vw,520px) - 26px));width:auto;max-width:100%;display:block;transition:height .25s}
+.fight.compact canvas.px{height:min(34vh,calc(min(100vw,520px) - 26px))}
+.stage .fhead{position:absolute;left:6%;right:6%;top:4%;background:rgba(10,8,6,.82);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:6px 8px;line-height:1.3}
+.stage .fclock b{font-size:22px}
+.tks{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.tks button{background:var(--panel2);border:2px solid var(--line);color:var(--fg);padding:7px 7px 6px;text-align:left;font-family:var(--f-body);font-size:12px;line-height:1.2;cursor:pointer;display:flex;flex-direction:column;gap:3px;min-width:0}
+.tks button strong{font-family:var(--f-display);font-size:7px;font-weight:400;line-height:1.5}
+.tks button span{color:var(--muted)}
+.verdict{border:3px solid;padding:10px 12px;display:flex;flex-direction:column;gap:4px}
+.verdict b{font-family:var(--f-display);font-size:11px;font-weight:400}
+.verdict.ok{border-color:#5fbf4a;background:rgba(95,191,74,.12)} .verdict.ok b{color:#8fe07a}
+.verdict.half{border-color:#e0b23a;background:rgba(224,178,58,.12)} .verdict.half b{color:#f2c94c}
+.verdict.bad{border-color:#d4452f;background:rgba(212,69,47,.12)} .verdict.bad b{color:#ff6b5a}
+.verdict.info{border-color:#5b8fc4;background:rgba(91,143,196,.12)} .verdict.info b{color:#9cc4ec}
+.fctl{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:6px}
+.sum{display:grid;grid-template-columns:1fr 54px 54px;gap:1px 8px;font-size:12px;background:var(--panel);border:2px solid var(--line);padding:6px 8px}
+.sum b{font-family:var(--f-display);font-size:6px;color:var(--muted);font-weight:400;letter-spacing:.08em;text-align:right}
+.sum b:first-child{text-align:left}
+.sum span.v{font-family:var(--f-mono);font-size:16px;text-align:right;line-height:1}
+.sum small{font-size:12px;color:var(--muted)}
+.sum .me{color:#ff9a86} .sum .op{color:#9cc4ec}
+.cseg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.cseg2{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.cseg .btn,.cseg2 .btn{font-size:7px;padding:9px 3px 7px}
+.cseg .btn.on,.cseg2 .btn.on{background:var(--gold);color:#1b140c;border-color:#9c7420}
+</style>
+
+<div id="app">
+  <div class="hud" id="hud"></div>
+  <div class="screen" id="gymScreen"><canvas class="px" id="gym" width="240" height="136"></canvas><div class="tagl" id="tagl"></div></div>
+  <div class="panel" id="panel"></div>
+  <div class="nav" id="nav"></div>
+</div>
+<div id="modalRoot"></div>
+<div id="fightRoot"></div>
+
+<script>
+(function(){
+'use strict';
+const $=s=>document.querySelector(s);
+const R=(a,b)=>a+Math.random()*(b-a);
+const RI=(a,b)=>Math.floor(R(a,b+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const fmt=n=>Math.round(n).toLocaleString('pt-PT');
+
+/* ================= DATA ================= */
+const CATS=['Pena','Superpena','Ligeiro','Pesado'];
+const CAT_KG={Pena:'57 kg',Superpena:'59 kg',Ligeiro:'61 kg',Pesado:'+91 kg'};
+const TUNE=Object.assign({hitDiv:350,hvy:1.45,resK:.3,qk:.45,mk:.45,cleanMul:6,normMul:.45,cleanP:.02,forK:.04,judge:.8,giftK:.35,train:.2,decay:.3,decayFloor:.88,formK:1,dmg:.78,edge:.3,sagg:.03,hprec:6,flash:.4,ctr:.25,ctrA:.35,sdA:-.02,sdD:.06,sdC:.02,tdA:.03,tdB:.08},window.__TUNE||{});
+const CATMOD={Pena:{vol:1.25,dmg:.85,flash:.6,cost:.9},Superpena:{vol:1.15,dmg:.92,flash:.8,cost:.95},Ligeiro:{vol:1,dmg:1,flash:1,cost:1},Pesado:{vol:.75,dmg:1.3,flash:1.8,cost:1.25}};
+CATMOD.Pesado.dmg=TUNE.hvy;
+const GIFTS={
+  mao:{n:'Mão pesada',d:'Bate muito mais forte do que é normal na categoria.',hint:['Bate com uma força que não parece deste peso...','O saco abanou como se fosse um pesado a bater.']},
+  rapidas:{n:'Mãos rápidas',d:'Lança golpes e combinações como um peso leve.',hint:['As mãos dele quase não se veem...','Soltou cinco golpes antes de o outro piscar.']},
+  motor:{n:'Motor inesgotável',d:'Quase não se cansa, mesmo nos rounds finais.',hint:['Não parou de saltar durante uma hora...','Correu atrás de ti três ruas sem perder o fôlego.']},
+  queixo:{n:'Queixo de ferro',d:'Aguenta golpes fortes e quase nunca cai com um só golpe.',hint:['Levou um murro em cheio e nem pestanejou...','Parece feito de granito.']}
+};
+function rollGift(cat){if(Math.random()>=1/6)return null;return pick(cat==='Pesado'?['rapidas','motor','queixo']:cat==='Ligeiro'?Object.keys(GIFTS):['mao','motor','queixo'])}
+function fmods(x){const m={...(CATMOD[x.cat]||CATMOD.Ligeiro),chin:1};const g=x.gift;
+  const gk=TUNE.giftK;if(g==='mao'){m.dmg*=1+.22*gk;m.flash*=1+.6*gk}
+  if(g==='rapidas'){m.vol*=1+.45*gk}
+  if(g==='motor'){m.cost*=1-TUNE.mk*gk}
+  if(g==='queixo'){m.chin=1-TUNE.qk*gk}
+  return m}
+const STYLES=['Agressivo','Defensivo','Contra-atacante'];
+function edge(a,b){
+  if((a==='Agressivo'&&b==='Defensivo')||(a==='Defensivo'&&b==='Contra-atacante')||(a==='Contra-atacante'&&b==='Agressivo'))return 1;
+  if(a===b)return 0;return -1;
+}
+const TRAITS={
+  'Trabalhador':'Ganha mais 25% nos treinos.',
+  'Teimoso':'Às vezes ignora a estratégia do canto.',
+  'Cabeça fria':'Perde menos confiança nas derrotas.',
+  'Preguiçoso':'Ganha menos 20% nos treinos, mas cansa-se menos.',
+  'Coração de leão':'Mais difícil de derrubar de vez.'
+};
+const ATTRS=[['forca','Força'],['velocidade','Velocidade'],['resistencia','Resistência'],['defesa','Defesa'],['tecnica','Técnica']];
+const SHORT={forca:'For',velocidade:'Vel',resistencia:'Res',defesa:'Def',tecnica:'Téc'};
+const TIERS=[
+  {n:'Amador',rounds:3,base:12,purse:[200,400],share:.5,cost:30,spons:20},
+  {n:'Regional',rounds:4,base:32,purse:[900,1800],share:.4,cost:120,spons:70},
+  {n:'Nacional',rounds:6,base:50,purse:[4000,8000],share:.33,cost:400,spons:200},
+  {n:'Mundial',rounds:8,base:68,purse:[20000,40000],share:.25,cost:1500,spons:600}
+];
+const ECON={fee:15,rentBase:30,rentPerUpg:20,maint:3,coach:60};
+function weeklyCosts(){
+  const sal=S.roster.reduce((t,a)=>t+a.salary,0),staff=S.up.treinador?ECON.coach:0;
+  const rent=ECON.rentBase+ECON.rentPerUpg*UPG.filter(u=>S.up[u.id]&&u.id!=='treinador').length;
+  const maint=ECON.maint*eqUnits();
+  return{sal,staff,rent,maint,total:sal+staff+rent+maint};
+}
+function sponsors(){let v=Math.max(0,Math.round(S.pop-20));for(const a of S.roster)if(a.titles.length)v+=[15,50,150,450][Math.min(3,a.titles.length-1)];return v}
+const TR={
+  saco:{n:'Saco',eq:'saco',g:{forca:3,resistencia:.8},f:12,d:'Força'},
+  sparring:{n:'Sparring',eq:'sparring',g:{defesa:2.4,tecnica:1.4,velocidade:.6},f:14,d:'Defesa, técnica'},
+  corrida:{n:'Corrida',eq:null,g:{resistencia:3},f:11,d:'Resistência'},
+  shadow:{n:'Shadow boxing',eq:null,g:{tecnica:1.8,velocidade:1.4},f:7,d:'Técnica, velocidade'},
+  corda:{n:'Corda',eq:'corda',g:{resistencia:2,velocidade:2},f:11,d:'Resistência, pés'},
+  pads:{n:'Pads',eq:'pads',g:{tecnica:3,velocidade:.6},f:11,d:'Técnica, golpes',xp:true},
+  pesos:{n:'Musculação',eq:'pesos',g:{forca:3.6},f:14,d:'Força'},
+  pera:{n:'Pera',eq:'pera',g:{velocidade:2.8,tecnica:1},f:8,d:'Velocidade'},
+  esquiva:{n:'Corda de esquiva',eq:'esquiva',g:{defesa:3,velocidade:.8},f:9,d:'Defesa'},
+  pneu:{n:'Pneu e marreta',eq:'pneu',g:{forca:2.4,resistencia:2.2},f:16,d:'Força, resist.'},
+  bola:{n:'Bola medicinal',eq:'bola',g:{resistencia:2.2,defesa:1},f:12,d:'Aguentar golpes'},
+  descanso:{n:'Descanso',eq:null,g:{},f:-22,d:'Baixa a fadiga'}
+};
+const EQ={
+  saco:{n:'Saco de pancada',max:3,cost:[0,400,600]},
+  sparring:{n:'Zona de sparring',max:2,cost:[0,900]},
+  corda:{n:'Corda de saltar',max:3,cost:[150,200,250]},
+  pera:{n:'Pera de velocidade',max:2,cost:[450,500]},
+  pads:{n:'Pads',max:2,cost:[600,700]},
+  pesos:{n:'Banco e pesos',max:2,cost:[1000,1200]},
+  esquiva:{n:'Corda de esquiva',max:1,cost:[350]},
+  pneu:{n:'Pneu e marreta',max:1,cost:[450]},
+  bola:{n:'Bola medicinal',max:2,cost:[300,350]}
+};
+const UPG=[
+  {id:'pintura',n:'Pintar e arranjar',cost:1500,d:'+6 popularidade, +4 lugares. Os sócios deixam de se queixar. Renda +20 €/semana.'},
+  {id:'balneario',n:'Balneários novos',cost:2500,d:'+6 lugares para sócios, +2 popularidade. Renda +20 €/semana.'},
+  {id:'treinador',n:'Treinador assistente',cost:2000,d:'+20% nos treinos, segura os pads, ensina o Gancho. Salário 60 €/semana.'},
+  {id:'ringue',n:'Ringue a sério',cost:6000,d:'+6 popularidade, +3 lugares. O sparring rende mais. Renda +20 €/semana.'}
+];
+const SKILLS={jab:{n:'Jab',d:.7,h:.08},direto:{n:'Direto',d:1.05,h:0},gancho:{n:'Gancho',d:1.4,h:-.07},uppercut:{n:'Uppercut',d:1.3,h:-.03},
+  corpoDireto:{n:'Direto ao corpo',d:.85,h:.03,body:true,anim:'direto',arm:'R'},figado:{n:'Gancho ao fígado',d:1.1,h:-.03,body:true,anim:'gancho',arm:'L',liver:true}};
+const DEFS={bloqueio:{n:'Bloqueio'},esquiva:{n:'Esquiva lateral'},clinch:{n:'Clinch'}};
+const COMBOS=[
+  {id:'umdois',n:'Um-dois',seq:['jab','direto'],req:{jab:1,direto:1}},
+  {id:'jjd',n:'Jab-jab-direto',seq:['jab','jab','direto'],req:{jab:2,direto:1}},
+  {id:'udu',n:'Um-dois-uppercut',seq:['jab','direto','uppercut'],req:{direto:2,uppercut:1}},
+  {id:'udg',n:'Um-dois-gancho',seq:['jab','direto','gancho'],req:{jab:2,direto:2,gancho:1}},
+  {id:'cc',n:'Corpo-cabeça',seq:['figado','gancho'],req:{figado:1,gancho:2}},
+  {id:'temp',n:'Tempestade',seq:['jab','direto','gancho','direto','gancho'],req:{jab:3,direto:3,gancho:3}}
+];
+function knownCombos(x){return COMBOS.filter(c=>Object.entries(c.req).every(([k,v])=>(x.skills[k]||0)>=v))}
+const STRAT={
+  'Agressivo':{agg:.64,dmg:1.12,def:-.05,cost:1.5,combo:.25},
+  'Equilibrado':{agg:.5,dmg:1,def:0,cost:.6,combo:0},
+  'Defensivo':{agg:.36,dmg:.92,def:.09,cost:.1,combo:-.15}
+};
+const FIRST=['Rui','Tiago','Nuno','Diogo','Bruno','Hugo','Marco','Pedro','Samuel','André','Kevin','Leandro','Jorge','Fábio','Ivo','Luís','Edson','Wilson','Dário','Telmo'];
+const LAST=['Matos','Costa','Ferreira','Santos','Pereira','Lopes','Rocha','Neves','Tavares','Gomes','Moura','Pinto','Varela','Semedo','Brito'];
+const NICKS=['Faísca','Martelo','Sombra','Touro','Relâmpago','Bigorna','Furacão','Raposa','Muralha','Vespa','Granito','Cobra','Pólvora','Lobo'];
+const FOUND=['a lutar à porta de um café','a defender um amigo numa rixa no metro','a carregar caixas no mercado como se não pesassem nada','a bater num saco improvisado num pátio','a ganhar um desafio de braço de ferro na feira','a fugir de três tipos maiores do que ele, e a ganhar'];
+const SKINS=['#e8b78f','#c98f62','#9a6440','#6b4229','#f1cba5'];
+const HAIRS=['#1b1410','#3b2416','#7a4a22','#c9a25a','#222'];
+const TRUNKS=['#d4452f','#2d6db3','#e8b13a','#3c8d4e','#7d3fa0','#e6e6e6'];
+const DAYS=['SEGUNDA','TERÇA','QUARTA','QUINTA','SEXTA','SÁBADO'];
+
+/* ================= STATE ================= */
+let S=null;
+const KEY='ginasio-esperanca-v5';
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+function load(){try{const t=localStorage.getItem(KEY);return t?JSON.parse(t):null}catch(e){return null}}
+function look(){return{skin:pick(SKINS),hair:pick(HAIRS),trunk:pick(TRUNKS)}}
+function makeAthlete(cat,o={}){
+  const pot=o.pot??RI(40,88);
+  const a={id:'a'+Date.now()+RI(0,9999),name:o.name||pick(FIRST)+' '+pick(LAST),nick:o.nick||pick(NICKS),age:o.age||RI(16,21),cat,
+    style:o.style||pick(STYLES),trait:o.trait||pick(Object.keys(TRAITS)),salary:o.salary||RI(30,45),look:o.look||look(),
+    attrs:{},cap:{},pot,fatigue:0,conf:55,injury:0,skills:{jab:1,direto:0,gancho:0,uppercut:0,corpoDireto:0,figado:0},xp:{jab:0,direto:0,gancho:0,uppercut:0,corpoDireto:0,figado:0},def:{bloqueio:1,esquiva:0,clinch:0},dxp:{bloqueio:0,esquiva:0,clinch:0},combos:[],recovery:0,
+    rec:{w:0,l:0,d:0,ko:0},tier:0,rank:10,titles:[],fight:null,offers:[],plan:['saco','corrida','sparring'],gift:o.gift===undefined?rollGift(cat):o.gift,giftKnown:false,weeks:0,hint:null,base:{},peak:{},lastT:{},tlog:[],refusals:0};
+  for(const[k]of ATTRS){a.attrs[k]=RI(8,20)+(o.boost||0);a.cap[k]=clamp(pot+RI(-12,12),28,99)}
+  if(o.attrs)Object.assign(a.attrs,o.attrs);
+  for(const[k]of ATTRS){a.base[k]=a.attrs[k];a.peak[k]=a.attrs[k];a.lastT[k]=0}
+  return a;
+}
+function rating(a){const s=ATTRS.reduce((t,[k])=>t+a.attrs[k],0)/5;return s+Object.values(a.skills).reduce((t,v)=>t+(v||0),0)*1.5}
+function stars(pot){return clamp(Math.round(pot/18),1,5)}
+function starStr(n){return '★'.repeat(n)+'☆'.repeat(5-n)}
+function potRange(a){const s=stars(a.pot),m=S.up.treinador?0:1;const lo=clamp(s-m,1,5),hi=clamp(s+m,1,5);return lo===hi?starStr(lo):starStr(lo)+' a '+starStr(hi)}
+function newGame(){
+  const rui=makeAthlete('Pena',{gift:null,name:'Rui Matos',nick:'Faísca',age:18,style:'Agressivo',trait:'Trabalhador',salary:35,pot:70,
+    look:{skin:'#c98f62',hair:'#1b1410',trunk:'#d4452f'},attrs:{forca:16,velocidade:14,resistencia:12,defesa:9,tecnica:11}});
+  S={week:1,money:500,pop:5,members:4,up:{},eq:{saco:1,sparring:1,corda:0,pera:0,pads:0,pesos:0,esquiva:0,pneu:0,bola:0},
+    roster:[rui],sel:0,tab:'gym',sub:'ficha',shopSub:'eq',
+    rivals:[{n:'Academia Tubarão',lvl:0},{n:'Boxe Clube Ribeira',lvl:0},{n:'Punhos de Aço',lvl:1},{n:'Ginásio Estrela do Norte',lvl:0},{n:'Clube Leões da Margem',lvl:2}],
+    log:[],seen:false};
+  addOffer(rui,true);
+  note('Abriste as portas do Ginásio Esperança. O Rui é o teu único lutador.');
+}
+function note(t){S.log.unshift({w:S.week,t});S.log=S.log.slice(0,10)}
+function cur(){return S.roster[S.sel]||S.roster[0]}
+function level(){return S.pop>=70?3:S.pop>=30?2:1}
+function eqUnits(){return Object.values(S.eq).reduce((t,v)=>t+v,0)}
+function capacity(){return 4+eqUnits()*2+(S.up.pintura?4:0)+(S.up.balneario?6:0)+(S.up.ringue?3:0)+(level()-1)*3}
+function weeksTo(a){return a.fight?a.fight.week-S.week:null}
+function trainOK(a,id){const t=TR[id];return !t.eq||(S.eq[t.eq]||0)>0}
+
+/* ================= OFFERS ================= */
+function makeOpp(a,title){
+  const t=TIERS[a.tier],rv=pick(S.rivals);
+  const r=t.base+RI(-4,6)+Math.min(rv.lvl,6)+(12-a.rank)*.9+(title?6:0);
+  const st=pick(STYLES);
+  const used=S.roster.map(x=>x.nick);const o={name:pick(FIRST)+' '+pick(LAST),nick:pick(NICKS.filter(n=>!used.includes(n))),academy:rv.n,style:st,look:{...look(),trunk:pick(TRUNKS.filter(c=>c!==a.look.trunk))},attrs:{},
+    skills:{jab:1+Math.floor(r/25),direto:r>22?1+Math.floor(r/30):0,gancho:r>34?1+Math.floor(r/40):0,uppercut:r>28?1+Math.floor(r/38):0,corpoDireto:r>30?1+Math.floor(r/45):0,figado:r>40?1+Math.floor(r/50):0},def:{bloqueio:1+Math.floor(r/30),esquiva:r>26?1+Math.floor(r/40):0,clinch:r>22?1+Math.floor(r/45):0},rating:0,trait:pick(Object.keys(TRAITS))};
+  for(const[k]of ATTRS)o.attrs[k]=clamp(r+RI(-7,7),5,99);
+  if(st==='Agressivo')o.attrs.forca+=4;if(st==='Defensivo')o.attrs.defesa+=4;if(st==='Contra-atacante')o.attrs.velocidade+=4;
+  o.rating=rating(o);o.made=S.week;o.cat=a.cat;o.gift=rollGift(a.cat);
+  const n=clamp(Math.round(RI(0,3)+a.tier*4+(r-14)/5),0,40);const w=Math.round(n*R(.5,.85));
+  o.rec={w,l:n-w,ko:Math.round(w*R(.2,.6))};
+  o.fk=n>=4&&Math.random()<clamp((o.attrs.tecnica-35)/60,0,.6)?RI(1,Math.max(1,Math.floor(n/4))):0;
+  o.glass=n>=4&&o.attrs.resistencia<24&&Math.random()<.6?RI(1,2):0;
+  return o;
+}
+function scoutOf(o){
+  if(!o.rec){const n=RI(0,4);o.rec={w:Math.round(n*.6),l:n-Math.round(n*.6),ko:0}}
+  if(!o.made)o.made=S.week;
+  if(!o.scout){
+    const n=o.rec.w+o.rec.l;let u=n<=2?12:n<=5?8:n<=10?5:3;
+    const sc={u,attrs:{}};
+    for(const[k]of ATTRS){const c=o.attrs[k]+R(-u*.6,u*.6);sc.attrs[k]=[Math.max(1,Math.round(c-u)),Math.round(c+u)]}
+    const seen=n<=2?1:n<=5?2:4;sc.skills=Object.keys(o.skills).filter(k=>o.skills[k]>0).slice(0,seen);
+    o.scout=sc;
+  }
+  const u=Math.max(2,o.scout.u-(S.up.treinador?2:0));
+  return{...o.scout,u};
+}
+function scoutRating(o){const sc=scoutOf(o);return ATTRS.reduce((t,[k])=>t+(sc.attrs[k][0]+sc.attrs[k][1])/2,0)/5+Object.values(o.skills).reduce((t,v)=>t+(v||0),0)*1.5}
+function showScout(o,a,when){
+  const sc=scoutOf(o);const n=o.rec.w+o.rec.l;
+  const prec=n<=2?'Muito pouca informação':n<=5?'Informação razoável':n<=10?'Boa informação':'Muito bem estudado';
+  const rows=ATTRS.map(([k,nm])=>{const[lo,hi]=sc.attrs[k];const mine=a.attrs[k];
+    return `<div class="stat" style="grid-template-columns:78px 1fr 54px"><span>${nm}</span><div class="bar" style="height:12px"><i style="left:${clamp(lo,0,100)}%;width:${clamp(hi-lo,1,100)}%;background:var(--blue);opacity:.75"></i><b style="position:absolute;top:-2px;bottom:-2px;width:2px;left:${clamp(mine,0,99)}%;background:var(--gold)"></b></div><span class="num" style="font-size:16px">${lo}–${hi}</span></div>`}).join('');
+  const weeks=S.week-o.made;
+  return info(`FICHA DE ${o.nick.toUpperCase()}`,`<div class="r" style="grid-template-columns:1fr"><div><strong>${o.name} "${o.nick}"</strong><p>${o.academy} · ${o.style} · ${o.rec.w}V ${o.rec.l}D (${o.rec.ko} KO)</p></div></div>
+    <p class="hint">${prec} (${n} luta${n===1?'':'s'} vista${n===1?'':'s'}). Barra azul: onde achamos que está. Linha dourada: ${a.nick}.</p>
+    <div class="stats">${rows}</div>
+    <p class="hint">Golpes que já lhe vimos: ${sc.skills.map(k=>SKILLS[k].n).join(', ')||'nenhum registo'}.</p>
+    ${o.fk?`<p class="hint"><span class="warn">Mão perigosa:</span> já fez ${o.fk} queda${o.fk>1?'s':''} relâmpago a adversários que estavam inteiros.</p>`:''}
+    ${o.gift&&(o.rec.w+o.rec.l)>=5?`<p class="hint"><span class="warn">Dom conhecido:</span> ${GIFTS[o.gift].n}. ${GIFTS[o.gift].d}</p>`:''}
+    ${o.glass?`<p class="hint"><span class="good">Queixo frágil:</span> já foi ao chão ${o.glass} vez${o.glass>1?'es':''} sem estar ferido.</p>`:''}
+    <div class="r" style="grid-template-columns:1fr"><div><strong>TÁTICAS CONTRA UM ${o.style.toUpperCase()}</strong>${TACTICS[o.style].good.map(g=>`<p>Resulta: <b style="color:var(--fg)">${g.n}</b> (precisa de ${ATTR_N[g.need].toLowerCase()}${a.attrs[g.need]>=(sc.attrs[g.need][0]+sc.attrs[g.need][1])/2-3?'':', <span class="warn">o teu atleta pode não ter</span>'})</p>`).join('')}<p>Ajuda em parte: ${TACTICS[o.style].half.map(h=>h.n.toLowerCase()).join(', ')}.</p></div></div>
+    <p class="hint">${edge(a.style,o.style)>0?`<span class="good">O estilo de ${a.nick} tem vantagem.</span>`:edge(a.style,o.style)<0?`<span class="warn">O estilo de ${a.nick} está em desvantagem.</span>`:'Mesmo estilo: ninguém tem vantagem.'} ${when?`Faltam ${when} semanas: ele também vai treinar até lá.`:''}${weeks>0?` Dados de há ${weeks} semana${weeks>1?'s':''}.`:''}</p>`,'FECHAR');
+}
+function addOffer(a,easy){
+  if(a.offers.length>=3)return;
+  const t=TIERS[a.tier];
+  const title=!easy&&a.rank<=3&&!a.offers.some(x=>x.title);
+  const opp=makeOpp(a,title);
+  if(easy){for(const[k]of ATTRS)opp.attrs[k]=clamp(a.attrs[k]+RI(-3,3),5,99);opp.rating=rating(opp)}
+  const purse=RI(t.purse[0],t.purse[1])*(title?2:1);
+  a.offers.push({id:'o'+Date.now()+RI(0,999),opp,purse:Math.round(purse/10)*10,inWeeks:RI(6,8),expires:S.week+2,title,rounds:t.rounds+(title?1:0)});
+}
+function diffLabel(a,o){const d=scoutRating(o)-rating(a);if(d<-6)return['Fácil','g'];if(d<4)return['Equilibrada','m'];if(d<12)return['Difícil','b'];return['Muito difícil','b']}
+
+/* ================= RENDER ================= */
+let busy=false;
+function render(){
+  if(!S)return;
+  $('#hud').innerHTML=`<div><small>DINHEIRO</small><b>${fmt(S.money)} €</b></div><div><small>POPULAR.</small><b>${Math.round(S.pop)}</b></div><div><small>SÓCIOS</small><b>${S.members}/${capacity()}</b></div><div><small>SEMANA</small><b>${S.week}</b></div>`;
+  $('#tagl').textContent=`GINÁSIO ESPERANÇA · NÍVEL ${level()}`;
+  const nOff=S.roster.reduce((t,a)=>t+a.offers.length,0),nRev=S.roster.filter(needsReview).length;
+  const tabs=[['gym','GINÁSIO'],['ath','ATLETAS'],['go',''],['fights','LUTAS'],['shop','LOJA']];
+  $('#nav').innerHTML=tabs.map(([id,n])=>id==='go'
+    ?`<button class="go ${anyFightNow()?'fightgo':''}" id="goBtn" ${busy?'disabled':''}>${anyFightNow()?'IR PARA<br>A LUTA':'AVANÇAR<br>SEMANA'}</button>`
+    :`<button data-tab="${id}" class="${S.tab===id?'on':''}">${n}${id==='fights'&&nOff?`<span class="badge">${nOff}</span>`:''}${id==='ath'&&nRev?`<span class="badge">${nRev}</span>`:''}</button>`).join('');
+  const P=$('#panel');
+  if(S.tab==='gym')P.innerHTML=panelGym();
+  if(S.tab==='ath')P.innerHTML=panelAth();
+  if(S.tab==='fights')P.innerHTML=panelFights();
+  if(S.tab==='shop')P.innerHTML=panelShop();
+  const pc=$('#portrait');if(pc)drawPortrait(pc,cur().look);
+  save();
+}
+function anyFightNow(){return S.roster.some(a=>a.fight&&a.fight.week===S.week)}
+function fightLine(a){
+  if(!a.fight)return `<div class="meta">Sem luta marcada</div>`;
+  const w=weeksTo(a);
+  const when=w<=0?'ESTA SEMANA':w===1?'daqui a 1 semana':`daqui a ${w} semanas`;
+  return `<div class="meta">${a.fight.title?'<b class="warn">TÍTULO</b> · ':''}Luta vs <b>${a.fight.opp.nick}</b> · <b class="${w<=0?'warn':''}" style="${w>0?'color:var(--gold)':''}">${when}</b></div>`;
+}
+function canTrain(a){return !(a.injury>0||a.recovery>0)}
+function needsReview(a){return canTrain(a)&&a.revWeek!==S.week}
+function planWarns(a){
+  const W=[];if(!canTrain(a))return W;
+  const end=projFat(a,a.plan);if(end>70)W.push(`<span class="warn">⚠ fadiga ≈${end}: risco de lesão</span>`);
+  const trained=new Set(a.plan.filter(p=>trainOK(a,p)).flatMap(p=>Object.keys(TR[p].g)));
+  if(a.plan.some(p=>!trainOK(a,p)))trained.add('resistencia');
+  const lost=['forca','velocidade','resistencia'].filter(k=>{const l=losing(a,k);return l&&l.lvl==='red'&&!trained.has(k)});
+  if(lost.length)W.push(`<span class="lossr">↓ perde ${lost.map(k=>SHORT[k]).join(', ')} esta semana</span>`);
+  const w=weeksTo(a);if(a.fight&&w===1&&end>45)W.push(`<span class="warn">🥊 luta na próxima semana: convém aliviar</span>`);
+  if(a.plan.some(p=>!trainOK(a,p)))W.push(`<span class="meta">sem equipamento num treino: fica a correr</span>`);
+  return W;
+}
+function weekSummary(){
+  if(window.__SIM)return Promise.resolve(true);
+  return new Promise(res=>{
+    const pend=S.roster.filter(needsReview).length;
+    const rows=S.roster.map((a,i)=>{
+      if(!canTrain(a))return `<div class="sumr"><div><strong>${a.nick}</strong> <span class="meta">· a descansar (${a.injury>0?'lesão':'recuperação da luta'})</span></div></div>`;
+      const W=planWarns(a);const rv=!needsReview(a);
+      return `<div class="sumr"><div style="min-width:0"><strong>${rv?'✅':'⏳'} ${a.nick}</strong> <span class="meta">${rv?'revisto':'por rever'}</span>
+        <div class="meta">${a.plan.map(p=>TR[p].n).join(' · ')} · fadiga ≈${projFat(a,a.plan)}</div>${W.map(x=>`<div style="font-size:12px">${x}</div>`).join('')}</div>
+        <button class="btn" data-sumgo="${i}">MUDAR</button></div>`}).join('');
+    const m=modal(`<h2>SEMANA ${S.week} · PLANOS</h2><p class="hint">${pend?`${pend} atleta${pend>1?'s':''} com o plano por rever.`:'Todos os planos revistos.'}</p><div class="rows">${rows}</div>
+      <div class="row2" style="margin-top:8px"><button class="btn" id="sumNo">VOLTAR</button><button class="btn ${pend?'':'gold'}" id="sumOk">${pend?'AVANÇAR MESMO ASSIM':'AVANÇAR'}</button></div>`);
+    m.querySelector('#sumNo').onclick=()=>{closeModal();res(false)};
+    m.querySelector('#sumOk').onclick=()=>{$('#modalRoot').innerHTML='';res(true)};
+    m.querySelectorAll('[data-sumgo]').forEach(b=>b.onclick=()=>{S.tab='ath';S.sel=+b.dataset.sumgo;S.sub='plano';closeModal();res(false);editPlan(S.roster[S.sel])});
+  });
+}
+function nameTag(a){
+  if(!a.fight)return a.nick;
+  const w=weeksTo(a),col=w<=1?'var(--red)':'var(--gold)';
+  return `<span style="color:${col}">${a.nick}<small class="wk"> · ${w<=0?'hoje':w+'s'}</small></span>`;
+}
+function selector(){
+  return `<div class="seg">${CATS.map(c=>{const i=S.roster.findIndex(x=>x.cat===c);const x=S.roster[i];
+    return `<button ${x?`data-sel="${i}"`:'disabled'} class="${x&&i===S.sel?'on':''}" style="position:relative">${x&&(S.tab==='fights'?x.offers.length>0:needsReview(x))?`<i class="rdot" title="${S.tab==='fights'?'tem propostas':'plano por rever'}"></i>`:''}<b>${c.toUpperCase()}</b>${x?nameTag(x):'vazio'}</button>`}).join('')}</div>`;
+}
+function panelGym(){
+  const fees=S.members*ECON.fee+sponsors(),WC=weeklyCosts(),sal=WC.total;
+  const fights=S.roster.filter(a=>a.fight).map(a=>{const w=weeksTo(a);return `<div class="r"><div><strong>${a.nick} vs ${a.fight.opp.nick}</strong><p>${w===0?'Esta semana!':`Daqui a ${w} semana${w>1?'s':''}`} · ${a.fight.rounds} rounds · ${fmt(a.fight.purse)} €</p></div></div>`}).join('');
+  return `<div class="kv"><div><small>ENTRADAS/SEM</small><b class="good">+${fmt(fees)} €</b></div><div><small>DESPESAS/SEM</small><b class="warn">-${fmt(sal)} €</b></div><div><small>SALDO/SEM</small><b class="${fees-sal>=0?'good':'warn'}">${fees-sal>=0?'+':''}${fmt(fees-sal)} €</b></div></div>
+  ${fights?`<h3>LUTAS MARCADAS</h3><div class="rows">${fights}</div>`:`<div class="empty">Nenhuma luta marcada. Vê as propostas em Lutas.</div>`}
+  <h3>DIÁRIO</h3><div class="log">${S.log.map(l=>`<span><b>S${l.w}</b> ${l.t}</span>`).join('')}</div>
+  <div class="row2"><button class="btn" id="helpBtn">COMO JOGAR</button><button class="btn" id="resetBtn">NOVO JOGO</button></div>`;
+}
+function panelAth(){
+  const a=cur();const t=TIERS[a.tier];
+  const inF=S.sub!=='plano';
+  const sub=`<div class="seg"><button data-sub="ficha" class="${inF?'on':''}">Ficha</button><button data-sub="plano" class="${!inF?'on':''}">Plano</button></div>`
+    +(inF?`<div class="seg sub2"><button data-sub="ficha" class="${S.sub!=='golpes'?'on':''}">ATRIBUTOS</button><button data-sub="golpes" class="${S.sub==='golpes'?'on':''}">GOLPES</button></div>`:'');
+  if(S.sub==='golpes'){
+    const ch=(on,txt)=>`<span class="chip ${on?'':'lock'}" style="font-size:11px;padding:0 4px">${txt}</span>`;
+    const soc=Object.keys(SKILLS).map(k=>a.skills[k]>0?ch(1,`${SKILLS[k].n} nv ${a.skills[k]}`):ch(0,`${SKILLS[k].n}: ${lockReason(a,k)}`)).join('');
+    const df=Object.keys(DEFS).map(k=>a.def[k]>0?ch(1,`${DEFS[k].n} nv ${a.def[k]}`):ch(0,`${DEFS[k].n}: ${lockReason(a,k)}`)).join('');
+    const kc=knownCombos(a).map(c=>c.id);
+    const cb=COMBOS.map(c=>kc.includes(c.id)?`<span class="chip gold">${c.n}</span>`:ch(0,`${c.n}: ${Object.entries(c.req).filter(([k,v])=>(a.skills[k]||0)<v).map(([k,v])=>SKILLS[k].n.toLowerCase()+' '+v).join(', ')}`)).join('');
+    return selector()+sub+`<div class="card" style="overflow:auto;min-height:0;gap:5px;padding:7px 8px"><h3>SOCOS · SOBEM COM PADS</h3><div class="chips">${soc}</div>
+      <h3>DEFESAS · SOBEM COM SPARRING E CORDA DE ESQUIVA</h3><div class="chips">${df}</div>
+      <h3>COMBINAÇÕES · APRENDEM-SE COM OS SOCOS</h3><div class="chips">${cb}</div></div>`;
+  }
+  if(S.sub==='plano'){
+    let f=Math.max(0,a.fatigue-15);for(const p of a.plan)f=clamp(f+TR[trainOK(a,p)?p:'corrida'].f,0,100);
+    const w=weeksTo(a);
+    return selector()+sub+miniStats(a)+`<button class="slot planbox" data-editplan="1"><span><strong>PLANO DA SEMANA · ${!canTrain(a)?'a descansar':needsReview(a)?'<span style="color:var(--red)">⏳ por rever</span>':'<span style="color:var(--green)">✅ revisto</span>'}</strong><span class="pl">${a.plan.map(p=>TR[p].n).join(' · ')}</span></span><em class="ed">EDITAR<br>PLANO</em></button>
+      <div class="card plancard"><div class="meta">Fadiga agora: <b>${Math.round(a.fatigue)}</b> · no fim da semana: <b class="${f>70?'warn':''}">≈${Math.round(f)}</b></div>
+      ${!canTrain(a)?'':f>70?'<div class="warn">Acima de 70 há risco de lesão. Troca um treino por descanso.</div>':'<div class="meta">O plano repete-se todas as semanas até o mudares.</div>'}
+      ${a.injury>0?`<div class="warn">Lesionado: ${a.injury} semana${a.injury>1?'s':''} só a recuperar.</div>`:''}
+      ${a.recovery>0?`<div class="warn">A recuperar da luta: ${a.recovery} semana${a.recovery>1?'s':''} sem treinar.</div>`:''}
+      ${a.fight?`<div class="meta">Luta ${w===0?'esta semana':w===1?'daqui a 1 semana':`daqui a ${w} semanas`}: ${w<=1?'convém aliviar para chegar fresco.':'tempo para construir.'}</div>`:''}
+      ${a.fight&&w<=3?(()=>{const fo=formOf(a);return `<div class="meta">Forma prevista: <b class="${fo.cls}">${fo.label}</b>${fo.reasons.length?' · '+fo.reasons.slice(0,3).join(' · '):''}</div>`})():''}</div>`;
+  }
+  const chips=Object.keys(SKILLS).map(k=>a.skills[k]>0?`<span class="chip">${SKILLS[k].n} nv ${a.skills[k]}</span>`:`<span class="chip lock">${SKILLS[k].n}: ${lockReason(a,k)}</span>`).join('');
+  return selector()+sub+`<div class="card" style="overflow:auto;min-height:0">
+    <div class="who"><canvas width="32" height="32" id="portrait"></canvas><div style="min-width:0">
+      <div class="nm">${a.name.split(' ')[0]} <em>"${a.nick}"</em> ${a.name.split(' ').slice(1).join(' ')}</div>
+      <div class="meta">${a.age} anos · peso ${a.cat.toLowerCase()} (${CAT_KG[a.cat]}) · ${a.style} · ${a.trait}</div>
+      <div class="meta">${a.rec.w}V ${a.rec.l}D ${a.rec.d}E (${a.rec.ko} KO) · #${a.rank} ${t.n}${a.titles.length?' · '+a.titles.length+' título':''}</div>
+      ${fightLine(a)}</div></div>
+    <div class="stats">${ATTRS.map(([k,n])=>`<div class="stat"><span>${n}</span><div class="bar"><i style="width:${clamp(a.attrs[k],0,100)}%"></i></div><span class="num">${Math.floor(a.attrs[k])}</span></div>`).join('')}</div>
+    <div class="row2"><div class="stat" style="grid-template-columns:52px 1fr"><span>Fadiga</span><div class="bar ${a.fatigue>60?'red':'gold'}"><i style="width:${a.fatigue}%"></i></div></div>
+      <div class="stat" style="grid-template-columns:70px 1fr"><span>Confiança</span><div class="bar blue"><i style="width:${a.conf}%"></i></div></div></div>
+    <div class="meta">Potencial <span class="stars">${potRange(a)}</span>${a.injury>0?` · <span class="warn">lesionado (${a.injury} sem.)</span>`:''}${a.recovery>0?` · <span class="warn">a recuperar da luta (${a.recovery} sem.)</span>`:''}</div>
+    ${a.giftKnown?(a.gift?`<div class="meta"><b style="color:var(--gold)">Dom: ${GIFTS[a.gift].n}</b> · ${GIFTS[a.gift].d}</div>`:'<div class="meta">Sem dom especial.</div>'):a.hint?`<div class="meta">Pista: ${GIFTS[a.hint].n.toLowerCase()}? Ainda por confirmar.</div>`:''}
+    ${S.roster.length>1?`<button class="btn" data-dismiss="${a.id}" style="align-self:flex-start;font-size:7px;padding:7px 8px 5px;flex:none">DISPENSAR ATLETA</button>`:''}</div>`;
+}
+function panelFights(){
+  const a=cur();
+  let h=selector();
+  if(a.fight){const w=weeksTo(a),o=a.fight.opp;
+    h+=`<div class="r"><div><strong>MARCADA: ${a.nick} vs ${o.nick}</strong><p>${o.academy} · ${o.style} · ${w===0?'esta semana':`daqui a ${w} semanas`} · ${fmt(a.fight.purse)} €</p></div><button class="btn" data-scoutf="1">FICHA</button></div>`}
+  h+=`<h3>PROPOSTAS PARA ${a.nick.toUpperCase()} · #${a.rank} ${TIERS[a.tier].n.toUpperCase()}</h3>`;
+  if(!a.offers.length)h+=`<div class="empty">Sem propostas agora. Chegam novas ao longo das semanas, mais depressa com mais popularidade.</div>`;
+  h+=`<div class="rows">${a.offers.map(o=>{const[dl,dc]=diffLabel(a,o.opp);const e=edge(a.style,o.opp.style);
+    return `<div class="r"><div style="min-width:0"><strong>${o.title?'TÍTULO · ':''}${o.opp.nick} · ${fmt(o.purse)} €</strong>
+      <p>${o.opp.academy} · ${o.opp.style} · ${o.rounds} rounds · daqui a ${o.inWeeks} sem.</p>
+      <div class="chips" style="margin-top:3px"><span class="tag ${dc}">${dl}</span>${e?`<span class="tag ${e>0?'g':'b'}">Estilo ${e>0?'+':'-'}</span>`:''}<span class="tag">expira S${o.expires}</span></div></div>
+      <div style="display:flex;flex-direction:column;gap:4px"><button class="btn red" data-acc="${o.id}" ${a.fight||a.injury>0?'disabled':''}>ACEITAR</button><button class="btn" data-scout="${o.id}">FICHA</button><button class="btn" data-rej="${o.id}">RECUSAR</button></div></div>`}).join('')}</div>`;
+  h+=`<div class="meta">No escalão ${TIERS[a.tier].n} a academia fica com ${Math.round(TIERS[a.tier].share*100)}% do prémio e paga ${TIERS[a.tier].cost} € de custos por luta.</div>`;
+  return h;
+}
+function panelShop(){
+  const sub=`<div class="seg"><button data-shop="eq" class="${S.shopSub==='eq'?'on':''}">Equipamento</button><button data-shop="up" class="${S.shopSub==='up'?'on':''}">Instalações e staff</button></div>`;
+  if(S.shopSub==='eq'){
+    return sub+`<div class="meta">Cada peça nova desbloqueia treinos e traz mais sócios (+2 lugares).</div><div class="scrolly"><div class="rows">${Object.entries(EQ).map(([id,e])=>{const have=S.eq[id]||0,max=have>=e.max,c=max?0:e.cost[have];
+      return `<div class="r"><div><strong>${e.n} · ${have}/${e.max}</strong><p>${have?'Mais um para mais sócios a treinar.':'Desbloqueia: '+Object.values(TR).filter(t=>t.eq===id).map(t=>t.n).join(', ')}</p></div>
+      ${max?'<span class="meta">MÁXIMO</span>':`<button class="btn ${S.money>=c?'gold':''}" data-eq="${id}" ${S.money<c?'disabled':''}>${fmt(c)} €</button>`}</div>`}).join('')}</div></div>`;
+  }
+  return sub+`<div class="scrolly"><div class="rows">${UPG.map(u=>`<div class="r"><div><strong>${u.n}</strong><p>${u.d}</p></div>
+    ${S.up[u.id]?'<span class="meta">FEITO</span>':`<button class="btn ${S.money>=u.cost?'gold':''}" data-up="${u.id}" ${S.money<u.cost?'disabled':''}>${fmt(u.cost)} €</button>`}</div>`).join('')}</div>
+    <div class="meta">Nível ${level()} da academia: sobe com popularidade 30 e 70 e dá mais lugares.</div></div>`;
+}
+function lockReason(a,k){
+  if(k==='direto'){if(!S.eq.pads)return 'precisa de pads';if(a.attrs.tecnica<20)return 'técnica 20';return 'a aprender'}
+  if(k==='gancho'){if(!S.up.treinador)return 'precisa de treinador';if(!S.eq.pads)return 'precisa de pads';if(a.attrs.forca<30)return 'força 30';return 'a aprender'}
+  if(k==='uppercut'){if(!S.eq.pads)return 'precisa de pads';if(a.attrs.forca<25)return 'força 25';if(a.attrs.tecnica<25)return 'técnica 25';return 'a aprender'}
+  if(k==='corpoDireto')return (a.skills.direto||0)<2?'direto nv 2':'a aprender';
+  if(k==='figado'){if((a.skills.gancho||0)<2)return 'gancho nv 2';if(a.attrs.forca<30)return 'força 30';return 'a aprender'}
+  if(k==='esquiva'){if(!S.eq.esquiva)return 'precisa de corda de esquiva';if(a.attrs.velocidade<20)return 'velocidade 20';return 'a aprender'}
+  if(k==='clinch')return a.attrs.resistencia<20?'resistência 20':'a aprender';
+  return '';
+}
+function formOf(a){
+  const RS=[];let sc=0;const add=(v,t)=>{sc+=v;if(Math.abs(v)>=.08)RS.push([v,t])};
+  if(a.fatigue>50)add(-(a.fatigue-50)/50,'chega cansado');else if(a.fatigue<20)add(.15,'chega fresco');
+  const L=(a.tlog||[]).slice(-4);const avg=L.length?L.reduce((t,x)=>t+x.n,0)/L.length:2;
+  if(L.length>=3&&avg>=2)add(.25,'treinou com regularidade');else if(avg<1)add(-.35,'treinou pouco nas últimas semanas');
+  const last=L.at(-1);if(last&&last.rest&&last.n>0)add(.15,'aliviou na última semana');
+  const lostN=['forca','velocidade','resistencia'].filter(k=>a.peak&&a.attrs[k]<a.peak[k]-1.5).length;if(lostN)add(-.15*lostN,'perdeu condição física');
+  add((a.conf-55)/150,a.conf>=55?'confiante':'com pouca confiança');
+  if(a.recovery>0)add(-.4,'ainda não recuperou da última luta');
+  sc=clamp(sc,-1,1);
+  return{sc,label:sc>=.3?'Em grande forma':sc<=-.3?'Fora de forma':'Normal',cls:sc>=.3?'good':sc<=-.3?'warn':'',reasons:RS.sort((x,y)=>Math.abs(y[0])-Math.abs(x[0])).map(x=>(x[0]>0?'+ ':'− ')+x[1])};
+}
+function revealGift(a,why){
+  if(a.giftKnown)return '';a.giftKnown=true;
+  let m;
+  if(a.gift)m=`Descobriste ${why} que ${a.nick} tem um dom: ${GIFTS[a.gift].n}!`;
+  else if(a.hint)m=`Afinal ${a.nick} não tem nada de especial: a pista sobre ${GIFTS[a.hint].n.toLowerCase()} era falsa.`;
+  else return '';
+  note(m);return m;
+}
+function checkUnlocks(a){
+  const out=[];
+  if(!a.skills.direto&&S.eq.pads&&a.attrs.tecnica>=20){a.skills.direto=1;out.push('Direto')}
+  if(!a.skills.gancho&&S.eq.pads&&S.up.treinador&&a.attrs.forca>=30){a.skills.gancho=1;out.push('Gancho')}
+  if(!a.skills.uppercut&&S.eq.pads&&a.attrs.forca>=25&&a.attrs.tecnica>=25){a.skills.uppercut=1;out.push('Uppercut')}
+  if(!a.skills.corpoDireto&&(a.skills.direto||0)>=2){a.skills.corpoDireto=1;out.push('Direto ao corpo')}
+  if(!a.skills.figado&&(a.skills.gancho||0)>=2&&a.attrs.forca>=30){a.skills.figado=1;out.push('Gancho ao fígado')}
+  a.def=a.def||{bloqueio:1,esquiva:0,clinch:0};
+  if(!a.def.esquiva&&S.eq.esquiva&&a.attrs.velocidade>=20){a.def.esquiva=1;out.push('Esquiva lateral')}
+  if(!a.def.clinch&&a.attrs.resistencia>=20){a.def.clinch=1;out.push('Clinch')}
+  a.combos=a.combos||[];
+  for(const c of knownCombos(a))if(!a.combos.includes(c.id)){a.combos.push(c.id);out.push('combinação '+c.n)}
+  for(const g of out)note(`${a.nick} aprendeu: ${g}.`);
+  return out;
+}
+
+/* ================= MODALS ================= */
+function modal(html){$('#modalRoot').innerHTML=`<div class="ov"><div class="sheet" role="dialog" aria-modal="true">${html}</div></div>`;return $('#modalRoot .sheet')}
+function closeModal(){$('#modalRoot').innerHTML='';render()}
+function info(title,body,btn='CONTINUAR'){
+  return new Promise(res=>{const s=modal(`<h2>${title}</h2>${body}<button class="btn gold big" id="mOk">${btn}</button>`);s.querySelector('#mOk').onclick=()=>{closeModal();res()}});
+}
+function help(){
+  return info('COMO JOGAR',`<p class="hint">És o dono de um ginásio de bairro. Em cada semana escolhes 3 treinos para cada lutador (em Atletas, Plano da semana) e carregas em Avançar semana.</p>
+  <p class="hint">As lutas marcam-se com 6 a 8 semanas de antecedência. Treina, gere a fadiga e, no dia, dá ordens no canto entre rounds.</p>
+  <p class="hint">Mais equipamento desbloqueia treinos e traz mais sócios, que pagam mensalidades. Às vezes aparece um talento escondido.</p>`,'VAMOS A ISSO');
+}
+
+/* ================= INPUT ================= */
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button');if(!t||!S)return;
+  const d=t.dataset;
+  if(d.tab){S.tab=d.tab;render();return}
+  if(d.sel!==undefined){S.sel=+d.sel;render();return}
+  if(d.sub){S.sub=d.sub;render();return}
+  if(d.shop){S.shopSub=d.shop;render();return}
+  if(d.editplan){editPlan(cur());return}
+  if(d.acc){const a=cur(),o=a.offers.find(x=>x.id===d.acc);if(!o)return;
+    a.fight={opp:o.opp,purse:o.purse,week:S.week+o.inWeeks,title:o.title,rounds:o.rounds};a.offers=a.offers.filter(x=>x!==o);
+    note(`Luta marcada: ${a.nick} vs ${o.opp.nick}, semana ${a.fight.week}.`);render();return}
+  if(d.scout){const a=cur(),o=a.offers.find(x=>x.id===d.scout);if(o)showScout(o.opp,a,o.inWeeks);return}
+  if(d.scoutf){const a=cur();if(a.fight)showScout(a.fight.opp,a,weeksTo(a));return}
+  if(d.dismiss){const a=S.roster.find(x=>x.id===d.dismiss);if(a)askDismiss(a);return}
+  if(d.rej){const a=cur();a.offers=a.offers.filter(x=>x.id!==d.rej);render();return}
+  if(d.eq){const id=d.eq,e=EQ[id],have=S.eq[id]||0;if(have>=e.max)return;const c=e.cost[have];if(S.money<c)return;
+    S.money-=c;S.eq[id]=have+1;S.roster.forEach(checkUnlocks);note(`Compraste: ${e.n}${have?' (mais um)':''}.`);render();return}
+  if(d.up){const u=UPG.find(x=>x.id===d.up);if(!u||S.up[u.id]||S.money<u.cost)return;
+    S.money-=u.cost;S.up[u.id]=true;if(u.id==='pintura'||u.id==='ringue')S.pop+=6;if(u.id==='balneario')S.pop+=2;
+    S.roster.forEach(checkUnlocks);note(`Compraste: ${u.n}.`);render();return}
+  if(t.id==='goBtn'){advanceWeek();return}
+  if(t.id==='helpBtn'){help();return}
+  if(t.id==='resetBtn'){const m=modal(`<h2>COMEÇAR DE NOVO?</h2><p class="hint">Perdes todo o progresso deste ginásio.</p><div class="row2"><button class="btn" id="rNo">CANCELAR</button><button class="btn red" id="rYes">APAGAR TUDO</button></div>`);
+    m.querySelector('#rNo').onclick=closeModal;m.querySelector('#rYes').onclick=()=>{ENT=[];occ={};newGame();closeModal()};return}
+});
+function projFat(a,plan){let f=Math.max(0,a.fatigue-15);for(const p of plan){const t=TR[trainOK(a,p)?p:'corrida'];f=clamp(f+(t.f>0&&a.trait==='Preguiçoso'?t.f*.7:t.f),0,100)}return Math.round(f)}
+function losing(a,k){
+  if(!['forca','velocidade','resistencia'].includes(k)||!a.lastT||a.lastT[k]===undefined)return null;
+  const d=S.week-a.lastT[k];if(d<3)return null;
+  const base=(a.base&&a.base[k])||0,peak=(a.peak&&a.peak[k])||a.attrs[k];
+  const floor=Math.max(base,peak*TUNE.decayFloor),lost=Math.max(0,peak-a.attrs[k]);
+  if(a.attrs[k]<=floor+.05)return null;
+  return {lvl:d>=4?'red':'warn',lost};
+}
+function lossMark(a,k){const l=losing(a,k);if(!l)return '';
+  return l.lvl==='red'?` <span class="lossr" title="perde condição no fim desta semana se não treinar">↓${l.lost>.05?' −'+l.lost.toFixed(1):''}</span>`
+  :` <span class="lossw" title="começa a perder condição se continuar sem treino">↓</span>`}
+function fatBox(a,plan){const now=Math.round(a.fatigue),end=projFat(a,plan);const col=v=>v>70?'red':v>45?'gold':'green';
+  return `<div class="fatbox"><div class="fl"><small>FADIGA AGORA</small><b>${now}</b><div class="bar ${col(now)}"><i style="width:${now}%"></i></div></div><div class="fl"><small>FIM DA SEMANA</small><b class="${end>70?'warn':''}">≈${end}</b><div class="bar ${col(end)}"><i style="width:${end}%"></i></div></div><p>${end>70?'Acima de 70: risco de lesão.':end>45?'Cansado: treina menos bem e chega pior às lutas.':'Bom nível de fadiga.'}</p></div>`}
+function miniStats(a){
+  const min=Math.min(...ATTRS.map(([k])=>a.attrs[k]));
+  return `<div class="mini">${ATTRS.map(([k])=>`<div class="${a.attrs[k]===min?'low':''}"><small>${SHORT[k].toUpperCase()}${lossMark(a,k)}</small><b>${Math.floor(a.attrs[k])}</b><div class="bar ${a.attrs[k]===min?'red':''}"><i style="width:${clamp(a.attrs[k],0,100)}%"></i></div></div>`).join('')}</div>`;
+}
+function trainTargets(a,t){return Object.keys(t.g).map(k=>`${SHORT[k]} ${Math.floor(a.attrs[k])}`).join(' · ')}
+function editPlan(a){
+  const draft=[...a.plan];
+  const draw=()=>{
+    const ch=draft.some((p,i)=>p!==a.plan[i]);
+    const s=modal(`<h2>PLANO DE ${a.nick.toUpperCase()}</h2><p class="hint">Semana ${S.week} · ${needsReview(a)?'⏳ por rever':'✅ revisto'} · toca num treino para o mudar</p>${miniStats(a)}${fatBox(a,draft)}
+      <div class="slots">${draft.map((p,i)=>{const tr=TR[p],ok=trainOK(a,p);
+        return `<button class="slot" data-ps="${i}"><span class="n">${i+1}</span><span><strong>${tr.n}${p!==a.plan[i]?' <span style="color:var(--gold)">· novo</span>':''}</strong><span class="meta">${ok?(Object.keys(tr.g).length?'Treina '+trainTargets(a,tr):tr.d):'Sem equipamento: fica a correr'}</span></span><em>MUDAR</em></button>`}).join('')}</div>
+      <div class="row2"><button class="btn" id="pKeep">MANTER ANTERIOR</button><button class="btn gold" id="pOk">CONFIRMAR PLANO</button></div>
+      <button class="btn" id="pX" style="font-size:7px">FECHAR SEM REVER</button>`);
+    s.querySelectorAll('[data-ps]').forEach(b=>b.onclick=()=>pickSlot(+b.dataset.ps));
+    s.querySelector('#pX').onclick=closeModal;
+    s.querySelector('#pKeep').onclick=()=>{a.revWeek=S.week;closeModal()};
+    s.querySelector('#pOk').onclick=()=>{const chg=draft.some((p,i)=>p!==a.plan[i]);a.plan=[...draft];a.revWeek=S.week;
+      if(chg){const e=ENT.find(x=>x.id===a.id);if(e){release(e);e.state='idle'}}closeModal()};
+  };
+  const pickSlot=i=>{
+    const s=modal(`<h2>TREINO ${i+1} · ${a.nick.toUpperCase()}</h2><p class="hint">a vermelho o ponto mais fraco · <span class="lossw">↓</span> vai começar a perder · <span class="lossr">↓</span> perde esta semana sem treino</p>${miniStats(a)}${fatBox(a,draft)}
+    <div class="pick">${Object.entries(TR).map(([id,t])=>{const ok=trainOK(a,id);
+      return `<button data-t="${id}" class="${draft[i]===id?'on':''}" ${ok?'':'disabled'}><strong>${t.n}</strong>${ok?(Object.keys(t.g).length?`<em>${trainTargets(a,t)}</em>`:'<em>recupera</em>'):`<span>compra ${EQ[t.eq].n.toLowerCase()}</span>`}<span>${t.f<0?'fadiga '+t.f:'fadiga +'+t.f}${ok?(()=>{const pl=[...draft];pl[i]=id;const e=projFat(a,pl);return ` · <b class="${e>70?'warn':''}" style="font-weight:400">fim ≈${e}</b>`})():''}</span></button>`}).join('')}</div>
+    <button class="btn" id="mX">VOLTAR AO PLANO</button>`);
+    s.querySelector('#mX').onclick=draw;
+    s.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{draft[i]=b.dataset.t;draw()});
+  };
+  draw();
+}
+
+/* ================= WEEK ================= */
+async function advanceWeek(){
+  if(busy)return;busy=true;render();
+  if(anyFightNow()){
+    for(const a of S.roster){
+      if(!(a.fight&&a.fight.week===S.week))continue;
+      if(a.injury>0){await info('LUTA CANCELADA',`<p class="hint">${a.nick} está lesionado. A luta com ${a.fight.opp.nick} foi cancelada. Popularidade -2.</p>`);note(`Luta de ${a.nick} cancelada por lesão.`);a.fight=null;S.pop=Math.max(0,S.pop-2);continue}
+      await fightFlow(a);
+    }
+    busy=false;render();return;
+  }
+  if(!(await weekSummary())){busy=false;render();return}
+  const lines=[];
+  const reveals=[];
+  for(const a of S.roster){
+    a.weeks=(a.weeks||0)+1;if(a.weeks>=3){const m=revealGift(a,'nos treinos');if(m)reveals.push(m)}
+    a.fatigue=Math.max(0,a.fatigue-15);
+    a.tlog=a.tlog||[];
+    if(a.injury>0){a.tlog.push({n:0,rest:true});a.fatigue=Math.max(0,a.fatigue-20);lines.push(`<b>${a.nick}</b> esteve a recuperar da lesão.`);continue}
+    if(a.recovery>0){a.tlog.push({n:0,rest:true});a.fatigue=Math.max(0,a.fatigue-20);a.recovery--;lines.push(`<b>${a.nick}</b> descansou depois da luta. ${a.recovery?`Faltam ${a.recovery} semana${a.recovery>1?'s':''} de recuperação.`:'Já pode voltar a treinar.'}`);continue}
+    const before={...a.attrs};let injured=false;const up=[];let nT=0,rested=false;
+    for(const p of a.plan){
+      const id=trainOK(a,p)?p:'corrida';const t=TR[id];
+      if(id==='descanso'){rested=true;a.fatigue=Math.max(0,a.fatigue+t.f);a.conf=clamp(a.conf+3,0,100);continue}
+      nT++;
+      if(a.fatigue>70&&Math.random()<(a.fatigue-65)/90){injured=true;break}
+      const q=clamp(.6+a.conf/250+R(-.1,.1)+(S.up.treinador?.05:0)+(a.trait==='Trabalhador'?.05:a.trait==='Preguiçoso'?-.08:0),.35,1);
+      const m=(id==='sparring'&&S.up.ringue)?1.25:1;
+      for(const[k,b]of Object.entries(t.g))gain(a,k,b,q,m);
+      if(t.xp){const known=Object.keys(SKILLS).filter(k=>a.skills[k]>0);let pts=Math.round(5*q);
+        while(pts-->0){const k=pick(known);a.xp[k]++;while(a.skills[k]<5&&a.xp[k]>=a.skills[k]*8){a.xp[k]-=a.skills[k]*8;a.skills[k]++;up.push(`${SKILLS[k].n} nv ${a.skills[k]}`)}}}
+      if(id==='sparring'||id==='esquiva'){const ks=id==='esquiva'?['esquiva']:['bloqueio','clinch'];const kn=ks.filter(k=>a.def[k]>0);let pts=Math.round((id==='esquiva'?5:4)*q);
+        while(kn.length&&pts-->0){const k=pick(kn);a.dxp[k]++;while(a.def[k]<5&&a.dxp[k]>=a.def[k]*8){a.dxp[k]-=a.def[k]*8;a.def[k]++;up.push(`${DEFS[k].n} nv ${a.def[k]}`)}}}
+      a.fatigue=clamp(a.fatigue+(a.trait==='Preguiçoso'?t.f*.7:t.f),0,100);
+    }
+    a.tlog.push({n:nT,rest:rested});
+    const parts=ATTRS.map(([k])=>{const d=a.attrs[k]-before[k];return d>=.1?`${SHORT[k]} +${d.toFixed(1)}`:''}).filter(Boolean).concat(up,checkUnlocks(a).map(g=>'aprendeu '+g));
+    if(injured){a.injury=RI(1,3);lines.push(`<b>${a.nick}</b> <span class="warn">lesionou-se por excesso de treino (${a.injury} sem.).</span> ${parts.join(', ')}`);note(`${a.nick} lesionou-se no treino.`)}
+    else lines.push(`<b>${a.nick}</b>: ${parts.join(', ')||'semana leve'} · fadiga ${Math.round(a.fatigue)}`);
+  }
+  for(const a of S.roster){
+    a.tlog=(a.tlog||[]).slice(-6);a.base=a.base||{...a.attrs};a.peak=a.peak||{...a.attrs};a.lastT=a.lastT||{};
+    const lost=[];
+    for(const k of['forca','velocidade','resistencia']){
+      if(a.lastT[k]===undefined)a.lastT[k]=S.week;
+      if(S.week-a.lastT[k]>3){const floor=Math.max(a.base[k],a.peak[k]*TUNE.decayFloor);if(a.attrs[k]>floor){const d=Math.min(TUNE.decay,a.attrs[k]-floor);a.attrs[k]-=d;if(d>.05)lost.push(SHORT[k])}}
+    }
+    if(lost.length)lines.push(`<b>${a.nick}</b> <span class="warn">está a perder condição física (${lost.join(', ')}) por falta de treino.</span>`);
+  }
+  const fightLines=[];
+  const fees=S.members*ECON.fee,spons=sponsors(),WC=weeklyCosts();
+  S.money=Math.max(0,S.money+fees+spons-WC.total);
+  const prevM=S.members,cap=capacity();
+  const target=Math.min(cap,3+Math.floor(S.pop/3)+eqUnits()+(S.up.pintura?2:0));
+  if(S.members<target)S.members+=Math.min(2,target-S.members);else if(S.members>target)S.members--;
+  let extra='';
+  if(!S.up.pintura&&S.members>8&&Math.random()<.4){S.members--;extra='Um sócio saiu a queixar-se do estado das paredes.'}
+  for(const r of S.rivals)if(Math.random()<.15&&r.lvl<8)r.lvl+=1;
+  S.pop=Math.min(100,S.pop);
+  S.week++;
+  const news=[...reveals];
+  for(const a of S.roster){
+    if(a.injury>0)a.injury--;
+    a.offers=a.offers.filter(o=>o.expires>=S.week);
+    if(!a.fight&&a.rank<=3&&!a.offers.some(o=>o.title)){if(a.offers.length>=3)a.offers.shift();addOffer(a);news.push(`${a.nick} é desafiante oficial: tem uma proposta para lutar pelo título ${TIERS[a.tier].n}!`)}
+    else if(!a.fight&&Math.random()<.3+S.pop/200){const n=a.offers.length;addOffer(a);if(a.offers.length>n)news.push(`Nova proposta para ${a.nick}.`)}
+  }
+  note(`Semana fechada: ${fees+spons-WC.total>=0?'+':''}${fees+spons-WC.total} €.`);
+  const dm=S.members-prevM;
+  await info(`SEMANA ${S.week-1}`,`<div class="rep">
+    <div class="r"><div><strong>TREINOS</strong>${lines.map(l=>`<p>${l}</p>`).join('')}</div></div>
+    ${fightLines.length?`<div class="r"><div><strong>LUTAS</strong>${fightLines.map(l=>`<p>${l}</p>`).join('')}</div></div>`:''}
+    <div class="r"><div><strong>CONTAS · SALDO ${fees+spons-WC.total>=0?'+':''}${fmt(fees+spons-WC.total)} €</strong><p>Mensalidades <span class="good">+${fees} €</span>${spons?` · Patrocínios <span class="good">+${spons} €</span>`:''}</p><p>Salários <span class="warn">-${WC.sal} €</span>${WC.staff?` · Staff <span class="warn">-${WC.staff} €</span>`:''} · Renda <span class="warn">-${WC.rent} €</span> · Manutenção <span class="warn">-${WC.maint} €</span></p><p>Sócios ${dm>=0?'+':''}${dm} (agora ${S.members}/${capacity()})${extra?' · '+extra:''}</p></div></div>
+    ${news.length?`<div class="r"><div><strong>NOVIDADES</strong>${news.map(l=>`<p>${l}</p>`).join('')}</div></div>`:''}
+  </div>`);
+  for(const a of [...S.roster])if(a.pendingRaise)await negotiate(a);
+  const empty=CATS.filter(c=>!S.roster.some(a=>a.cat===c));
+  if(empty.length&&S.week>3&&Math.random()<.14+S.pop/400)await talent(pick(empty));
+  else if(S.week>3&&Math.random()<.05+S.pop/800)await talent(pick(CATS.filter(c=>!empty.includes(c))));
+  busy=false;render();
+}
+function gain(a,k,base,q,mult=1){
+  let g=TUNE.train*base*(.3+.9*q)*(1-a.fatigue/160)*mult;
+  if(a.trait==='Trabalhador')g*=1.25;if(a.trait==='Preguiçoso')g*=.8;if(S.up.treinador)g*=1.2;
+  g*=clamp((a.cap[k]-a.attrs[k])/20,.06,1);
+  a.attrs[k]=clamp(a.attrs[k]+g,0,a.cap[k]+2);
+  if(g>.02){a.lastT=a.lastT||{};a.lastT[k]=S.week;a.peak=a.peak||{};a.peak[k]=Math.max(a.peak[k]||0,a.attrs[k])}
+}
+function dismissCost(a){const pen=1+(a.fight?3:0)+a.titles.length*2+(a.rec.w>=5?1:0);return{money:a.salary*2,pop:pen}}
+function doDismiss(a){const c=dismissCost(a);S.money=Math.max(0,S.money-c.money);S.pop=Math.max(0,S.pop-c.pop);
+  S.roster=S.roster.filter(x=>x!==a);S.sel=0;note(`${a.name} "${a.nick}" saiu do ginásio${a.fight?' e a luta marcada foi cancelada':''}.`)}
+function dismissText(a){const c=dismissCost(a);return `Pagas ${c.money} € de indemnização (2 semanas de salário) e perdes ${c.pop} de popularidade${a.fight?' (inclui cancelar a luta marcada)':''}${a.titles.length?' (os sócios não gostam de ver sair um campeão)':''}.`}
+function askDismiss(a){
+  const m=modal(`<h2>DISPENSAR ${a.nick.toUpperCase()}?</h2><p class="hint">${dismissText(a)}</p><p class="hint">A categoria ${a.cat.toLowerCase()} fica livre para novos talentos.</p>
+  <div class="row2"><button class="btn" id="dNo">CANCELAR</button><button class="btn red" id="dYes">DISPENSAR</button></div>`);
+  m.querySelector('#dNo').onclick=closeModal;m.querySelector('#dYes').onclick=()=>{doDismiss(a);closeModal()};
+}
+async function negotiate(a){
+  const req=Math.max(Math.round(a.salary*a.pendingRaise/5)*5,a.pendingRaise>=1.6?[45,90,220,600][a.tier]:0),ctr=Math.round((a.salary+req)/2/5)*5;a.pendingRaise=0;
+  return new Promise(res=>{
+    const m=modal(`<h2>${a.nick.toUpperCase()} QUER UM AUMENTO</h2><p class="hint">${a.titles.length?'Depois do título':'Depois de uma série de vitórias'}, ${a.nick} pede para passar de ${a.salary} € para <b>${req} € por semana</b>.</p>
+      <p class="hint">Personalidade: ${a.trait} · Confiança ${Math.round(a.conf)}${a.refusals?` · já recusaste ${a.refusals} vez${a.refusals>1?'es':''}`:''}</p>
+      <div class="rows"><button class="btn gold" id="nA">ACEITAR (${req} €)</button><button class="btn" id="nC">CONTRAPROPOSTA (${ctr} €)</button><button class="btn red" id="nR">RECUSAR</button></div>`);
+    const end=t=>{closeModal();note(t);info('NEGOCIAÇÃO',`<p class="hint">${t}</p>`).then(res)};
+    const refuse=async(t)=>{a.conf=clamp(a.conf-12,0,100);a.refusals=(a.refusals||0)+1;
+      if(a.refusals>=2&&S.roster.length>1){closeModal();
+        const q=modal(`<h2>${a.nick.toUpperCase()} QUER SAIR</h2><p class="hint">${t} ${a.nick} sente-se desvalorizado e quer ir para outro ginásio.</p><div class="row2"><button class="btn" id="lGo">DEIXÁ-LO IR</button><button class="btn gold" id="lPay">PAGAR ${req} €</button></div>`);
+        q.querySelector('#lGo').onclick=()=>{S.roster=S.roster.filter(x=>x!==a);S.sel=0;S.pop=Math.max(0,S.pop-2);end(`${a.nick} saiu do ginásio.`)};
+        q.querySelector('#lPay').onclick=()=>{a.salary=req;a.refusals=0;a.conf=clamp(a.conf+8,0,100);end(`${a.nick} fica, agora a ganhar ${req} € por semana.`)};
+      }else end(t+' Ficou com menos confiança.')};
+    m.querySelector('#nA').onclick=()=>{a.salary=req;a.refusals=0;a.conf=clamp(a.conf+6,0,100);end(`${a.nick} aceita: agora ganha ${req} € por semana.`)};
+    m.querySelector('#nC').onclick=()=>{const p=.5+(a.conf-50)/150+(a.trait==='Trabalhador'?.15:a.trait==='Teimoso'?-.2:a.trait==='Cabeça fria'?.05:0);
+      if(Math.random()<p){a.salary=ctr;a.refusals=0;end(`${a.nick} aceita a contraproposta: ${ctr} € por semana.`)}else refuse(`${a.nick} recusa a contraproposta.`)};
+    m.querySelector('#nR').onclick=()=>refuse(`Recusaste o aumento de ${a.nick}.`);
+  });
+}
+function talent(cat){
+  return new Promise(res=>{
+    const used=S.roster.map(x=>x.nick);const a=makeAthlete(cat,{boost:RI(0,6),nick:pick(NICKS.filter(n=>!used.includes(n)))});
+    const vis=ATTRS.map(([k,n])=>[n,a.attrs[k]]).sort((x,y)=>y[1]-x[1]);
+    const desc=v=>v>=22?'alta':v>=15?'média':'fraca';
+    const hr=S.up.treinador?[.8,.04]:[.55,.12];
+    a.hint=a.gift?(Math.random()<hr[0]?a.gift:null):(Math.random()<hr[1]?pick(Object.keys(GIFTS)):null);
+    const curA=S.roster.find(x=>x.cat===cat);
+    const cmp=curA?`<div class="r" style="grid-template-columns:1fr"><div><strong>ATUAL NO PESO ${cat.toUpperCase()}: ${curA.nick}</strong>
+      <p>${ATTRS.map(([k])=>`${SHORT[k]} ${Math.floor(curA.attrs[k])}`).join(' · ')} · ${curA.rec.w}V ${curA.rec.l}D</p>
+      <p>Potencial <span class="stars">${potRange(curA)}</span>${curA.giftKnown&&curA.gift?` · Dom: ${GIFTS[curA.gift].n}`:''}</p>
+      <p class="warn" style="font-size:12px">Trocar: ${dismissText(curA)}</p></div></div>`:'';
+    const s=modal(`<h2>TALENTO DESCOBERTO</h2><div class="talent" style="display:flex;flex-direction:column;gap:8px">
+      <canvas width="32" height="32" id="tp"></canvas><p class="quote">Encontraste-o ${pick(FOUND)}.</p>
+      <div class="r" style="grid-template-columns:1fr"><div><strong>${a.name} "${a.nick}"</strong>
+      <p>${a.age} anos · peso ${cat.toLowerCase()} (${CAT_KG[cat]}) · estilo provável: ${a.style} · ${a.trait}</p>
+      <div class="chips" style="margin:4px 0">${[vis[0],vis[1],vis[4]].map(([n,v])=>`<span class="chip">${n}: ${desc(v)}</span>`).join('')}</div>
+      <p>Potencial <span class="stars">${potRange(a)}</span> · pede ${a.salary} €/semana</p>
+      ${a.hint?`<p class="quote" style="text-align:left;color:var(--gold)">"${pick(GIFTS[a.hint].hint)}"</p>`:''}</div></div>${cmp}</div>
+      <div class="row2"><button class="btn" id="ig">IGNORAR</button><button class="btn gold" id="tk">${curA?'TROCAR':'TRAZER'}</button></div>`);
+    drawPortrait(s.querySelector('#tp'),a.look);
+    s.querySelector('#ig').onclick=()=>{note(`Deixaste ir um talento (${a.nick}).`);closeModal();res()};
+    s.querySelector('#tk').onclick=()=>{if(curA)doDismiss(curA);S.roster.push(a);S.sel=S.roster.length-1;addOffer(a,true);note(`${a.name} "${a.nick}" juntou-se ao ginásio (${cat}).`);closeModal();res()};
+  });
+}
+
+/* ================= GYM WORLD ================= */
+const memberLooks=Array.from({length:16},(_,i)=>({hs:i%4,stripe:i%3===0,skin:SKINS[i%5],hair:HAIRS[(i*3)%5],trunk:['#333','#555','#2d4a6b','#5a3d2b'][i%4],shirt:['#6b6b6b','#3d5a80','#8c3b2e','#4d6b3d','#bbb','#7a6a3a'][i%6],glove:['#2d6db3','#3c8d4e','#7d3fa0','#222','#e8b13a'][i%5]}));
+const COACH={skin:'#9a6440',hair:'#ccc',trunk:'#222',shirt:'#2d4a6b'};
+function spots(){
+  const L=[];
+  const add=(type,i,x,y,face,pose,extra={})=>L.push({key:type+i,type,i,x,y,face,pose,...extra});
+  for(let i=0;i<S.eq.saco;i++)add('saco',i,[16,34,52][i]+13,78,-1,'punch',{bag:[16,34,52][i]});
+  for(let i=0;i<S.eq.pera;i++)add('pera',i,[76,92][i]+4,72,1,'fast',{px:[76,92][i]});
+  for(let i=0;i<S.eq.corda;i++)add('corda',i,[114,126,138][i],84,1,'jump',{hook:[114,126,138][i]});
+  for(let i=0;i<S.eq.esquiva;i++)add('esquiva',i,164,80,1,'duck');
+  for(let i=0;i<S.eq.pesos;i++)add('pesos',i,[18,48][i]+9,118,1,'lift',{bench:[18,48][i]});
+  for(let i=0;i<S.eq.pneu;i++)add('pneu',i,92,124,1,'hammer');
+  for(let i=0;i<S.eq.bola;i++)add('bola',i,[118,142][i],130,1,'ball',{partner:true});
+  for(let i=0;i<S.eq.pads;i++)add('pads',i,156,[104,128][i],1,'punch',{holder:true});
+  for(let i=0;i<S.eq.sparring;i++)add('sparring',i,198,[98,130][i],1,'spar',{zone:i});
+  add('shadow',0,126,104,1,'shadow');add('shadow',1,104,100,-1,'shadow');
+  return L;
+}
+const IDLE=[
+  {key:'warm0',x:68,y:96,pose:'jack'},{key:'warm1',x:82,y:100,pose:'stretch'},{key:'warm2',x:96,y:92,pose:'jack'},
+  {key:'bench0',x:70,y:72,pose:'sit'},{key:'bench1',x:82,y:72,pose:'gloves'},{key:'bench2',x:94,y:72,pose:'gloves'},
+  {key:'water',x:222,y:72,pose:'drink',face:1},{key:'chat0',x:40,y:100,pose:'stand',face:1},{key:'chat1',x:48,y:100,pose:'stand',face:-1},
+  {key:'warm3',x:30,y:132,pose:'stretch'},{key:'warm4',x:138,y:114,pose:'jack'}
+];
+let ENT=[];let occ={};
+function entFor(id,kind,lk){let e=ENT.find(x=>x.id===id);if(!e){e={id,kind,lk,x:R(60,110),y:R(90,120),tx:0,ty:0,state:'idle',until:0,spot:null,face:1,t:R(0,9),doFor:0};ENT.push(e)}e.lk=lk;return e}
+function syncEnt(){
+  const want=new Set();
+  const n=Math.min(S.members,14);
+  for(let i=0;i<n;i++){const e=entFor('m'+i,'m',memberLooks[i]);want.add(e.id)}
+  for(const a of S.roster){const e=entFor(a.id,'a',{...a.look,hs:(a.id.charCodeAt(3)||0)%3,shirt:a.look.skin,glove:'#d4452f'});e.ath=a;want.add(e.id)}
+  ENT=ENT.filter(e=>{if(!want.has(e.id)){release(e);return false}return true});
+}
+function release(e){if(e.spot&&occ[e.spot.key]===e.id)delete occ[e.spot.key];e.spot=null}
+function goTo(e,sp,dur){release(e);e.spot=sp;occ[sp.key]=e.id;e.tx=sp.x;e.ty=sp.y;e.state='walk';e.doFor=dur}
+function chooseAct(e){
+  const st=spots().filter(s=>!occ[s.key]&&s.type!=='sparring');
+  const idle=IDLE.filter(s=>!occ[s.key]);
+  let sp=null;
+  if(Math.random()<.55&&st.length)sp=pick(st);else if(idle.length)sp=pick(idle);else if(st.length)sp=pick(st);
+  if(sp)goTo(e,sp,R(4000,9000));
+}
+function athleteAct(e){
+  const a=e.ath;const S_=spots();
+  const side=()=>{const idle=IDLE.filter(s=>!occ[s.key]);if(idle.length)goTo(e,pick(idle),R(3000,5000))};
+  if(a.injury>0||a.recovery>0){const b=IDLE.filter(s=>(s.pose==='sit'||s.pose==='stretch')&&!occ[s.key]);if(b.length)goTo(e,pick(b),R(5000,8000));return}
+  if(Math.random()<.25){side();return}
+  const p=pick(a.plan);const id=trainOK(a,p)?p:'corrida';
+  let sp=null;
+  if(id==='descanso')sp=IDLE.find(s=>s.key==='bench0');
+  else if(id==='corrida')sp={key:'run_'+a.id,type:'corrida',x:R(20,170),y:132,pose:'run',run:true};
+  else sp=S_.find(s=>s.type===id&&!occ[s.key])||S_.find(s=>s.type===id&&!ENT.some(o=>o.kind==='a'&&o.id===occ[s.key]));
+  if(!sp){side();return}
+  const h=occ[sp.key];if(h&&h!==e.id){const o=ENT.find(x=>x.id===h);if(o){release(o);o.state='idle'}}
+  goTo(e,sp,R(6000,10000));
+}
+function stepWorld(dt,now){
+  syncEnt();
+  const S_=spots();
+  for(const e of ENT){
+    e.t+=dt/1000;
+    if(e.state==='idle'){if(e.kind==='a')athleteAct(e);else chooseAct(e);continue}
+    if(e.state==='walk'){
+      const dx=e.tx-e.x,dy=e.ty-e.y,d=Math.hypot(dx,dy);const v=22*dt/1000;
+      if(d<=v){e.x=e.tx;e.y=e.ty;e.state='do';e.until=now+e.doFor}
+      else{e.x+=dx/d*v;e.y+=dy/d*v;e.face=dx>=0?1:-1}
+      continue;
+    }
+    if(e.state==='do'){
+      if(e.spot&&e.spot.run){e.dir=e.dir||1;e.x+=e.dir*60*dt/1000;if(e.x>186)e.dir=-1;if(e.x<8)e.dir=1;e.face=e.dir}
+      if(now>e.until){release(e);e.state='idle'}
+    }
+  }
+}
+function fig(x,cx,gy,lk,face,pose,t){
+  const P=(dx,dy,w,h,c)=>{x.fillStyle=c;x.fillRect(Math.round(face===1?cx+dx:cx-dx-w),Math.round(gy+dy),w,h)};
+  const sk=lk.skin,sh=lk.shirt||sk,tr=lk.trunk,hr=lk.hair,gl=lk.glove||sk;
+  x.fillStyle='rgba(0,0,0,.28)';x.fillRect(Math.round(cx-3),Math.round(gy-1),7,2);x.fillRect(Math.round(cx-2),Math.round(gy),5,1);
+  if(pose==='sit'||pose==='gloves'){
+    P(-2,-7,5,3,tr);P(2,-4,1,4,sk);P(4,-4,1,4,sk);P(-2,-12,4,5,sh);P(-2,-16,4,4,sk);P(-2,-17,4,1,hr);P(1,-15,1,1,'#111');
+    if(pose==='gloves'){const u=Math.sin(t*6)>0;P(2,-10+(u?-1:0),2,2,gl);P(0,-9,2,2,gl)}else P(2,-9,2,2,sk);
+    return;
+  }
+  let j=0,by=0;
+  if(pose==='jump')j=Math.sin(t*14)>0?-3:0;
+  if(pose==='jack')j=Math.sin(t*9)>0?-2:0;
+  if(pose==='duck'){const c=(t*1.4)%1;by=c>.4&&c<.7?4:0}
+  const walk=pose==='walk'||pose==='run';const ph=Math.sin(t*(pose==='run'?20:11))>0;
+  if(walk){P(-2+(ph?-1:0),-4,1,4,sk);P(1+(ph?1:0),-4,1,4,sk)}
+  else if(pose==='stretch'&&Math.sin(t*2)>0){P(-3,-4,1,4,sk);P(2,-4,1,4,sk)}
+  else{P(-2,-4+j,1,4,sk);P(1,-4+j,1,4,sk)}
+  P(-2,-1+j,2,1,'#151515');P(1,-1+j,2,1,'#151515');
+  P(-2,-6+j,4,2,tr);
+  P(-2,-11+j+by,4,5,sh);
+  P(-2,-11+j+by,1,5,'rgba(0,0,0,.18)');if(lk.stripe)P(-2,-9+j+by,4,1,'rgba(255,255,255,.35)');
+  P(-2,-15+j+by,4,4,sk);P(1,-14+j+by,1,1,'#111');P(-2,-12+j+by,1,1,'rgba(0,0,0,.2)');
+  const hs=lk.hs||0;
+  if(hs===0){P(-2,-16+j+by,4,1,hr);P(-2,-15+j+by,1,2,hr)}
+  else if(hs===1){P(-2,-16+j+by,4,1,hr);P(-1,-17+j+by,1,1,hr);P(1,-17+j+by,1,1,hr)}
+  else if(hs===2){P(-2,-16+j+by,4,1,hr);P(-3,-15+j+by,1,4,hr);P(-2,-15+j+by,1,3,hr)}
+  else{P(-1,-16+j+by,2,1,'rgba(255,255,255,.25)')}
+  const yy=j+by;
+  switch(pose){
+    case 'punch':case 'spar':case 'shadow':{const l=Math.sin(t*(pose==='shadow'?7:9))>0;
+      if(l){P(2,-11+yy,4,1,sk);P(6,-12+yy,2,2,gl);P(-1,-12+yy,2,2,gl)}else{P(2,-12+yy,2,2,gl);P(-1,-12+yy,2,2,gl)}break}
+    case 'fast':{const l=Math.sin(t*22)>0;P(2,-14+(l?-1:0),2,2,gl);P(0,-14+(l?0:-1),2,2,gl);break}
+    case 'jump':P(-3,-9+yy,1,3,sk);P(2,-9+yy,1,3,sk);break;
+    case 'jack':if(j<0){P(-3,-16+yy,1,4,sk);P(2,-16+yy,1,4,sk)}else{P(-3,-10,1,4,sk);P(2,-10,1,4,sk)}break;
+    case 'stretch':P(-3,-17,1,5,sk);P(2,-17,1,5,sk);break;
+    case 'lift':{const u=Math.sin(t*4)>0;const y=u?-19:-15;P(-4,y,9,1,'#666');P(-5,y-1,2,3,'#333');P(4,y-1,2,3,'#333');P(-3,y+1,1,u?6:3,sk);P(2,y+1,1,u?6:3,sk);break}
+    case 'hammer':{const u=Math.sin(t*5)>0;if(u){P(1,-18,1,7,'#7a5a3a');P(0,-20,4,2,'#555')}else{P(2,-9,6,1,'#7a5a3a');P(7,-10,2,3,'#555')}P(1,-11,2,2,sk);break}
+    case 'ball':{const u=Math.sin(t*3)>0;P(2,-12,3,3,u?'#6b4a2e':sk);break}
+    case 'drink':P(2,-14,1,3,'#7aa6c2');break;
+    case 'pad':P(2,-13,1,3,sk);P(3,-14,2,4,'#e8b13a');break;
+    default:if(walk){P(-3,-11+(ph?-1:0),1,4,sk);P(2,-11+(ph?0:-1),1,4,sk)}else{P(-3,-11,1,4,sk);P(2,-11,1,4,sk)}
+  }
+}
+function drawGym(now){
+  const cv=$('#gym');if(!cv||!S)return;const x=cv.getContext('2d');
+  const t=now/1000;
+  const painted=S.up.pintura;
+  x.fillStyle=painted?'#7b3e2c':'#4b4038';x.fillRect(0,0,240,62);
+  if(painted){x.fillStyle='#e8b13a';x.fillRect(0,50,240,3);x.fillStyle='#5f2e20';for(let i=0;i<240;i+=12)x.fillRect(i,0,1,50)}
+  else{x.fillStyle='#3c332c';x.fillRect(150,8,14,10);x.fillRect(66,40,20,6);x.fillRect(206,4,6,18);x.fillStyle='#2b241f';x.fillRect(178,14,1,12);x.fillRect(179,25,6,1)}
+  x.fillStyle='#1e2a33';x.fillRect(166,8,26,20);x.fillStyle='#7aa6c2';x.fillRect(168,10,10,7);x.fillRect(180,10,10,7);x.fillRect(168,19,10,7);x.fillRect(180,19,10,7);
+  x.fillStyle='#e6dcc8';x.fillRect(198,8,14,18);x.fillStyle='#d4452f';x.fillRect(200,10,10,8);x.fillStyle='#1b140c';x.fillRect(200,20,10,2);x.fillRect(200,23,7,1);
+  x.fillStyle='#8fa3ad';x.fillRect(100,30,34,22);x.fillStyle='#b9cad1';x.fillRect(102,32,6,18);x.fillStyle='#2b241f';x.fillRect(99,29,36,1);x.fillRect(99,52,36,1);
+  x.fillStyle='#2b241f';x.fillRect(216,30,22,32);x.fillStyle='#3d2e22';x.fillRect(218,32,18,30);x.fillStyle='#e8b13a';x.fillRect(233,46,2,2);
+  x.fillStyle='#7aa6c2';x.fillRect(208,52,6,8);x.fillStyle='#ddd';x.fillRect(207,60,8,4);
+  x.fillStyle='#2b1f17';x.fillRect(0,58,240,4);
+  for(let r=0,y=62;y<136;r++,y+=6){x.fillStyle=r%2?'#5e4029':'#634430';x.fillRect(0,y,240,6);x.fillStyle='#4e3420';x.fillRect(0,y,240,1);
+    for(let i=(r*17)%30;i<240;i+=30)x.fillRect(i,y,1,6);x.fillStyle='rgba(255,220,170,.05)';x.fillRect(0,y+1,240,1)}
+  x.fillStyle='#2a2a2c';x.fillRect(8,66,62,20);x.fillRect(10,98,62,26);x.fillStyle='#333336';for(let i=8;i<70;i+=10)x.fillRect(i,66,1,20);for(let i=10;i<72;i+=10)x.fillRect(i,98,1,26);
+  // wall details: lamps, clock, belts shelf, rules board
+  for(const lx of[40,120,200]){x.fillStyle='#222';x.fillRect(lx,0,1,6);x.fillStyle='#3a3a3a';x.fillRect(lx-4,6,9,3);x.fillStyle='#fff3c9';x.fillRect(lx-3,9,7,1)}
+  x.fillStyle='#e6dcc8';x.fillRect(146,32,10,10);x.fillStyle='#2b241f';x.fillRect(150,34,1,4);x.fillRect(150,37,3,1);x.fillRect(145,31,12,1);x.fillRect(145,42,12,1);
+  x.fillStyle='#2b241f';x.fillRect(64,22,30,2);
+  const nt=S.roster.reduce((tt,a)=>tt+a.titles.length,0);for(let i=0;i<Math.min(4,nt);i++){x.fillStyle='#e8b13a';x.fillRect(66+i*7,16,5,6);x.fillStyle='#9c7420';x.fillRect(67+i*7,20,3,1)}
+  if(!nt){x.fillStyle='#3a2d22';x.fillRect(70,17,4,5);x.fillRect(80,17,4,5)}
+  x.fillStyle='#3a2d22';x.fillRect(64,66,36,4);x.fillStyle='#2b241f';x.fillRect(66,70,2,4);x.fillRect(96,70,2,4);
+  const sp=spots();
+  const user=k=>{const id=occ[k];if(!id)return null;const e=ENT.find(z=>z.id===id);return e&&e.state==='do'?e:null};
+  for(const s of sp){
+    const u=user(s.key);
+    if(s.type==='saco'){const hit=u&&Math.sin(u.t*9)>0;const sw=u?(hit?-2:0):Math.sin(t*2+s.i)*.6;const bx=s.bag;
+      x.fillStyle='#777';x.fillRect(bx+4,0,1,42);x.fillStyle='#8f2a1b';x.fillRect(bx+sw,42,9,24);x.fillStyle='#d4452f';x.fillRect(bx+1+sw,43,7,22);x.fillStyle='#1b140c';x.fillRect(bx+sw,47,9,1);x.fillRect(bx+sw,59,9,1)}
+    if(s.type==='pera'){x.fillStyle='#3a2d22';x.fillRect(s.px-4,48,16,3);x.fillStyle='#2b241f';x.fillRect(s.px+3,51,1,3);const v=u?Math.round(Math.sin(u.t*30)):0;x.fillStyle='#d4452f';x.fillRect(s.px+1+v,54,5,6)}
+    if(s.type==='corda'&&!u){x.fillStyle='#2b241f';x.fillRect(s.hook-1,34,3,2);x.fillStyle='#d9cfb8';x.fillRect(s.hook,36,1,12);x.fillStyle='#e8b13a';x.fillRect(s.hook-1,48,1,3);x.fillRect(s.hook+1,48,1,3)}
+    if(s.type==='esquiva'){x.fillStyle='#3a2d22';x.fillRect(152,52,2,30);x.fillRect(178,52,2,30);x.fillStyle='#d9cfb8';x.fillRect(154,66,24,1)}
+    if(s.type==='pesos'){x.fillStyle='#2b241f';x.fillRect(s.bench,112,18,3);x.fillRect(s.bench+2,115,2,4);x.fillRect(s.bench+14,115,2,4);if(!u){x.fillStyle='#666';x.fillRect(s.bench-2,104,22,1);x.fillStyle='#333';x.fillRect(s.bench-3,102,3,5);x.fillRect(s.bench+18,102,3,5)}}
+    if(s.type==='pneu'){x.fillStyle='#1a1a1a';x.fillRect(98,118,16,6);x.fillStyle='#333';x.fillRect(101,119,10,2)}
+    if(s.type==='bola'&&!u){x.fillStyle='#6b4a2e';x.fillRect(s.x-2,126,4,4)}
+    if(s.type==='pads'&&!u){x.fillStyle='#e8b13a';x.fillRect(150+s.i*7,38,5,5)}
+    if(s.type==='sparring'){const zy=s.y-26,zx=184;
+      if(s.zone===0&&S.up.ringue){x.fillStyle='#c9b48f';x.fillRect(zx,zy+6,52,24);x.fillStyle='#3a2d22';x.fillRect(zx-2,zy-6,3,36);x.fillRect(zx+51,zy-6,3,36);x.fillStyle='#e8e0d0';x.fillRect(zx+1,zy,50,1);x.fillRect(zx+1,zy+5,50,1);x.fillStyle='#d4452f';x.fillRect(zx-2,zy-6,3,3)}
+      else{x.fillStyle='#d9cfb8';x.fillRect(zx,zy+8,52,1);x.fillRect(zx,zy+29,52,1);x.fillRect(zx,zy+8,1,22);x.fillRect(zx+51,zy+8,1,22)}}
+  }
+  const list=ENT.slice().sort((a,b)=>a.y-b.y);
+  for(const e of list){
+    let pose='stand';
+    if(e.state==='walk')pose='walk';
+    else if(e.state==='do'&&e.spot)pose=e.spot.pose||'stand';
+    const face=e.state==='do'&&e.spot&&e.spot.face&&!e.spot.run?e.spot.face:e.face;
+    fig(x,e.x,e.y,e.lk,face,pose,e.t);
+    if(e.state==='do'&&e.spot){
+      const s=e.spot;
+      if(s.type==='corda'){const up=Math.sin(e.t*14)>0;x.fillStyle='#e8d9b8';if(up)x.fillRect(e.x-4,e.y,9,1);else{x.fillRect(e.x-5,e.y-19,11,1);x.fillRect(e.x-5,e.y-19,1,9);x.fillRect(e.x+5,e.y-19,1,9)}}
+      if(s.holder)fig(x,e.x+12,e.y,(s.i===0&&S.up.treinador)?COACH:memberLooks[(s.i+9)%16],-1,'pad',e.t);
+      if(s.partner)fig(x,e.x+16,e.y,memberLooks[(s.i+11)%16],-1,'ball',e.t+1.6);
+      if(s.type==='sparring')fig(x,e.x+22,e.y,memberLooks[(s.i+5)%16],-1,'spar',e.t+.35);
+    }
+    if(e.kind==='a'){const by=Math.round(Math.sin(e.t*4));x.fillStyle='#e8b13a';x.fillRect(Math.round(e.x)-2,Math.round(e.y)-22+by,5,1);x.fillRect(Math.round(e.x)-1,Math.round(e.y)-21+by,3,1);x.fillRect(Math.round(e.x),Math.round(e.y)-20+by,1,1)}
+  }
+  if(S.up.treinador&&!occ['pads0'])fig(x,142,90,COACH,-1,'stand',t);
+  for(const lx of[40,120,200]){const g=x.createRadialGradient(lx,10,2,lx,90,80);g.addColorStop(0,'rgba(255,236,190,.16)');g.addColorStop(1,'rgba(255,236,190,0)');x.fillStyle=g;x.beginPath();x.moveTo(lx-4,10);x.lineTo(lx+4,10);x.lineTo(lx+46,136);x.lineTo(lx-46,136);x.fill()}
+  const vg=x.createRadialGradient(120,80,40,120,80,150);vg.addColorStop(0,'rgba(0,0,0,0)');vg.addColorStop(1,'rgba(0,0,0,.35)');x.fillStyle=vg;x.fillRect(0,0,240,136);
+}
+let lastT=performance.now();
+function world(now){
+  const dt=Math.min(100,now-lastT);lastT=now;
+  if(S&&!$('#fightRoot').innerHTML){stepWorld(dt,now);drawGym(now)}
+  requestAnimationFrame(world);
+}
+function drawPortrait(cv,lk){
+  if(!cv)return;const x=cv.getContext('2d');
+  x.fillStyle='#3a2d22';x.fillRect(0,0,32,32);x.fillStyle='#4a3a2c';x.fillRect(0,22,32,10);
+  x.fillStyle=lk.skin;x.fillRect(10,6,12,14);x.fillRect(6,22,20,10);x.fillRect(13,19,6,4);
+  x.fillStyle=lk.hair;x.fillRect(9,4,14,4);x.fillRect(9,6,3,5);x.fillRect(20,6,3,3);
+  x.fillStyle='#111';x.fillRect(13,12,2,2);x.fillRect(18,12,2,2);x.fillStyle='rgba(0,0,0,.2)';x.fillRect(15,15,2,2);x.fillRect(14,17,4,1);
+  x.fillStyle=lk.trunk;x.fillRect(6,29,20,3);
+}
+
+/* ================= FIGHT ================= */
+let F=null;
+const RING={x0:34,y0:24,x1:206,y1:152};
+const LIM={x0:54,y0:44,x1:186,y1:132};const SC=1.45;
+const STRAT_D={
+  'Agressivo':'Ataca mais vezes e em combinações, golpes 12% mais fortes. Defende pior e cansa-se muito mais depressa.',
+  'Equilibrado':'Sem bónus nem penalizações. Bom para poupar fôlego sem dar o round.',
+  'Defensivo':'Ataca menos e com golpes 8% mais fracos, mas é mais difícil de acertar e quase não se cansa.'
+};
+const LINES={
+  hit_jab:['{a} encaixa o jab.','Jab rápido de {a}, a cabeça de {d} vai para trás.','{a} mantém {d} à distância com o jab.','Mais um jab de {a}. Está a medir a distância.','Jab duplo de {a}!'],
+  hit_direto:['Direto de {a} em cheio!','{a} solta a direita e acerta!','Que direto de {a}!','{a} entra com o direto e {d} sente.','Direita pela linha do meio. Bom golpe de {a}.'],
+  hit_gancho:['Gancho de {a} ao queixo!','{a} roda o gancho e acerta em cheio!','Gancho por cima da guarda de {d}!','Gancho curto de {a}, a cabeça de {d} roda.'],
+  hit_uppercut:['Uppercut de {a} por baixo da guarda!','{a} levanta {d} com um uppercut!','Uppercut curto e seco de {a}!'],
+  body:['{a} vai ao corpo. Isso tira o fôlego.','Golpe ao fígado de {a}! {d} encolhe-se.','{a} trabalha o corpo de {d}.'],
+  clean:['QUE GOLPE! {a} apanhou {d} em cheio!','Isso doeu! {d} está abanado!','Golpe perfeito de {a}! O público levanta-se!','Em cheio! {d} nem viu de onde veio!'],
+  block:['{d} fecha a guarda e bloqueia.','Bloqueado. {d} está atento.','{a} bate na guarda de {d}.','Boa defesa de {d}, apanha tudo nas luvas.'],
+  slip:['{d} desvia a cabeça e o golpe passa ao lado.','Bom trabalho de cintura de {d}.','{d} esquiva para o lado com classe.'],
+  duck:['{d} baixa-se e o golpe passa por cima!','{a} ataca o ar, {d} baixou-se a tempo.'],
+  back:['{d} recua um passo e o golpe fica curto.','{d} sai da distância.'],
+  counter:['{d} responde de imediato!','Contra-ataque de {d}!','{d} aproveita a abertura!'],
+  combo:['Combinação de {a}: {n} golpes seguidos!','{a} encadeia {n} golpes. Que ritmo!','Sequência de {n} golpes de {a}!'],
+  clinch:['Os dois agarram-se. O árbitro separa.','{d} amarra {a} para ganhar tempo.','Clinch. Break!'],
+  stagger:['{d} cambaleia!','As pernas de {d} tremem!','{d} está em apuros!'],
+  tiring:['{x} já não salta tanto.','{x} começa a respirar mais fundo.','O ritmo de {x} está a baixar.'],
+  tired:['{x} está a ficar sem fôlego.','{x} baixa as mãos. O cansaço nota-se.','{x} respira pela boca. Está a sofrer.'],
+  down:['{d} VAI AO TAPETE!','ABAIXO! {d} está no chão!','{d} CAI! Que golpe de {a}!'],
+  flash:['DO NADA! {d} estava inteiro e foi ao chão!','Encaixe perfeito de {a}! {d} cai sem perceber!','No sítio certo! {a} deita {d} com um só golpe!'],
+  liver:['Gancho ao fígado! {d} dobra-se e cai de joelhos!','Ao fígado! {d} não consegue respirar e vai ao tapete!'],
+  up:['{d} levanta-se! Que coração!','{d} de pé ao oito. A luta continua.','{d} levanta-se, mas as pernas não estão bem.'],
+  ko:['ACABOU! {a} vence por KO!','KO! {d} não se levanta! Vitória de {a}!'],
+  circle:['{y} anda à volta e mantém a distância.','{y} não deixa {x} entrar.','{y} dança à volta de {x} com o jab.'],
+  wait:['{y} espera no centro, de mão baixa, a convidar.','{y} está à espera do erro de {x}.','{y} parado, paciente, a ler {x}.'],
+  pressure:['{a} não pára de avançar!','{a} vai sempre para a frente.'],
+  ropes:['{x} encosta {y} às cordas.','{y} está nas cordas!','{x} empurra {y} contra as cordas.'],
+  cornered:['{y} está preso no canto!','{x} encurrala {y} no canto.','Canto! {y} tem de sair dali.'],
+  center:['Voltam ao centro do ringue.','Os dois estudam-se no meio do ringue.','{x} corta o ringue e procura o ataque.','{x} anda à volta, a trabalhar o jab.'],
+  start:['Toca o gongo! Round {n}!','Round {n}. Os lutadores saem dos cantos.','Começa o round {n}!'],
+  end:['Gongo! Fim do round {n}.','Termina o round {n}. Cada um para o seu canto.']
+};
+let recent=[];
+function line(type,v){
+  let opts=LINES[type].filter(l=>!recent.includes(l));if(!opts.length)opts=LINES[type];
+  const l=pick(opts);recent.push(l);if(recent.length>14)recent.shift();
+  return l.replace(/\{(\w)\}/g,(m,k)=>v[k]??'');
+}
+function fighter(src,mine){
+  return{name:src.name,nick:src.nick,style:src.style,trait:src.trait,look:src.look,mine,...src.attrs,skills:{jab:1,direto:0,gancho:0,uppercut:0,corpoDireto:0,figado:0,...src.skills},def:{bloqueio:1,esquiva:0,clinch:0,...(src.def||{})},src,cat:src.cat||'Ligeiro',gift:src.gift||null,
+    hp:100,st:mine?clamp(100-(src.fatigue||0)*.5,40,100):100,kd:0,cut:0,conf:mine?src.conf:60,strat:'Equilibrado',
+    rs:newRS(),tot:{thrown:0,landed:0,power:0,dmg:0},card:0,dmgTaken:0,
+    pos:{x:mine?180:60,y:mine?44:132,tx:mine?180:60,ty:mine?44:132},an:{pose:'guard',t0:0,dur:1,arm:'L'},lastArm:'R',flash:0};
+}
+function newRS(){return{thrown:0,landed:0,power:0,dmg:0,kd:0}}
+function fightFlow(a){return new Promise(res=>startFight(a,res))}
+function startFight(a,done){
+  const f=a.fight;
+  if(!f.opp.grown){const wk=Math.max(0,S.week-(f.opp.made||S.week));for(const[k]of ATTRS)f.opp.attrs[k]=clamp(f.opp.attrs[k]+R(0,.45)*wk,5,99);f.opp.grown=true}
+  F={a,done,me:fighter(a,true),op:fighter(f.opp,false),round:1,rounds:f.rounds,log:[],fast:false,over:null,ft:0,
+    zoom:null,crowd:0,flashes:0,ref:{x:120,y:60,tx:120,ty:60,pose:'stand'},count:null,big:null,lastScore:[10,10],zone:'center'};
+  F.me.form=formOf(a).sc*TUNE.formK;F.op.form=0;
+  F.op.strat=f.opp.style==='Agressivo'?'Agressivo':f.opp.style==='Defensivo'?'Defensivo':'Equilibrado';
+  $('#fightRoot').innerHTML=`<div class="fight">
+    <div class="stagew"><div class="stage"><canvas class="px" id="ring" width="240" height="240"></canvas>
+      <div class="fhead"><div class="fside" id="fL"></div><div class="fclock" id="fClock"></div><div class="fside rt" id="fR"></div></div></div></div>
+    <div class="booth" id="booth"><div class="fcom" id="fcom" aria-live="polite"></div><div class="caster"><canvas id="caster" width="40" height="48"></canvas><span>ZÉ DO MICRO</span></div></div>
+    <div class="fctl" id="fctl"></div></div>`;
+  recent=[];
+  requestAnimationFrame(ringLoop);
+  hud();
+  runFight();
+}
+function hud(){
+  if(!F)return;
+  const side=(el,x)=>{
+    if(!el.firstChild)el.innerHTML=`<div class="fname"></div><div class="bar red"><i class="v"></i><i class="pv"></i></div><div class="bar gold"><i class="v"></i><i class="pv"></i></div><div class="meta" style="font-size:11px"></div>`;
+    el.querySelector('.fname').textContent=`${x.nick.toUpperCase()} · ${x.strat.slice(0,3).toUpperCase()}`;
+    const pv=(x.mine&&F.prev)||{};const hp=clamp(x.hp,0,100),st=clamp(x.st,0,100);
+    const[hb,sb]=el.querySelectorAll('.bar');
+    hb.children[0].style.width=hp+'%';sb.children[0].style.width=st+'%';
+    const ph=clamp(pv.hp||0,0,100-hp),ps=clamp(pv.st||0,0,100-st);
+    hb.children[1].style.left=hp+'%';hb.children[1].style.width=ph+'%';sb.children[1].style.left=st+'%';sb.children[1].style.width=ps+'%';
+    const cut=x.cut+(pv.cut||0);
+    el.querySelector('.meta').innerHTML=`${x.kd?`Quedas ${x.kd}`:''}${x.kd&&cut?' · ':''}${cut?`Cortes ${cut}`:''}${ps?` <b style="color:var(--gold);font-weight:400">+${Math.round(ps)} fôlego</b>`:''}${ph?` <b style="color:#ff9a86;font-weight:400">+${Math.round(ph)} vida</b>`:''}${pv.cut?' <b style="color:#ff9a86;font-weight:400">-1 corte</b>':''}&nbsp;`;
+  };
+  side($('#fL'),F.me);side($('#fR'),F.op);
+  const left=Math.max(0,180-F.ft/1000*3);
+  $('#fClock').innerHTML=`${F.a.fight.title?'TÍTULO<br>':''}ROUND ${F.round}/${F.rounds}<b>${Math.floor(left/60)}:${String(Math.floor(left%60)).padStart(2,'0')}</b>`;
+}
+function say(t,c){F.log.push({t,c});F.talk=performance.now()+Math.min(2200,400+t.length*28);const big=$('#booth')&&$('#booth').classList.contains('big');$('#fcom').innerHTML=F.log.slice(big?-9:-3).map(l=>`<div class="${l.c||''}">${l.t}</div>`).join('')}
+function setBooth(big){const b=$('#booth');if(!b)return;b.classList.toggle('big',big);const fr=$('#fightRoot .fight');if(fr)fr.classList.toggle('compact',!big);$('#fctl').style.flex=big?'none':'';const L=F.log;F.log=L.slice(0,-1);if(L.length)say(L.at(-1).t,L.at(-1).c)}
+function drawCaster(now){
+  const cv=$('#caster');if(!cv||!F)return;const c=cv.getContext('2d');const t=now/1000;
+  const talking=now<(F.talk||0),hype=now<F.crowd;
+  c.fillStyle='#1a1410';c.fillRect(0,0,40,48);
+  c.fillStyle='#2b1f17';c.fillRect(0,0,40,30);c.fillStyle='#e8b13a';c.fillRect(3,3,12,5);c.fillStyle='#1a1410';c.fillRect(4,4,10,3);c.fillStyle='#e8b13a';c.font='4px monospace';
+  const by=hype&&Math.sin(t*12)>0?-1:0;
+  // body: suit
+  c.fillStyle='#2d3a55';c.fillRect(8,30+by,24,14);c.fillStyle='#e8e0d0';c.fillRect(18,30+by,4,8);c.fillStyle='#d4452f';c.fillRect(19,31+by,2,6);
+  // arms
+  if(hype){c.fillStyle='#2d3a55';c.fillRect(4,22+by,4,10);c.fillRect(32,22+by,4,10);c.fillStyle='#e0a878';c.fillRect(4,19+by,4,4);c.fillRect(32,19+by,4,4)}
+  // head
+  c.fillStyle='#e0a878';c.fillRect(13,12+by,14,16);c.fillStyle='#c48c5e';c.fillRect(13,26+by,14,2);
+  c.fillStyle='#5a3a22';c.fillRect(12,10+by,16,4);c.fillRect(12,10+by,2,8);c.fillRect(26,10+by,2,8);
+  // headset
+  c.fillStyle='#111';c.fillRect(11,13+by,2,7);c.fillRect(27,13+by,2,7);c.fillRect(12,9+by,16,2);c.fillRect(27,19+by,1,1);c.fillRect(22,24+by,6,1);c.fillStyle='#333';c.fillRect(21,23+by,2,3);
+  // eyes (blink) + brows
+  const blink=(t%3.2)<.12;c.fillStyle='#111';if(blink){c.fillRect(16,18+by,3,1);c.fillRect(22,18+by,3,1)}else{c.fillRect(16,17+by,2,2);c.fillRect(22,17+by,2,2)}
+  c.fillStyle='#5a3a22';c.fillRect(15,15+by-(hype?1:0),4,1);c.fillRect(21,15+by-(hype?1:0),4,1);
+  // mouth
+  const open=talking&&Math.sin(t*22)>0;c.fillStyle='#7a2a20';if(open||hype)c.fillRect(18,22+by,5,hype?3:2);else c.fillRect(18,23+by,5,1);
+  // desk with mic
+  c.fillStyle='#4a3424';c.fillRect(0,42,40,6);c.fillStyle='#5e4430';c.fillRect(0,42,40,1);
+  c.fillStyle='#222';c.fillRect(30,34,1,8);c.fillRect(28,32,4,3);
+}
+function spd(){return F.fast?.3:1}
+function slowF(){return F.zoom&&performance.now()<F.zoom.until?2.4:1}
+async function fsleep(ms,count=true){if(count)F.ft+=ms;await sleep(ms*spd()*slowF());hud()}
+function act(x,pose,dur,extra={}){x.an={pose,t0:performance.now(),dur:Math.max(1,dur*spd()*slowF()),arm:extra.arm||x.an.arm,side:extra.side||1,body:!!extra.body}}
+async function waitArrive(maxMs){
+  const t0=performance.now();
+  while(F&&performance.now()-t0<maxMs*spd()){if([F.me,F.op].every(x=>Math.hypot(x.pos.tx-x.pos.x,x.pos.ty-x.pos.y)<1.5))break;await sleep(40)}
+  if(F){F.ft+=(performance.now()-t0)/spd();hud()}
+}
+function setT(x,tx,ty){x.pos.tx=clamp(tx,LIM.x0,LIM.x1);x.pos.ty=clamp(ty,LIM.y0,LIM.y1)}
+function unit(a,b){const dx=b.pos.x-a.pos.x,dy=b.pos.y-a.pos.y,d=Math.hypot(dx,dy)||1;return{dx:dx/d,dy:dy/d,d}}
+function pair(prey,presser,px,py,ang,gap){setT(prey,px,py);setT(presser,prey.pos.tx+Math.cos(ang)*gap,prey.pos.ty+Math.sin(ang)*gap)}
+async function toCorners(){
+  setT(F.me,LIM.x1-2,LIM.y0+2);setT(F.op,LIM.x0+2,LIM.y1-2);F.refLock=true;F.ref.tx=LIM.x0+10;F.ref.ty=LIM.y0+6;
+  F.me.an={pose:'guard',t0:0,dur:1,arm:'L'};F.op.an={pose:'guard',t0:0,dur:1,arm:'L'};
+}
+async function runFight(){
+  const fc=$('#fctl');
+  await preTalk();
+  for(F.round=1;F.round<=F.rounds;F.round++){
+    F.ft=0;F.me.rs=newRS();F.op.rs=newRS();
+    fc.innerHTML=`<button class="btn" id="fast">${F.fast?'VELOCIDADE NORMAL':'ACELERAR'}</button>`;setBooth(true);
+    $('#fast').onclick=()=>{F.fast=!F.fast;$('#fast').textContent=F.fast?'VELOCIDADE NORMAL':'ACELERAR'};
+    say(line('start',{n:F.round}),'sys');
+    if(F.round===1){const fm=F.me.form||0;if(fm>=.3)say(`${F.me.nick} entra em grande forma, muito solto.`,'sys');else if(fm<=-.3)say(`${F.me.nick} parece pesado hoje...`,'sys')}
+    setT(F.me,98,88);setT(F.op,142,88);F.refLock=false;F.zone='center';
+    await waitArrive(3000);F.ft=0;hud();
+    while(F.ft<60000&&!F.over){await exchange();if(F.over)break;await fsleep(R(450,950)/((fmods(F.me).vol+fmods(F.op).vol)/2))}
+    if(F.over)break;
+    say(line('end',{n:F.round}),'sys');scoreRound();
+    toCorners();
+    await fsleep(900,false);
+    if(F.round<F.rounds){const c=await corner();if(c==='towel'){F.over={win:false,how:'toalha'};say(`Atiras a toalha. ${F.me.nick} está salvo, mas perde.`,'sys');break}if(F.over)break;await preTalk(true)}
+  }
+  if(!F.over){
+    const a=F.me.card,b=F.op.card;
+    if(a===b)F.over={draw:true,how:'pontos'};else F.over={win:a>b,how:'pontos'};
+    setT(F.me,104,88);setT(F.op,136,88);F.refLock=true;F.ref.tx=120;F.ref.ty=70;
+    await sleep(900);
+    F.big=F.over.draw?'EMPATE':'DECISÃO';
+    say(F.over.draw?`Os juízes dão empate: ${a}-${b}.`:`Decisão dos juízes, ${Math.max(a,b)}-${Math.min(a,b)}: vitória de ${F.over.win?F.me.nick:F.op.nick}!`,'sys');
+  }
+  if(F.over.win){act(F.me,'win',99999);F.crowd=performance.now()+3000}else if(!F.over.draw&&F.over.how!=='toalha')act(F.op,'win',99999);
+  await sleep(2400);
+  const r=finishFight();
+  const done=F.done;
+  $('#fightRoot').innerHTML='';F=null;
+  await info(r.title,r.html);
+  done(r.line);
+}
+const TACTICS={
+  'Agressivo':{
+    good:[
+      {n:'Esperar e contra-atacar',need:'velocidade',t:['Deixa-o vir. Esquiva e responde na hora.','Ele vai entrar a matar. Sai da linha e castiga.','Não vás ao encontro dele. Deixa-o falhar e responde.']},
+      {n:'Guarda fechada e aguentar',need:'defesa',t:['Fecha a guarda, aguenta a tempestade e ele cansa-se.','Cotovelos colados, queixo em baixo. Ele vai gastar-se.']},
+      {n:'Jab e sair pelos lados',need:'tecnica',t:['Jab na cara e sai sempre para o lado. Nunca para trás.','Jab, passo ao lado, jab. Não lhe dês um alvo parado.']}
+    ],
+    half:[
+      {n:'Clinch quando ele entrar',need:'resistencia',t:['Quando ele entrar, agarra-o e corta-lhe o ritmo.','Amarra-o sempre que vier com tudo.']},
+      {n:'Trocar golpe a golpe',need:'forca',t:['Ele quer guerra? Dá-lhe guerra, tens mão pesada.','Mostra-lhe que também bates. Troca com ele.']}
+    ]},
+  'Defensivo':{
+    good:[
+      {n:'Pressão constante',need:'resistencia',t:['Corta-lhe o ringue e não o deixes respirar.','Anda sempre para a frente. Ele não aguenta pressão.']},
+      {n:'Encurralar nos cantos',need:'velocidade',t:['Fecha-lhe as saídas e mete-o no canto.','Passos curtos, corta os ângulos, leva-o às cordas.']},
+      {n:'Bater no corpo',need:'forca',t:['Vai ao corpo até ele baixar a guarda.','Ele fecha a cabeça? Então parte-lhe as costelas.']}
+    ],
+    half:[
+      {n:'Fintar para abrir a guarda',need:'tecnica',t:['Finta em cima, bate em baixo.','Faz-lhe mexer as mãos com fintas e entra.']},
+      {n:'Duelo de jab',need:'tecnica',t:['Ganha-lhe o duelo de jab à distância.','Jab dobrado, sempre. Ele não vai responder.']}
+    ]},
+  'Contra-atacante':{
+    good:[
+      {n:'Paciência e jab',need:'tecnica',t:['Não entres primeiro. Jab e paciência.','Ele vive dos teus erros. Jab e mais nada.']},
+      {n:'Guarda alta, não morder',need:'defesa',t:['Ele está à espera que ataques mal. Guarda alta e não mordas o isco.','Não caias nas fintas dele. Guarda sempre em cima.']},
+      {n:'Fintar e atacar depois',need:'velocidade',t:['Finta, deixa-o mostrar o contra, e entra a seguir.','Faz-lhe a finta, ele responde ao ar, e tu entras.']}
+    ],
+    half:[
+      {n:'Ataques curtos e sair',need:'velocidade',t:['Entra, bate dois e sai antes que ele responda.','Combinações curtas e fora da distância.']},
+      {n:'Ir ao corpo',need:'forca',t:['Ao corpo ele não contra-ataca tão bem.','Baixa e trabalha-lhe o tronco.']}
+    ]}
+};
+const MENTAL=[
+  {n:'Motivar',m:'conf',t:['Vais ganhar isto! Acredita em ti!','Treinaste para isto. Hoje é a tua noite!','Ninguém trabalhou mais do que tu.']},
+  {n:'Acalmar',m:'calm',t:['Respira. Faz o teu boxe e mais nada.','Calma. Uma coisa de cada vez.','Esquece o público. Só tu e ele.']}
+];
+const ATTR_N=Object.fromEntries(ATTRS);
+const INTROS=[
+  n=>`No balneário, ${n} está a ligar as luvas. Olha para ti à espera de uma última palavra.`,
+  n=>`${n} aquece nos pads. Antes de subir ao ringue, quer ouvir o plano.`,
+  n=>`O público já se ouve no corredor. ${n} pergunta-te: "Como é que o apanho?"`
+];
+/* situation questions between rounds: eff keys hit, dmg, def, stam (cost x), body, cut, conf */
+const SITS=[
+  {id:'losing',when:F=>F.me.card<F.op.card,q:['Estás a perder nos pontos. O que lhe dizes?','Os juízes estão a dar-lhe os rounds. E agora?'],
+   o:[{n:'Mais volume',t:'Mais golpes! Jab, jab, direto, sem parar.',lvl:1,need:'resistencia',eff:{hit:.05,stam:1.15}},
+      {n:'Arriscar o KO',t:'Procura a mão grande. Precisamos de o derrubar.',lvl:.5,need:'forca',eff:{dmg:.1,def:-.03}},
+      {n:'Continuar igual',t:'Está tudo bem, continua assim.',lvl:0},
+      {n:'Esperar o erro',t:'Espera que ele falhe e depois logo se vê.',lvl:0}]},
+  {id:'winning',when:F=>F.me.card>=F.op.card+2,q:['Estás a ganhar com folga. Como geres o round?','Os rounds são teus. Qual é o plano agora?'],
+   o:[{n:'Controlar com o jab',t:'Sem riscos. Jab, distância e não lhe dês nada.',lvl:1,need:'tecnica',eff:{def:.06,stam:.85}},
+      {n:'Manter a pressão',t:'Continua em cima dele, mas com cabeça.',lvl:.5,eff:{hit:.02}},
+      {n:'Ir para o KO',t:'Acaba com isto já! Vai com tudo!',lvl:0,eff:{def:-.04}},
+      {n:'Descansar',t:'Abranda, poupa-te, já está ganho.',lvl:0,eff:{hit:-.03}}]},
+  {id:'opTired',when:F=>F.op.st<50,q:['Ele está a ficar sem pernas. O que fazes?','O adversário respira pela boca. Aproveitas como?'],
+   o:[{n:'Pressionar já',t:'Ele está sem gás. Em cima dele, agora!',lvl:1,need:'resistencia',eff:{hit:.05,dmg:.06}},
+      {n:'Bater no corpo',t:'Vai ao corpo para o acabar de esvaziar.',lvl:.5,need:'forca',eff:{body:.25,dmg:.03}},
+      {n:'Deixá-lo vir',t:'Espera que ele venha ter contigo.',lvl:0},
+      {n:'Poupar energia',t:'Não te gastes, o round é longo.',lvl:0}]},
+  {id:'meTired',when:F=>F.me.st<50,q:['O teu atleta está a ficar sem fôlego. O que lhe dizes?','As pernas dele estão a pesar. Como o guias?'],
+   o:[{n:'Jab e clinch',t:'Usa o jab e agarra quando ele entrar. Ganha tempo.',lvl:1,need:'defesa',eff:{stam:.75,def:.04}},
+      {n:'Só contra-atacar',t:'Não ataques primeiro, responde só quando ele falhar.',lvl:.5,need:'velocidade',eff:{def:.04,stam:.85}},
+      {n:'Tudo por tudo',t:'Gasta o que tens antes que acabe o gás!',lvl:0,eff:{stam:1.3}},
+      {n:'Motivar',t:'Tu aguentas! Não pares!',lvl:0,eff:{conf:4}}]},
+  {id:'opCut',when:F=>F.op.cut>0,q:['Ele tem um corte acima do olho. Como aproveitas?','O sangue está a escorrer-lhe para o olho. E agora?'],
+   o:[{n:'Jab ao corte',t:'Jab direto a esse corte, uma e outra vez.',lvl:1,need:'tecnica',eff:{cut:.25,hit:.02}},
+      {n:'Procurar a cabeça',t:'Mira à cabeça, o médico pode parar isto.',lvl:.5,eff:{cut:.12}},
+      {n:'Ir ao corpo',t:'Esquece o corte, trabalha o corpo.',lvl:0,eff:{body:.15}},
+      {n:'Respeitar',t:'Não forces, deixa a luta correr.',lvl:0}]},
+  {id:'meCut',when:F=>F.me.cut>0,q:['Ele abriu-te um corte. Como proteges o teu atleta?','O cutman está a trabalhar no sobrolho. Que instrução dás?'],
+   o:[{n:'Proteger esse lado',t:'Guarda alta desse lado e sai sempre para o outro.',lvl:1,need:'defesa',eff:{def:.06}},
+      {n:'Acabar depressa',t:'Antes que o médico pare isto, vai buscá-lo!',lvl:.5,need:'forca',eff:{dmg:.08,def:-.02}},
+      {n:'Ignorar',t:'Não é nada, luta normalmente.',lvl:0},
+      {n:'Trocar golpes',t:'Ele cortou-te? Corta-o tu também!',lvl:0,eff:{def:-.04}}]},
+  {id:'meDown',when:F=>F.me.kd>0,q:['O teu atleta já foi ao tapete. O que lhe dizes?','Ele levantou-se, mas ainda está tonto. Plano?'],
+   o:[{n:'Recuperar as pernas',t:'Fica longe, mexe-te, recupera a cabeça.',lvl:1,need:'velocidade',eff:{def:.07,stam:.85}},
+      {n:'Agarrar quando vier',t:'Se ele vier, agarra-o e ganha tempo.',lvl:.5,need:'resistencia',eff:{def:.04}},
+      {n:'Responder logo',t:'Mostra-lhe que não te assustou! Ataca!',lvl:0,eff:{def:-.05}},
+      {n:'Motivar',t:'Isso não foi nada! Tu és mais forte!',lvl:0,eff:{conf:6}}]},
+  {id:'opDown',when:F=>F.op.kd>0,q:['Ele já foi ao tapete. Como acabas a luta?','O adversário está ferido. Vais buscá-lo como?'],
+   o:[{n:'Ir buscá-lo com cabeça',t:'Ele está ferido. Golpes limpos, sem te expores.',lvl:1,need:'tecnica',eff:{dmg:.1,hit:.03}},
+      {n:'Pressão total',t:'Não o deixes respirar, em cima dele!',lvl:.5,need:'resistencia',eff:{hit:.03,stam:1.2}},
+      {n:'Deixá-lo recuperar',t:'Calma, já ganhaste o round.',lvl:0},
+      {n:'Só golpes grandes',t:'Só bombas, acaba com ele com um golpe.',lvl:0,eff:{hit:-.04,dmg:.08}}]},
+  {id:'opPower',when:F=>F.op.rs.power>=3,q:['Ele está a acertar-te com golpes pesados. Como corriges?','Os ganchos dele estão a entrar. O que mudas?'],
+   o:[{n:'Sair para o lado',t:'Sai para o lado da mão forte dele, sempre.',lvl:1,need:'velocidade',eff:{def:.07}},
+      {n:'Fechar a guarda',t:'Cotovelos colados, aguenta e responde.',lvl:.5,need:'defesa',eff:{def:.04}},
+      {n:'Trocar com ele',t:'Ele bate? Tu bates mais!',lvl:0,eff:{def:-.04,dmg:.04}},
+      {n:'Acalmar',t:'Respira, isso passa.',lvl:0}]},
+  {id:'meLanding',when:F=>F.me.rs.landed>=F.op.rs.landed+4,q:['Os teus golpes estão a entrar. O que lhe dizes?','Ele não consegue fugir do teu jab. Continuas como?'],
+   o:[{n:'Repetir o que resulta',t:'Isso está a entrar. Repete, repete, repete.',lvl:1,need:'tecnica',eff:{hit:.05}},
+      {n:'Juntar o direto',t:'Depois do jab, solta o direto.',lvl:.5,eff:{dmg:.05}},
+      {n:'Mudar tudo',t:'Experimenta outra coisa, ele vai adaptar-se.',lvl:0,eff:{hit:-.03}},
+      {n:'Abrandar',t:'Já fizeste o suficiente, descansa.',lvl:0}]},
+  {id:'last',when:F=>F.round+1===F.rounds,q:['Último round! O que lhe dizes?','Faltam três minutos. Última instrução?'],
+   o:[{n:'Deixar tudo lá dentro',t:'É o último! Tudo o que tens, agora!',lvl:1,need:'resistencia',eff:{hit:.04,dmg:.05,stam:1.1}},
+      {n:'Fechar com o jab',t:'Jab e mãos em cima até ao gongo.',lvl:.5,eff:{def:.04}},
+      {n:'Esperar o gongo',t:'Sobrevive e espera pelo gongo.',lvl:0,eff:{hit:-.03}},
+      {n:'Motivar',t:'Três minutos para seres outro homem!',lvl:0,eff:{conf:5}}]},
+  {id:'even',when:F=>true,q:['Round equilibrado. Que ajuste fazes?','Ninguém se destaca. Qual é o plano para o próximo round?','Está tudo muito igual. Que instrução lhe dás?'],
+   o:[{n:'Corpo e depois cabeça',t:'Primeiro o corpo, a cabeça vem a seguir.',lvl:1,need:'forca',eff:{body:.2,dmg:.04}},
+      {n:'Trabalhar o jab',t:'Ganha-lhe a distância com o jab.',lvl:.5,need:'tecnica',eff:{hit:.03}},
+      {n:'Esperar e ver',t:'Vê o que ele faz e depois decide.',lvl:0},
+      {n:'Mudar de guarda',t:'Experimenta lutar de canhoto.',lvl:0,eff:{hit:-.03}}]}
+];
+const STYLEQ=['Ele está a ganhar-te no estilo. O que mudas?','O estilo dele está a complicar-te a vida. Que tática agora?','A tática de antes não resultou. Nova instrução?'];
+function attrOk(a,o,need){if(!need)return true;const sc=scoutOf(o);const opv=(sc.attrs[need][0]+sc.attrs[need][1])/2;return a.attrs[need]>=opv-3}
+function shuffle(arr){return arr.map(v=>[Math.random(),v]).sort((x,y)=>x[0]-y[0]).map(x=>x[1])}
+function styleOptions(op){
+  const T=TACTICS[op.style];const goods=shuffle(T.good).slice(0,2);
+  const other=pick(STYLES.filter(x=>x!==op.style));
+  return shuffle([...goods.map(g=>({...g,lvl:1,t:pick(g.t)})),{...pick(T.half),lvl:.5},{...pick(TACTICS[other].good),lvl:0}].map(x=>({...x,t:Array.isArray(x.t)?pick(x.t):x.t})));
+}
+function preTalk(mid){
+  return new Promise(res=>{
+    setBooth(false);const{me,op}=F;const a=F.a,o=a.fight.opp;
+    const disadv=edge(a.style,op.style)<0;
+    F.usedQ=F.usedQ||[];
+    let kind,question,opts,sit=null;
+    if(!mid){
+      kind='style';question=`${op.nick} é ${op.style.toLowerCase()}. Qual é o plano?`;
+      opts=styleOptions(op);
+      const m=pick(MENTAL);opts[3]={n:m.n,m:m.m,t:pick(m.t),lvl:0};opts=shuffle(opts);
+    }else if(disadv&&(me.baseFix||0)<1){
+      kind='style';question=pick(STYLEQ);opts=styleOptions(op);
+    }else{
+      kind='sit';
+      const cands=SITS.filter(s=>s.when(F)&&!F.usedQ.includes(s.id));
+      sit=cands.find(s=>s.id!=='even')&&Math.random()<.85?pick(cands.filter(s=>s.id!=='even')):(cands.find(s=>s.id==='even')||pick(SITS));
+      F.usedQ.push(sit.id);question=pick(sit.q);opts=shuffle(sit.o.map(x=>({...x})));
+    }
+    let strat=mid?me.strat:'Equilibrado';
+    say(mid?question:pick(INTROS)(me.nick),'sys');
+    const draw=()=>{
+      $('#fctl').innerHTML=(mid?`<h3>PALAVRA NO CANTO · PARA O ROUND ${F.round+1}${kind==='style'?' · TÁTICA DE ESTILO':''}</h3>`:`<h3>1 · ESTRATÉGIA · ${op.nick.toUpperCase()} É ${op.style.toUpperCase()}</h3>
+      <div class="cseg">${Object.keys(STRAT).map(k=>`<button class="btn ${strat===k?'on':''}" data-s0="${k}">${k.toUpperCase()}</button>`).join('')}</div>
+      <h3>2 · ${question.toUpperCase()}</h3>`)+`
+      <div class="tks">${opts.map((x,i)=>`<button data-tk="${i}"><strong>${x.n.toUpperCase()}</strong><span>"${x.t}"</span></button>`).join('')}</div>`;
+      $('#fctl').querySelectorAll('[data-s0]').forEach(b=>b.onclick=()=>{strat=b.dataset.s0;draw()});
+      $('#fctl').querySelectorAll('[data-tk]').forEach(b=>b.onclick=()=>{
+        const x=opts[+b.dataset.tk];me.strat=strat;
+        let lvl=x.lvl,why='';
+        if(lvl>0&&x.need&&!attrOk(a,o,x.need)){lvl=lvl===1?.5:0;why='attr'}
+        if(lvl>0&&a.trait==='Teimoso'&&Math.random()<.3){lvl=lvl===1?.5:0;why='teimoso'}
+        let cls,lab,eff,reply;
+        if(x.m){
+          if(x.m==='conf'){me.conf=clamp(me.conf+8,0,100);reply=pick(['"Vou dar tudo, treinador!"','"Hoje é a minha noite."','"Deixa comigo."'])}
+          else{me.calm=true;reply=pick(['"Ok. Estou concentrado."','"Respira... pronto."','"Estou tranquilo."'])}
+          cls='info';lab='PALAVRA MENTAL';eff=x.m==='conf'?'Mais confiança, mas não muda nada contra o estilo dele.':'Gasta menos fôlego, mas não muda nada contra o estilo dele.';
+        }else{
+          reply=lvl===1?pick(['"Percebido. Sei exatamente o que fazer."','"É isso. Vou fazer assim."','"Boa. Já vi onde ele falha."']):lvl===.5?(why==='attr'?`"Vou tentar... mas não sei se tenho ${ATTR_N[x.need].toLowerCase()} para isso."`:why==='teimoso'?'"Hmm. Vou ver."':pick(['"Ok, vou tentar isso."','"Pode ser."'])):(why==='teimoso'?'"Eu lá dentro resolvo."':why==='attr'?'"Não sei se consigo, treinador."':pick(['"Ok..." Não parece muito convencido.','"Tens a certeza?"','Acena, mas olha para o outro lado.']));
+          cls=lvl===1?'ok':lvl===.5?'half':'bad';lab=lvl===1?'CERTA':lvl===.5?'MEIA CERTA':'ERRADA';
+          const lack=why==='attr'?`Falta-lhe ${ATTR_N[x.need].toLowerCase()} para isso. `:why==='teimoso'?'Não te ouviu bem. ':'';
+          if(kind==='style'){
+            if(!mid){me.baseFix=disadv?lvl:0;me.tacB=!disadv?lvl*.03:0;
+              eff=lack+(lvl===1?(disadv?'A desvantagem de estilo desaparece durante toda a luta.':'Pequeno bónus de acerto durante toda a luta.'):lvl===.5?(disadv?'A desvantagem de estilo fica reduzida a metade durante a luta.':'Bónus pequeno de acerto.'):`Essa tática não resulta contra um ${op.style.toLowerCase()}.`);}
+            else{me.roundFix=lvl;me.rb={};
+              eff=lack+(lvl===1?'Neste round, a desvantagem de estilo desaparece.':lvl===.5?'Neste round, a desvantagem de estilo diminui.':`Essa tática não resulta contra um ${op.style.toLowerCase()}. Tens nova hipótese no próximo intervalo.`);}
+          }else{
+            me.roundFix=0;
+            const base=x.eff||{};const k=lvl===1?1:lvl===.5?.5:(x.lvl===0?1:0);
+            me.rb={};for(const[kk,v]of Object.entries(base)){if(kk==='stam')me.rb.stam=1+(v-1)*k;else if(kk==='conf')me.conf=clamp(me.conf+v*k,0,100);else me.rb[kk]=v*k}
+            eff=lack+(lvl===1?'Bónus no próximo round.':lvl===.5?'Ajuda um pouco no próximo round.':'Não ajuda nada. Pode até piorar.');
+          }
+        }
+        say(`${me.nick}: ${reply}`,cls);
+        $('#fctl').innerHTML=`<div class="verdict ${cls}"><b>${lab}</b><span>${me.nick}: ${reply}</span><span class="meta">${eff}</span></div>`;
+        setTimeout(res,F&&F.fast?600:2600);
+      });
+    };
+    draw();
+  });
+}
+function scoreRound(){
+  const m=F.me.rs,o=F.op.rs;
+  let ms=10,os=10;
+  const jn=()=>1+(Math.random()+Math.random()+Math.random()-1.5)*TUNE.judge;const tm=(m.dmg+m.landed*.5)*jn(),to=(o.dmg+o.landed*.5)*jn();
+  if(Math.abs(tm-to)>(tm+to)*.08){if(tm>to)os=9;else ms=9}
+  ms-=o.kd;os-=m.kd;
+  F.me.card+=ms;F.op.card+=os;F.lastScore=[ms,os];
+}
+function choosePunch(x,i){
+  const ks=Object.keys(x.skills).filter(k=>x.skills[k]>0);
+  if(i===0&&Math.random()<(x.style==='Defensivo'?.75:x.style==='Agressivo'?.35:.5))return 'jab';
+  if(x.style==='Contra-atacante'&&i>0){const pw=ks.filter(k=>k!=='jab');if(pw.length&&Math.random()<.6)return pick(pw)}
+  return pick(ks);
+}
+async function footwork(){
+  const{me,op}=F;
+  const sw=x=>x.style==='Agressivo'?1.9:x.style==='Defensivo'?.55:.8;
+  const aM=STRAT[me.strat].agg*sw(me),aO=STRAT[op.strat].agg*sw(op);
+  const presser=Math.random()<aM/(aM+aO)?me:op,prey=presser===me?op:me;
+  const v={x:presser.nick,y:prey.nick};
+  let pC=.42,pR=.76;
+  if(presser.style==='Agressivo'){pC=.22;pR=.62}
+  if(prey.style==='Defensivo'){pC+=.2;pR=Math.min(.95,pR+.12)}
+  if(prey.style==='Contra-atacante'){pC=Math.max(pC,.55);pR=Math.max(pR,.82)}
+  const r=Math.random();let zone,msg=null;
+  if(r<pC){
+    zone='center';
+    const ang=Math.atan2(presser.pos.y-prey.pos.y,presser.pos.x-prey.pos.x)+R(-1,1);
+    const cs=prey.style==='Contra-atacante'?8:24;pair(prey,presser,120+R(-cs,cs),88+R(-cs*.75,cs*.75),ang,prey.style==='Defensivo'?56:46);
+    if(F.zone!=='center')msg=line('center',v);
+    else if(prey.style==='Defensivo'&&Math.random()<.4)msg=line('circle',v);
+    else if(prey.style==='Contra-atacante'&&Math.random()<.4)msg=line('wait',v);
+  }else if(r<.76){
+    zone='ropes';
+    const side=RI(0,3);let px,py,ang;
+    if(side===0){px=R(70,170);py=LIM.y0;ang=Math.PI/2}
+    else if(side===1){px=R(70,170);py=LIM.y1;ang=-Math.PI/2}
+    else if(side===2){px=LIM.x0;py=R(54,122);ang=0}
+    else{px=LIM.x1;py=R(54,122);ang=Math.PI}
+    pair(prey,presser,px,py,ang+R(-.4,.4),42);
+    if(F.zone!=='ropes')msg=line('ropes',v);
+  }else{
+    zone='corner';
+    const c=pick([[LIM.x0+2,LIM.y0+2,Math.PI/4],[LIM.x1-2,LIM.y0+2,3*Math.PI/4],[LIM.x0+2,LIM.y1-2,-Math.PI/4],[LIM.x1-2,LIM.y1-2,-3*Math.PI/4]]);
+    pair(prey,presser,c[0],c[1],c[2]+R(-.3,.3),42);
+    msg=line('cornered',v);
+  }
+  F.zone=zone;
+  if(msg&&Math.random()<.6)say(msg);
+  await waitArrive(2400);await fsleep(R(150,400));
+}
+async function exchange(){
+  const{me,op}=F;
+  await footwork();
+  {const cl=x=>(x.def&&x.def.clinch)||0;const need=x=>cl(x)>0&&(x.st<=30||x.hp<35);const lv=Math.max(cl(me),cl(op));
+   if(lv>0&&Math.random()<((need(me)||need(op))?.14+.02*lv:.04+.01*lv)){await clinch(need(me)&&need(op)?pick([me,op]):need(me)?me:need(op)?op:cl(me)>cl(op)?me:cl(op)>cl(me)?op:pick([me,op]));return}}
+  let myStrat=me.strat;
+  if(me.trait==='Teimoso'&&Math.random()<(me.calm?.1:.25))myStrat='Agressivo';
+  const aM=STRAT[myStrat].agg*(me.style==='Agressivo'?1+TUNE.sagg:me.style==='Defensivo'?1-TUNE.sagg:1)*fmods(me).vol;
+  const aO=STRAT[op.strat].agg*(op.style==='Agressivo'?1+TUNE.sagg:op.style==='Defensivo'?1-TUNE.sagg:1)*fmods(op).vol;
+  const att=Math.random()<aM/(aM+aO)?me:op,def=att===me?op:me;
+  const strat=att===me?myStrat:att.strat;
+  const u=unit(def,att);
+  setT(att,def.pos.x+u.dx*33,def.pos.y+u.dy*33);
+  await waitArrive(900);
+  const AM=fmods(att),DM=fmods(def);let n=1;const pc=(AM.vol-1)*.8+.35+STRAT[strat].combo+(att.style==='Agressivo'?.15:att.style==='Defensivo'?-.1:0);if(att.st>25&&Math.random()<pc)n++;if(att.st>45&&Math.random()<pc*.5)n++;
+  let seq=null;
+  if(n>=2){const kc=knownCombos(att).filter(c=>c.seq.length<=n+2&&(att.st>30||c.seq.length<=2));if(kc.length&&Math.random()<.7){const c=kc.at(-1-Math.floor(Math.random()*Math.min(2,kc.length)));seq=c.seq;n=seq.length;say(`${c.n} de ${att.nick}!`,att.mine?'me':'')}}
+  let landed=0;
+  for(let i=0;i<n;i++){
+    const k=seq?seq[i]:choosePunch(att,i);
+    const res=await punch(att,def,k,strat,1,i===n-1,seq&&i>0?.06:0);
+    if(F.over)return;
+    if(res==='hit'||res==='clean')landed++;
+    if((res==='slip'||res==='duck')&&def.style==='Contra-atacante'&&Math.random()<.5*(att.style==='Defensivo'?TUNE.ctr:att.style==='Agressivo'?TUNE.ctrA:1)){say(line('counter',{d:def.nick}),def.mine?'me':'');await punch(def,att,choosePunch(def,1),def.strat,1.15,true);if(F.over)return;break}
+    if(res==='block'&&Math.random()<.35)break;
+  }
+  if(n>=2&&landed>=2)say(line('combo',{a:att.nick,n:landed}),att.mine?'me':'');
+  else if(att.style==='Agressivo'&&Math.random()<.12)say(line('pressure',{a:att.nick}));
+  for(const x of[me,op]){if(x.cut)x.hp=Math.max(1,x.hp-x.cut*.4)}
+  {const x=me.st<op.st?me:op;if(x.st<=30&&Math.random()<.15)say(line('tired',{x:x.nick}));else if(x.st<70&&Math.random()<.05)say(line('tiring',{x:x.nick}))}
+  const b=unit(att,def);setT(att,att.pos.tx-b.dx*8,att.pos.ty-b.dy*8);
+  hud();
+}
+async function clinch(who){
+  const{me,op}=F;const u=unit(op,me);
+  setT(me,op.pos.x+u.dx*19,op.pos.y+u.dy*19);await waitArrive(900);
+  act(me,'clinch',1700);act(op,'clinch',1700);say(line('clinch',{a:me.nick,d:op.nick}));
+  {const mx=(me.pos.x+op.pos.x)/2,my=(me.pos.y+op.pos.y)/2,sd=Math.sign((F.ref.x-mx)*(-u.dy)+(F.ref.y-my)*u.dx)||1;F.refLock=true;F.ref.tx=mx-u.dy*sd*17;F.ref.ty=my+u.dx*sd*17}
+  await fsleep(1300);
+  setT(me,me.pos.x+u.dx*14,me.pos.y+u.dy*14);setT(op,op.pos.x-u.dx*14,op.pos.y-u.dy*14);
+  act(me,'guard',1);act(op,'guard',1);F.refLock=false;
+  for(const x of[me,op])x.st=clamp(x.st+(x===who?4+2*((x.def&&x.def.clinch)||0):3),0,100);await fsleep(420);
+}
+const PDUR={jab:230,direto:320,gancho:360,uppercut:340,corpoDireto:320,figado:360};
+async function punch(att,def,k,strat,bonus,talk,flow=0){
+  const lv=att.skills[k]||1,sk=SKILLS[k];let e=edge(att.style,def.style);const fx=x=>Math.max(x.baseFix||0,x.roundFix||0);if(att.mine&&e<0)e*=1-fx(att);if(def.mine&&e>0)e*=1-fx(def);const ar=att.rb||{},dr=def.rb||{};
+  let hit=.5+(att.tecnica+att.velocidade-def.defesa-def.velocidade)/TUNE.hitDiv+sk.h+lv*.025+e*.05*TUNE.edge-STRAT[def.strat].def-(def.style==='Agressivo'?TUNE.sdA:def.style==='Defensivo'?TUNE.sdD:TUNE.sdC)+(att.st<=30?-.1:att.st<70?-.03:0)+(def.st<=30?TUNE.tdB:def.st<70?TUNE.tdA:0)+(att.conf-50)/500+(att.hitB||0)+(att.tacB||0)+(ar.hit||0)-(dr.def||0)+flow+(att.form||0)*.04-((def.def&&def.def.bloqueio)||0)*.008-((def.def&&def.def.esquiva)||0)*.012;
+  hit=clamp(hit,.12,.9);
+  att.st=clamp(att.st-(2.2+STRAT[strat].cost)*(1.5-att.resistencia/100*TUNE.resK-(1-TUNE.resK)*.35)*(att.calm===true?.85:att.calm?.93:1)*(ar.stam||1)*fmods(att).cost*(1-(att.form||0)*.1),0,100);
+  att.rs.thrown++;att.tot.thrown++;
+  const arm=sk.arm||(k==='jab'?'L':k==='direto'?'R':(att.lastArm==='L'?'R':'L'));att.lastArm=arm;
+  const body=!!sk.body||((k==='gancho'||k==='direto')&&Math.random()<(ar.body||0));
+  const v={a:att.nick,d:def.nick};
+  const dur=PDUR[k]*(att.st>=70?1:att.st>30?1.1:1.25);
+  act(att,sk.anim||k,dur,{arm,body});
+  await fsleep(dur*.45);
+  const u=unit(att,def);
+  let res;
+  if(Math.random()<hit){
+    let dmg=(3+att.forca*TUNE.forK+lv*.9)*sk.d*(.55+.45*att.st/100)*R(.75,1.25)*(1+e*.1*TUNE.edge)*STRAT[strat].dmg*bonus*(1+(ar.dmg||0))*fmods(att).dmg*(fmods(def).chin<1&&!body?1-.15*TUNE.giftK:1)*TUNE.dmg;
+    const clean=!body&&Math.random()<.05+TUNE.cleanP+lv*.012+(k==='gancho'||k==='uppercut'?.03:0);dmg*=clean?TUNE.cleanMul:TUNE.normMul;
+    if(body){dmg*=.75;def.st=clamp(def.st-(sk.liver?9:sk.body?7:5),0,100)}
+    const chin=1.3-def.resistencia/100;
+    dmg*=(1.15-def.resistencia/250*TUNE.resK-(1-TUNE.resK)*.14);
+    def.hp-=dmg;def.dmgTaken+=dmg;def.st=clamp(def.st-dmg*(clean?.8:.55)*chin,0,100);att.rs.landed++;att.tot.landed++;att.rs.dmg+=dmg;att.tot.dmg+=dmg;if(k!=='jab'){att.rs.power++;att.tot.power++}
+    if(!body&&dmg>8&&Math.random()<.18+(ar.cut||0))def.cut++;
+    res=clean?'clean':'hit';
+    act(def,body?'hurtBody':'hurt',300);def.flash=performance.now()+150;
+    setT(def,def.pos.x+u.dx*(clean?9:5),def.pos.y+u.dy*(clean?9:5));
+    if(clean||def.hp<=0){F.zoom={until:performance.now()+1300*spd(),cx:(att.pos.x+def.pos.x)/2,cy:(att.pos.y+def.pos.y)/2};F.crowd=performance.now()+1500;F.flashes=performance.now()+1200;say(line('clean',v),'sys')}
+    else if(body)say(line('body',v),att.mine?'me':'');
+    else if(talk||dmg>7)say(line('hit_'+k,v),att.mine?'me':'');
+    await fsleep(dur*.55+(clean?200:60));
+    if(def.hp<=0){await knockdown(def,att);return res}
+    if(!F.over&&(clean||sk.liver)){
+      const base={jab:.01,direto:.045,uppercut:.08,gancho:.09,figado:.025}[k]||0;
+      let pf=base*(.5+att.tecnica/60*TUNE.resK+(1-TUNE.resK)*.58)*(1+(lv-1)*.25)*(.8+att.forca/150)*(bonus>1?2:1)*clamp(1.4-def.resistencia/100*TUNE.resK-(1-TUNE.resK)*.35,.5,1.4)*(def.st<=30?1.5:def.st<70?1.15:1)*(def.hp<50?1.3:1)*fmods(att).flash*fmods(def).chin;
+      if(Math.random()<Math.min(.18,pf*TUNE.flash)){await knockdown(def,att,sk.liver?'liver':'flash');return res}
+    }
+    if(def.hp<25&&Math.random()<.5){act(def,'stagger',800);say(line('stagger',v));await fsleep(750)}
+  }else{
+    const r=Math.random();
+    let W=def.style==='Defensivo'?[.5,.25,.25]:def.style==='Contra-atacante'?[.18,.72,.1]:[.55,.35,.1];
+    {const dd=def.def||{bloqueio:1,esquiva:1};const b=W[0]*(.6+.2*(dd.bloqueio||0)),sl=(dd.esquiva||0)>0?W[1]*(.6+.2*dd.esquiva):0,bk=W[2]+.1;const tt=b+sl+bk;W=[b/tt,sl/tt,bk/tt]}
+    if(k==='gancho'&&r<(def.style==='Contra-atacante'?.6:.4)){res='duck';act(def,'duck',dur*1.2)}
+    else if(r<W[0]){res='block';act(def,'block',dur*1.3)}
+    else if(r<W[0]+W[1]){res='slip';act(def,'slip',dur*1.2,{side:Math.random()<.5?1:-1})}
+    else{res='back';act(def,'guard',1);setT(def,def.pos.x+u.dx*12,def.pos.y+u.dy*12)}
+    def.st=clamp(def.st-(res==='block'?1.6:res==='back'?.5:.8)*(1.3-def.resistencia/100),0,100);
+    if(talk&&Math.random()<.55)say(line(res,v),def.mine?'me':'');
+    await fsleep(dur*.55+60);
+  }
+  act(att,'guard',1);if(def.an.pose!=='stagger')act(def,'guard',1);
+  await fsleep(110);
+  hud();
+  return res;
+}
+async function knockdown(x,att,kind){
+  x.kd++;att.rs.kd++;
+  act(x,'down',99999);act(att,'guard',1);
+  say(line(kind||'down',{a:att.nick,d:x.nick}),'sys');F.crowd=performance.now()+2500;
+  if(kind){if(!x.mine)x.src.glass=(x.src.glass||0)+1;if(!att.mine)att.src.fk=(att.src.fk||0)+1;F.zoom={until:performance.now()+1600,cx:x.pos.x,cy:x.pos.y};F.flashes=performance.now()+1500}
+  const ncs=[[LIM.x0+4,LIM.y0+4],[LIM.x1-4,LIM.y1-4]];const nc=ncs.sort((p,q)=>Math.hypot(q[0]-x.pos.x,q[1]-x.pos.y)-Math.hypot(p[0]-x.pos.x,p[1]-x.pos.y))[0];
+  setT(att,nc[0],nc[1]);if(Math.random()<.5)act(att,'win',2600);
+  await fsleep(700);
+  F.refLock=true;F.ref.tx=clamp(x.pos.x+(x.pos.x<120?24:-24),LIM.x0,LIM.x1);F.ref.ty=clamp(x.pos.y-10,LIM.y0,LIM.y1);F.ref.pose='count';
+  let getup=.45+x.resistencia/220+x.conf/500+(x.trait==='Coração de leão'?.15:0)-x.kd*.12+(x.st-50)/250;
+  if(kind)getup=x.resistencia>=25||x.gift==='queixo'?1:clamp(getup+.3,0,.94);
+  if(x.gift==='queixo')getup+=.15;
+  const ok=x.kd<3&&Math.random()<getup;
+  const upAt=ok?RI(4,8):11;
+  for(let i=1;i<=10;i++){F.count=i;await fsleep(520);if(i===upAt)break}
+  F.ref.pose='stand';
+  if(!ok){
+    F.count=null;F.big='KO!';F.over={win:!x.mine,how:'KO'};act(x,'ko',99999);
+    F.zoom={until:performance.now()+2200,cx:x.pos.x,cy:x.pos.y};F.crowd=performance.now()+4000;F.flashes=performance.now()+3000;
+    say(line('ko',{a:att.nick,d:x.nick}),'sys');await fsleep(1500);
+  }else{
+    F.count=null;act(x,'stagger',900);x.hp=Math.max(kind?x.hp:0,12+x.resistencia*.3+x.st*.18);if(x.st>=70)say(`${x.nick} ainda tem pernas. Levantou-se com fôlego!`);else if(x.st<=30)say(`${x.nick} levanta-se, mas está completamente vazio.`);
+    say(line('up',{d:x.nick}),'sys');act(att,'guard',1);await fsleep(900);act(x,'guard',1);F.refLock=false;
+  }
+  hud();
+}
+function corner(){
+  return new Promise(res=>{
+    setBooth(false);const{me,op}=F;
+    const b0={st:me.st,hp:me.hp};
+    for(const x of[me,op]){x.st=clamp(x.st+28+(x.form||0)*4,0,100);x.hp=clamp(x.hp+TUNE.hprec+x.resistencia*.06+(x.form||0)*3,0,100)}
+    say(`Intervalo: ${me.nick} recupera +${Math.round(me.st-b0.st)} de fôlego e +${Math.round(me.hp-b0.hp)} de vida.`,'sys');
+    hud();
+    if(me.cut>=4){F.over={win:false,how:'médico'};say(`O médico vê os cortes de ${me.nick} e pára a luta.`,'sys');res('doc');return}
+    if(op.cut>=4){F.over={win:true,how:'médico'};say(`O médico pára a luta: ${op.nick} tem demasiados cortes!`,'sys');res('doc');return}
+    let strat=me.strat,act_=me.cut?'corte':'folego';
+    const m=me.rs,o=op.rs;
+    const pct=r=>r.thrown?Math.round(r.landed/r.thrown*100)+'%':'-';
+    const draw=()=>{
+      $('#fctl').innerHTML=`
+      <div class="sum"><b>ROUND ${F.round}</b><b class="me">${me.nick.toUpperCase().slice(0,7)}</b><b class="op">${op.nick.toUpperCase().slice(0,7)}</b>
+        <span>Lançados</span><span class="v">${m.thrown}</span><span class="v">${o.thrown}</span>
+        <span>Acertados</span><span class="v">${m.landed} <small>${pct(m)}</small></span><span class="v">${o.landed} <small>${pct(o)}</small></span>
+        <span>Golpes de poder</span><span class="v">${m.power}</span><span class="v">${o.power}</span>
+        <span>Quedas provocadas</span><span class="v">${m.kd}</span><span class="v">${o.kd}</span>
+        <span>Pontos round / total</span><span class="v">${F.lastScore[0]}/${me.card}</span><span class="v">${F.lastScore[1]}/${op.card}</span></div>
+      <h3>ESTRATÉGIA · O ADVERSÁRIO ESTÁ ${op.strat.toUpperCase()}</h3><div class="cseg">${Object.keys(STRAT).map(k=>`<button class="btn ${strat===k?'on':''}" data-s="${k}">${k.toUpperCase()}</button>`).join('')}</div>
+      <p class="meta" style="font-size:12px">${STRAT_D[strat]}</p>
+      <div class="cseg2"><button class="btn ${act_==='corte'?'on':''}" data-c="corte" ${me.cut?'':'disabled'}>TRATAR CORTE</button><button class="btn ${act_==='folego'?'on':''}" data-c="folego">RECUPERAR FÔLEGO</button></div>
+      <div class="cseg2"><button class="btn" id="towel">ATIRAR A TOALHA</button><button class="btn red" id="goR">ROUND ${F.round+1}</button></div>`;
+      $('#fctl').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{strat=b.dataset.s;draw()});
+      $('#fctl').querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{act_=b.dataset.c;draw()});
+      F.prev=act_==='folego'?{st:18}:{hp:4,cut:-1};hud();
+      $('#towel').onclick=()=>res('towel');
+      $('#goR').onclick=()=>{
+        me.strat=strat;
+        F.prev=null;
+        if(act_==='corte'){me.cut=Math.max(0,me.cut-1);me.hp=clamp(me.hp+4,0,100);say('Tratas o corte com vaselina e gelo.','sys')}
+        else{me.st=clamp(me.st+18,0,100);say('Mandas respirar fundo. Recupera o fôlego.','sys')}
+        if(me.trait==='Teimoso'&&Math.random()<.3)say(`${me.nick} acena, mas tu sabes que não vai ouvir.`);
+        res('go');
+      };
+    };
+    draw();
+  });
+}
+function finishFight(){
+  const a=F.a,f=a.fight,r=F.over;
+  const myR=rating(a),oR=f.opp.rating;
+  let html='',title='',lineTxt='';
+  const st=`<div class="sum"><b>TOTAL</b><b class="me">${F.me.nick.slice(0,7).toUpperCase()}</b><b class="op">${F.op.nick.slice(0,7).toUpperCase()}</b>
+    <span>Lançados</span><span class="v">${F.me.tot.thrown}</span><span class="v">${F.op.tot.thrown}</span>
+    <span>Acertados</span><span class="v">${F.me.tot.landed}</span><span class="v">${F.op.tot.landed}</span>
+    <span>Pontos</span><span class="v">${F.me.card}</span><span class="v">${F.op.card}</span></div>`;
+  if(r.draw){
+    a.rec.d++;const sh=TIERS[a.tier].share;const cash=Math.round(f.purse*sh*.6)-TIERS[a.tier].cost;S.money+=cash;S.pop+=1;
+    title='EMPATE';html=`<p class="hint">Academia recebe <span class="good">+${fmt(cash)} €</span>. Popularidade +1.</p>`;
+    lineTxt=`${a.nick} empatou com ${f.opp.nick}.`;note(lineTxt);
+  }else if(r.win){
+    a.rec.w++;if(r.how==='KO')a.rec.ko++;
+    const sh=TIERS[a.tier].share,fc=TIERS[a.tier].cost;const cash=Math.round(f.purse*sh)-fc;S.money+=cash;
+    const pg=3+(r.how==='KO'?2:0)+(f.title?8:0)+a.tier*2;S.pop+=pg;a.conf=clamp(a.conf+10,0,100);
+    let rk='';
+    if(f.title){const tn=TIERS[a.tier].n;a.titles.push(`${tn} (${a.cat})`);
+      rk=`${a.nick} é campeão ${tn}! ${a.tier<3?`Sobe para o escalão ${TIERS[a.tier+1].n}.`:'É o melhor do mundo.'}`;
+      if(a.tier<3){a.tier++;a.rank=10}note(`${a.nick} ganhou o título ${tn}!`);
+    }else{const up=clamp(2+Math.round((oR-myR)/8),2,4);const old=a.rank;a.rank=Math.max(1,a.rank-up);rk=`Ranking: #${old} → #${a.rank}.${a.rank<=3?' É desafiante oficial ao título!':''}`}
+    a.streak=(a.streak||0)+1;if(f.title)a.pendingRaise=1.6;else if(a.streak%4===0)a.pendingRaise=1.3;
+    title=r.how==='KO'?'VITÓRIA POR KO!':r.how==='médico'?'VITÓRIA (MÉDICO)':'VITÓRIA AOS PONTOS';
+    html=`<p class="hint">Academia (${Math.round(sh*100)}% menos ${fc} € de custos da luta) <span class="good">+${fmt(cash)} €</span> · Atleta ${fmt(f.purse*(1-sh))} € · Popularidade +${pg}</p><p class="hint">${rk}</p>`;
+    lineTxt=`${a.nick} venceu ${f.opp.nick} (${r.how}).`;note(lineTxt);
+  }else{
+    a.streak=0;a.rec.l++;S.money=Math.max(0,S.money-TIERS[a.tier].cost);const lc=r.how==='toalha'?8:a.trait==='Cabeça fria'?8:16;a.conf=clamp(a.conf-lc,0,100);
+    const old=a.rank;a.rank=Math.min(15,a.rank+(f.title?3:RI(1,2)));S.pop=Math.max(0,S.pop-1);
+    let inj='';if(r.how==='KO'&&Math.random()<.5){a.injury=RI(1,3);inj=` Saiu lesionado: mais ${a.injury} semana${a.injury>1?'s':''} parado.`}
+    title=r.how==='KO'?'DERROTA POR KO':r.how==='toalha'?'ATIRASTE A TOALHA':'DERROTA';
+    html=`<p class="hint">Sem prémio. Custos da luta -${TIERS[a.tier].cost} €. Confiança -${lc}. Ranking #${old} → #${a.rank}.<span class="warn">${inj}</span></p>`;
+    lineTxt=`${a.nick} perdeu com ${f.opp.nick} (${r.how}).`;note(lineTxt);
+  }
+  const rec=clamp(1+Math.round(F.me.dmgTaken/70)+(F.me.kd)+(r.how==='KO'&&!r.win?1:0),1,5);
+  a.recovery=rec;a.fatigue=clamp(a.fatigue+25,0,100);a.fight=null;
+  {const m=revealGift(a,'na luta');if(m)html+=`<p class="hint"><b style="color:var(--gold)">${m}</b></p>`}
+  html+=`<p class="hint">Dano sofrido: ${Math.round(F.me.dmgTaken)} · <b>Recuperação: ${rec} semana${rec>1?'s':''} sem treinar.</b></p>`;
+  if(r.win)S.members=Math.min(capacity(),S.members+RI(0,2));
+  return{title,html:st+html,line:lineTxt};
+}
+
+/* ---- arena fight drawing (elevated front view) ---- */
+function shade(hex){const n=parseInt(hex.slice(1),16);const r=(n>>16)*.78|0,g=((n>>8)&255)*.78|0,b=(n&255)*.78|0;return `rgb(${r},${g},${b})`}
+function disc(c,x,y,r,col){c.fillStyle=col;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill()}
+const PJ={yF:130,yN:198,wF:130,wN:214,cx:120};
+function proj(x,y){const u=(x-RING.x0)/(RING.x1-RING.x0),v=(y-RING.y0)/(RING.y1-RING.y0);const w=PJ.wF+(PJ.wN-PJ.wF)*v;return{x:PJ.cx+(u-.5)*w,y:PJ.yF+(PJ.yN-PJ.yF)*v,s:.8+.42*v}}
+const STRIKES={jab:1,direto:1,gancho:1,uppercut:1};
+function drawFighter(c,cx,gy,face,lk,gl,f,now,t){
+  const an=f.an;const p=clamp((now-an.t0)/an.dur,0,1);
+  let pose=an.pose;
+  if(STRIKES[pose]&&p<.18)pose='wind';
+  const P=(dx,dy,w,h,col)=>{c.fillStyle=col;c.fillRect(Math.round(face===1?cx+dx:cx-dx-w),Math.round(gy+dy),w,h)};
+  const sk=lk.skin,sh=shade(sk),tr=lk.trunk,hr=lk.hair;
+  c.fillStyle='rgba(0,0,0,.28)';c.beginPath();c.ellipse(cx,gy,15,4,0,0,Math.PI*2);c.fill();
+  if(pose==='down'||pose==='ko'){
+    P(-24,-5,14,4,sk);P(-26,-5,3,4,'#151515');P(-10,-7,9,6,tr);P(-1,-7,13,6,sk);P(12,-9,9,8,sk);P(19,-9,3,8,hr);
+    P(4,-11,6,5,gl);P(8,-3,6,4,gl);
+    if(pose==='down'){P(2,-16,3,9,sk);P(1,-18,6,5,gl)}else{P(14,-7,1,1,'#111');P(16,-5,1,1,'#111');P(16,-7,1,1,'#111');P(14,-5,1,1,'#111')}
+    return;
+  }
+  let ux=0,uy=0,lead='guard',rear='guard',aY=0;
+  const st=f.style;const tier=f.st>=70?1:f.st>30?2:3;
+  if(st==='Agressivo'){lead='tight';rear='tight'}else if(st==='Defensivo'){lead='high';rear='high'}else if(st==='Contra-atacante'){lead='lowlead'}
+  switch(pose){
+    case 'jab':ux=2;lead='ext';break;
+    case 'direto':ux=4;rear='ext';if(an.body){uy=3;}break;
+    case 'gancho':ux=2;if(an.arm==='R'){rear='hook';lead='tight'}else{lead='hook'}if(an.body)uy=3;break;
+    case 'uppercut':ux=2;uy=2;if(an.arm==='L')lead='upper';else rear='upper';break;
+    case 'wind':ux=-1;uy=1;break;
+    case 'block':lead='block';rear='block';break;
+    case 'duck':uy=8;ux=3;break;
+    case 'slip':ux=-6;uy=2;break;
+    case 'hurt':ux=-4;lead='low';rear='low';break;
+    case 'hurtBody':ux=-2;uy=4;lead='low';rear='low';break;
+    case 'stagger':ux=Math.round(Math.sin(t*9)*3)-2;uy=1;lead='low';rear='low';break;
+    case 'clinch':ux=4;lead='wrap';rear='wrap';break;
+    case 'win':lead='up';rear='up';break;
+    case 'guard':
+      if(tier===1){
+        if(st==='Agressivo'){ux=Math.round(Math.sin(t*7));uy=Math.sin(t*7)>0?1:0}
+        else if(st==='Defensivo')uy=Math.sin(t*4)>0?1:0;
+        else ux=Math.sin(t*2)>0?0:-1;
+      }else if(tier===2){uy=1+(Math.sin(t*3.4)>0?1:0);aY=2}
+      else{ux=2;uy=2+(Math.sin(t*2.6)>0?2:0);lead='tlow';rear='tlow'}
+      break;
+  }
+  if(tier>1&&pose!=='guard'){uy+=1}
+  const moving=Math.hypot(f.pos.tx-f.pos.x,f.pos.ty-f.pos.y)>.8;const step=moving&&Math.sin(t*(tier===1?16:tier===2?11:7))>0?(tier===3?1:2):0;
+  P(-7-step,-18,4,16,sk);P(2+step,-18,4,16,sk);P(-7-step,-18,1,16,sh);P(2+step,-18,1,16,sh);
+  P(-9-step,-3,6,3,'#151515');P(2+step,-3,7,3,'#151515');
+  P(-8,-27,15,10,tr);P(-8,-27,15,1,'#f1e5d0');P(-1,-22,1,4,'rgba(0,0,0,.25)');
+  const T=(dx,dy,w,h,col)=>P(dx+ux,dy+uy,w,h,col);
+  const glD=shade(gl.length===7?gl:'#d4452f');
+  const arm=(which,mode)=>{
+    const r=which==='rear';const G=r?glD:gl;const A=r?sh:sk;
+    switch(mode){
+      case 'guard':if(r){T(0,-42+aY,4,6,A);T(1,-50+aY,6,6,G)}else{T(6,-40+aY,3,5,A);T(9,-46+aY,6,6,G)}break;
+      case 'tight':if(r){T(0,-44+aY,4,6,A);T(1,-52+aY,6,6,G)}else{T(5,-43+aY,3,6,A);T(7,-51+aY,6,6,G)}break;
+      case 'high':if(r){T(0,-46+aY,4,6,A);T(1,-56+aY,6,7,G)}else{T(6,-45+aY,3,6,A);T(8,-55+aY,6,7,G)}break;
+      case 'tlow':if(r){T(0,-38,4,5,A);T(1,-38,6,6,G)}else{T(6,-36,3,5,A);T(8,-36,6,6,G)}break;
+      case 'lowlead':T(6,-37,3,6,A);T(7,-32,5,5,G);break;
+      case 'ext':if(r){T(1,-43,18,3,A);T(18,-46,7,7,G)}else{T(5,-42,15,3,A);T(19,-45,7,7,G)}break;
+      case 'hook':if(r){T(2,-47,12,3,A);T(12,-52,7,7,G)}else{T(5,-45,9,3,A);T(12,-50,7,7,G)}break;
+      case 'upper':if(r){T(2,-41,3,9,A);T(4,-54,7,7,G)}else{T(6,-41,3,9,A);T(9,-55,7,7,G)}break;
+      case 'block':if(r){T(1,-57,6,8,G)}else{T(7,-56,6,8,G)}break;
+      case 'low':if(r){T(-3,-36,3,7,A);T(-4,-30,5,5,G)}else{T(5,-36,3,7,A);T(5,-30,5,5,G)}break;
+      case 'wrap':if(r){T(3,-39,14,3,A);T(15,-41,6,6,G)}else{T(4,-42,14,3,A);T(16,-44,6,6,G)}break;
+      case 'up':if(r){T(-7,-58,3,14,A);T(-8,-64,6,6,G)}else{T(6,-58,3,14,A);T(5,-64,6,6,G)}break;
+    }
+  };
+  T(-7,-41,13,14,sk);T(-7,-41,3,14,sh);T(-2,-35,6,1,sh);T(0,-31,2,1,sh);
+  T(-2,-44,5,3,sk);T(-4,-53,10,10,sk);T(-4,-54,10,3,hr);T(-4,-52,2,5,hr);T(-1,-49,2,3,sh);
+  if(pose==='hurt'||pose==='stagger'||pose==='hurtBody'){T(3,-49,2,1,'#111');T(4,-46,2,1,'#7a2a20')}
+  else if(tier===3){T(3,-49,2,1,'#111');T(4,-46,2,2,'#3a1a14')}
+  else{T(3,-50,2,1,'#111');T(4,-46,2,1,'#e8e0d0')}
+  if(tier>1){for(let i=0;i<(tier===3?3:1);i++){const ph=(t*1.2+i*.41+(f.mine?0:.2))%1;c.fillStyle='rgba(180,215,255,'+(1-ph)*.9+')';P(-3+i*4+ux,-52+uy+ph*18,1,2,c.fillStyle)}}
+  arm('rear',rear);
+  arm('lead',lead);
+  if(now<f.flash){c.fillStyle='rgba(255,255,255,.5)';c.fillRect(Math.round(cx-12),Math.round(gy-56+uy),24,40)}
+}
+function drawRef(c,cx,gy,face,pose,t){
+  const P=(dx,dy,w,h,col)=>{c.fillStyle=col;c.fillRect(Math.round(face===1?cx+dx:cx-dx-w),Math.round(gy+dy),w,h)};
+  c.fillStyle='rgba(0,0,0,.25)';c.beginPath();c.ellipse(cx,gy,11,3,0,0,Math.PI*2);c.fill();
+  P(-5,-17,4,15,'#222');P(1,-17,4,15,'#222');P(-6,-3,5,3,'#111');P(1,-3,5,3,'#111');
+  P(-6,-37,12,20,'#dfe6ea');P(-1,-36,2,2,'#111');P(-6,-37,1,20,'#b9c3c8');
+  P(-4,-47,8,9,'#c98f62');P(-4,-48,8,2,'#444');P(1,-44,1,1,'#111');
+  if(pose==='count'){const u=Math.sin(t*12)>0;P(5,u?-50:-38,3,u?14:8,'#dfe6ea');P(5,u?-52:-31,3,3,'#c98f62')}
+  else{P(-8,-35,3,12,'#dfe6ea');P(5,-35,3,12,'#dfe6ea')}
+}
+/* static arena, cached */
+let ARENA=null,SEATS=[];
+function buildArena(){
+  const W=240,H=240;
+  const cv=document.createElement('canvas');cv.width=W;cv.height=H;const c=cv.getContext('2d');
+  SEATS=[];
+  // ceiling with trusses
+  c.fillStyle='#0b0908';c.fillRect(0,0,W,46);
+  c.strokeStyle='rgba(150,150,150,.35)';c.lineWidth=1;
+  for(let i=0;i<14;i++){const x=(i*37)%240,y=6+(i*13)%30,w=18+(i*7)%30;c.beginPath();c.moveTo(x,y);c.lineTo(x+w,y);c.lineTo(x+w,y+((i%3)+1)*4);c.stroke()}
+  for(let i=0;i<6;i++){c.beginPath();c.moveTo(i*44+10,0);c.lineTo(i*44+16,40);c.stroke()}
+  // back bleachers
+  for(let i=0;i<10;i++){const y=46+i*7;c.fillStyle=i%2?'#3a2b20':'#2f2319';c.fillRect(0,y,W,7);c.fillStyle='#4d3a2b';c.fillRect(0,y,W,1);
+    for(let x=4;x<236;x+=7){if((x>62&&x<78)||(x>162&&x<178))continue;SEATS.push([x+2,y+2,.6+i*.03])}}
+  c.fillStyle='#120d0a';for(const ax of[70,170]){c.fillRect(ax-7,46,14,70);c.fillStyle='#3a3a3a';for(let i=0;i<10;i++)c.fillRect(ax-6,49+i*7,2,2);c.fillStyle='#120d0a'}
+  // floor
+  const g=c.createLinearGradient(0,116,0,H);g.addColorStop(0,'#4a2e18');g.addColorStop(1,'#8a5a2e');c.fillStyle=g;c.fillRect(0,116,W,H-116);
+  c.fillStyle='rgba(0,0,0,.1)';for(let y=118;y<H;y+=6)c.fillRect(0,y,W,1);
+  const RA=proj(RING.x0,RING.y0),RE=proj(RING.x0,RING.y1),RB=proj(RING.x1,RING.y0),RD=proj(RING.x1,RING.y1);
+  const ringL=y=>RA.x+(RE.x-RA.x)*clamp((y-RA.y)/(RE.y-RA.y),0,1)-12,ringR=y=>RB.x+(RD.x-RB.x)*clamp((y-RB.y)/(RD.y-RB.y),0,1)+12;
+  const inside=(x,y,s)=>y>RA.y-20&&y<RE.y+44&&x+5*s>ringL(y)&&x<ringR(y);
+  const chair=(x,y,s)=>{if(inside(x,y,s))return;c.fillStyle='#55606e';c.fillRect(x,y-3*s,5*s,3*s);c.fillStyle='#8a4a2a';c.fillRect(x,y,5*s,2*s);c.fillStyle='#1a1a1a';c.fillRect(x,y+2*s,1,2*s);c.fillRect(x+4*s,y+2*s,1,2*s);SEATS.push([x+2.5*s,y-4*s,s])};
+  // back floor row (behind the ring) and angled side blocks
+  for(let x=8;x<232;x+=8)chair(x,122,.8);
+  for(let r=0;r<4;r++)for(let k=0;k<8;k++){const v=k/7;const y=132+v*90;chair(2+r*7-v*6,y,.85+v*.4);chair(232-r*7+v*6-6,y,.85+v*.4)}
+  // ring platform: front steps like a stage
+  c.fillStyle='#27313f';c.beginPath();c.moveTo(RA.x-4,RA.y);c.lineTo(RE.x-6,RE.y+2);c.lineTo(RE.x-4,RE.y+14);c.lineTo(RA.x-3,RA.y+8);c.fill();
+  c.beginPath();c.moveTo(RB.x+4,RB.y);c.lineTo(RD.x+6,RD.y+2);c.lineTo(RD.x+4,RD.y+14);c.lineTo(RB.x+3,RB.y+8);c.fill();
+  c.fillStyle='#34405a';c.fillRect(RE.x-6,RE.y+2,RD.x-RE.x+12,12);
+  for(let i=0;i<3;i++){const y=RE.y+14+i*8;c.fillStyle=i%2?'#3a4a62':'#465873';c.fillRect(RE.x+6+i*6,y,RD.x-RE.x-12-i*12,8);c.fillStyle='#5a6d8a';c.fillRect(RE.x+6+i*6,y,RD.x-RE.x-12-i*12,1)}
+  // canvas
+  c.fillStyle='#c9d3dc';c.beginPath();c.moveTo(RA.x-4,RA.y-2);c.lineTo(RB.x+4,RB.y-2);c.lineTo(RD.x+6,RD.y+3);c.lineTo(RE.x-6,RE.y+3);c.fill();
+  c.fillStyle='#e3e9ee';c.beginPath();c.moveTo(RA.x,RA.y);c.lineTo(RB.x,RB.y);c.lineTo(RD.x,RD.y);c.lineTo(RE.x,RE.y);c.fill();
+  c.fillStyle='rgba(143,42,27,.14)';c.font='10px "Press Start 2P", monospace';c.textAlign='center';c.fillText('ESPERANÇA',120,(RA.y+RE.y)/2+6);
+  ARENA=cv;
+}
+function refFollow(){
+  if(F.refLock)return;
+  const a=F.me.pos,b=F.op.pos;const mx=(a.x+b.x)/2,my=(a.y+b.y)/2;let dx=b.x-a.x,dy=b.y-a.y;const d=Math.hypot(dx,dy)||1;dx/=d;dy/=d;
+  const nx=-dy,ny=dx;let sd=Math.abs(ny)>.35?(ny>0?-1:1):(Math.sign((F.ref.x-mx)*nx+(F.ref.y-my)*ny)||1);
+  let tx=mx+nx*sd*44,ty=my+ny*sd*44;
+  if(tx<LIM.x0-4||tx>LIM.x1+4||ty<LIM.y0-4||ty>LIM.y1+4){tx=clamp(tx,LIM.x0-4,LIM.x1+4);ty=clamp(ty,LIM.y0-4,LIM.y1+4)}
+  for(const p of[a,b]){const ex=tx-p.x,ey=ty-p.y,e=Math.hypot(ex,ey)||1;if(e<30){tx=p.x+ex/e*30;ty=p.y+ey/e*30}}
+  F.ref.tx=tx;F.ref.ty=ty;
+}
+function post(c,x,y,h,col){c.fillStyle='#1d1d22';c.fillRect(Math.round(x)-2,Math.round(y-h),4,h);c.fillStyle=col;c.fillRect(Math.round(x)-2,Math.round(y-h),4,Math.round(h*.6))}
+function rope(c,p1,h1,p2,h2,col){for(const[f,cl]of[[.42,col],[.68,'#e8e8ee'],[.92,col]]){c.strokeStyle=cl;c.lineWidth=1;c.beginPath();c.moveTo(p1.x,p1.y-h1*f);c.lineTo(p2.x,p2.y-h2*f);c.stroke()}}
+const crowdLooks=Array.from({length:400},(_,i)=>({s:SKINS[i%5],h:HAIRS[(i*7)%5],c:['#5a4a3a','#3d5a80','#8c3b2e','#4d6b3d','#777','#6b4a2e'][i%6],on:((i*37)%100)/100}));
+function ringLoop(now){
+  if(!F)return;
+  const cv=$('#ring');if(!cv)return;
+  if(!ARENA)buildArena();
+  const c=cv.getContext('2d');const t=now/1000;
+  const dt=Math.min(.05,(now-(F.lt||now))/1000);F.lt=now;const mul=(F.fast?3.3:1)/slowF();
+  const mv=(o,sp)=>{const dx=o.tx-o.x,dy=o.ty-o.y,d=Math.hypot(dx,dy);const v=sp*dt*mul*(d>30?1:.55+.45*d/30);if(d<=v||d<.01){o.x=o.tx;o.y=o.ty}else{o.x+=dx/d*v;o.y+=dy/d*v}};
+  for(const x of[F.me,F.op])mv(x.pos,(x.an.pose==='hurt'||x.an.pose==='hurtBody'?90:70)*(x.st>=70?1:x.st>30?.82:.6));
+  refFollow();
+  mv(F.ref,52);
+  for(const x of[F.me,F.op]){if(x.an.pose==='down'||x.an.pose==='ko')continue;const dx=F.ref.x-x.pos.x,dy=F.ref.y-x.pos.y,d=Math.hypot(dx,dy)||1;if(d<28&&!F.refLock){F.ref.x=x.pos.x+dx/d*28;F.ref.y=x.pos.y+dy/d*28}}
+  c.save();
+  let z=1;
+  if(F.zoom&&now<F.zoom.until){const dur=1300,p=clamp(1-(F.zoom.until-now)/dur,0,1);z=1+.75*Math.min(1,p*3)*(p<.85?1:(1-p)/.15)}
+  if(z>1.01){const q=proj(F.zoom.cx,F.zoom.cy);const cy=q.y-34;c.translate(q.x,cy);c.scale(z,z);c.translate(-q.x,-cy)}
+  c.drawImage(ARENA,0,0);
+  // crowd in seats
+  const fill=.35+F.a.tier*.18+(F.a.fight.title?.2:0);const jump=now<F.crowd;
+  SEATS.forEach(([x,y,s],i)=>{const L=crowdLooks[i%400];if(L.on>fill)return;const b=jump&&Math.sin(t*14+i)>0?-2*s:0;
+    c.fillStyle=L.c;c.fillRect(Math.round(x-2*s),Math.round(y+b),Math.ceil(4*s),Math.ceil(4*s));
+    c.fillStyle=L.s;c.fillRect(Math.round(x-1.5*s),Math.round(y-3*s+b),Math.ceil(3*s),Math.ceil(3*s));c.fillStyle=L.h;c.fillRect(Math.round(x-1.5*s),Math.round(y-3*s+b),Math.ceil(3*s),Math.max(1,Math.round(s)));
+    if(jump&&i%4===0){c.fillStyle=L.s;c.fillRect(Math.round(x-3*s),Math.round(y-4*s+b),1,2);c.fillRect(Math.round(x+2*s),Math.round(y-4*s+b),1,2)}});
+  if(now<F.flashes){for(let k=0;k<6;k++){const sp=pick(SEATS);c.fillStyle='#fff';c.fillRect(sp[0],sp[1]-3,2,2)}}
+  // spotlight
+  c.fillStyle='rgba(220,235,255,.07)';c.beginPath();c.moveTo(100,0);c.lineTo(140,0);c.lineTo(228,206);c.lineTo(12,206);c.fill();
+  const gl=c.createRadialGradient(120,165,8,120,165,100);gl.addColorStop(0,'rgba(255,255,255,.18)');gl.addColorStop(1,'rgba(255,255,255,0)');c.fillStyle=gl;c.fillRect(10,110,220,110);
+  // back posts + ropes
+  const A=proj(RING.x0,RING.y0),B=proj(RING.x1,RING.y0),D=proj(RING.x1,RING.y1),E=proj(RING.x0,RING.y1);
+  const hF=30,hN=44;
+  post(c,A.x,A.y,hF,'#e8e8ee');post(c,B.x,B.y,hF,'#d4452f');
+  rope(c,A,hF,B,hF,'#d4452f');rope(c,A,hF,E,hN,'#d4452f');rope(c,B,hF,D,hN,'#d4452f');
+  // people sorted by depth
+  const pm=proj(F.me.pos.x,F.me.pos.y),po=proj(F.op.pos.x,F.op.pos.y),pr=proj(F.ref.x,F.ref.y);
+  let fm=pm.x<=po.x?1:-1;if(Math.abs(pm.x-po.x)<3)fm=F.lastFace||1;F.lastFace=fm;
+  const mid=(pm.x+po.x)/2;
+  const list=[
+    {y:pr.y,d:()=>{c.save();c.translate(pr.x,pr.y);c.scale(pr.s,pr.s);drawRef(c,0,0,pr.x<mid?1:-1,F.ref.pose,t);c.restore()}},
+    {y:pm.y,d:()=>{c.save();c.translate(pm.x,pm.y);c.scale(pm.s,pm.s);drawFighter(c,0,0,fm,F.me.look,'#d4452f',F.me,now,t);c.restore()}},
+    {y:po.y,d:()=>{c.save();c.translate(po.x,po.y);c.scale(po.s,po.s);drawFighter(c,0,0,-fm,F.op.look,'#2d6db3',F.op,now,t+.5);c.restore()}}
+  ];
+  list.sort((a,b)=>a.y-b.y).forEach(o=>o.d());
+  // front posts + front rope
+  rope(c,E,hN,D,hN,'#2d6db3');
+  post(c,E.x,E.y,hN,'#2d6db3');post(c,D.x,D.y,hN,'#e8e8ee');
+  c.restore();
+  if(F.count){c.fillStyle='rgba(0,0,0,.55)';c.fillRect(96,70,48,30);c.fillStyle='#fff';c.font='20px "Press Start 2P", monospace';c.textAlign='center';c.fillText(String(F.count),120,95)}
+  if(F.big){c.fillStyle='rgba(0,0,0,.6)';c.fillRect(40,96,160,30);c.fillStyle='#e8b13a';c.font='16px "Press Start 2P", monospace';c.textAlign='center';c.fillText(F.big,120,118)}
+  drawCaster(now);
+  requestAnimationFrame(ringLoop);
+}
+
+/* ================= BOOT ================= */
+async function start(){
+  try{document.fonts&&document.fonts.ready.then(()=>{ARENA=null})}catch(e){}
+  S=load();
+  if(!S||!S.roster)newGame();
+  for(const a of S.roster){for(const k of Object.keys(SKILLS)){a.skills[k]=a.skills[k]||0;a.xp[k]=a.xp[k]||0}a.def=a.def||{bloqueio:1,esquiva:0,clinch:0};a.dxp=a.dxp||{bloqueio:0,esquiva:0,clinch:0};a.combos=a.combos||knownCombos(a).map(c=>c.id);a.recovery=a.recovery||0;if(a.gift===undefined){a.gift=null;a.giftKnown=true}a.weeks=a.weeks||0}
+  S.tab=S.tab||'gym';
+  render();requestAnimationFrame(world);
+  if(!S.seen){S.seen=true;save();await help()}
+}
+start();
+})();
+</script>
+
+<script>
+if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
+</script>
+</body></html>
