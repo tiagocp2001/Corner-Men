@@ -68,7 +68,7 @@ Ordem: 8 → 5 → 1 → 3 → 4.
   - 5.5 **Decidido — ecrã:** pequena barra LONGE · MEIO · PERTO por cima do ringue, junto ao relógio, além do movimento no ringue, do comentador e da análise.
 - **Animações (tema 5):** pivô/passo lateral e circular — usam o movimento existente; clinch — existe; **encostado às cordas/canto** — nova; **pernas bambas** — nova; a distância vê-se pela distância entre os lutadores no ringue.
 
-### Tema 1 — Golpes
+### Tema 1 — Golpes · *Decidido*
 - **Hoje:** jab, direto, gancho, uppercut, direto ao corpo, gancho ao fígado, Contra-golpe.
 - **Guia:** numeração 1–6 (mão da frente/de trás), overhand, cabeça/corpo como alvo, variações (jab duplo, power jab, flicker jab, check hook, shovel hook, cross-counter…), que treino ensina cada golpe, números usados pelo comentador.
 - **Nota:** havia perguntas em aberto deste tema numa conversa anterior que não ficaram registadas; refazem-se aqui.
@@ -78,6 +78,7 @@ Ordem: 8 → 5 → 1 → 3 → 4.
   - 1.3 **Decidido:** o Contra-golpe deixa de ser um tipo de golpe. Um counter é um dos 7 golpes lançado logo a seguir a uma defesa, com bónus por apanhar o adversário aberto; o golpe que sai depende da defesa (tabela do Guia). O comentador e a análise chamam-lhe counter. O que torna um atleta bom a contra-atacar decide-se nos temas da defesa e do contra-ataque.
   - 1.4 **Decidido — variações:** nenhuma é golpe treinado à parte. **Alvo:** jab/direto/gancho/uppercut ao corpo. **Distância:** gancho e uppercut curtos (perto) ou largos/longos (meio). **Outros temas:** jab duplo/triplo, gancho duplo, hook off the jab → combinações; feint jab, range finder → fintas; check hook, cross-counter → contra-ataque; straight left → guarda; jab de recuo → distância (usado quando é empurrado). **Só texto (comentador):** power jab, flicker jab, lead right, pivot hook, shovel hook, leaping uppercut, bolo punch, corkscrew, hookercut. Ilegais → faltas.
   - 1.5 **Decidido (provisório, o Tiago pode mudar depois):** o comentador usa os números do Guia sobretudo nas combinações ("1-2!", "1-6-3-2"), e o nome nos golpes soltos; a Ficha mostra o número ao lado de cada golpe ("3 Gancho da frente").
+  - 1.6 **Decidido — como se treinam:** nas **luvas de foco** o treinador escolhe o golpe da semana (muita experiência nesse golpe; pode ser um golpe que o atleta ainda não sabe, se os atributos deixarem — aprende-o em algumas sessões). Os outros treinos dão um pouco aos golpes ligados (Guia): saco pesado → 2, 4, overhand; saco de ângulo → 3–6; saco de velocidade → 1; saco duplo elástico → 1, 2; shadowboxing → todos um pouco; sparring → os golpes mais usados. Lista final de treinos no tema dos treinos.
 
 ### Tema 3 — Defesa
 - **Hoje:** defesas com níveis (bloqueio, esquiva, baixar, recuar…).
