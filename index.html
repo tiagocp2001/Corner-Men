@@ -1337,7 +1337,7 @@ const LINES={
   heardLate:['Finalmente! {x} lá ouviu o treinador: {s}.','Demorou, mas {x} percebeu o recado. Agora em {s}.','Só agora {x} ouve o canto vermelho. {s}!'],
   slow:['{x} está a sofrer... não sei se te está a ouvir.','{x} olha para o canto, mas parece ausente.','Gritam do canto vermelho, mas {x} tem a cabeça noutro lado.'],
   deaf:['{x} já não ouve nada. Está a lutar por instinto!','Podem gritar à vontade: {x} não ouve o canto!','{x} está tão cansado e dorido que nem ouve o treinador.'],
-  lost:['{x} não chegou a ouvir a instrução antes do gongo.','O round acaba antes de {x} perceber o que lhe gritavam.'],
+  lost:['No canto, {x} finalmente ouve o treinador: {s} no próximo round.','{x} não ouviu durante o round, mas no canto já percebe: {s}.','Só no intervalo {x} ouve o recado: {s}.'],
   start:['Toca o gongo! Round {n}!','Round {n}. Os lutadores saem dos cantos.','Começa o round {n}!'],
   end:['Gongo! Fim do round {n}.','Termina o round {n}. Cada um para o seu canto.']
 };
@@ -1495,16 +1495,18 @@ function opSwitch(){
   say(`O canto de ${op.nick} mexe-se: ele muda para ${op.style}!`,'sys');
 }
 /* ---- ordens do canto durante o round ----
-   Gritas uma estratégia; o atleta só a cumpre quando te "ouve". A demora (em segundos do relógio) cresce com o cansaço,
-   com a vida perdida e com as quedas neste round; muito cansado e muito tocado, não ouve até ao fim do round.
+   Gritas uma estratégia e o treinador continua a gritá-la até o atleta "ouvir". A cada momento o atleta vai percebendo
+   a ordem a um ritmo que depende do estado em que está AGORA (cansaço, vida perdida, quedas neste round): fresco ouve
+   depressa; cansado ou dorido demora mais; muito cansado e muito dorido não ouve nada enquanto estiver assim.
+   Se o gongo tocar antes, ouve-te no canto, no intervalo. Uma ordem nova substitui a anterior e recomeça.
    A toalha é para o árbitro: acaba a luta logo (com confirmação). F.autoOrd agenda ordens nos testes (window.__sim). */
 const SHOUT={'Pressão':['Vai! Em cima dele!','Pressão! Não o deixes respirar!','Agora! Mãos e para a frente!'],'Equilibrado':['Com cabeça! Faz o teu boxe!','Calma! Nem para a frente nem para trás!','Equilibra! Jab e respira!'],'Cautela':['Guarda alta! Sai daí!','Cautela! Mexe-te e defende!','Para trás! Não troques com ele!']};
 function hearFactors(x){return{f:clamp((70-x.st)/50,0,1),h:clamp((60-x.hp)/45,0,1)+TUNE.hearKd*((F.op.rs&&F.op.rs.kd)||0)}}
-function hearDelay(x){
+function hearDelay(x,j=1){ // segundos que demoraria a ouvir se ficasse sempre neste estado (Infinity = não ouve)
   const{f,h}=hearFactors(x);
-  if(F.deaf===F.round||(f>=TUNE.hearDeaf&&h>=TUNE.hearDeaf))return Infinity;
+  if(f>=TUNE.hearDeaf&&h>=TUNE.hearDeaf)return Infinity;
   const tr=x.trait==='Cabeça fria'?TUNE.hearCalm:x.trait==='Teimoso'?TUNE.hearStub:1;
-  return(TUNE.hearB+TUNE.hearSt*f+TUNE.hearHp*Math.min(1,h))*tr*R(1-TUNE.hearJit,1+TUNE.hearJit);
+  return(TUNE.hearB+TUNE.hearSt*f+TUNE.hearHp*Math.min(1,h))*tr*j;
 }
 function clockS(){return F.ft*3/1000}
 function giveOrder(s){
@@ -1515,19 +1517,24 @@ function giveOrder(s){
   if(o)F.ordLog.push({...o,lost:'replaced'});
   F.shout=performance.now()+1800;
   say(`Gritas do canto: "${pick(SHOUT[s])}"`,'me');
-  const{f,h}=hearFactors(me),d=hearDelay(me);
-  F.ord={r:F.round,s,from:me.strat,t:Math.round(clockS()),st:Math.round(me.st),hp:Math.round(me.hp),kd:(F.op.rs&&F.op.rs.kd)||0,f:+f.toFixed(2),h:+h.toFixed(2),wait:d===Infinity?null:+d.toFixed(1),due:d===Infinity?Infinity:clockS()+d,deaf:d===Infinity};
-  if(F.ord.deaf){F.deaf=F.round;say(line('deaf',{x:me.nick}),'bad')}
+  const{f,h}=hearFactors(me),j=R(1-TUNE.hearJit,1+TUNE.hearJit),d=hearDelay(me,j);
+  F.ord={r:F.round,s,from:me.strat,t:Math.round(clockS()),st:Math.round(me.st),hp:Math.round(me.hp),kd:(F.op.rs&&F.op.rs.kd)||0,f:+f.toFixed(2),h:+h.toFixed(2),j,p:0,lt:clockS(),deaf:d===Infinity,wasDeaf:d===Infinity,saidDeaf:d===Infinity};
+  if(F.ord.deaf)say(line('deaf',{x:me.nick}),'bad');
   else if(d>=TUNE.hearSlow)say(line('slow',{x:me.nick}),'half');
   roundCtl();
 }
 function orderTick(){
   if(!F||F.over)return;
   if(F.autoOrd&&F.inRound)autoOrder();
-  const o=F.ord;if(!o||o.deaf||clockS()<o.due)return;
+  const o=F.ord;if(!o||!F.inRound)return;
+  const c=clockS(),dt=Math.max(0,c-o.lt);o.lt=c;
+  F.shout=performance.now()+600; // o treinador continua a gritar
+  const d=hearDelay(F.me,o.j),was=o.deaf;o.deaf=d===Infinity;
+  if(o.deaf){o.wasDeaf=true;if(!was&&!o.saidDeaf){o.saidDeaf=true;say(line('deaf',{x:F.me.nick}),'bad')}ordInd();return}
+  o.p+=dt/d;if(o.p<1){if(was)ordInd();return}
   F.ord=null;F.me.strat=o.s;F.heard={s:o.s,until:performance.now()+1800};
-  F.ordLog.push({...o,heard:true,got:Math.round(clockS())});
-  say(line(o.wait<TUNE.hearSlow?'heard':'heardLate',{x:F.me.nick,s:o.s}),'ok');
+  const got=Math.round(c);F.ordLog.push({...o,heard:true,got});
+  say(line(got-o.t<TUNE.hearSlow?'heard':'heardLate',{x:F.me.nick,s:o.s}),'ok');
   roundCtl();
 }
 function autoOrder(){
@@ -1538,10 +1545,10 @@ function autoOrder(){
       a.done=F.round;if(a.towel){throwTowel();return}giveOrder(a.strat)}
   }
 }
-function orderLost(){
+function orderLost(){ // fim do round: se a luta continua, ouve-te no canto (intervalo)
   const o=F.ord;F.ord=null;F.heard=null;if(!o)return;
-  F.ordLog.push({...o,lost:F.over?'over':'bell'});
-  if(!F.over)say(line('lost',{x:F.me.nick}),'bad');
+  if(F.over){F.ordLog.push({...o,lost:'over'});return}
+  F.me.strat=o.s;F.ordLog.push({...o,heard:true,corner:true,got:Math.round(clockS())});F.cornerHeard=o;
 }
 function askTowel(){if(!F||F.over||!F.live)return;F.towelAsk=true;roundCtl()}
 function throwTowel(){
@@ -1589,7 +1596,7 @@ async function runFight(){
     while(F.ft<60000&&!F.over){await exchange();if(F.over)break;await fsleep(R(450,950)/((fmods(F.me).vol+fmods(F.op).vol)/2))}
     orderLost();F.inRound=false;F.live=false;F.towelAsk=false;if(!F.over)roundCtl();
     if(F.over)break;
-    say(line('end',{n:F.round}),'sys');SFX.play('bell');scoreRound();
+    say(line('end',{n:F.round}),'sys');SFX.play('bell');if(F.cornerHeard){say(line('lost',{x:F.me.nick,s:F.cornerHeard.s}),'half');F.cornerHeard=null}scoreRound();
     toCorners();
     await waitArrive(2500);if(!F.over&&F.round<F.rounds){act(F.me,'sit',99999);act(F.op,'sit',99999);if(F.crew)setCrew('break')}
     await fsleep(400,false);
@@ -2064,8 +2071,8 @@ function ordTxt(o){
   const why=[];if(o.f>=.5)why.push(o.f>=.8?'muito cansado':'cansado');if(o.h>=.5)why.push(o.kd?'abanado da queda':o.h>=.8?'muito dorido':'dorido');
   const w=why.length?` (${why.join(' e ')})`:'';
   const hd=`R${o.r} ${mmss(o.t)} · pediste ${o.s}`;
+  if(o.corner)return{c:'half',t:`${hd}: só te ouviu no canto, no intervalo${w||(o.wasDeaf?' (deixou de te ouvir)':'')}`};
   if(o.heard){const d=Math.max(0,Math.round(o.got-o.t));return{c:'ok',t:`${hd}: ouviu ${d} s depois${d>=TUNE.hearSlow?w:''}`}}
-  if(o.deaf)return{c:'bad',t:`${hd}: não te ouviu${w||' (já não te ouvia neste round)'}`};
   if(o.lost==='bell')return{c:'half',t:`${hd}: o gongo tocou antes de ele ouvir${w}`};
   if(o.lost==='replaced')return{c:'',t:`${hd}: trocaste de ordem antes de ele ouvir`};
   if(o.lost==='cancel')return{c:'',t:`${hd}: desististe da ordem`};
@@ -2080,6 +2087,7 @@ function anReasons(win,draw){
   const P=(x,k)=>x.ps[k]||[0,0,0];
   // 1) atributos (≈ +3,2 pontos percentuais por ponto de média: +5 em tudo ≈ 66%)
   {const dA=ATTRS.map(([k,n])=>({k,n,d:me[k]-op[k]})),avg=dA.reduce((t,x)=>t+x.d,0)/5;
+   const pv=x=>{x=Math.abs(x);return x<5?'ligeiramente':x<12?'claramente':'muito'}; // diferença dita por palavras, sem números
    const eff=(k,s)=>{ // efeito medido do atributo, só se for no mesmo sentido
      if(k==='tecnica'||k==='velocidade')return s*(accM-accO)>=4?(s>0?` Acertaste ${accM}% dos golpes, ele ${accO}%.`:` Ele acertou ${accO}% dos golpes, tu ${accM}%.`):'';
      if(k==='defesa')return s*(accM-accO)>=4?(s>0?` Ele só acertou ${accO}% dos golpes.`:` Só acertaste ${accM}% dos golpes.`):'';
@@ -2087,10 +2095,10 @@ function anReasons(win,draw){
      if(k==='resistencia'){const l=rr.at(-1);return l&&s*(l.st[0]-l.st[1])>=8?` Fôlego no fim: ${l.st[0]} contra ${l.st[1]}.`:''}
      return ''};
    if(Math.abs(avg)>=2){const s=Math.sign(avg),top=dA.slice().sort((x,y)=>s*(y.d-x.d))[0],one=Math.abs(top.d-avg)>=2;
-     add('attr',s,Math.abs(avg)*3.2,s>0?`Estavas mais bem preparado: +${Math.round(avg)} de média nos atributos${one?`, sobretudo ${top.n} (+${Math.round(top.d)})`:''}.${eff(top.k,1)}`
-       :`Ele estava mais bem preparado: +${Math.round(-avg)} de média nos atributos${one?`, sobretudo ${top.n} (+${Math.round(-top.d)})`:''}.${eff(top.k,-1)}|${one?`Treina ${top.n} (${ATR_TR[top.k]}).`:'Precisas de mais semanas de treino antes de lutas deste nível.'}`,one?top.k:'')}
+     add('attr',s,Math.abs(avg)*3.2,s>0?`Estavas ${pv(avg)} mais bem preparado nos atributos${one?`, sobretudo em ${top.n}`:''}.${eff(top.k,1)}`
+       :`Ele estava ${pv(avg)} mais bem preparado nos atributos${one?`, sobretudo em ${top.n}`:''}.${eff(top.k,-1)}|${one?`Treina ${top.n} (${ATR_TR[top.k]}).`:'Precisas de mais semanas de treino antes de lutas deste nível.'}`,one?top.k:'')}
    else{const top=dA.slice().sort((x,y)=>Math.abs(y.d)-Math.abs(x.d))[0],s=Math.sign(top.d);
-     if(Math.abs(top.d)>=8)add('attr',s,Math.abs(top.d)*.64,s>0?`A tua ${top.n} fez diferença: +${Math.round(top.d)} do que ele.${eff(top.k,1)}`:`Ele tinha mais ${top.n} (+${Math.round(-top.d)}).${eff(top.k,-1)}|Treina-a com ${ATR_TR[top.k]}.`,top.k)}}
+     if(Math.abs(top.d)>=8)add('attr',s,Math.abs(top.d)*.64,s>0?`A tua ${top.n} fez diferença: eras ${pv(top.d)} superior.${eff(top.k,1)}`:`Ele tinha ${pv(top.d)} mais ${top.n} do que tu.${eff(top.k,-1)}|Treina-a com ${ATR_TR[top.k]}.`,top.k)}}
   // 2) estilo (≈ 5 pontos no amador → 13 no topo), descontando a tática certa no canto
   {const ms=majority(rr.map(x=>x.sty[0]).concat(me.style)),os=majority(rr.map(x=>x.sty[1]).concat(op.style)),e=edge(ms,os);
    if(e>0){add('style',1,5+8*clamp((me.slv-1)/4,0,1),`O teu estilo (${ms}) tem vantagem sobre o dele (${os}).`)}
