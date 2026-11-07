@@ -64,6 +64,8 @@ Secções (procurar pelos comentários `/* ===== X ===== */`):
 
 ## Equilíbrio (muito importante)
 
+> **Fase atual:** primeiro define-se como cada sistema funciona; o equilíbrio (simulações e afinação de números) fica para depois, quando o Tiago disser. Até lá, não afinar números nem fazer estudos de equilíbrio — basta confirmar que nada parte.
+
 Todo o equilíbrio passa pelo objeto `TUNE` (pode ser sobreposto com `window.__TUNE` para testes). **Nunca afinar números "a olho"**: o Tiago espera que cada mudança de regras seja **testada com simulações** e que os resultados lhe sejam mostrados.
 
 Princípio do Tiago: **"no ringue tudo pode acontecer"** — as vantagens individuais (estilo, talento, corpo, alcance) devem ser **pequenas**.
