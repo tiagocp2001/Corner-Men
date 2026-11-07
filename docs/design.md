@@ -23,6 +23,7 @@ Regras gerais que orientam todos os temas.
 | 0.1 | **O jogador é o treinador, não o lutador.** Decide três coisas: o **treino**, o **plano de luta** e as **ordens do canto** (durante o round e no intervalo). Os golpes, um a um, são automáticos. | Decidido |
 | 0.2 | **Nível de realismo.** Cada elemento do Guia entra de uma de três formas: **mecânica** (muda o resultado), **texto** (só o comentador e a análise o mencionam) ou **fora**. Decide-se tema a tema. | Decidido |
 | 0.3 | **Regra de ouro:** tudo o que é mecânica tem de se **ver na luta** (animação, comentador) **e na análise pós-luta**. Se o jogador não o vê, não entra. | Decidido |
+| 0.5 | **Animações:** cada ação do Guia fica marcada como *usa animação existente*, *precisa de animação nova* ou *só texto*. Lista "Animações necessárias" no fim deste documento. Cada fase implementa-se em dois passos: mecânica com animações existentes + comentador; depois uma passagem de animação com capturas para o Tiago aprovar. Poucas animações, só as que mudam a leitura da luta. | Decidido |
 | 0.4 | **Ecrã fixo:** cada tema diz onde aparece no ecrã e o que sai ou se junta para caber. | Decidido |
 
 ## Fase A — Núcleo da luta · *Em aberto*
@@ -63,6 +64,8 @@ Ordem: 8 → 5 → 1 → 3 → 4.
   - 5.1 **Decidido — quem decide a distância:** cada atleta tem uma distância preferida que vem do estilo (Outboxer longe, Puncher meio, In-fighter perto). Quando querem distâncias diferentes, disputam-na: conta sobretudo **Pés**, depois **Ring IQ**. Nunca é garantido. A influência da **estratégia** fica por decidir: a estratégia ainda vai ser redefinida (plano de combate); se fizer sentido na altura, entra.
   - 5.2 **Decidido — efeito de cada distância:** **longe** — jab e direto; alcance conta muito; menos dano, mais pontos; pouco fôlego gasto. **Meio** — direto, combinações, ganchos largos; troca equilibrada. **Perto** — ganchos curtos, uppercuts, corpo, clinch; jab quase sem força; braços longos atrapalham um pouco; mais dano e mais fôlego gasto. Os golpes treinados valem mais ou menos conforme a distância.
   - 5.3 **Decidido — centro, cordas e canto:** quem ganha a disputa para se aproximar empurra o outro para as cordas e depois para o canto ("cortar o ringue"); quem prefere longe e tem Pés circula e fica no centro. Cordas: defende e foge pior, luta tende para perto. Canto: quase sempre perto, defende ainda pior, combinações fazem mais estragos. Sai-se com Pés (pivô, passo lateral), clinch ou a bater para sair. Em rounds equilibrados, quem dominou o centro tem uma pequena vantagem nos juízes. Comentador e análise (tempo no centro/cordas/canto) mostram isto.
+  - 5.4 **Decidido — estado mexe nos Pés:** os Pés que contam na luta descem com pouco fôlego e com muita dor; logo depois de uma queda, "pernas bambas" (Pés caem muito durante um bocado). O atleta cansado vai sendo empurrado para as cordas.
+- **Animações (tema 5):** pivô/passo lateral e circular — usam o movimento existente; clinch — existe; **encostado às cordas/canto** — nova; **pernas bambas** — nova; a distância vê-se pela distância entre os lutadores no ringue.
 
 ### Tema 1 — Golpes
 - **Hoje:** jab, direto, gancho, uppercut, direto ao corpo, gancho ao fígado, Contra-golpe.
@@ -130,3 +133,10 @@ Ordem: 8 → 5 → 1 → 3 → 4.
 ## Ideias da pesquisa (Boxing Gym Story e MMA Manager 2) por encaixar
 
 Noites de luta organizadas pelo ginásio · hall da fama / reformados como treinadores · parceiro de sparring contratado · treinadores com nível máximo · prémio da primeira vitória contra cada adversário · equipamento de patrocinador · pontuação anual de legado · rivalidades e desforras · galeria de momentos · prolongar a carreira · Novo Jogo+ com o que passa bem explicado. Regras: lutas curtas com 1–2 decisões que contam; ganhar tem de pagar claramente mais do que perder.
+
+## Animações necessárias
+
+| Ação | Tema | Estado |
+|---|---|---|
+| Encostado às cordas / ao canto | Distância | Por fazer |
+| Pernas bambas (depois de uma queda) | Distância | Por fazer |
