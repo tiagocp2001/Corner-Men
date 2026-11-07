@@ -47,7 +47,8 @@ Ordem: 8 → 5 → 1 → 3 → 4.
   - Ligações: Ring IQ acelera o "ouvir o canto" já implementado; Pés decide a distância (tema 5); Queixo decide quedas e KOs.
 - **Ecrã:** a Ficha mostra 2 colunas de 4 barras (FÍSICO / TÉCNICO). A Ficha já está apertada a 390×720; tem de ser reorganizada.
 - **Perguntas ao Tiago:** ver conversa de 7 nov 2026 (8 barras? mentais como traços? Queixo treinável? Ring IQ por experiência?).
-- **Decisões:** —
+- **Decisões:**
+  - 8.1 **Decidido:** 8 barras — Força, Velocidade, Resistência, Queixo (físicos) / Técnica, Defesa, Pés, Ring IQ (técnicos).
 
 ### Tema 5 — Pés, distância e controlo do ringue
 - **Hoje:** zonas do ringue e alcance existem; não há distância longa/média/curta explícita.
