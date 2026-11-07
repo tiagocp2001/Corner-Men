@@ -61,7 +61,7 @@ Ordem: 8 → 5 → 1 → 3 → 4.
   - 8.3 Queixo de nascença (escala própria, ~50 = normal em qualquer escalão): quedas, quedas relâmpago, dano à cabeça e levantar-se. Desce em cada derrota por KO e a partir dos 28 anos (os atletas fazem anos).
   - 8.4 Ring IQ sobe em cada luta (mais com mais rounds) e um pouco com Sparring; acelera o ouvir o canto e ajuda o contra-golpe. Pés: por agora só o recuar como defesa (a distância vem no tema 5). Algumas táticas do canto pedem agora Pés ou Ring IQ.
 
-### Tema 5 — Pés, distância e controlo do ringue · *Decidido*
+### Tema 5 — Pés, distância e controlo do ringue · *Implementado* (A3; análise e animações no A4)
 - **Hoje:** zonas do ringue e alcance existem; não há distância longa/média/curta explícita.
 - **Guia:** distância longa/média/curta, trabalho de pés, controlo do ringue.
 - **Decisões:**
@@ -72,6 +72,14 @@ Ordem: 8 → 5 → 1 → 3 → 4.
   - 5.4 **Decidido — estado mexe nos Pés:** os Pés que contam na luta descem com pouco fôlego e com muita dor; logo depois de uma queda, "pernas bambas" (Pés caem muito durante um bocado). O atleta cansado vai sendo empurrado para as cordas.
   - 5.5 **Decidido — ecrã:** pequena barra LONGE · MEIO · PERTO por cima do ringue, junto ao relógio, além do movimento no ringue, do comentador e da análise.
 - **Animações (tema 5):** pivô/passo lateral e circular — usam o movimento existente; clinch — existe; **encostado às cordas/canto** — nova; **pernas bambas** — nova; a distância vê-se pela distância entre os lutadores no ringue.
+- **Implementado (A3):**
+  - 5.0/5.1 `F.dist` (longe/meio/perto) e `F.zone` (centro/cordas/canto) contam na luta. Distância preferida pelo estilo; em cada troca, se querem distâncias diferentes, disputam-na: Pés que contam agora + metade do Ring IQ, com um mínimo de 12% para quem perde (nunca garantido). **A estratégia não entra** (fica um parâmetro `TUNE.dStrat` a 0 para quando o plano de combate for decidido). Se querem a mesma distância, vão para lá com algum vaivém.
+  - 5.2 Escolha do golpe e da defesa, acerto e dano pela tabela `DIST_FIT`: longe vive do jab e do direto (o primeiro golpe é mais vezes o jab, menos golpes seguidos), alcance conta o dobro, ganchos e uppercuts quase não chegam, 80% do dano e do fôlego gasto; perto — ganchos, uppercuts, clinch, jab quase sem força, braços longos atrapalham um pouco, 115% do dano e 120% do fôlego. O fígado usa a curta distância. Recuar com os Pés pode abrir a distância.
+  - 5.3 Quem ganha a disputa para se aproximar pode empurrar o outro para as cordas e depois para o canto; quem a ganha para se afastar pode sair (pivô/passo lateral). Nas cordas a disputa pende para quem se aproxima e não há espaço para longe; no canto é quase sempre perto. Encostado: a defesa rende 85% (cordas) / 70% (canto) e leva mais golpes; no canto as combinações fazem +20% de dano. Sai-se com os Pés (disputa ou defesa de pés a resultar), com o clinch ou a bater (2+ golpes a entrar). Em rounds equilibrados, quem controlou o ringue (mais tempo a encostar o outro ou a ganhar a distância) tem uma pequena vantagem nos juízes.
+  - 5.4 Os Pés que contam (`pesEff`) descem com fôlego abaixo de 50 e vida abaixo de 50; depois de uma queda, "pernas bambas" (~27 s de relógio, Pés a 45%; o que sobra passa em parte ao round seguinte). O mesmo vale para a defesa de Pés.
+  - 5.5 Barra LONGE · MEIO · PERTO por baixo do relógio, no cabeçalho do ringue. A distância entre os lutadores no ringue e o sítio (centro/cordas/canto) seguem o estado; o comentador diz "mantém-no à ponta do jab", "encurta a distância", "encostou-o às cordas", "saiu com um pivô", "pernas bambas", etc.
+  - Dados por luta para a análise do A4 (`an.dz`, um por lutador): segundos em cada distância e no centro/cordas/canto, segundos a controlar o ringue, trocas ganhas em cada distância, antecipações, cross-counters, counters de ângulo e de clinch, saídas das cordas (pés/clinch/a bater). A análise ainda não os mostra.
+  - Ritmo: os lutadores andam menos no ringue do que antes; um tempo a estudar-se em cada troca (`TUNE.fwT`) mantém o número de golpes por round como no A2.
 
 ### Tema 1 — Golpes · *Implementado* (A2)
 - **Hoje:** jab, direto, gancho, uppercut, direto ao corpo, gancho ao fígado, Contra-golpe.
@@ -92,7 +100,7 @@ Ordem: 8 → 5 → 1 → 3 → 4.
   - 1.5 Comentador: números nas combinações ("1-2-3 de X: 3 golpes a entrar!"), nomes nos golpes soltos. Ficha → GOLPES: número ao lado de cada golpe, em 2 colunas (golpes | defesas) com o nível; tocar abre o detalhe (para que serve, como se treina, progresso). Os estilos passaram para um separador próprio (ESTILOS) para caber sem scroll. As combinações antigas passaram a 1-2, 1-1-2, 1-2-3, 3-3 corpo-cabeça, 1-6-3-2, 1-2-3-2 (o tema 2 mexe nelas a sério).
   - 1.6 Pads: no plano aparece "PADS · GOLPE DA SEMANA" (Livre ou um dos 7); o golpe escolhido leva quase toda a experiência; um golpe que ainda não sabe aprende-se em ~3 sessões se os atributos deixarem. Saco → 2, 4, overhand; Pera → 1; Shadow → todos; Sparring → os mais usados nas lutas. **Saco de ângulo e saco duplo elástico ficam para o tema 9** (são equipamento novo: loja, ginásio animado e treino).
 
-### Tema 3 — Defesa · *Implementado* (A2, menos o que depende da distância)
+### Tema 3 — Defesa · *Implementado* (A2; counters de Pés e Clinch no A3)
 - **Hoje:** defesas com níveis (bloqueio, esquiva, baixar, recuar…).
 - **Guia:** 6 famílias — bloqueio, parry, movimento de cabeça, ombro, pés, clinch — cada uma abre um contra-golpe específico.
 - **Decisões:**
@@ -102,15 +110,16 @@ Ordem: 8 → 5 → 1 → 3 → 4.
 - **Implementado (A2):**
   - 3.1 As 6 famílias com nível 1–5 (`bloqueio, aparar, cabeca, ombro, pes, clinch`). Antes de cada golpe o defensor escolhe a família: lê o golpe que vem (mais com Ring IQ), eficácia da família contra esse golpe (retos / ganchos / uppercuts / corpo), nível, crença, estilo (Outboxer pés e aparar; In-fighter cabeça e bloqueio; Puncher bloqueio) e estado (cansado: menos cabeça e pés; magoado: clinch). A defesa errada para o golpe defende pior. Bloqueio deixa passar ~15% do dano; cabeça e pés gastam fôlego e pioram com o cansaço; Pés usa o atributo Pés e corta a combinação; ombro precisa de Ring IQ e, se falha, o golpe entra mais forte; clinch trava a combinação, recupera fôlego, o árbitro separa e conta contra quem agarra nos juízes. Todos começam com Bloqueio 1 e Pés 1; o Clinch vem com Resistência 20. Treinos: Corda de esquiva → cabeça; Shadow → cabeça e pés; Corda → pés; Pads → aparar; Bola medicinal → bloqueio; Sparring → todas (mais as que usa).
   - 3.2 Confiança em cada golpe e defesa (`a.bel`): o nível real decide se resulta, a crença decide quantas vezes a usa. Cada sucesso sobe, cada falhanço desce (na luta e no Sparring); equilíbrio no nível real, puxado pela Confiança (mental) e pela confiança do dia; Ring IQ corrige mais depressa. Golpe novo começa a 0,3; subir de nível dá só um pouco. Ficha: ▼ "ainda não confia" / ▲ "confia demais" só quando a diferença é grande; depois da luta, uma linha se a confiança mudou muito ("Ganhou confiança no gancho da frente"). A análise guarda tentados/acertados por golpe e tentadas/resultadas por defesa (números finos no A4).
-  - 3.3 Counters pela tabela do Guia (slip para dentro → 2 / overhand; slip para fora → 4 ou 6 ao corpo; slip do direto → 3 / 5; pull back → 2 / 1; pendular → gancho/uppercut do lado contrário (contra o gancho da frente → 3 ou 5; contra o de trás ou o overhand → 4 ou 6); aparar ou apanhar o jab → 1 ou 2; shoulder roll → 2 / overhand; bloquear um gancho → gancho da outra mão, a que bloqueou). Pés (ângulo) e clinch (sair a bater) ainda não dão counter: dependem da distância (A3).
+  - 3.3 (A3) Pés → pivô/passo lateral abre um ataque de ângulo (gancho da frente ou direto, ou jab), com bónus de acerto (ele está virado); Clinch → ao separar, quem agarrou pode sair a bater com gancho ou uppercut curto. Contam na análise como counters de pés e de clinch.
+  - 3.3 Counters pela tabela do Guia (slip para dentro → 2 / overhand; slip para fora → 4 ou 6 ao corpo; slip do direto → 3 / 5; pull back → 2 / 1; pendular → gancho/uppercut do lado contrário (contra o gancho da frente → 3 ou 5; contra o de trás ou o overhand → 4 ou 6); aparar ou apanhar o jab → 1 ou 2; shoulder roll → 2 / overhand; bloquear um gancho → gancho da outra mão, a que bloqueou). Pés (ângulo) e clinch (sair a bater): ver A3, acima.
 
-### Tema 4 — Contra-ataque · *Decidido* (4.1 implementado no A2)
+### Tema 4 — Contra-ataque · *Implementado* (4.1 no A2; 4.2 e 4.3 no A3)
 - **Hoje:** Contra-golpe dispara depois de uma defesa.
 - **Guia:** contra-ataque antes, ao mesmo tempo e depois.
 - **Decisões:**
   - 4.1 **Implementado (A2) — depois:** defender e responder (tabela 3.3). Hipótese: família (cabeça e ombro mais; aparar médio; bloqueio pouco), nível da defesa, Ring IQ, Técnica, confiança do dia e crença no golpe de resposta; o In-fighter é mais difícil de contra-atacar (como antes). O counter tem bónus de acerto e dano, o adversário defende pior (apanhado aberto) e, se entra limpo à cabeça, mais hipótese de queda relâmpago. O comentador diz o nome ("Slip e direto por cima!"); a análise conta counters por família.
-  - 4.2 **Decidido — antes (antecipação):** quando o adversário tenta aproximar-se, o atleta pode apanhá-lo a entrar com jab ou check hook; se resultar, a distância não encurta e ele leva o golpe. Depende de Ring IQ, Velocidade, Pés e do nível do jab/gancho da frente.
-  - 4.3 **Decidido — ao mesmo tempo (cross-counter):** contra jab ou direto, direto por cima sem defender primeiro. Arriscado (se falhar o timing, os dois acertam); se resultar, grande hipótese de queda relâmpago. Depende de Ring IQ, Técnica, Velocidade e do nível do direto.
+  - 4.2 **Implementado (A3) — antes (antecipação):** quando o adversário ganha a disputa para se aproximar, o atleta pode tentar apanhá-lo a entrar: jab (de longe; "jab de recuo" se está a ser empurrado) ou check hook (gancho da frente, de meia distância). Hipótese: Ring IQ, Velocidade, Pés que contam, nível e crença no golpe. Se o golpe entra, a distância não encurta; se não, ele entra.
+  - 4.3 **Implementado (A3) — ao mesmo tempo (cross-counter):** contra jab ou direto à cabeça, o defensor (se sabe o direto) pode soltar o direto por cima sem defender. Tenta mais com Ring IQ e crença no direto (menos perto, nunca com pernas bambas). Timing: Ring IQ, Técnica, Velocidade (contra a do outro) e nível do direto. Se resulta, o golpe dele não entra e o direto entra com bónus de dano e muita hipótese de queda relâmpago; se falha, os dois acertam. Conta à parte dos counters por defesa.
   - 4.4 **Decidido:** ser bom contra-atacante vem de Ring IQ (o mais importante), níveis das defesas e dos golpes de resposta, e confiança. Drills de parceiro como treino → tema dos treinos.
 
 ## Fase B — Camada tática · *Em aberto*
@@ -171,8 +180,9 @@ Noites de luta organizadas pelo ginásio · hall da fama / reformados como trein
 
 | Ação | Tema | Estado |
 |---|---|---|
-| Encostado às cordas / ao canto | Distância | Por fazer |
-| Pernas bambas (depois de uma queda) | Distância | Por fazer |
+| Encostado às cordas / ao canto | Distância | Por fazer (A4). No A3 vê-se pela posição no ringue (`F.zone`, `F.zp`, lado `F.zs`) |
+| Pernas bambas (depois de uma queda) | Distância | Por fazer (A4). No A3 usa `stagger` de vez em quando enquanto `x.wobbly > F.ft` |
+| Antecipação / cross-counter / ângulo / sair do clinch | Contra-ataque | Usam as animações dos golpes (A3) |
 | Overhand | Golpes | Usa a do gancho de trás (A2); própria se o Tiago quiser |
 | Curvado depois do fígado | Golpes | Usa `hurtBody` (A2) |
 | Slip / pendular / aparar / ombro / pivô | Defesa | Usam slip, duck, block e o movimento existente (A2) |

@@ -39,7 +39,7 @@ Secções (procurar pelos comentários `/* ===== X ===== */`):
 
 | Secção | Conteúdo principal |
 |---|---|
-| `DATA` | `CATS` (Pena, Superpena, Ligeiro, Pesado), `CATMOD`, `GIFTS` (talentos escondidos), `ATTRS`/`ATTR_G` (8 atributos), `MENT`/`PERS1`/`PERS2` (mentais e nomes de personalidade), `TIERS` (Amador → Regional → Nacional → Mundial), `ECON`, `EQ` (equipamento), `UPG` (melhorias e treinadores), `TR` (treinos), `SKILLS` (7 golpes), `DEFS` (6 defesas), `LEARN`, confiança (`belOf`/`belUpd`), `DIST_FIT`/`curDist` (distância, neutra até ao A3), `COMBOS`, `STRAT` (estratégias de luta), `TUNE` |
+| `DATA` | `CATS` (Pena, Superpena, Ligeiro, Pesado), `CATMOD`, `GIFTS` (talentos escondidos), `ATTRS`/`ATTR_G` (8 atributos), `MENT`/`PERS1`/`PERS2` (mentais e nomes de personalidade), `TIERS` (Amador → Regional → Nacional → Mundial), `ECON`, `EQ` (equipamento), `UPG` (melhorias e treinadores), `TR` (treinos), `SKILLS` (7 golpes), `DEFS` (6 defesas), `LEARN`, confiança (`belOf`/`belUpd`), `DIST_FIT`/`curDist`/`distFit` (golpes e defesas por distância), `COMBOS`, `STRAT` (estratégias de luta), `TUNE` |
 | body / style levels | Altura e alcance (`H_BASE`, `rollBody`, `bodyType`: Compacto/Médio/Longo), níveis de estilo 0–5 (`sty`, `styleCap`, `styleFit`, `addStyleXP`), efeitos físicos na luta (`phys`, `skillF`, `sf`, `topF`) |
 | `STATE` | `newGame`, `makeAthlete`, `save`/`load`, `KEY` |
 | `OFFERS` | Propostas de luta, `makeOpp` (adversários de academias rivais), scouting |
@@ -48,7 +48,7 @@ Secções (procurar pelos comentários `/* ===== X ===== */`):
 | `MODALS`, `INPUT` | `modal`, `info`, handler global de cliques (`data-*`) |
 | `WEEK` | `advanceWeek`: treinos, fadiga, decadência física, economia, eventos, resumo semanal de planos |
 | `GYM WORLD` | Ginásio animado em canvas 240×136: membros e atletas a treinar, treinadores a circular, sons ambiente |
-| `FIGHT` | Simulação da luta (`runFight`, `exchange`, `punch`, `knockdown`, `corner`, `preTalk`), entrada no ringue, cerimónia final |
+| `FIGHT` | Simulação da luta (`runFight`, `exchange`, `punch`, `knockdown`, `corner`, `preTalk`), distância e ringue (`ringStep`, `pesEff`, `placeRing`, `footwork`, antecipação `antP`, cross-counter `crossCounter`; dados em `x.dx`), entrada no ringue, cerimónia final |
 | arena drawing | Arena em vista frontal elevada (`buildArena`, `proj`/`unproj`), 4 locais por escalão, público, `ringLoop` |
 | corner men | Treinadores nos cantos (`makeCrew`, `crewUpdate`, `drawCrew`) |
 | `BOOT` | Menu inicial / pausa (`menu`, `pauseMenu`), `start()` |
@@ -118,7 +118,7 @@ O build de teste gera-se a partir do `index.html` por substituição de texto (o
 
 ## Em discussão: alinhar o jogo com o "Guia Completo de Boxe"
 
-O Tiago quer o jogo baseado num guia de boxe que escreveu. **As decisões, o plano por fases e o estado de cada tema estão em `docs/design.md` — é a referência; mantê-lo atualizado.** Os temas estão a ser decididos um a um. Fase A em implementação (A1 = tema 8, atributos e mentais, feito); o resto ainda não está implementado:
+O Tiago quer o jogo baseado num guia de boxe que escreveu. **As decisões, o plano por fases e o estado de cada tema estão em `docs/design.md` — é a referência; mantê-lo atualizado.** Os temas estão a ser decididos um a um. Fase A em implementação (A1 = tema 8, A2 = temas 1 e 3/4.1, A3 = tema 5 e 4.2/4.3, feitos); o resto ainda não está implementado:
 
 1. **Golpes:** numeração 1–6 (frente/trás), overhand, cabeça/corpo como alvo, variações (jab duplo, power jab, flicker jab, check hook, shovel hook, cross-counter…), que treino ensina cada golpe, uso dos números pelo comentador.
 2. Combinações clássicas (1-2, 1-1-2, 1-2-3, 1-2-3-2, 2-3-2, 1-6-3-2, gancho duplo, mudança de nível) e fintas.
@@ -133,4 +133,4 @@ O Tiago quer o jogo baseado num guia de boxe que escreveu. **As decisões, o pla
 11. Faltas e golpes ilegais.
 12. Como tudo isto cabe num ecrã fixo.
 
-Último ponto aberto: ver `docs/design.md` (neste momento: **fase A em implementação** — A1 e A2 feitos; segue-se o A3, distância).
+Último ponto aberto: ver `docs/design.md` (neste momento: **fase A em implementação** — A1, A2 e A3 feitos; segue-se o A4, análise/comentador e animações da fase A).

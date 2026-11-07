@@ -204,6 +204,9 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .fight.compact canvas.px{height:min(34vh,calc(min(100vw,520px) - 26px))}
 .stage .fhead{position:absolute;left:6%;right:6%;top:4%;background:rgba(10,8,6,.82);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:6px 8px;line-height:1.3}
 .stage .fclock b{font-size:22px}
+.fdist{grid-column:1/-1;display:flex;justify-content:center;align-items:center;gap:3px;font-family:var(--f-display);font-size:6px;line-height:1;color:#7d7064;margin-top:1px}
+.fdist i{font-style:normal;padding:2px 4px 1px;border-radius:2px;background:#15110d;transition:background .25s,color .25s} .fdist b{font-weight:400;opacity:.6}
+.fdist i.on{background:#e8b13a;color:#1a1410} .fdist.off i.on{background:#5c4a2a;color:#d8c9a8}
 .tks{display:grid;grid-template-columns:1fr 1fr;gap:5px}
 .card.ficha{gap:3px;padding:5px 10px}
 .card.ficha .who .meta{font-size:12px;line-height:1.25}
@@ -311,7 +314,15 @@ const TUNE=Object.assign({hitDiv:350,hvy:1.55,resK:.3,qk:.45,mk:.45,cleanMul:6,n
      bodyG/bodyGMax guarda que baixa com o trabalho ao corpo; clJ juízes contra quem agarra; padXP/lnkXP/learnXP treino; bel* confiança em cada habilidade. */
   dfK:.2,dfE0:.32,readB:.55,blkD:.15,ombR:1.15,pesBrk:.75,ctrCab:.22,ctrOmb:.24,ctrApa:.15,ctrPes:.12,ctrBlq:.05,ctrCl:.04,ctrMax:.45,ctrHit:.12,ctrDmg:1.2,ctrFl:1.8,
   livK:.035,livS:.15,livSt:20,livT:2500,livHit:.15,livClose:.5,bodyG:.002,bodyGMax:.06,clJ:1.5,varP:.25,
-  padXP:5,lnkXP:1.5,learnXP:12,bel0:.3,belUp:.25,belC:.8,belF:.3,belS:.25,belR:.08,belNote:1},window.__TUNE||{});
+  padXP:5,lnkXP:1.5,learnXP:12,bel0:.3,belUp:.25,belC:.8,belF:.3,belS:.25,belR:.08,belNote:1,
+  /* A3 distância e ringue (tema 5, 4.2, 4.3): dIQ peso do Ring IQ na disputa da distância (os Pés pesam 1); dDiv escala; dMin nunca é garantido;
+     dStrat peso da estratégia (0: por decidir, 5.1); dRope/dCorn encostado às cordas/canto a distância tende a fechar; cornPerto no canto é quase sempre perto;
+     dHit/dDmg golpe bom/mau para a distância (DIST_FIT) no acerto e no dano; zPush empurrar para as cordas/canto; zEsc sair; zDrift empurrar quando ninguém disputa;
+     ropeD/cornD defesa que fica nas cordas/canto, ropeH/cornH acerto a mais; cornC dano das combinações no canto; wobT/wobP pernas bambas (ms de luta, Pés que ficam);
+     ant* antecipação (hipótese, bónus de acerto); cc* cross-counter (tentativa, timing, acerto, queda relâmpago); ctrAng counter de ângulo; ctrClS sair a bater do clinch;
+     ctlJ vantagem nos juízes de quem controla o ringue (só pesa em rounds equilibrados). */
+  dIQ:.5,dDiv:90,dMin:.12,dStrat:0,dRope:.1,dCorn:.25,cornPerto:.85,dHit:.12,dDmg:.8,zPush:.45,zEsc:.55,zDrift:.2,ropeD:.85,cornD:.7,ropeH:.02,cornH:.04,cornC:1.2,
+  wobT:9000,wobP:.45,antK:.16,antHit:.08,ccK:.05,ccOk:.5,ccHit:.15,ccFl:2.5,ctrAng:.08,ctrClS:.12,ctlJ:.05,fwT:700,pesSt:.45,pesHp:.35},window.__TUNE||{});
 const CATMOD={Pena:{vol:1.25,dmg:.85,flash:.6,cost:.9},Superpena:{vol:1.15,dmg:.92,flash:.8,cost:.95},Ligeiro:{vol:1,dmg:1,flash:1,cost:1},Pesado:{vol:.75,dmg:1.3,flash:1.8,cost:1.25}};
 CATMOD.Pesado.dmg=TUNE.hvy;
 const GIFTS={
@@ -366,9 +377,10 @@ function skillF(x,ks){const v=ks.reduce((t,k)=>t+(x.skills[k]||0),0)/ks.length;r
 function topF(x){const dv=DKEYS.map(k=>(x.def&&x.def[k])||0).sort((p,q)=>q-p),dl=Math.max(1,(dv[0]+dv[1]+dv[2])/3),sl=PKEYS.reduce((t,k)=>t+(x.skills[k]||0),0)/PKEYS.length;return 1/(1+TUNE.topD*Math.max(0,dl+sl-5))}
 function phys(att,def,k,body){
   const d=clamp(((att.r||175)-(def.r||175))/12,-1,1);let b=0;
-  const longP=(k==='jab'||k==='direto')&&!body;
-  if(d>0&&longP)b+=d*TUNE.rch*skillF(att,['jab','direto']);
-  if(d<0){if(longP)b+=d*TUNE.rch*.5*skillF(def,['jab','direto']);else b+=-d*TUNE.rch*.6*skillF(att,['ganchoF','ganchoT','upperF','upperT'])}
+  const longP=(k==='jab'||k==='direto')&&!body,dd=curDist(),rk=dd==='longe'?2:dd==='perto'?.5:1; // a distância: o alcance conta muito longe, pouco perto
+  if(d>0&&longP)b+=d*TUNE.rch*rk*skillF(att,['jab','direto']);
+  if(d<0){if(longP)b+=d*TUNE.rch*.5*rk*skillF(def,['jab','direto']);else b+=-d*TUNE.rch*.6*(dd==='longe'?.5:1)*skillF(att,['ganchoF','ganchoT','upperF','upperT'])}
+  if(d>0&&dd==='perto')b-=d*TUNE.rch*.5;                       // braços longos atrapalham um pouco a curta distância
   const fit=styleFit(att,att.style);b+=(fit>0?TUNE.fitP:fit<0?-TUNE.fitN:0)*clamp(((att.slv||1)-1)/4,.15,1)*skillF(att,['jab','direto','ganchoF','upperF']);
   return b;
 }
@@ -515,16 +527,16 @@ function belUpd(x,k,ok,p){const lv=lvOf(x,k);if(!lv)return;x.bel=x.bel||{};const
 function bf(b){return .4+.6*clamp(b,0,5)/3}                                           // peso da crença na escolha
 function belNote(a,k){const lv=lvOf(a,k);if(!lv)return '';const b=belOf(a,k),d=b-lv;return d<=-TUNE.belNote||b<=lv*.5?'ainda não confia':d>=TUNE.belNote?'confia demais':''} // só quando a diferença é grande (ou é nova)
 function wpick(arr,wf){const w=arr.map(wf);let t=w.reduce((s,v)=>s+v,0)*Math.random();for(let i=0;i<arr.length;i++){if((t-=w[i])<0)return arr[i]}return arr[arr.length-1]}
-/* ---- distância (tema 5, passo A3): por agora neutra. curDist() devolve sempre 'meio' e distFit() 1; DIST_FIT já diz que golpes e defesas
-   rendem mais em cada distância (Guia 5.2), para o A3 ligar. closeRange() entra na hipótese do gancho ao fígado (0 = neutro). ---- */
+/* ---- distância (tema 5): DIST_FIT diz que golpes e defesas rendem mais em cada distância (Guia 5.2). Entra na escolha do golpe e da defesa,
+   no acerto e no dano (TUNE.dHit/dDmg). curDist() é a distância da luta (F.dist); closeRange() entra na hipótese do gancho ao fígado. ---- */
 const DIST_FIT={
   longe:{jab:1.4,direto:1.2,ganchoF:.6,ganchoT:.5,upperF:.4,upperT:.4,overhand:.8,pes:1.3,aparar:1.2,clinch:.2},
   meio:{},
   perto:{jab:.5,direto:.8,ganchoF:1.3,ganchoT:1.2,upperF:1.4,upperT:1.4,overhand:.8,cabeca:1.2,bloqueio:1.2,clinch:1.5,pes:.7}
 };
-function curDist(){return 'meio'}
-function distFit(k,d){return 1} // A3: (DIST_FIT[d]&&DIST_FIT[d][k])||1
-function closeRange(){return 0}  // A3: curDist()==='perto'?1:0
+function curDist(){return(F&&F.dist)||'meio'}
+function distFit(k,d){return(DIST_FIT[d]&&DIST_FIT[d][k])||1}
+function closeRange(){return curDist()==='perto'?1:0}
 /* combinações (tema 2 vem na fase B): sequências pelos números do Guia; 'k@b' = ao corpo, 'k@h' = à cabeça, sem marca = o atleta escolhe */
 const COMBOS=[
   {id:'12',n:'1-2',seq:['jab','direto'],req:{jab:1,direto:1}},
@@ -1558,6 +1570,25 @@ const LINES={
   pressure:['{a} não pára de avançar!','{a} vai sempre para a frente.'],
   ropes:['{x} encosta {y} às cordas.','{y} está nas cordas!','{x} empurra {y} contra as cordas.'],
   cornered:['{y} está preso no canto!','{x} encurrala {y} no canto.','Canto! {y} tem de sair dali.'],
+  d_keep:['{y} mantém {x} à ponta do jab.','{y} não deixa {x} entrar: tudo à distância.','{x} não consegue encurtar. {y} controla a distância.'],
+  d_in:['{x} encurta a distância e cola-se a {y}.','{x} entra! Agora é luta curta.','{x} fecha a distância: {y} já não tem espaço para o jab.'],
+  d_mid:['Meia distância: aqui troca-se.','Estão a meia distância, ao alcance do direto.'],
+  d_out:['{y} sai a bater das cordas!','{y} responde e consegue sair das cordas.','{y} abre espaço à força de golpes.'],
+  d_pivot:['{y} saiu com um pivô! De volta ao centro.','Passo lateral de {y}: sai das cordas e deixa {x} a olhar para elas.','{y} roda sobre o pé e escapa das cordas.'],
+  d_pivotC:['{y} saiu do canto com um pivô! Que pés!','{y} escapa do canto com um passo lateral.'],
+  d_clinch:['{y} agarra-se e sai das cordas no clinch.','{y} amarra {x} e, no break, já está fora das cordas.'],
+  wobbly:['{x} levanta-se com as pernas bambas!','Pernas bambas! {x} não está firme.','{x} está de pé, mas as pernas não respondem.'],
+  wobblyR:['{x} ainda tem as pernas bambas e é empurrado para trás.','As pernas de {x} ainda tremem.'],
+  tiredRopes:['{y} está cansado e já não consegue sair das cordas.','Sem pernas, {y} vai ficando encostado.'],
+  ant_jab:['{a} apanhou {d} a entrar com o jab!','{d} tenta entrar e leva logo com o jab de {a}.','Jab de {a} na entrada! {d} tem de recomeçar.'],
+  ant_back:['Jab de recuo de {a}! {d} não consegue fechar.','{a} recua a picar com o jab e trava {d}.'],
+  ant_check:['Check hook de {a}! Apanhou {d} a entrar!','{d} entra e leva com o check hook de {a}!','{a} roda e espeta o gancho na entrada de {d}.'],
+  antMiss:['{d} entra apesar do jab de {a}.','{d} passa por baixo do jab e entra.'],
+  ctr_cross:['CROSS-COUNTER! {a} solta o direto por cima do golpe de {d}!','Cross-counter de {a}! Por cima do braço de {d}!','Ao mesmo tempo e por cima: cross-counter de {a}!'],
+  cc_both:['Os dois acertam ao mesmo tempo! {a} tentou o cross-counter cedo demais.','Troca simultânea! O cross-counter de {a} saiu sem timing.'],
+  ctr_pivot:['Pivô de {a} e {p} de ângulo! {d} ficou virado para o lado errado.','{a} roda sobre o pé e acerta de lado com o {p}!'],
+  ctr_side:['Passo lateral e {p} de {a}! Ângulo perfeito.','{a} sai para o lado e castiga com o {p} enquanto {d} se vira.'],
+  ctr_clinch:['No break, {a} sai a bater com o {p}!','{a} solta o {p} curto mal o árbitro os separa!'],
   center:['Voltam ao centro do ringue.','Os dois estudam-se no meio do ringue.','{x} corta o ringue e procura o ataque.','{x} anda à volta, a trabalhar o jab.'],
   heard:['{x} ouve o canto e muda logo para {s}.','{x} acena ao treinador. Agora é {s}.','Ordem do canto cumprida: {x} passa a {s}.'],
   heardLate:['Finalmente! {x} lá ouviu o treinador: {s}.','Demorou, mas {x} percebeu o recado. Agora em {s}.','Só agora {x} ouve o canto vermelho. {s}!'],
@@ -1577,11 +1608,11 @@ function fighter(src,mine){
   initBody(src,src.tier!=null?2:3);const fst=(mine&&src.fstyle&&styleLv(src,src.fstyle)>0)?src.fstyle:src.style;
   const x={h:src.h,r:src.r,sty:src.sty,slv:Math.max(1,styleLv(src,fst)),armX:clamp(Math.round(((src.r-src.h)-2.5)/3),-1,2),hs:clamp((src.h||175)/178,.9,1.12),name:src.name,nick:src.nick,style:fst,ment:src.ment||{},look:src.look,mine,...src.attrs,skills:{...newSkills(),...pickKeys(src.skills,PKEYS)},def:{...newDefs(),...pickKeys(src.def,DKEYS)},src,cat:src.cat||'Ligeiro',gift:src.gift||null,
     hp:100,st:mine?clamp(100-(src.fatigue||0)*.5,40,100):100,kd:0,cut:0,conf:mine?src.conf:confBase(src),strat:'Equilibrado',
-    rs:newRS(),tot:{thrown:0,landed:0,power:0,dmg:0},card:0,dmgTaken:0,ps:{},dfs:{},cts:{},liv:[0,0],bodyAcc:0,hunch:0,headL:0,bodyL:0,lowT:0,lastK:'jab',
+    rs:newRS(),dx:newDX(),wobbly:0,tot:{thrown:0,landed:0,power:0,dmg:0},card:0,dmgTaken:0,ps:{},dfs:{},cts:{},liv:[0,0],bodyAcc:0,hunch:0,headL:0,bodyL:0,lowT:0,lastK:'jab',
     pos:{x:mine?60:180,y:mine?132:44,tx:mine?60:180,ty:mine?132:44},an:{pose:'guard',t0:0,dur:1,arm:'L'},lastArm:'R',flash:0};
   initBel(x,src,mine);return x;
 }
-function newRS(){return{thrown:0,landed:0,power:0,dmg:0,kd:0,cl:0}}
+function newRS(){return{thrown:0,landed:0,power:0,dmg:0,kd:0,cl:0,ctl:0}}
 function pickKeys(o,ks){const r={};if(o)for(const k of ks)if(o[k]!=null)r[k]=o[k];return r}
 function initBel(x,src,mine){ // crença em cada habilidade na luta: a do atleta; a do adversário anda perto do nível real
   x.bel={};for(const k of[...PKEYS,...DKEYS]){const lv=lvOf(x,k);if(!lv)continue;const b=src.bel&&src.bel[k];
@@ -1591,12 +1622,12 @@ function startFight(a,done){
   const f=a.fight;
   if(!f.opp.grown){const wk=Math.max(0,S.week-(f.opp.made||S.week));for(const[k]of ATTRS)if(k!=='queixo')f.opp.attrs[k]=clamp(f.opp.attrs[k]+R(0,.45)*wk,5,99);f.opp.grown=true}
   F={a,done,me:fighter(a,true),op:fighter(f.opp,false),round:1,rounds:f.rounds,log:[],fast:false,over:null,ft:0,
-    zoom:null,crowd:0,flashes:0,ref:{x:120,y:60,tx:120,ty:60,pose:'stand'},count:null,big:null,lastScore:[10,10],zone:'center',ord:null,ordLog:[],deaf:0,live:false,inRound:false,rr:[],kdl:[],talks:[],sx:{}};
+    zoom:null,crowd:0,flashes:0,ref:{x:120,y:60,tx:120,ty:60,pose:'stand'},count:null,big:null,lastScore:[10,10],zone:'center',zp:null,ctl:null,dw:null,dist:'meio',dT:0,ord:null,ordLog:[],deaf:0,live:false,inRound:false,rr:[],kdl:[],talks:[],sx:{}};
   F.form0=formOf(a);F.me.form=F.form0.sc*TUNE.formK;F.op.form=0;F.venue=venueIdx({tier:a.tier,title:f.title});
   F.op.strat=f.opp.style==='In-fighter'?'Pressão':f.opp.style==='Outboxer'?'Cautela':'Equilibrado';
   $('#fightRoot').innerHTML=`<div class="fight">
     <div class="stagew"><div class="stage"><canvas class="px" id="ring" width="240" height="240"></canvas><button class="snd" id="pauseF" aria-label="Pausa">II</button><div class="ford" id="fOrd" aria-live="polite"></div>
-      <div class="fhead"><div class="fside" id="fL"></div><div class="fclock" id="fClock"></div><div class="fside rt" id="fR"></div></div></div></div>
+      <div class="fhead"><div class="fside" id="fL"></div><div class="fclock" id="fClock"></div><div class="fside rt" id="fR"></div><div class="fdist" id="fDist" aria-label="Distância">${DN.map(d=>`<i data-d="${d}">${d.toUpperCase()}</i>`).join('<b>·</b>')}</div></div></div></div>
     <div class="booth" id="booth"><div class="fcom" id="fcom" aria-live="polite"></div><div class="caster"><canvas id="caster" width="40" height="48"></canvas><span>ZÉ DO MICRO</span></div></div>
     <div class="fctl" id="fctl"></div></div>`;
   recent=[];ARENA=null;
@@ -1618,9 +1649,12 @@ function hud(){
     el.querySelector('.meta').innerHTML=`${x.kd?`Quedas ${x.kd}`:''}${x.kd&&cut?' · ':''}${cut?`Cortes ${cut}`:''}${ps?` <b style="color:var(--gold);font-weight:400">+${Math.round(ps)} fôlego</b>`:''}${ph?` <b style="color:#ff9a86;font-weight:400">+${Math.round(ph)} vida</b>`:''}${pv.cut?' <b style="color:#ff9a86;font-weight:400">-1 corte</b>':''}&nbsp;`;
   };
   side($('#fL'),F.me);side($('#fR'),F.op);ordInd();
+  distBar();
   const left=Math.max(0,180-F.ft/1000*3);
   $('#fClock').innerHTML=F.ended?`${F.a.fight.title?'TÍTULO<br>':''}FIM<b>${F.over&&F.over.how?F.over.how.toUpperCase().slice(0,7):''}</b>`:`${F.a.fight.title?'TÍTULO<br>':''}ROUND ${Math.min(F.round,F.rounds)}/${F.rounds}<b>${Math.floor(left/60)}:${String(Math.floor(left%60)).padStart(2,'0')}</b>`;
 }
+function distBar(){const el=$('#fDist');if(!el||!F)return;const k=F.dist+F.inRound;if(el.dataset.d===k)return; // barra LONGE · MEIO · PERTO (5.5)
+  el.dataset.d=k;el.classList.toggle('off',!F.inRound);el.querySelectorAll('i').forEach(i=>i.classList.toggle('on',i.dataset.d===F.dist))}
 function say(t,c){F.log.push({t,c});F.talk=performance.now()+Math.min(2200,400+t.length*28);const big=$('#booth')&&$('#booth').classList.contains('big');$('#fcom').innerHTML=F.log.slice(big?-9:-3).map(l=>`<div class="${l.c||''}">${l.t}</div>`).join('')}
 function setBooth(big){const b=$('#booth');if(!b)return;b.classList.toggle('big',big);const fr=$('#fightRoot .fight');if(fr)fr.classList.toggle('compact',!big);$('#fctl').style.flex=big?'none':'';const L=F.log;F.log=L.slice(0,-1);if(L.length)say(L.at(-1).t,L.at(-1).c)}
 function drawCaster(now){
@@ -1822,9 +1856,11 @@ async function runFight(){
     say(line('start',{n:F.round}),'sys');SFX.play('bell');
     if(F.round===1){const fm=F.me.form||0;if(fm>=.3)say(`${F.me.nick} entra em grande forma, muito solto.`,'sys');else if(fm<=-.3)say(`${F.me.nick} parece pesado hoje...`,'sys')}
     if(F.crew)setCrew('round');act(F.me,'guard',1);act(F.op,'guard',1);
-    setT(F.me,98,88);setT(F.op,142,88);F.refLock=false;F.zone='center';
-    await waitArrive(3000);F.ft=0;if(!F.over){F.inRound=true;roundCtl()}hud();
+    setT(F.me,98,88);setT(F.op,142,88);F.refLock=false;F.zone='center';F.zp=null;F.ctl=null;F.dw=null;F.dist='meio';
+    for(const x of[F.me,F.op]){x.wobbly=x.wob2||0;x.wob2=0} // pernas bambas: o que sobra depois do intervalo
+    await waitArrive(3000);F.ft=0;F.dT=0;if(!F.over){F.inRound=true;roundCtl()}hud();
     while(F.ft<60000&&!F.over){await exchange();if(F.over)break;await fsleep(R(450,950)/((fmods(F.me).vol+fmods(F.op).vol)/2))}
+    distTick();for(const x of[F.me,F.op])x.wob2=Math.max(0,x.wobbly-F.ft)*.4;
     orderLost();F.inRound=false;F.live=false;F.towelAsk=false;if(!F.over)roundCtl();
     if(F.over)break;
     say(line('end',{n:F.round}),'sys');SFX.play('bell');scoreRound();
@@ -2027,7 +2063,8 @@ function preTalk(mid){
 function scoreRound(){
   const m=F.me.rs,o=F.op.rs;
   let ms=10,os=10;
-  const jn=()=>1+(Math.random()+Math.random()+Math.random()-1.5)*TUNE.judge;const tm=Math.max(0,m.dmg+m.landed*.5-TUNE.clJ*(m.cl||0))*jn(),to=Math.max(0,o.dmg+o.landed*.5-TUNE.clJ*(o.cl||0))*jn(); // os juízes não gostam de quem agarra
+  const jn=()=>1+(Math.random()+Math.random()+Math.random()-1.5)*TUNE.judge;let tm=Math.max(0,m.dmg+m.landed*.5-TUNE.clJ*(m.cl||0))*jn(),to=Math.max(0,o.dmg+o.landed*.5-TUNE.clJ*(o.cl||0))*jn(); // os juízes não gostam de quem agarra
+  {const c=m.ctl+o.ctl;if(c>0){const e=TUNE.ctlJ*(tm+to)*(m.ctl/c-.5);tm+=e;to-=e}} // quem controlou o ringue: pequena vantagem (só decide rounds equilibrados)
   if(Math.abs(tm-to)>(tm+to)*.08){if(tm>to)os=9;else ms=9}
   ms-=o.kd;os-=m.kd;
   F.me.card+=ms;F.op.card+=os;F.lastScore=[ms,os];
@@ -2035,48 +2072,122 @@ function scoreRound(){
 }
 function finM(x,o){return(o.hp<40||o.st<25)?1+TUNE.finK*(mv(x,'fin')-50)/50:1} // Instinto finalizador: vai buscá-lo quando está magoado
 function concF(att,def){if(!F||F.rounds<2)return 0;const late=clamp((F.round-1)/(F.rounds-1),0,1);return TUNE.concK*late*(mv(att,'conc')-mv(def,'conc'))/50} // Concentração nos últimos rounds
-async function footwork(){
-  const{me,op}=F;
-  const sw=x=>x.style==='In-fighter'?1.9:x.style==='Outboxer'?.55:.7;
-  const aM=STRAT[me.strat].agg*sw(me),aO=STRAT[op.strat].agg*sw(op);
-  const presser=Math.random()<aM/(aM+aO)?me:op,prey=presser===me?op:me;
-  const v={x:presser.nick,y:prey.nick};
-  let pC=.42,pR=.76;
-  if(presser.style==='In-fighter'){pC=.22;pR=.62}
-  if(prey.style==='Outboxer'){pC+=.2;pR=Math.min(.95,pR+.12)}
-  if(prey.style==='Puncher'){pC=Math.max(pC,.55);pR=Math.max(pR,.82)}
-  const r=Math.random();let zone,msg=null;
-  if(r<pC){
-    zone='center';
-    const ang=Math.atan2(presser.pos.y-prey.pos.y,presser.pos.x-prey.pos.x)+R(-1,1);
-    const cs=prey.style==='Puncher'?8:24;pair(prey,presser,120+R(-cs,cs),88+R(-cs*.75,cs*.75),ang,prey.style==='Outboxer'?56:46);
-    if(F.zone!=='center')msg=line('center',v);
-    else if(prey.style==='Outboxer'&&Math.random()<.4)msg=line('circle',v);
-    else if(prey.style==='Puncher'&&Math.random()<.4)msg=line('wait',v);
-  }else if(r<.76){
-    zone='ropes';
-    const side=RI(0,3);let px,py,ang;
-    if(side===0){px=R(70,170);py=LIM.y0;ang=Math.PI/2}
-    else if(side===1){px=R(70,170);py=LIM.y1;ang=-Math.PI/2}
-    else if(side===2){px=LIM.x0;py=R(54,122);ang=0}
-    else{px=LIM.x1;py=R(54,122);ang=Math.PI}
-    pair(prey,presser,px,py,ang+R(-.4,.4),42);
-    if(F.zone!=='ropes')msg=line('ropes',v);
+/* ---- distância e ringue (tema 5, A3) ----
+   F.dist: 'longe' | 'meio' | 'perto'. Cada atleta prefere uma distância pelo estilo (DPREF: Outboxer longe, Puncher meio, In-fighter perto).
+   Em cada troca, se querem distâncias diferentes, disputam-na (ringStep): contam sobretudo os Pés que valem agora (pesEff: descem com pouco
+   fôlego, com muita dor e muito com as "pernas bambas" depois de uma queda), depois o Ring IQ. Nunca é garantido (TUNE.dMin).
+   A estratégia ainda NÃO entra (5.1, por decidir): fica o gancho TUNE.dStrat=0 em ringPow.
+   F.zone: 'center' | 'ropes' | 'corner'; F.zp = quem está encostado; F.ctl = quem controla o ringue (juízes, em rounds equilibrados).
+   Quem ganha a disputa para se aproximar empurra o outro para as cordas e depois para o canto ("cortar o ringue"); quem a ganha para se
+   afastar sai (pivô, passo lateral) e fica no centro. Também se sai com o clinch e a bater (exchange). Nas cordas a luta tende para perto;
+   no canto é quase sempre perto. Antecipação (4.2): quando o outro entra, pode apanhá-lo a entrar com o jab (jab de recuo, se está a ser
+   empurrado) ou com o check hook; se acertar, a distância não encurta.
+   Dados para a análise (A4) em x.dx: d segundos em cada distância; z segundos no centro / encostado às cordas / no canto; ctl segundos a
+   controlar o ringue; xw trocas ganhas em cada distância; ant [tentou, entrou]; cc cross-counters [tentou, entrou, os dois acertaram];
+   ang counters de ângulo (Pés) [tentou, entrou]; clo sair a bater do clinch [tentou, entrou]; esc saídas das cordas/canto por pés, clinch, a bater.
+   Ganchos para o A4: x.wobbly (F.ft até quando tem pernas bambas), F.zone/F.zp/F.zs (lado das cordas), F.dist. */
+const DN=['longe','meio','perto'],DI={longe:0,meio:1,perto:2};
+const DPREF={'Outboxer':'longe','Puncher':'meio','In-fighter':'perto'};
+const GAP={longe:50,meio:35,perto:22},DMUL={longe:.8,meio:1,perto:1.15},DCOST={longe:.8,meio:1,perto:1.2};
+function prefD(x){return DI[DPREF[x.style]||'meio']}
+function pesEff(x){let v=clamp(x.pes??20,1,100);if(x.st<50)v*=1-TUNE.pesSt+TUNE.pesSt*Math.max(0,x.st)/50;if(x.hp<50)v*=1-TUNE.pesHp+TUNE.pesHp*Math.max(0,x.hp)/50;if(F&&x.wobbly>F.ft)v*=TUNE.wobP;return v} // Pés que contam agora (5.4)
+function ringPow(x){return pesEff(x)+TUNE.dIQ*clamp(x.iq??20,0,100)+TUNE.dStrat*((STRAT[x.strat]||STRAT.Equilibrado).agg-.5)*100}
+function newDX(){return{d:{longe:0,meio:0,perto:0},z:{centro:0,cordas:0,canto:0},ctl:0,xw:{longe:0,meio:0,perto:0},ant:[0,0],cc:[0,0,0],ang:[0,0],clo:[0,0],esc:{pes:0,clinch:0,bater:0}}}
+function distTick(){ // conta o tempo (segundos de relógio) de cada um em cada distância e sítio do ringue
+  if(!F||!F.inRound)return;const dt=Math.max(0,F.ft-(F.dT||0));F.dT=F.ft;if(!dt)return;const s=dt*3/1000;
+  for(const x of[F.me,F.op]){x.dx.d[F.dist]+=s;x.dx.z[F.zp!==x||F.zone==='center'?'centro':F.zone==='ropes'?'cordas':'canto']+=s}
+  if(F.ctl){F.ctl.dx.ctl+=s;F.ctl.rs.ctl+=s}
+}
+function otherOf(x){return x===F.me?F.op:F.me}
+function zoneOut(prey){ // empurrado: centro → cordas → canto
+  if(F.zone!=='center'&&F.zp!==prey)F.zone='center'; // trocaram: o que estava encostado saiu e agora é ele que empurra
+  F.zone=F.zone==='center'?'ropes':'corner';if(F.zone==='ropes')F.zs=null;F.zp=prey;
+}
+function zoneIn(){F.zone=F.zone==='corner'?'ropes':'center';if(F.zone==='center'){F.zp=null;F.ctl=null}}
+function antKey(x){const j=x.skills.jab>0,g=x.skills.ganchoF>0;if(F.dist==='longe')return j?'jab':null;return g&&(!j||Math.random()<.6)?'ganchoF':j?'jab':null}
+function antP(x,o,k){ // 4.2: apanhá-lo a entrar. Ring IQ, Velocidade, Pés, nível e crença no jab / gancho da frente
+  if(!k||x.hunch>F.ft)return 0;const lv=x.skills[k]||1;
+  return TUNE.antK*(.5+clamp(x.iq??20,0,100)/100)*(.6+x.velocidade/125)*(.6+pesEff(x)/125)*(.7+.15*lv)*clamp(belOf(x,k)/Math.max(1,lv),.4,1.3)*(x.st<30?.6:1);
+}
+async function ringStep(){
+  const{me,op}=F;let di=DI[F.dist],ev=null,cl=null,kp=null;const pm=prefD(me),po=prefD(op);F.dw=null;
+  if(pm===po){ // querem a mesma distância: vão para lá, com um pouco de vaivém; ninguém disputa
+    if(di!==pm&&Math.random()<.75)di+=Math.sign(pm-di);else if(Math.random()<.15)di=clamp(di+(Math.random()<.5?1:-1),0,2);
+    if(F.zone==='center'){if(Math.random()<TUNE.zDrift){const a=ringPow(me),b=ringPow(op),w=Math.random()<a/(a+b)?me:op;cl=w;kp=otherOf(w);zoneOut(kp);ev='push'}}
+    else{const p=F.zp,q=otherOf(p);cl=q;kp=p;if(Math.random()<TUNE.zEsc*pesEff(p)/(pesEff(p)+pesEff(q))*(F.zone==='corner'?.7:1)){zoneIn();p.dx.esc.pes++;ev='esc'}}
   }else{
-    zone='corner';
-    const c=pick([[LIM.x0+2,LIM.y0+2,Math.PI/4],[LIM.x1-2,LIM.y0+2,3*Math.PI/4],[LIM.x0+2,LIM.y1-2,-Math.PI/4],[LIM.x1-2,LIM.y1-2,-3*Math.PI/4]]);
-    pair(prey,presser,c[0],c[1],c[2]+R(-.3,.3),42);
-    msg=line('cornered',v);
+    cl=pm>po?me:op;kp=otherOf(cl); // cl quer mais perto; kp quer mais longe
+    let p=.5+(ringPow(cl)-ringPow(kp))/TUNE.dDiv;
+    if(F.zone!=='center')p+=(F.zp===kp?1:-1)*(F.zone==='corner'?TUNE.dCorn:TUNE.dRope);
+    p=clamp(p,TUNE.dMin,1-TUNE.dMin);
+    const win=Math.random()<p?cl:kp;F.dw=win;const tgt=prefD(win);
+    if(win===cl){
+      const k=di<tgt?antKey(kp):null;
+      if(k&&Math.random()<antP(kp,cl,k)){ // antecipação: tenta apanhá-lo a entrar
+        kp.dx.ant[0]++;const back=k==='jab'&&(F.zp===kp||F.dist!=='longe');
+        const r=await punch(kp,cl,k,kp.strat,1.1,true,0,{tgt:'head',ant:1,ln:k==='jab'?(back?'ant_back':'ant_jab'):'ant_check',noCC:true});if(F.over)return;
+        if(r==='hit'||r==='clean'){kp.dx.ant[1]++;F.dw=kp;ev='ant'}
+        else{di++;ev='in';if(Math.random()<.4)say(line('antMiss',{a:kp.nick,d:cl.nick}))}
+      }else if(F.zone!=='center'&&F.zp===cl){zoneIn();if(di<tgt)di++} // o que quer perto estava encostado: sai a andar para a frente
+      else{const was=di;if(di<tgt)di++;if(Math.random()<TUNE.zPush){zoneOut(kp);ev='push'}else ev=di>was?'in':null}
+    }else{
+      if(di>tgt)di--;
+      if(F.zone!=='center'&&F.zp===kp){if(Math.random()<TUNE.zEsc*(F.zone==='corner'?.7:1)){const c=F.zone==='corner';zoneIn();kp.dx.esc.pes++;ev=c?'escC':'esc'}else ev='stuck'}
+      else ev='keep';
+    }
   }
-  F.zone=zone;
+  if(F.zone==='corner'&&Math.random()<TUNE.cornPerto)di=2; // no canto é quase sempre perto
+  else if(F.zone==='ropes'&&di===0&&Math.random()<.6)di=1; // nas cordas não há espaço para ficar longe
+  const d0=F.dist;F.dist=DN[di];
+  F.ctl=F.zone!=='center'?otherOf(F.zp):F.dw;
+  return{ev,cl,kp,d0};
+}
+function placeRing(){ // posições no ringue: o espaço entre os dois mostra a distância; o sítio mostra quem controla
+  const{me,op}=F,gap=GAP[F.dist]+R(-3,3);
+  if(F.zone==='center'){
+    const a=F.ctl||(Math.random()<.5?me:op),b=otherOf(a),cs=F.dist==='longe'?26:18;
+    const ang=(a.pos.x<b.pos.x?Math.PI:0)+R(-.5,.5); // quase de lado: a vista do ringue encolhe a profundidade e a distância lê-se melhor
+    pair(b,a,120+R(-cs,cs),88+R(-cs*.75,cs*.75),ang,gap);
+  }else if(F.zone==='ropes'){
+    const p=F.zp,q=otherOf(p);
+    if(F.zs==null){const ds=[p.pos.y-LIM.y0,LIM.y1-p.pos.y,p.pos.x-LIM.x0,LIM.x1-p.pos.x].map(v=>v+R(0,25));F.zs=ds.indexOf(Math.min(...ds))}
+    const s=F.zs;let px,py,ang;
+    if(s===0){px=clamp(p.pos.x+R(-20,20),70,170);py=LIM.y0;ang=Math.PI/2}
+    else if(s===1){px=clamp(p.pos.x+R(-20,20),70,170);py=LIM.y1;ang=-Math.PI/2}
+    else if(s===2){px=LIM.x0;py=clamp(p.pos.y+R(-16,16),54,122);ang=0}
+    else{px=LIM.x1;py=clamp(p.pos.y+R(-16,16),54,122);ang=Math.PI}
+    pair(p,q,px,py,ang+R(-.4,.4),gap);
+  }else{
+    const p=F.zp,q=otherOf(p);
+    const cs=[[LIM.x0+2,LIM.y0+2,Math.PI/4],[LIM.x1-2,LIM.y0+2,3*Math.PI/4],[LIM.x0+2,LIM.y1-2,-Math.PI/4],[LIM.x1-2,LIM.y1-2,-3*Math.PI/4]];
+    const c=cs.sort((u,w)=>Math.hypot(u[0]-p.pos.x,u[1]-p.pos.y)-Math.hypot(w[0]-p.pos.x,w[1]-p.pos.y))[0];
+    pair(p,q,c[0],c[1],c[2]+R(-.3,.3),gap);
+  }
+}
+async function footwork(){
+  distTick();
+  const z0=F.zone,zp0=F.zp,r=await ringStep();if(F.over||!r)return;
+  const{ev,cl,kp,d0}=r,v={x:cl&&cl.nick,y:kp&&kp.nick};let msg=null;
+  if(ev==='push')msg=line(F.zone==='corner'?'cornered':'ropes',v);
+  else if(ev==='esc'||ev==='escC')msg=line(z0==='corner'?'d_pivotC':'d_pivot',{x:otherOf(zp0||kp).nick,y:(zp0||kp).nick});
+  else if(ev==='stuck'&&kp.st<35&&Math.random()<.5)msg=line('tiredRopes',v);
+  else if(ev==='in'&&F.dist==='perto'&&d0!=='perto')msg=line('d_in',v);
+  else if(ev==='keep'&&F.dist==='longe'&&kp.skills.jab>0)msg=line('d_keep',v);
+  else if(ev==='keep'&&F.zone==='center'&&kp.style==='Outboxer'&&Math.random()<.3)msg=line('circle',v);
+  else if(F.dist==='meio'&&d0!=='meio'&&Math.random()<.25)msg=line('d_mid',v);
+  else if(F.zone==='center'&&z0!=='center')msg=line('center',v);
+  for(const x of[F.me,F.op])if(x.wobbly>F.ft&&Math.random()<.35){act(x,'stagger',700);if(!msg&&Math.random()<.5)msg=line('wobblyR',{x:x.nick})} // A4: animação própria das pernas bambas
+  placeRing();
   if(msg&&Math.random()<.6)say(msg);
-  await waitArrive(2400);await fsleep(R(150,400));
+  hud();
+  await waitArrive(2400);await fsleep(R(150,400)+R(.5,1.5)*TUNE.fwT); // fwT: tempo a estudar-se/andar à volta (o ritmo de trocas por round fica como antes do A3)
 }
 async function exchange(){
   const{me,op}=F;
   await footwork();if(F.over)return;
+  const d0=F.dist,m0=me.tot.dmg,o0=op.tot.dmg;
   {const cl=x=>(x.def&&x.def.clinch)||0;const need=x=>cl(x)>0&&(x.st<=30||x.hp<35);const lv=Math.max(cl(me),cl(op));
-   if(lv>0&&Math.random()<((need(me)||need(op))?.14+.02*lv:.04+.01*lv)){await clinch(need(me)&&need(op)?pick([me,op]):need(me)?me:need(op)?op:cl(me)>cl(op)?me:cl(op)>cl(me)?op:pick([me,op]));return}}
+   if(lv>0&&Math.random()<((need(me)||need(op))?.14+.02*lv:.04+.01*lv)*distFit('clinch',F.dist)){await clinch(need(me)&&need(op)?pick([me,op]):need(me)?me:need(op)?op:cl(me)>cl(op)?me:cl(op)>cl(me)?op:pick([me,op]));return}}
   let myStrat=me.strat;
   if(Math.random()<TUNE.stubFight*stubP(me)*(me.calm?.4:1))myStrat='Pressão';
   const aM=STRAT[myStrat].agg*(me.style==='In-fighter'?1+TUNE.sagg:me.style==='Outboxer'?1-TUNE.sagg:1)*fmods(me).vol*finM(me,op);
@@ -2085,29 +2196,36 @@ async function exchange(){
   const att=hM!==hO?(hM?op:me):Math.random()<aM/(aM+aO)?me:op,def=att===me?op:me;F.sx[me.strat]=(F.sx[me.strat]||0)+1;
   const strat=att===me?myStrat:att.strat;
   const u=unit(def,att);
-  setT(att,def.pos.x+u.dx*33,def.pos.y+u.dy*33);
+  setT(att,def.pos.x+u.dx*GAP[F.dist]*.92,def.pos.y+u.dy*GAP[F.dist]*.92);
   await waitArrive(900);
   const AM=fmods(att),DM=fmods(def);let n=1;const pc=(AM.vol-1)*.8+.35+STRAT[strat].combo+(att.style==='In-fighter'?.15:att.style==='Outboxer'?-.1:0)*sf(att)/.74;if(att.st>25&&Math.random()<pc)n++;if(att.st>45&&Math.random()<pc*.5)n++;
   let seq=null;
+  if(F.dist==='longe'&&n>2&&Math.random()<.5)n--; // longe: menos golpes seguidos
   if(n>=2){const kc=knownCombos(att).filter(c=>c.seq.length<=n+2&&(att.st>30||c.seq.length<=2));if(kc.length&&Math.random()<.7){const c=kc.at(-1-Math.floor(Math.random()*Math.min(2,kc.length)));seq=c.seq;n=seq.length;say(`${c.n}! Combinação de ${att.nick}.`,att.mine?'me':'')}}
   let landed=0;const thrown=[];
   for(let i=0;i<n;i++){
     let k,tgt;
     if(seq){const[sk,b]=seq[i].split('@');k=sk;tgt=b==='b'?'body':b==='h'?'head':chooseTarget(att,def,k)}else{k=choosePunch(att,i);tgt=chooseTarget(att,def,k)}
     thrown.push(k);
-    const res=await punch(att,def,k,strat,1,i===n-1,seq&&i>0?.06:0,{tgt,first:i===0&&!seq});
+    const res=await punch(att,def,k,strat,1,i===n-1,seq&&i>0?.06:0,{tgt,first:i===0&&!seq,ci:i});
     if(F.over)return;
+    if(res==='cc')break; // apanhado pelo cross-counter
     if(res==='hit'||res==='clean')landed++;
     if(res==='def'){const{fam,sub}=F.ld||{};
       if(fam==='clinch'){await clinch(def);break}
+      if(fam==='pes'&&(sub==='pivot'||sub==='side')&&F.zp===def&&F.zone!=='center'&&Math.random()<.5){const c=F.zone==='corner';zoneIn();def.dx.esc.pes++;say(line(c?'d_pivotC':'d_pivot',{x:att.nick,y:def.nick}),def.mine?'me':'')} // sai das cordas com os pés
+      else if(fam==='pes'&&sub==='back'&&F.dist!=='longe'&&Math.random()<.35)F.dist=DN[DI[F.dist]-1]; // recuar abre distância
       const ck=fam?ctrPick(def,sub,k):null;
-      if(ck&&Math.random()<ctrChance(def,att,fam,ck.k)){await punch(def,att,ck.k,def.strat,TUNE.ctrDmg,true,0,{tgt:ck.tgt,ctr:fam,sub});if(F.over)return;if(Math.random()<.5)break}
+      if(ck&&Math.random()<ctrChance(def,att,fam,ck.k)){const r=await punch(def,att,ck.k,def.strat,TUNE.ctrDmg,true,0,{tgt:ck.tgt,ctr:fam,sub,ang:fam==='pes'});if(F.over)return;
+        if(fam==='pes'){def.dx.ang[0]++;if(r==='hit'||r==='clean')def.dx.ang[1]++}if(Math.random()<.5)break}
       else if(fam==='pes'&&Math.random()<TUNE.pesBrk)break; // os Pés evitam a combinação inteira
       else if(fam==='bloqueio'&&Math.random()<.35)break;
     }
   }
   if(thrown.length>=2&&landed>=2)say(line('combo',{a:att.nick,n:landed,c:pNums(thrown)}),att.mine?'me':'');
   else if(att.style==='In-fighter'&&Math.random()<.12)say(line('pressure',{a:att.nick}));
+  if(F.zp===att&&F.zone!=='center'&&landed>=2&&Math.random()<.5){zoneIn();att.dx.esc.bater++;say(line('d_out',{x:def.nick,y:att.nick}),att.mine?'me':'')} // sai a bater
+  {const dm=me.tot.dmg-m0,dp=op.tot.dmg-o0;if(Math.abs(dm-dp)>.5)(dm>dp?me:op).dx.xw[d0]++} // trocas ganhas em cada distância
   for(const x of[me,op]){if(x.cut)x.hp=Math.max(1,x.hp-x.cut*.4)}
   {const x=me.st<op.st?me:op;if(x.st<=30&&Math.random()<.15)say(line('tired',{x:x.nick}));else if(x.st<70&&Math.random()<.05)say(line('tiring',{x:x.nick}))}
   const b=unit(att,def);setT(att,att.pos.tx-b.dx*8,att.pos.ty-b.dy*8);
@@ -2121,7 +2239,12 @@ async function clinch(who){
   await fsleep(1300);
   setT(me,me.pos.x+u.dx*14,me.pos.y+u.dy*14);setT(op,op.pos.x-u.dx*14,op.pos.y-u.dy*14);
   act(me,'guard',1);act(op,'guard',1);F.refLock=false;
-  for(const x of[me,op])x.st=clamp(x.st+(x===who?4+2*((x.def&&x.def.clinch)||0):3),0,100);await fsleep(420);
+  for(const x of[me,op])x.st=clamp(x.st+(x===who?4+2*((x.def&&x.def.clinch)||0):3),0,100);
+  if(who&&F.zp===who&&F.zone!=='center'&&Math.random()<.5){zoneIn();who.dx.esc.clinch++;say(line('d_clinch',{x:otherOf(who).nick,y:who.nick}))} // sai das cordas no clinch
+  await fsleep(420);if(F.over)return;
+  if(who&&(who.def.clinch||0)>0){const o=otherOf(who),ck=ctrPick(who,'clinch','clinch'); // 3.3: ao separar, sai a bater com gancho/uppercut curto
+    if(ck&&Math.random()<ctrChance(who,o,'clinch',ck.k,TUNE.ctrClS)){F.dist='perto';who.dx.clo[0]++;const r=await punch(who,o,ck.k,who.strat,TUNE.ctrDmg,true,0,{tgt:ck.tgt,ctr:'clinch',sub:'clinch'});if(F.over)return;if(r==='hit'||r==='clean')who.dx.clo[1]++}}
+  if(F.dist==='perto')F.dist='meio'; // o árbitro separa
 }
 /* ---- golpe a golpe (temas 1, 3 e 4.1) ----
    O defensor escolhe a defesa antes de o golpe chegar (chooseDef: golpe que vem, se o lê (Ring IQ), níveis, crença, estilo, estado).
@@ -2129,7 +2252,7 @@ async function clinch(who){
    pode sair um counter (ctrPick: tabela do Guia; ctrChance: família, nível, Ring IQ, Técnica, confiança). Os resultados mexem na crença (belUpd). */
 function choosePunch(x,i){
   const ks=PKEYS.filter(k=>x.skills[k]>0);
-  if(i===0&&x.skills.jab>0&&Math.random()<(x.style==='Outboxer'?.75:x.style==='In-fighter'?.35:.5))return 'jab';
+  if(i===0&&x.skills.jab>0&&Math.random()<(x.style==='Outboxer'?.75:x.style==='In-fighter'?.35:.5)*(F.dist==='longe'?1.2:F.dist==='perto'?.4:1))return 'jab'; // longe vive-se do jab; perto quase não
   const W=PW[x.style]||PW.Puncher;return wpick(ks,k=>W[k]*bf(belOf(x,k))*distFit(k,curDist()));
 }
 const PW={ // peso de cada golpe por estilo: o Outboxer vive do jab e do direto; o In-fighter dos ganchos e uppercuts; o Puncher das mãos de trás
@@ -2150,19 +2273,19 @@ function chooseDef(x,o,k,body){
   return wpick(fams,f=>{if(f==='clinch'&&!need)return .04;const E=read?DEFS[f].E[cls]:.55;
     return E*E*(pref[f]||1)*bf(belOf(x,f))*(f==='clinch'?2.5:1)*((f==='cabeca'||f==='pes')&&x.st<40?.6:1)*(need&&f==='bloqueio'?1.3:1)*distFit(f,curDist())});
 }
-function subDef(fam,k,body){ // a forma concreta da defesa (para o comentador, a animação e o counter)
+function subDef(fam,k,body,x){ // a forma concreta da defesa (para o comentador, a animação e o counter)
   const c=SKILLS[k].cls;
   if(fam==='cabeca')return body?'pull':k==='jab'?(Math.random()<.5?'slipIn':'slipOut'):k==='direto'?(Math.random()<.6?'slip':'pull'):c==='gancho'?'pend':'pull';
   if(fam==='aparar')return 'parry';
   if(fam==='bloqueio')return k==='jab'&&!body&&Math.random()<.5?'catch':'block';
   if(fam==='ombro')return 'roll';
-  if(fam==='pes')return pick(['back','back','pivot','side']);
+  if(fam==='pes')return x&&F.zp===x&&F.zone!=='center'?pick(['pivot','side']):pick(F.dist==='longe'?['back','back','back','pivot','side']:['back','back','pivot','side']); // encostado não há para onde recuar
   return 'clinch';
 }
 function defPow(x,fam,k,body){ // quanto a defesa escolhida tira à hipótese de acertar (negativo = defesa errada para este golpe)
   let lf=.5+.15*(x.def[fam]||0);const cls=body?'body':SKILLS[k].cls;
   if(fam==='cabeca')lf*=x.st<50?.6+.4*x.st/50:1;                                    // piora com o cansaço
-  if(fam==='pes')lf*=(.6+clamp(x.pes??20,0,100)/100)*(x.st<50?.7+.3*x.st/50:1);      // usa o atributo Pés
+  if(fam==='pes')lf*=.6+pesEff(x)/100;                                               // usa os Pés que contam agora (fôlego, dor, pernas bambas)
   if(fam==='ombro')lf*=.6+clamp(x.iq??20,0,100)/100;                                 // precisa de timing
   return TUNE.dfK*(DEFS[fam].E[cls]*lf-TUNE.dfE0);
 }
@@ -2170,13 +2293,15 @@ function ctrPick(x,sub,k){ // tabela 3.3 do Guia: o golpe de resposta (se não o
   const T={slipIn:[['direto'],['overhand']],slipOut:[['ganchoT','upperT'],null,'body'],slip:[['ganchoF'],['upperF']],pull:[['direto'],['jab']],
     catch:[['jab','direto']],parry:[['jab','direto']],roll:[['direto'],['overhand']],
     pend:k==='ganchoF'?[['ganchoF','upperF']]:[['ganchoT','upperT']],
-    block:k==='ganchoF'?[['ganchoT']]:k==='ganchoT'||k==='overhand'?[['ganchoF']]:null}[sub];
-  if(!T)return null; // Pés (ângulo) e clinch (sair a bater) dependem da distância: A3
+    block:k==='ganchoF'?[['ganchoT']]:k==='ganchoT'||k==='overhand'?[['ganchoF']]:null,
+    pivot:[['ganchoF','direto'],['jab']],side:[['ganchoF','direto'],['jab']],  // Pés: ataque de ângulo, com ele virado
+    clinch:[['ganchoF','upperT','upperF'],['ganchoT']]}[sub];                  // clinch: ao separar, gancho ou uppercut curto
+  if(!T)return null;
   for(const opts of[T[0],T[1]]){if(!opts)continue;const kn=opts.filter(c=>x.skills[c]>0);if(kn.length)return{k:pick(kn),tgt:T[2]||'head'}}
   return null;
 }
-function ctrChance(x,o,fam,ck){ // cabeça e ombro abrem mais; aparar e pés médio; bloqueio e clinch pouco. Ring IQ, Técnica, nível, confiança
-  const base={cabeca:TUNE.ctrCab,ombro:TUNE.ctrOmb,aparar:TUNE.ctrApa,pes:TUNE.ctrPes,bloqueio:TUNE.ctrBlq,clinch:TUNE.ctrCl}[fam]||0;
+function ctrChance(x,o,fam,ck,b0){ // cabeça e ombro abrem mais; aparar e pés médio; bloqueio e clinch pouco. Ring IQ, Técnica, nível, confiança
+  const base=b0??({cabeca:TUNE.ctrCab,ombro:TUNE.ctrOmb,aparar:TUNE.ctrApa,pes:TUNE.ctrPes,bloqueio:TUNE.ctrBlq,clinch:TUNE.ctrCl}[fam]||0);
   return Math.min(TUNE.ctrMax,base*(.55+.15*(x.def[fam]||0))*(.6+clamp(x.iq??20,0,100)/100)*(.8+x.tecnica/250)*(.85+(x.conf??50)/330)*clamp(belOf(x,ck)/Math.max(1,x.skills[ck]||1),.4,1.3)
     *(x.style!=='In-fighter'?1.15:1)*(o.style==='In-fighter'?1-TUNE.inCtr-(o.slv>=4?TUNE.inCl:0):1)*(x.st<30?.6:1));
 }
@@ -2192,29 +2317,52 @@ function varLine(att,k,body,clean,dmg,first,v){ // variações do Guia: só text
   if((k==='overhand'||k==='ganchoT')&&!body&&att.style==='Puncher'&&dmg>6)c.push('bolo');
   return c.length?line('v_'+pick(c),v):null;
 }
+/* ---- cross-counter (4.3): contra o jab ou o direto à cabeça, o direto por cima sem defender primeiro. Tenta mais com Ring IQ e crença no direto;
+   o timing depende de Ring IQ, Técnica, Velocidade e do nível do direto. Se resulta: o golpe dele não entra e o direto entra com muita hipótese de
+   queda relâmpago. Se falha o timing: os dois acertam. ---- */
+function ccTry(x,o,k){if(!(x.skills.direto>0)||x.hunch>F.ft||x.wobbly>F.ft)return 0;
+  return TUNE.ccK*(.4+clamp(x.iq??20,0,100)/80)*bf(belOf(x,'direto'))*(k==='jab'?1:.8)*(F.dist==='perto'?.4:F.dist==='longe'?.7:1)*(x.st<30?.5:1)}
+function ccOk(x,o){return clamp(TUNE.ccOk+((x.iq??20)-(o.iq??20))/200+(x.tecnica-50)/250+(x.velocidade-o.velocidade)/200+.05*((x.skills.direto||1)-2),.15,.85)}
+async function crossCounter(att,def,k,strat,bonus,talk,flow,o){
+  def.dx.cc[0]++;
+  if(Math.random()<ccOk(def,att)){def.dx.cc[1]++;
+    const sk=SKILLS[k];act(att,sk.anim,sk.dur,{arm:sk.arm});att.rs.thrown++;att.tot.thrown++;(att.ps[k]||(att.ps[k]=[0,0,0]))[0]++;att.lastK=k;belUpd(att,k,false,.5);
+    await punch(def,att,'direto',def.strat,TUNE.ctrDmg,true,0,{tgt:'head',ctr:'cross',noCC:true,noDef:true,force:true,ln:'ctr_cross'});
+    return F.over?'over':'cc';
+  }
+  def.dx.cc[2]++; // sem timing: os dois acertam
+  const r=await punch(att,def,k,strat,bonus,talk,flow,{...o,noCC:true,noDef:true,force:true});if(F.over)return r;
+  await punch(def,att,'direto',def.strat,1,true,0,{tgt:'head',noCC:true,noDef:true,force:true,ln:'cc_both'});
+  return r;
+}
 async function punch(att,def,k,strat,bonus,talk,flow=0,o={}){
-  const lv=att.skills[k]||1,sk=SKILLS[k],body=o.tgt==='body',ctr=o.ctr||null;let e=edge(att.style,def.style);e*=e>0?sf(att):sf(def);const fx=x=>Math.max(x.baseFix||0,x.roundFix||0);if(att.mine&&e<0)e*=1-fx(att);if(def.mine&&e>0)e*=1-fx(def);const ar=att.rb||{},dr=def.rb||{};
-  const fam=chooseDef(def,att,k,body),sub=fam?subDef(fam,k,body):null;F.ld={fam,sub};
+  const lv=att.skills[k]||1,sk=SKILLS[k],body=o.tgt==='body',ctr=o.ctr||null;
+  if(!ctr&&!o.noCC&&!body&&(k==='jab'||k==='direto')&&Math.random()<ccTry(def,att,k))return await crossCounter(att,def,k,strat,bonus,talk,flow,o);let e=edge(att.style,def.style);e*=e>0?sf(att):sf(def);const fx=x=>Math.max(x.baseFix||0,x.roundFix||0);if(att.mine&&e<0)e*=1-fx(att);if(def.mine&&e>0)e*=1-fx(def);const ar=att.rb||{},dr=def.rb||{};
+  const fam=o.noDef?null:chooseDef(def,att,k,body),sub=fam?subDef(fam,k,body,def):null;F.ld={fam,sub};
   let dp=fam?defPow(def,fam,k,body):0;if(ctr)dp*=.5; // apanhado aberto: defende pior o counter
+  if(o.ant)dp*=.6;                                     // apanhado a entrar
+  const dist=F.dist,trap=def===F.zp&&F.zone!=='center'?F.zone:null; // encostado: defende pior
+  if(trap&&dp>0)dp*=trap==='corner'?TUNE.cornD:TUNE.ropeD;
   let hit=.5+(att.tecnica+att.velocidade-def.defesa-def.velocidade)/TUNE.hitDiv+sk.h+lv*.025+e*.05*TUNE.edge+phys(att,def,k,body)-STRAT[def.strat].def-(def.style==='In-fighter'?TUNE.sdA:def.style==='Outboxer'?TUNE.sdD:TUNE.sdC)*sf(def)/.74+(att.st<=30?-.1:att.st<70?-.03:0)+(def.st<=30?TUNE.tdB:def.st<70?TUNE.tdA:0)+(att.conf-50)/500+(att.hitB||0)+(att.tacB||0)+(ar.hit||0)-(dr.def||0)+flow+concF(att,def)+(att.form||0)*.04
-    -dp+(ctr?TUNE.ctrHit:0)+(def.hunch>F.ft?TUNE.livHit:0)+(body?0:Math.min(TUNE.bodyGMax,(def.bodyAcc||0)*TUNE.bodyG)); // trabalho ao corpo baixa a guarda
+    -dp+(ctr?TUNE.ctrHit:0)+(def.hunch>F.ft?TUNE.livHit:0)+TUNE.dHit*(distFit(k,dist)-1)+(trap==='corner'?TUNE.cornH:trap?TUNE.ropeH:0)+(o.ant?TUNE.antHit:0)+(o.ang?TUNE.ctrAng:0)+(body?0:Math.min(TUNE.bodyGMax,(def.bodyAcc||0)*TUNE.bodyG)); // trabalho ao corpo baixa a guarda
   hit=clamp(hit,.12,.9);att.lastK=k;if(att.st<=30)att.lowT++;
-  att.st=clamp(att.st-(TUNE.pc+STRAT[strat].cost*TUNE.scm)*(att.style==='Puncher'?1-.15*sf(att):1)*(1.5-att.resistencia/100*TUNE.resK-(1-TUNE.resK)*.35)*(att.calm===true?.85:att.calm?.93:1)*(1+TUNE.calmSt*(50-mv(att,'calma'))/50)*(ar.stam||1)*fmods(att).cost*(1-(att.form||0)*.1)*(sk.cost||1),0,100);
+  att.st=clamp(att.st-(TUNE.pc+STRAT[strat].cost*TUNE.scm)*(att.style==='Puncher'?1-.15*sf(att):1)*(1.5-att.resistencia/100*TUNE.resK-(1-TUNE.resK)*.35)*(att.calm===true?.85:att.calm?.93:1)*(1+TUNE.calmSt*(50-mv(att,'calma'))/50)*(ar.stam||1)*fmods(att).cost*(1-(att.form||0)*.1)*(sk.cost||1)*DCOST[dist],0,100);
   if(fam){const c=DEFS[fam].st*(1.3-def.resistencia/100);if(c>0)def.st=clamp(def.st-c,0,100);(def.dfs[fam]||(def.dfs[fam]=[0,0]))[0]++}
   att.rs.thrown++;att.tot.thrown++;const PS=att.ps[k]||(att.ps[k]=[0,0,0]);PS[0]++;
-  const CT=ctr?(att.cts[ctr]||(att.cts[ctr]=[0,0])):null;if(CT)CT[0]++;
+  const CT=ctr&&DEFS[ctr]?(att.cts[ctr]||(att.cts[ctr]=[0,0])):null;if(CT)CT[0]++; // o cross-counter conta à parte (x.dx.cc)
   const arm=sk.arm;att.lastArm=arm;
   const v={a:att.nick,d:def.nick,p:pLow(k)};
   const dur=sk.dur*(att.st>=70?1:att.st>30?1.1:1.25);
   act(att,sk.anim,dur,{arm,body});
   await fsleep(dur*.45);if(F.over){act(att,'guard',1);return 'over'}
   const u=unit(att,def);
-  const ok=Math.random()<hit;belUpd(att,k,ok,hit);if(fam)belUpd(def,fam,!ok,1-hit); // confiança: ajusta-se durante a luta
-  const raw=()=>(3+att.forca*TUNE.forK+lv*.9)*sk.d*(att.style==='Puncher'?1+TUNE.punD*sf(att)*(def.style==='Outboxer'?.4:1):1)*(.55+.45*att.st/100)*R(.75,1.25)*(1+e*.1*TUNE.edge)*STRAT[strat].dmg*bonus*(1+(ar.dmg||0))*fmods(att).dmg*(fmods(def).chin<1&&!body?1-.15*TUNE.giftK:1)*(body?1:1+TUNE.qxD*(50-(def.queixo??50))/50)*TUNE.dmg;
+  const ok=o.force||Math.random()<hit;belUpd(att,k,ok,hit);if(fam)belUpd(def,fam,!ok,1-hit); // confiança: ajusta-se durante a luta
+  const raw=()=>(3+att.forca*TUNE.forK+lv*.9)*sk.d*(att.style==='Puncher'?1+TUNE.punD*sf(att)*(def.style==='Outboxer'?.4:1):1)*(.55+.45*att.st/100)*R(.75,1.25)*(1+e*.1*TUNE.edge)*STRAT[strat].dmg*bonus*(1+(ar.dmg||0))*fmods(att).dmg*(fmods(def).chin<1&&!body?1-.15*TUNE.giftK:1)*(body?1:1+TUNE.qxD*(50-(def.queixo??50))/50)*TUNE.dmg
+    *DMUL[dist]*(1+TUNE.dDmg*(distFit(k,dist)-1))*(trap==='corner'&&o.ci>0?TUNE.cornC:1); // distância; no canto as combinações fazem mais estragos
   let res;
   if(ok){
     let dmg=raw();if(fam==='ombro')dmg*=TUNE.ombR; // o ombro falhou: apanhado em cheio
-    const clean=!body&&Math.random()<.05+TUNE.cleanP+lv*.012+(sk.cls!=='reto'?.03:0)+(ctr?.04:0)+(fam==='ombro'?.02:0);dmg*=clean?TUNE.cleanMul:TUNE.normMul;
+    const clean=!body&&Math.random()<.05+TUNE.cleanP+lv*.012+(sk.cls!=='reto'?.03:0)+(ctr?.04:0)+(ctr==='cross'?.1:0)+(fam==='ombro'?.02:0);dmg*=clean?TUNE.cleanMul:TUNE.normMul;
     if(body){dmg*=.75;def.st=clamp(def.st-(k==='ganchoF'?6:5)*TUNE.bdm,0,100)}
     const chin=1.3-def.resistencia/100;
     dmg*=(1.15-def.resistencia/250*TUNE.resK-(1-TUNE.resK)*.14);dmg*=TUNE.dk/(TUNE.dk+def.resistencia*TUNE.dr);dmg*=topF(def);
@@ -2225,7 +2373,7 @@ async function punch(att,def,k,strat,bonus,talk,flow=0,o={}){
     act(def,body?'hurtBody':'hurt',300);def.flash=performance.now()+150;
     setT(def,def.pos.x+u.dx*(clean?9:5),def.pos.y+u.dy*(clean?9:5));
     const cls=att.mine?'me':'';
-    const txt=ctr?line('ctr_'+o.sub,v):(Math.random()<TUNE.varP&&(talk||dmg>7||body)&&varLine(att,k,body,clean,dmg,o.first,v))||(body?line('body',v):talk||dmg>7?line('hit_'+k,v):null);
+    const txt=o.ln?line(o.ln,v):ctr?line('ctr_'+o.sub,v):(Math.random()<TUNE.varP&&(talk||dmg>7||body)&&varLine(att,k,body,clean,dmg,o.first,v))||(body?line('body',v):talk||dmg>7?line('hit_'+k,v):null);
     if(clean||def.hp<=0){F.react={by:att.mine?'me':'op',until:performance.now()+1800};F.zoom={until:performance.now()+1300*spd(),cx:(att.pos.x+def.pos.x)/2,cy:(att.pos.y+def.pos.y)/2};F.crowd=performance.now()+1500;F.flashes=performance.now()+1200;if(ctr)say(txt,cls);say(line('clean',v),'sys')}
     else if(txt)say(txt,cls);
     await fsleep(dur*.55+(clean?200:60));
@@ -2236,8 +2384,8 @@ async function punch(att,def,k,strat,bonus,talk,flow=0,o={}){
     }
     if(!F.over&&!body&&clean){ // queda relâmpago (à cabeça); o counter apanha-o aberto
       let pf=sk.fl*(.5+att.tecnica/60*TUNE.resK+(1-TUNE.resK)*.58)*(1+(lv-1)*.25)*(.8+att.forca/150)*(bonus>1?2:1)*clamp(1.4-def.resistencia/100*TUNE.resK-(1-TUNE.resK)*.35,.5,1.4)*(def.st<=30?1.5:def.st<70?1.15:1)*(def.hp<50?1.3:1)*fmods(att).flash*fmods(def).chin*chinK(def);
-      pf*=topF(def);if(att.style==='Puncher')pf*=1+TUNE.punF*sf(att)*(def.style==='Outboxer'?.4:1);if(ctr)pf*=TUNE.ctrFl;
-      if(Math.random()<Math.min(.18,pf*TUNE.flash)){await knockdown(def,att,'flash');return res}
+      pf*=topF(def);if(att.style==='Puncher')pf*=1+TUNE.punF*sf(att)*(def.style==='Outboxer'?.4:1);if(ctr)pf*=ctr==='cross'?TUNE.ccFl:TUNE.ctrFl;
+      if(Math.random()<Math.min(ctr==='cross'?.3:.18,pf*TUNE.flash)){await knockdown(def,att,'flash');return res}
     }
     if(def.hp<25&&Math.random()<.5){act(def,'stagger',800);say(line('stagger',v));await fsleep(750)}
   }else{
@@ -2285,6 +2433,8 @@ async function knockdown(x,att,kind){
   }else{
     F.count=null;act(x,'stagger',900);x.hp=Math.max(kind?x.hp:0,12+x.resistencia*.3+x.st*.18+((x.queixo??50)-50)*.1);if(x.st>=70)say(`${x.nick} ainda tem pernas. Levantou-se com fôlego!`);else if(x.st<=30)say(`${x.nick} levanta-se, mas está completamente vazio.`);
     say(line('up',{d:x.nick}),'sys');act(att,'guard',1);await fsleep(900);act(x,'guard',1);F.refLock=false;if(kind==='liver')x.hunch=F.ft+TUNE.livT;
+    x.wobbly=F.ft+TUNE.wobT*(kind==='liver'?.5:1)*(x.st<40?1.3:1);say(line('wobbly',{x:x.nick}),x.mine?'bad':'');act(x,'stagger',900); // pernas bambas (5.4): Pés caem muito durante um bocado
+    F.zone='center';F.zp=null;F.dist='meio';F.ctl=null; // recomeça a meio do ringue
   }
   hud();
 }
@@ -2498,6 +2648,8 @@ function anReasons(win,draw){
   const sp=x=>{const[t,tip]=x.t.split('|');return{s:x.s,t,tip:tip||'',sc:+x.sc.toFixed(1)}};
   return{why:main.map(sp),plus:plus?sp(plus):null};
 }
+function dzOf(x){const r=o=>Object.fromEntries(Object.entries(o).map(([k,v])=>[k,Math.round(v)]));const D=x.dx; // distância e ringue (A3), para a análise do A4
+  return{d:r(D.d),z:r(D.z),ctl:Math.round(D.ctl),xw:{...D.xw},ant:D.ant.slice(),cc:D.cc.slice(),ang:D.ang.slice(),clo:D.clo.slice(),esc:{...D.esc}}}
 function buildAnalysis(){
   const{me,op}=F,r=F.over,a=F.a;
   if(F.rr.length<Math.min(F.round,F.rounds)){const x=rrOf(null);x.p=1;F.rr.push(x)}
@@ -2517,7 +2669,7 @@ function buildAnalysis(){
     rr:F.rr.map(x=>[x.s?x.s[0]:null,x.s?x.s[1]:null,x.dn[0],x.dn[1],x.st[0],x.st[1],x.l[0],x.l[1],x.p?1:0]),
     ps:[ps(me),ps(op)],hb:[[me.headL,me.bodyL],[op.headL,op.bodyL]],df:[df(me),df(op)],ct:[ct(me),ct(op)],lv:[me.liv.slice(),op.liv.slice()],
     kdl:F.kdl.slice(0,6).map(kdTxt),ord:F.ordLog.slice(-8).map(ordTxt),ordN:F.ordLog.length,talk:F.talks.map(t=>({t:`${t.r===1?'Antes do R1':'Antes do R'+t.r}: ${t.n}`,c:t.lab==='CERTA'?'ok':t.lab==='MEIA CERTA'?'half':t.lab==='ERRADA'?'bad':''})),
-    sx:Object.entries(F.sx).sort((p,q)=>q[1]-p[1]).map(([k,v])=>`${k} ${Math.round(100*v/tot)}%`).join(' · '),why,plus};
+    sx:Object.entries(F.sx).sort((p,q)=>q[1]-p[1]).map(([k,v])=>`${k} ${Math.round(100*v/tot)}%`).join(' · '),why,plus,dz:[dzOf(me),dzOf(op)]};
 }
 /* ---- histórico de lutas ----
    a.hist: uma entrada pequena por luta (mais antiga primeiro): {w semana, o alcunha do adversário, ac academia, os estilo dele,
@@ -3008,7 +3160,7 @@ function ringLoop(now){
   if(F.confetti){if(!F.conf)F.conf=Array.from({length:150},(_,i)=>({x:Math.random()*240,y0:-Math.random()*260,v:.6+Math.random()*1.1,w:2+Math.random()*3,ph:Math.random()*6,c:['#e8b13a','#d4452f','#2d6db3','#f1e5d0','#74b35d','#f5d36a'][i%6]}));
     const el=(now-F.confetti)/1000;for(const q of F.conf){const y=q.y0+el*q.v*55;if(y<-4||y>244)continue;const x=q.x+Math.sin(el*q.w+q.ph)*5;c.fillStyle=q.c;const fl=Math.sin(el*q.w*2+q.ph)>0;c.fillRect(Math.round(x),Math.round(y),fl?3:1,2)}}
   if(F.big){const by=F.bigTop?18:96;c.fillStyle='rgba(0,0,0,.6)';c.fillRect(40,by,160,30);c.fillStyle='#e8b13a';c.font='16px "Press Start 2P", monospace';c.textAlign='center';c.fillText(F.big,120,by+22)}
-  drawCaster(now);
+  drawCaster(now);distBar();
   requestAnimationFrame(ringLoop);
 }
 
