@@ -58,7 +58,9 @@ Ordem: 8 → 5 → 1 → 3 → 4.
 ### Tema 5 — Pés, distância e controlo do ringue
 - **Hoje:** zonas do ringue e alcance existem; não há distância longa/média/curta explícita.
 - **Guia:** distância longa/média/curta, trabalho de pés, controlo do ringue.
-- **Decisões:** —
+- **Decisões:**
+  - 5.0 **Decidido:** a distância (longe / meio / perto) e o sítio do ringue (centro / cordas / canto) passam a contar na luta (hoje são só visuais).
+  - 5.1 **Decidido — quem decide a distância:** cada atleta tem uma distância preferida que vem do estilo (Outboxer longe, Puncher meio, In-fighter perto). Quando querem distâncias diferentes, disputam-na: conta sobretudo **Pés**, depois **Ring IQ**. Nunca é garantido. A influência da **estratégia** fica por decidir: a estratégia ainda vai ser redefinida (plano de combate); se fizer sentido na altura, entra.
 
 ### Tema 1 — Golpes
 - **Hoje:** jab, direto, gancho, uppercut, direto ao corpo, gancho ao fígado, Contra-golpe.
