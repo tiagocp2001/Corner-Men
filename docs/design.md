@@ -26,7 +26,7 @@ Regras gerais que orientam todos os temas.
 | 0.4 | **Ecrã fixo:** cada tema diz onde aparece no ecrã e o que sai ou se junta para caber. | Decidido |
 | 0.5 | **Animações:** cada ação do Guia fica marcada como *usa animação existente*, *precisa de animação nova* ou *só texto*. Lista "Animações necessárias" no fim deste documento. Cada fase implementa-se em dois passos: mecânica com animações existentes + comentador; depois uma passagem de animação com capturas para o Tiago aprovar. Poucas animações, só as que mudam a leitura da luta. | Decidido |
 
-## Fase A — Núcleo da luta · *Decidido*
+## Fase A — Núcleo da luta · *Implementado* (A1–A4)
 
 Ordem: 8 → 5 → 1 → 3 → 4.
 
@@ -61,7 +61,7 @@ Ordem: 8 → 5 → 1 → 3 → 4.
   - 8.3 Queixo de nascença (escala própria, ~50 = normal em qualquer escalão): quedas, quedas relâmpago, dano à cabeça e levantar-se. Desce em cada derrota por KO e a partir dos 28 anos (os atletas fazem anos).
   - 8.4 Ring IQ sobe em cada luta (mais com mais rounds) e um pouco com Sparring; acelera o ouvir o canto e ajuda o contra-golpe. Pés: por agora só o recuar como defesa (a distância vem no tema 5). Algumas táticas do canto pedem agora Pés ou Ring IQ.
 
-### Tema 5 — Pés, distância e controlo do ringue · *Implementado* (A3; análise e animações no A4)
+### Tema 5 — Pés, distância e controlo do ringue · *Implementado* (A3 e A4)
 - **Hoje:** zonas do ringue e alcance existem; não há distância longa/média/curta explícita.
 - **Guia:** distância longa/média/curta, trabalho de pés, controlo do ringue.
 - **Decisões:**
@@ -80,6 +80,11 @@ Ordem: 8 → 5 → 1 → 3 → 4.
   - 5.5 Barra LONGE · MEIO · PERTO por baixo do relógio, no cabeçalho do ringue. A distância entre os lutadores no ringue e o sítio (centro/cordas/canto) seguem o estado; o comentador diz "mantém-no à ponta do jab", "encurta a distância", "encostou-o às cordas", "saiu com um pivô", "pernas bambas", etc.
   - Dados por luta para a análise do A4 (`an.dz`, um por lutador): segundos em cada distância e no centro/cordas/canto, segundos a controlar o ringue, trocas ganhas em cada distância, antecipações, cross-counters, counters de ângulo e de clinch, saídas das cordas (pés/clinch/a bater). A análise ainda não os mostra.
   - Ritmo: os lutadores andam menos no ringue do que antes; um tempo a estudar-se em cada troca (`TUNE.fwT`) mantém o número de golpes por round como no A2.
+- **Implementado (A4):**
+  - **Análise pós-luta:** novo separador **RINGUE** (5 separadores: RESUMO · GOLPES · RINGUE · ROUNDS · CANTO, cabem sem scroll a 390×720/760). Barra com o tempo longe / meio / perto, distância que cada um prefere, trocas ganhas em cada distância, controlo do ringue (%), tempo encostado às cordas e no canto, saídas (pés / clinch / a bater), pernas bambas (tempo); contra-ataque: antecipações, cross-counters (e sem timing), ataques de ângulo e saídas do clinch a bater (entrou/tentou).
+  - **Motivos novos no RESUMO** (por palavras, ordenados pelo impacto, com dica de treino): batalha da distância ganha/perdida e porquê (Pés, Ring IQ, sem pernas com o cansaço); encostado às cordas/canto (porquê: fôlego, pernas bambas, ele cortava o ringue); antecipação ("apanhaste-o a entrar N vezes: o In-fighter não conseguia encurtar"); cross-counter (entrou / sem timing); gancho ao fígado; counters com dica conforme a família da defesa dele; confiança fora do sítio.
+  - **Animações:** encostado às cordas / ao canto (inclina-se para trás com a guarda fechada, as costas chegam às cordas, cordas e poste do canto desenhados atrás dele); pernas bambas (joelhos para dentro a tremer, tronco a balançar, mãos em baixo, estrelas à volta da cabeça) enquanto `x.wobbly > F.ft` — substitui o `stagger` ao acaso.
+  - Comentador: as linhas do mesmo tipo não se repetem logo (`lineOk`, por tempo de luta); mais variedade nas frases de distância, cordas, pernas bambas e contra-ataque.
 
 ### Tema 1 — Golpes · *Implementado* (A2)
 - **Hoje:** jab, direto, gancho, uppercut, direto ao corpo, gancho ao fígado, Contra-golpe.
@@ -96,7 +101,7 @@ Ordem: 8 → 5 → 1 → 3 → 4.
   - 1.1 Os 7 golpes com nível 1–5 e experiência (`jab, direto, ganchoF, ganchoT, upperF, upperT, overhand`). Saíram o Direto ao corpo, o Gancho ao fígado e o Contra-golpe. Para aprender: Direto Técnica 20; ganchos Força 28/30 e treinador assistente; uppercuts Força 22–25 e Técnica 25; overhand Força 30 e Direto nv 2. O overhand gasta mais fôlego e usa a animação do gancho de trás.
   - 1.2 Alvo escolhido em cada golpe (estilo: In-fighter vai mais ao corpo, Outboxer menos; corpo mais cedo na luta e com o adversário cansado; cabeça quando ele está magoado; ordem do canto "ao corpo"). Corpo: tira fôlego e acumula trabalho ao corpo, que baixa a guarda (mais acerto à cabeça). Só golpes à cabeça dão quedas relâmpago. Fígado = gancho da frente ao corpo que entra: hipótese pequena (força, nível, adversário cansado, trabalho ao corpo acumulado, curta distância — neutra até ao A3 —, Queixo pouco). Leve: perde muito fôlego e fica curvado uns segundos (animação `hurtBody`; não ataca e defende pior). Forte (~15% dos casos): "aguenta um segundo… e cai", contagem difícil mesmo lúcido.
   - 1.3 Counters: ver 3.3/4.1.
-  - 1.4 Variações só no comentador: flicker jab, power jab, lead right, corkscrew, shovel hook, pivot hook, hookercut, leaping uppercut, bolo punch (quando encaixam no golpe/estilo/alvo).
+  - 1.4 Variações só no comentador: flicker jab, power jab, lead right, corkscrew, shovel hook, pivot hook, hookercut, leaping uppercut, bolo punch (quando encaixam no golpe/estilo/alvo). **A4:** também conforme a distância (gancho e uppercut curtos perto, gancho largo a meia distância, leaping uppercut de meia distância, shovel hook só perto/meio, flicker e power jab só longe/meio; o jab perto "quase sem força"); a mesma variação não volta a aparecer logo a seguir.
   - 1.5 Comentador: números nas combinações ("1-2-3 de X: 3 golpes a entrar!"), nomes nos golpes soltos. Ficha → GOLPES: número ao lado de cada golpe, em 2 colunas (golpes | defesas) com o nível; tocar abre o detalhe (para que serve, como se treina, progresso). Os estilos passaram para um separador próprio (ESTILOS) para caber sem scroll. As combinações antigas passaram a 1-2, 1-1-2, 1-2-3, 3-3 corpo-cabeça, 1-6-3-2, 1-2-3-2 (o tema 2 mexe nelas a sério).
   - 1.6 Pads: no plano aparece "PADS · GOLPE DA SEMANA" (Livre ou um dos 7); o golpe escolhido leva quase toda a experiência; um golpe que ainda não sabe aprende-se em ~3 sessões se os atributos deixarem. Saco → 2, 4, overhand; Pera → 1; Shadow → todos; Sparring → os mais usados nas lutas. **Saco de ângulo e saco duplo elástico ficam para o tema 9** (são equipamento novo: loja, ginásio animado e treino).
 
@@ -109,7 +114,7 @@ Ordem: 8 → 5 → 1 → 3 → 4.
   - 3.3 **Decidido — counters por defesa** (tabela do Guia + Pés e Clinch): slip para dentro do jab → 2 ou cross-counter; slip para fora do jab → 4 ou 6 ao corpo; slip do direto → 3; pendular do gancho → gancho/uppercut do lado contrário; aparar o jab → 1 ou 2; pull back → 2; shoulder roll → 2 por cima; bloqueio de gancho → gancho da mesma mão; *pivô/passo lateral → ataque de ângulo (gancho ou direto)*; *clinch → ao separar, gancho/uppercut curto*. Hipótese de counter: família (cabeça e ombro mais; aparar e pés médio; bloqueio e clinch menos), nível da defesa, Ring IQ, Técnica, confiança. Se não souber o golpe, usa a alternativa; senão não há counter. Counter tem bónus de precisão e dano (mais quedas relâmpago ao queixo). Comentador diz o nome; análise conta counters por defesa.
 - **Implementado (A2):**
   - 3.1 As 6 famílias com nível 1–5 (`bloqueio, aparar, cabeca, ombro, pes, clinch`). Antes de cada golpe o defensor escolhe a família: lê o golpe que vem (mais com Ring IQ), eficácia da família contra esse golpe (retos / ganchos / uppercuts / corpo), nível, crença, estilo (Outboxer pés e aparar; In-fighter cabeça e bloqueio; Puncher bloqueio) e estado (cansado: menos cabeça e pés; magoado: clinch). A defesa errada para o golpe defende pior. Bloqueio deixa passar ~15% do dano; cabeça e pés gastam fôlego e pioram com o cansaço; Pés usa o atributo Pés e corta a combinação; ombro precisa de Ring IQ e, se falha, o golpe entra mais forte; clinch trava a combinação, recupera fôlego, o árbitro separa e conta contra quem agarra nos juízes. Todos começam com Bloqueio 1 e Pés 1; o Clinch vem com Resistência 20. Treinos: Corda de esquiva → cabeça; Shadow → cabeça e pés; Corda → pés; Pads → aparar; Bola medicinal → bloqueio; Sparring → todas (mais as que usa).
-  - 3.2 Confiança em cada golpe e defesa (`a.bel`): o nível real decide se resulta, a crença decide quantas vezes a usa. Cada sucesso sobe, cada falhanço desce (na luta e no Sparring); equilíbrio no nível real, puxado pela Confiança (mental) e pela confiança do dia; Ring IQ corrige mais depressa. Golpe novo começa a 0,3; subir de nível dá só um pouco. Ficha: ▼ "ainda não confia" / ▲ "confia demais" só quando a diferença é grande; depois da luta, uma linha se a confiança mudou muito ("Ganhou confiança no gancho da frente"). A análise guarda tentados/acertados por golpe e tentadas/resultadas por defesa (números finos no A4).
+  - 3.2 Confiança em cada golpe e defesa (`a.bel`): o nível real decide se resulta, a crença decide quantas vezes a usa. Cada sucesso sobe, cada falhanço desce (na luta e no Sparring); equilíbrio no nível real, puxado pela Confiança (mental) e pela confiança do dia; Ring IQ corrige mais depressa. Golpe novo começa a 0,3; subir de nível dá só um pouco. Ficha: ▼ "ainda não confia" / ▲ "confia demais" só quando a diferença é grande; depois da luta, uma linha se a confiança mudou muito ("Ganhou confiança no gancho da frente"). A análise guarda tentados/acertados por golpe e tentadas/resultadas por defesa. **A4:** a análise (GOLPES → CONFIANÇA) mostra onde a crença e a realidade se afastaram ("Tentou o overhand 15 vezes, só entrou 2.", "Não usou o shoulder roll que treinaste.", "O jab resultou 7 em 9: mais do que ele acreditava."); a maior entra nos motivos do RESUMO.
   - 3.3 (A3) Pés → pivô/passo lateral abre um ataque de ângulo (gancho da frente ou direto, ou jab), com bónus de acerto (ele está virado); Clinch → ao separar, quem agarrou pode sair a bater com gancho ou uppercut curto. Contam na análise como counters de pés e de clinch.
   - 3.3 Counters pela tabela do Guia (slip para dentro → 2 / overhand; slip para fora → 4 ou 6 ao corpo; slip do direto → 3 / 5; pull back → 2 / 1; pendular → gancho/uppercut do lado contrário (contra o gancho da frente → 3 ou 5; contra o de trás ou o overhand → 4 ou 6); aparar ou apanhar o jab → 1 ou 2; shoulder roll → 2 / overhand; bloquear um gancho → gancho da outra mão, a que bloqueou). Pés (ângulo) e clinch (sair a bater): ver A3, acima.
 
@@ -142,7 +147,10 @@ Ordem: 8 → 5 → 1 → 3 → 4.
 ### Tema 9 — Treinos novos
 - **Guia:** saco duplo, maize bag, escada, sparring leve/condicionado/duro, clinch work, HIIT, core/pescoço.
 - **Decisões:**
-  - 9.1 **Decidido — velocidade de aprender e melhorar** (vale para golpes, defesas, atributos e estilos): depende do **treinador** (qualidade da equipa técnica: adjunto melhor/mais treinadores; especialista de um estilo ensina mais depressa os golpes desse estilo) e do **atleta** (Disciplina, Concentração, Técnica para golpes novos, fadiga da semana, confiança do dia). Nas luvas de foco, "aprende em ~N sessões" mostra a estimativa desse atleta. Números ficam para o equilíbrio. **Implementar no passo A4.**
+  - 9.1 **Implementado (A4) — velocidade de aprender e melhorar** (vale para golpes, defesas, atributos e estilos): depende do **treinador** (qualidade da equipa técnica: adjunto melhor/mais treinadores; especialista de um estilo ensina mais depressa os golpes desse estilo) e do **atleta** (Disciplina, Concentração, Técnica para golpes novos, fadiga da semana, confiança do dia). Nas luvas de foco, "aprende em ~N sessões" mostra a estimativa desse atleta. Números ficam para o equilíbrio.
+    - Qualidade da sessão (`sessQ`): confiança do dia, Disciplina, Concentração, adjunto e especialistas contratados; entra nos atributos, estilos, golpes e defesas. Por habilidade (`learnK`): adjunto, cada especialista e, mais forte, o especialista do estilo do golpe/defesa (In-fighter: ganchos, uppercuts, cabeça, bloqueio, clinch; Outboxer: jab, direto, pés, aparar; Puncher: direto, gancho de trás, overhand, bloqueio, ombro); Técnica só num golpe/defesa novos; fadiga da semana. Constantes em `TUNE` (`discQ, concQ, confQ, staffQ, lCoach, lStaff, lSpec, lTec…, lFat, padXP`).
+    - Exemplo (golpe novo nos Pads, `learnXP` 12): disciplinado + concentrado + técnico + confiante + fresco, com adjunto e especialista ≈ 2 sessões (sem treinadores ≈ 3); atleta normal com adjunto ≈ 3 (sem ≈ 4); preguiçoso + distraído + pouca técnica + em baixo + cansado, com adjunto ≈ 5 (sem treinadores ≈ 7).
+    - Pads: "novo: aprende em ~N sessões" e "nível 2 · nv 3 em ~N sess." para cada golpe, com o plano que está a ser feito; por cima, em palavras, o que acelera e o que atrasa este atleta. O detalhe de um golpe na Ficha também diz o ritmo.
 
 ### Tema 10 — Treino mental e tático
 - **Guia:** vídeos do adversário, plano de combate, peso/pesagem.
@@ -159,7 +167,7 @@ Ordem: 8 → 5 → 1 → 3 → 4.
 
 - **Ordens do canto durante o round:** Pressão / Equilibrado / Cautela. O treinador grita até o atleta ouvir; o ritmo a que ouve depende do estado atual (cansado/dorido ouve mais devagar; muito cansado e muito dorido não ouve). Se o gongo tocar antes, ouve no intervalo.
 - **Toalha a meio do round**, com confirmação (a luta pára enquanto se confirma).
-- **Análise pós-luta:** Resumo, Golpes, Rounds, Canto; motivos com dica de treino; diferenças de atributos ditas por palavras, sem números.
+- **Análise pós-luta:** Resumo, Golpes, Ringue (A4), Rounds, Canto; motivos com dica de treino; diferenças de atributos ditas por palavras, sem números.
 - **Histórico de lutas** na Ficha (separador LUTAS, páginas de 4): registo curto de todas as lutas; análise completa só das últimas 3. Sem limite: mostra todas as lutas do atleta. Uma ordem ouvida durante o round mantém-se no canto seguinte.
 - **Estratégia no canto** entre rounds: a ordem que ficou por ouvir aparece já escolhida; o treinador pode mudá-la.
 
@@ -180,8 +188,8 @@ Noites de luta organizadas pelo ginásio · hall da fama / reformados como trein
 
 | Ação | Tema | Estado |
 |---|---|---|
-| Encostado às cordas / ao canto | Distância | Por fazer (A4). No A3 vê-se pela posição no ringue (`F.zone`, `F.zp`, lado `F.zs`) |
-| Pernas bambas (depois de uma queda) | Distância | Por fazer (A4). No A3 usa `stagger` de vez em quando enquanto `x.wobbly > F.ft` |
+| Encostado às cordas / ao canto | Distância | *Feita* (A4): inclina-se para trás com a guarda fechada, costas nas cordas, cordas e poste do canto atrás dele (`x.lean`) |
+| Pernas bambas (depois de uma queda) | Distância | *Feita* (A4): joelhos para dentro a tremer, tronco a balançar, mãos em baixo, estrelas à volta da cabeça (`x.wobA`) |
 | Antecipação / cross-counter / ângulo / sair do clinch | Contra-ataque | Usam as animações dos golpes (A3) |
 | Overhand | Golpes | Usa a do gancho de trás (A2); própria se o Tiago quiser |
 | Curvado depois do fígado | Golpes | Usa `hurtBody` (A2) |

@@ -21,6 +21,7 @@
 }
 *{box-sizing:border-box}
 html,body{height:100%;overflow:hidden;background:var(--bg)}
+*{font-variant-ligatures:none} /* a Pixelify Sans desenha o "fi" como um A (In-fighter) */
 body{color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.3;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
 #app{height:100%;max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:8px;
   padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px));padding-block:8px 0}
@@ -253,6 +254,8 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .atab span.v{font-family:var(--f-mono);font-size:17px;text-align:right;line-height:1}
 .rtab{grid-template-columns:22px 1fr 1fr 1fr 1fr} .rtab b{text-align:center} .rtab span.v{text-align:center;color:var(--fg)}
 .olist{display:flex;flex-direction:column;gap:3px;font-size:12px;line-height:1.2}
+.dbar{display:flex;gap:4px;height:22px;flex:none} .dbar i{position:relative;flex:1;display:flex;align-items:center;justify-content:center;min-width:0;overflow:hidden;font-style:normal;border:2px solid var(--line);background:var(--panel2)}
+.dbar s{position:absolute;left:0;top:0;bottom:0;background:#5c4a2a} .dbar b{position:relative;font-family:var(--f-display);font-size:7px;font-weight:400;white-space:nowrap;color:var(--fg)}
 .olist div{background:var(--panel2);border-left:3px solid var(--line);padding:3px 6px}
 .olist .ok{border-left-color:var(--green)} .olist .bad{border-left-color:var(--red)} .olist .half{border-left-color:var(--gold)}
 .verdict{border:3px solid;padding:10px 12px;display:flex;flex-direction:column;gap:4px}
@@ -307,14 +310,14 @@ const fmt=n=>Math.round(n).toLocaleString('pt-PT');
 /* ================= DATA ================= */
 const CATS=['Pena','Superpena','Ligeiro','Pesado'];
 const CAT_KG={Pena:'57 kg',Superpena:'59 kg',Ligeiro:'61 kg',Pesado:'+91 kg'};
-const TUNE=Object.assign({hitDiv:350,hvy:1.55,resK:.3,qk:.45,mk:.45,cleanMul:6,normMul:.45,cleanP:.02,forK:.04,judge:.8,giftK:.35,train:.2,decay:.3,decayFloor:.88,formK:1,dmg:.88,edge:.25,sagg:0,hprec:6,flash:.4,sdA:-.02,sdD:.1,sdC:.02,tdA:.03,tdB:.08,pc:.8,scm:.5,hd:.5,bdm:.5,cr:20,dk:30,dr:.55,topD:.13,punD:.12,punF:.4,inCtr:.3,inCl:.2,sfB:.42,sfK:.116,rch:.03,fitP:.015,fitN:.006,hearB:6,hearSt:24,hearHp:30,hearKd:.35,hearJit:.25,hearDeaf:.8,hearSlow:12,hearCalm:.8,hearStub:1.3,qxK:.35,qxD:.1,qxG:.15,qxKO:3,qxAge:28,qxYear:1.5,iqFight:10,hearIQ:.25,discG:.25,discF:.3,discQ:.06,stubT:40,stubTalk:.45,stubFight:.35,calmL:8,calmSt:.06,corG:.15,concK:.03,finK:.3,confDrift:.06,mentSd:18,mentOut:15,
+const TUNE=Object.assign({hitDiv:350,hvy:1.55,resK:.3,qk:.45,mk:.45,cleanMul:6,normMul:.45,cleanP:.02,forK:.04,judge:.8,giftK:.35,train:.2,decay:.3,decayFloor:.88,formK:1,dmg:.88,edge:.25,sagg:0,hprec:6,flash:.4,sdA:-.02,sdD:.1,sdC:.02,tdA:.03,tdB:.08,pc:.8,scm:.5,hd:.5,bdm:.5,cr:20,dk:30,dr:.55,topD:.13,punD:.12,punF:.4,inCtr:.3,inCl:.2,sfB:.42,sfK:.116,rch:.03,fitP:.015,fitN:.006,hearB:6,hearSt:24,hearHp:30,hearKd:.35,hearJit:.25,hearDeaf:.8,hearSlow:12,hearCalm:.8,hearStub:1.3,qxK:.35,qxD:.1,qxG:.15,qxKO:3,qxAge:28,qxYear:1.5,iqFight:10,hearIQ:.25,discG:.25,discF:.3,discQ:.08,stubT:40,stubTalk:.45,stubFight:.35,calmL:8,calmSt:.06,corG:.15,concK:.03,finK:.3,confDrift:.06,mentSd:18,mentOut:15,
   /* A2 golpes e defesas: dfK/dfE0 peso da defesa escolhida no acerto (centrado para dar, em média, o mesmo que o bónus antigo por nível de defesa); readB lê o golpe que vem (+Ring IQ); blkD dano que passa num bloqueio; ombR dano extra se o ombro falha;
      pesBrk o Pés corta a combinação; ctr* hipótese base de counter por família, ctrMax teto, ctrHit/ctrDmg/ctrFl bónus do counter;
      liv* gancho ao fígado (K base, S parte forte, St fôlego perdido no leve, T tempo curvado em ms de luta, Hit acerto contra ele curvado, Close a curta distância);
      bodyG/bodyGMax guarda que baixa com o trabalho ao corpo; clJ juízes contra quem agarra; padXP/lnkXP/learnXP treino; bel* confiança em cada habilidade. */
   dfK:.2,dfE0:.32,readB:.55,blkD:.15,ombR:1.15,pesBrk:.75,ctrCab:.22,ctrOmb:.24,ctrApa:.15,ctrPes:.12,ctrBlq:.05,ctrCl:.04,ctrMax:.45,ctrHit:.12,ctrDmg:1.2,ctrFl:1.8,
   livK:.035,livS:.15,livSt:20,livT:2500,livHit:.15,livClose:.5,bodyG:.002,bodyGMax:.06,clJ:1.5,varP:.25,
-  padXP:5,lnkXP:1.5,learnXP:12,bel0:.3,belUp:.25,belC:.8,belF:.3,belS:.25,belR:.08,belNote:1,
+  padXP:4.6,lnkXP:1.5,learnXP:12,bel0:.3,belUp:.25,belC:.8,belF:.3,belS:.25,belR:.08,belNote:1,
   /* A3 distância e ringue (tema 5, 4.2, 4.3): dIQ peso do Ring IQ na disputa da distância (os Pés pesam 1); dDiv escala; dMin nunca é garantido;
      dStrat peso da estratégia (0: por decidir, 5.1); dRope/dCorn encostado às cordas/canto a distância tende a fechar; cornPerto no canto é quase sempre perto;
      dHit/dDmg golpe bom/mau para a distância (DIST_FIT) no acerto e no dano; zPush empurrar para as cordas/canto; zEsc sair; zDrift empurrar quando ninguém disputa;
@@ -322,7 +325,11 @@ const TUNE=Object.assign({hitDiv:350,hvy:1.55,resK:.3,qk:.45,mk:.45,cleanMul:6,n
      ant* antecipação (hipótese, bónus de acerto); cc* cross-counter (tentativa, timing, acerto, queda relâmpago); ctrAng counter de ângulo; ctrClS sair a bater do clinch;
      ctlJ vantagem nos juízes de quem controla o ringue (só pesa em rounds equilibrados). */
   dIQ:.5,dDiv:90,dMin:.12,dStrat:0,dRope:.1,dCorn:.25,cornPerto:.85,dHit:.12,dDmg:.8,zPush:.45,zEsc:.55,zDrift:.2,ropeD:.85,cornD:.7,ropeH:.02,cornH:.04,cornC:1.2,
-  wobT:9000,wobP:.45,antK:.16,antHit:.08,ccK:.05,ccOk:.5,ccHit:.15,ccFl:2.5,ctrAng:.08,ctrClS:.12,ctlJ:.05,fwT:700,pesSt:.45,pesHp:.35},window.__TUNE||{});
+  wobT:9000,wobP:.45,antK:.16,antHit:.08,ccK:.05,ccOk:.5,ccHit:.15,ccFl:2.5,ctrAng:.08,ctrClS:.12,ctlJ:.05,fwT:700,pesSt:.45,pesHp:.35,
+  /* A4 velocidade de aprender (9.1): qualidade da sessão q (atleta: discQ Disciplina, concQ Concentração, confQ confiança do dia; treinador: staffQ por
+     especialista de estilo); por habilidade (learnK): lCoach adjunto, lStaff cada especialista, lSpec especialista do estilo do golpe/defesa,
+     lTec Técnica num golpe/defesa novo (lTec0 neutro), lFat fadiga da semana. padXP experiência dos Pads por sessão; learnXP para aprender. */
+  confQ:.0045,concQ:.05,staffQ:.02,lCoach:.25,lStaff:.05,lSpec:.3,lTec:.008,lTec0:40,lTecMin:.83,lTecMax:1.25,lFat:.3},window.__TUNE||{});
 const CATMOD={Pena:{vol:1.25,dmg:.85,flash:.6,cost:.9},Superpena:{vol:1.15,dmg:.92,flash:.8,cost:.95},Ligeiro:{vol:1,dmg:1,flash:1,cost:1},Pesado:{vol:.75,dmg:1.3,flash:1.8,cost:1.25}};
 CATMOD.Pesado.dmg=TUNE.hvy;
 const GIFTS={
@@ -944,8 +951,9 @@ function skillInfo(a,k){ // detalhe de um golpe ou defesa (toque na Ficha)
     :{jab:'Mão da frente, reto. Rápido e seguro: marca pontos e mede a distância.',direto:'Mão de trás, reto. O golpe de poder mais usado.',ganchoF:'Mão da frente, em arco. Ao corpo é o gancho ao fígado.',
     ganchoT:'Mão de trás, em arco. Muito pesado, mas mais lento.',upperF:'Mão da frente, de baixo para cima. Entra por baixo da guarda.',upperT:'Mão de trás, de baixo para cima. Perigoso a curta distância.',
     overhand:'Mão de trás em arco por cima da guarda. Arriscado e cansativo, mas derruba.'}[k];
-  const how=isD?`Treina-se com ${DEF_TR[k]}.`:`Aprende-se e sobe nos Pads (escolhe-o como golpe da semana). Também sobe um pouco com ${SK_TR[k]} e com o Sparring, se o usar nas lutas.`;
-  const st=lv?`Nível ${lv}${lv<5?` · ${xp}/${lv*8} para o nível ${lv+1}`:' (máximo)'}`:`Ainda não sabe: ${lockReason(a,k)}.${xp?` Progresso ${xp}/${TUNE.learnXP}.`:''}`;
+  const pe=!isD&&lv<5&&S.eq.pads&&!learnLack(a,k)?(()=>{const n=padSess(a,k);return ` Ao ritmo de ${a.nick}: ${lv?'nível '+(lv+1):'aprende-o'} em ~${n} sess${n>1?'ões':'ão'} de Pads.`})():'';
+  const how=isD?`Treina-se com ${DEF_TR[k]}.`:`Aprende-se e sobe nos Pads (escolhe-o como golpe da semana).${pe} Também sobe um pouco com ${SK_TR[k]} e com o Sparring, se o usar nas lutas.`;
+  const st=lv?`Nível ${lv}${lv<5?` · ${Math.floor(xp)}/${lv*8} para o nível ${lv+1}`:' (máximo)'}`:`Ainda não sabe: ${lockReason(a,k)}.${xp?` Progresso ${Math.floor(xp)}/${TUNE.learnXP}.`:''}`;
   const cf=!lv?'':nt==='ainda não confia'?'Ainda não confia neste '+(isD?'recurso':'golpe')+': usa-o menos do que podia. O Sparring e as lutas dão-lhe confiança.':nt==='confia demais'?'Confia demais: usa-o mais do que devia. As lutas acabam por o pôr no sítio.':'Confia no que sabe fazer.';
   return info((isD?DEFS[k].n:pName(k)).toUpperCase(),`<p class="hint"><b style="color:var(--gold)">${st}</b></p><p class="hint">${what}</p><p class="hint">${how}</p>${cf?`<p class="hint">${cf}</p>`:''}`,'FECHAR');
 }
@@ -1041,8 +1049,8 @@ function miniStats(a){
   const min=Math.min(...ATTRS.filter(([k])=>k!=='queixo').map(([k])=>a.attrs[k]));
   return `<div class="mini">${ATTRS.map(([k])=>`<div class="${a.attrs[k]===min&&k!=='queixo'?'low':''}"><small>${SHORT[k].toUpperCase()}${lossMark(a,k)}</small><b>${Math.floor(a.attrs[k])}</b><div class="bar ${a.attrs[k]===min&&k!=='queixo'?'red':''}"><i style="width:${clamp(a.attrs[k],0,100)}%"></i></div></div>`).join('')}</div>`;
 }
-function padTxt(a,k){const lv=a.skills[k]||0,nt=belNote(a,k);if(!lv){const x=a.xp[k]||0,n=Math.max(1,Math.ceil((TUNE.learnXP-x)/TUNE.padXP));return `novo: aprende em ~${n} sess${n>1?'ões':'ão'}`}
-  return lv>=5?'nível 5 (máximo)':`nível ${lv} · ${a.xp[k]||0}/${lv*8}${nt?' · '+nt:''}`}
+function padTxt(a,k,plan){const lv=a.skills[k]||0,nt=belNote(a,k),n=padSess(a,k,plan);if(!lv)return `novo: aprende em ~${n} sess${n>1?'ões':'ão'}`;
+  return lv>=5?'nível 5 (máximo)':`nível ${lv} · nv ${lv+1} em ~${n} sess.${nt?' · '+nt:''}`}
 function trainTargets(a,t){return Object.keys(t.g).map(k=>`${SHORT[k]} ${Math.floor(a.attrs[k])}`).join(' · ')}
 function editPlan(a){
   const draft=[...a.plan];let pf=a.padF||null;
@@ -1051,7 +1059,7 @@ function editPlan(a){
     const s=modal(`<h2>PLANO DE ${a.nick.toUpperCase()}</h2><p class="hint">Semana ${S.week} · ${needsReview(a)?'⏳ por rever':'✅ revisto'} · toca num treino para o mudar</p>${miniStats(a)}${fatBox(a,draft)}
       <div class="slots">${draft.map((p,i)=>{const tr=TR[p],ok=trainOK(a,p);
         return `<button class="slot" data-ps="${i}"><span class="n">${i+1}</span><span><strong>${tr.n}${p!==a.plan[i]?' <span style="color:var(--gold)">· novo</span>':''}</strong><span class="meta">${ok?(Object.keys(tr.g).length?'Treina '+trainTargets(a,tr):tr.d):'Sem equipamento: fica a correr'}</span></span><em>MUDAR</em></button>`}).join('')}</div>
-      ${draft.some(p=>p==='pads'&&trainOK(a,p))?`<button class="slot padf" id="pFoc"><span class="n">◎</span><span><strong>PADS · GOLPE DA SEMANA</strong><span class="meta">${pf?`${pName(pf)} · ${padTxt(a,pf)}`:'Livre: um pouco em todos os golpes que sabe'}</span></span><em>MUDAR</em></button>`:''}
+      ${draft.some(p=>p==='pads'&&trainOK(a,p))?`<button class="slot padf" id="pFoc"><span class="n">◎</span><span><strong>PADS · GOLPE DA SEMANA</strong><span class="meta">${pf?`${pName(pf)} · ${padTxt(a,pf,draft)}`:'Livre: um pouco em todos os golpes que sabe'}</span></span><em>MUDAR</em></button>`:''}
       <div class="row2"><button class="btn" id="pKeep">MANTER ANTERIOR</button><button class="btn gold" id="pOk">CONFIRMAR PLANO</button></div>
       <button class="btn" id="pX" style="font-size:7px">FECHAR SEM REVER</button>`);
     s.querySelectorAll('[data-ps]').forEach(b=>b.onclick=()=>pickSlot(+b.dataset.ps));
@@ -1062,9 +1070,9 @@ function editPlan(a){
       if(chg){const e=ENT.find(x=>x.id===a.id);if(e){release(e);e.state='idle'}}closeModal()};
   };
   const pickFocus=()=>{ // golpe da semana nos Pads (tema 1.6): pode ser um que ainda não sabe, se os atributos deixarem
-    const s=modal(`<h2>PADS · ${a.nick.toUpperCase()}</h2><p class="hint">O treinador escolhe o golpe da semana: leva quase toda a experiência dos Pads. Um golpe novo aprende-se em algumas sessões.</p>
+    const s=modal(`<h2>PADS · ${a.nick.toUpperCase()}</h2><p class="hint">O golpe da semana leva quase toda a experiência dos Pads.${(()=>{const w=learnWhy(a);return w.g.length||w.b.length?` ${w.g.length?`<span class="good">Acelera:</span> ${w.g.join(', ')}.`:''}${w.b.length?` <span class="warn">Atrasa:</span> ${w.b.join(', ')}.`:''}`:' Aprende a um ritmo normal.'})()}</p>
       <div class="pick pick2"><button data-pf="" class="${pf?'':'on'}"><strong>LIVRE</strong><span>Um pouco em todos os que sabe</span></button>${PKEYS.map(k=>{const lack=a.skills[k]>0?'':learnLack(a,k);
-        return `<button data-pf="${k}" class="${pf===k?'on':''}" ${lack?'disabled':''}><strong>${pName(k).toUpperCase()}</strong><span>${lack?'precisa de '+lack.replace('precisa de ',''):padTxt(a,k)}</span></button>`}).join('')}</div>
+        return `<button data-pf="${k}" class="${pf===k?'on':''}" ${lack?'disabled':''}><strong>${pName(k).toUpperCase()}</strong><span>${lack?'precisa de '+lack.replace('precisa de ',''):padTxt(a,k,draft)}</span></button>`}).join('')}</div>
       <button class="btn" id="mX">VOLTAR AO PLANO</button>`);
     s.querySelector('#mX').onclick=draw;
     s.querySelectorAll('[data-pf]').forEach(b=>b.onclick=()=>{pf=b.dataset.pf||null;draw()});
@@ -1106,7 +1114,7 @@ async function advanceWeek(){
       if(id==='descanso'){rested=true;a.fatigue=Math.max(0,a.fatigue+t.f);a.conf=clamp(a.conf+3,0,100);continue}
       nT++;
       if(a.fatigue>70&&Math.random()<(a.fatigue-65)/90){injured=true;break}
-      const q=clamp(.6+a.conf/250+R(-.1,.1)+(S.up.treinador?.05:0)+TUNE.discQ*(mv(a,'disc')-50)/50,.35,1);
+      const q=clamp(sessQ(a)+R(-.1,.1),.3,1.15); // qualidade da sessão (9.1): atleta (Disciplina, Concentração, confiança) e equipa técnica
       const m=(id==='sparring'&&S.up.ringue)?1.25:1;
       for(const[k,b]of Object.entries(t.g))gain(a,k,b,q,m);
       if(t.sty)addStyleXP(a,t.sty,Math.round(4*q),up,true);
@@ -1171,8 +1179,33 @@ async function advanceWeek(){
    ligados (Guia); o Sparring aos mais usados nas lutas (a.use), a várias defesas e mexe na confiança (sucessos e falhanços). ---- */
 const T_SK={saco:['direto','ganchoT','overhand'],pera:['jab'],shadow:PKEYS};
 const T_DF={esquiva:{cabeca:5},shadow:{cabeca:1,pes:1},corda:{pes:1.5},pads:{aparar:1},bola:{bloqueio:1}};
+/* ---- velocidade de aprender (tema 9.1, passo A4): vale para golpes, defesas, atributos e estilos.
+   Treinador: o adjunto (S.up.treinador) e cada especialista de estilo; o especialista ensina mais depressa os golpes e defesas do seu estilo (STY_TEACH).
+   Atleta: Disciplina, Concentração e confiança do dia (qualidade da sessão, sessQ: entra nos atributos, estilos, golpes e defesas), Técnica num
+   golpe ou defesa novos e fadiga da semana (learnK). Nos Pads, "aprende em ~N sessões" é a estimativa deste atleta (padSess). ---- */
+const SPEC={cIn:'In-fighter',cOut:'Outboxer',cPun:'Puncher'};
+const STY_TEACH={'In-fighter':['ganchoF','ganchoT','upperF','upperT','cabeca','bloqueio','clinch'],'Outboxer':['jab','direto','pes','aparar'],'Puncher':['direto','ganchoT','overhand','bloqueio','ombro']};
+function nSpec(){return Object.keys(SPEC).filter(u=>S.up[u]).length}
+function specOf(k){return Object.keys(SPEC).filter(u=>S.up[u]&&STY_TEACH[SPEC[u]].includes(k)).map(u=>SPEC[u])}
+function sessQ(a){return clamp(.58+TUNE.confQ*(a.conf??50)+(S.up.treinador?.05:0)+TUNE.discQ*(mv(a,'disc')-50)/50+TUNE.concQ*(mv(a,'conc')-50)/50+TUNE.staffQ*nSpec(),.35,1.1)}
+function tecK(a){return clamp(1+TUNE.lTec*((a.attrs.tecnica||0)-TUNE.lTec0),TUNE.lTecMin,TUNE.lTecMax)}
+function learnK(a,k,fat){ // por habilidade: equipa técnica, Técnica (só num golpe/defesa novos), fadiga
+  return(1+(S.up.treinador?TUNE.lCoach:0)+TUNE.lStaff*nSpec()+(specOf(k).length?TUNE.lSpec:0))*(lvOf(a,k)>0?1:tecK(a))*(1-TUNE.lFat*clamp(fat??a.fatigue??0,0,100)/100)}
+function padSess(a,k,plan){ // sessões de Pads (com este golpe como golpe da semana) até aprender / subir de nível
+  const lv=a.skills[k]||0,need=(lv?lv*8:TUNE.learnXP)-(a.xp[k]||0),f=plan?(Math.max(0,a.fatigue-15)+projFat(a,plan))/2:a.fatigue;
+  return Math.max(1,Math.ceil(need/(TUNE.padXP*sessQ(a)*learnK(a,k,f))))}
+function learnWhy(a,k){ // em palavras: o que acelera e o que atrasa (sem números)
+  const g=[],b=[],d=mv(a,'disc'),c=mv(a,'conc'),neu=!(lvOf(a,k)>0);
+  if(S.up.treinador)g.push('treinador assistente');
+  for(const st of k?specOf(k):Object.values(SPEC).filter((s,i)=>S.up[Object.keys(SPEC)[i]]))g.push(`treinador de ${st}${k?'':' (golpes do estilo)'}`);
+  if(d>=65)g.push('disciplinado');else if(d<=35)b.push('pouco disciplinado');
+  if(c>=65)g.push('concentrado');else if(c<=35)b.push('distraído');
+  if(neu&&k){const t=tecK(a);if(t>=1.12)g.push('boa técnica');else if(t<=.9)b.push('pouca técnica')}
+  if(a.fatigue>=50)b.push('cansado');if(a.conf>=75)g.push('confiante');else if(a.conf<=35)b.push('em baixo');
+  return{g,b}}
 function addXP(a,k,pts,up){
   if(pts<=0)return;const isD=k in DEFS,lv=isD?a.def:a.skills,xp=isD?a.dxp:a.xp;a.bel=a.bel||{};
+  pts=Math.round(pts*learnK(a,k)*10)/10; // velocidade de aprender desta habilidade (9.1)
   if(!(lv[k]>0)){if(learnLack(a,k))return;xp[k]=(xp[k]||0)+pts;
     if(xp[k]>=TUNE.learnXP){xp[k]=0;lv[k]=1;a.bel[k]=TUNE.bel0;up.push('aprendeu '+skName(k));note(`${a.nick} aprendeu: ${skName(k)}.`)}return}
   xp[k]=(xp[k]||0)+pts;
@@ -1181,8 +1214,8 @@ function addXP(a,k,pts,up){
 }
 function trainSkills(a,id,q,up){
   const known=PKEYS.filter(k=>a.skills[k]>0),u=a.use||{};
-  if(id==='pads'){const f=a.padF;let pts=Math.round(TUNE.padXP*q);
-    if(f&&SKILLS[f]&&(a.skills[f]>0||!learnLack(a,f)))addXP(a,f,pts,up);else while(pts-->0)addXP(a,pick(known),1,up)}
+  if(id==='pads'){const f=a.padF;let pts=TUNE.padXP*q;
+    if(f&&SKILLS[f]&&(a.skills[f]>0||!learnLack(a,f)))addXP(a,f,pts,up);else{pts=Math.round(pts);while(pts-->0)addXP(a,pick(known),1,up)}}
   if(T_SK[id]){const ks=T_SK[id].filter(k=>a.skills[k]>0);let pts=Math.round(TUNE.lnkXP*q*(id==='shadow'?1.4:1));while(ks.length&&pts-->0)addXP(a,pick(ks),1,up)}
   if(id==='sparring'){
     let pts=Math.round(TUNE.lnkXP*q);while(pts-->0)addXP(a,wpick(known,k=>1+(u[k]||0)),1,up);
@@ -1516,21 +1549,25 @@ const STRAT_D={
   'Cautela':'Ataca menos e com golpes 8% mais fracos, mas é mais difícil de acertar e quase não se cansa.'
 };
 const LINES={
-  hit_jab:['{a} encaixa o jab.','Jab rápido de {a}, a cabeça de {d} vai para trás.','{a} mantém {d} à distância com o jab.','Mais um jab de {a}. Está a medir a distância.','Jab duplo de {a}!'],
+  hit_jab:['{a} encaixa o jab.','Jab rápido de {a}, a cabeça de {d} vai para trás.','{a} mantém {d} à distância com o jab.','Mais um jab de {a}. Está a medir a distância.','O jab de {a} volta a entrar.'],
+  hit_jabC:['Jab curto de {a}, sem grande força.','{a} ainda encaixa o jab, mas daqui não magoa.','Jab de {a} colado ao adversário: só para marcar.'],
   hit_direto:['Direto de {a} em cheio!','{a} solta a direita e acerta!','Que direto de {a}!','{a} entra com o direto e {d} sente.','Direita pela linha do meio. Bom golpe de {a}.'],
-  hit_ganchoF:['Gancho da frente de {a} ao queixo!','{a} roda o gancho de esquerda e acerta!','Gancho por cima da guarda de {d}!','Gancho curto de {a}, a cabeça de {d} roda.'],
+  hit_ganchoF:['Gancho da frente de {a} ao queixo!','{a} roda o gancho de esquerda e acerta!','Gancho por cima da guarda de {d}!','Gancho de {a}, a cabeça de {d} roda.'],
   hit_ganchoT:['Gancho de direita de {a}! Que mão pesada!','{a} solta o gancho de trás e {d} sente.','Gancho de trás em cheio de {a}!'],
   hit_upperF:['Uppercut de esquerda de {a} por baixo da guarda!','{a} levanta o queixo de {d} com o uppercut da frente!'],
-  hit_upperT:['Uppercut de direita de {a}! A cabeça de {d} vai para cima!','{a} entra por baixo com o uppercut de trás!','Uppercut curto e seco de {a}!'],
+  hit_upperT:['Uppercut de direita de {a}! A cabeça de {d} vai para cima!','{a} entra por baixo com o uppercut de trás!','Uppercut seco de {a}!'],
   hit_overhand:['OVERHAND de {a} por cima da guarda!','{a} arrisca o overhand e acerta!','Direita em arco por cima! Overhand de {a}!'],
   v_flicker:['Flicker jab de {a}, a picar de mão baixa.','{a} solta o flicker jab, quase sem se ver.'],
   v_powerjab:['Power jab de {a}! Um jab com peso de direto.','Jab pesado de {a}, a cabeça de {d} vai para trás!'],
   v_leadright:['Lead right! {a} abre com a direita, sem jab.','{a} entra com a direita direta, sem avisar.'],
-  v_corkscrew:['Corkscrew de {a}! Roda o punho no fim do direto.'],
+  v_corkscrew:['Corkscrew de {a}! Roda o punho no fim do direto.','{a} enrosca o direto, à corkscrew. Entra em saca-rolhas!'],
   v_shovel:['Shovel hook de {a} ao corpo, curto e por baixo!','{a} enterra um shovel hook nas costelas de {d}.'],
-  v_pivot:['Pivot hook de {a}: roda sobre o pé e acerta de lado!'],
-  v_hookercut:['Hookercut de {a}, meio gancho, meio uppercut!'],
-  v_leaping:['Leaping uppercut! {a} salta por baixo da guarda!'],
+  v_pivot:['Pivot hook de {a}: roda sobre o pé e acerta de lado!','{a} gira no pé da frente e o gancho chega de lado. Pivot hook!'],
+  v_hookercut:['Hookercut de {a}, meio gancho, meio uppercut!','{a} sobe em diagonal: nem gancho nem uppercut, hookercut!'],
+  v_leaping:['Leaping uppercut! {a} salta por baixo da guarda!','{a} dá um salto de meia distância e sobe com o uppercut!'],
+  v_shortH:['Gancho curto de {a}, colado ao adversário!','{a} roda o gancho curto, sem espaço nenhum.','Gancho curtinho de {a}. Daqui não se vê chegar.'],
+  v_wideH:['Gancho largo de {a}, a meia distância!','{a} abre o braço e o gancho chega largo.','Gancho em arco de {a}, por fora da guarda.'],
+  v_shortU:['Uppercut curto de {a}, de baixo para cima!','{a} encontra espaço para o uppercut curto.'],
   v_bolo:['Bolo punch de {a}! Roda o braço e acerta!','{a} faz o bolo punch, à moda antiga. E entra!'],
   body:['{a} vai ao corpo com o {p}. Isso tira o fôlego.','{p} de {a} às costelas de {d}.','{a} trabalha o corpo de {d} com o {p}.'],
   clean:['QUE GOLPE! {a} apanhou {d} em cheio!','Isso doeu! {d} está abanado!','Golpe perfeito de {a}! O público levanta-se!','Em cheio! {d} nem viu de onde veio!'],
@@ -1572,23 +1609,23 @@ const LINES={
   cornered:['{y} está preso no canto!','{x} encurrala {y} no canto.','Canto! {y} tem de sair dali.'],
   d_keep:['{y} mantém {x} à ponta do jab.','{y} não deixa {x} entrar: tudo à distância.','{x} não consegue encurtar. {y} controla a distância.'],
   d_in:['{x} encurta a distância e cola-se a {y}.','{x} entra! Agora é luta curta.','{x} fecha a distância: {y} já não tem espaço para o jab.'],
-  d_mid:['Meia distância: aqui troca-se.','Estão a meia distância, ao alcance do direto.'],
+  d_mid:['Meia distância: aqui troca-se.','Estão a meia distância, ao alcance do direto.','Nem longe nem perto: distância de direto e gancho largo.'],
   d_out:['{y} sai a bater das cordas!','{y} responde e consegue sair das cordas.','{y} abre espaço à força de golpes.'],
   d_pivot:['{y} saiu com um pivô! De volta ao centro.','Passo lateral de {y}: sai das cordas e deixa {x} a olhar para elas.','{y} roda sobre o pé e escapa das cordas.'],
-  d_pivotC:['{y} saiu do canto com um pivô! Que pés!','{y} escapa do canto com um passo lateral.'],
-  d_clinch:['{y} agarra-se e sai das cordas no clinch.','{y} amarra {x} e, no break, já está fora das cordas.'],
+  d_pivotC:['{y} saiu do canto com um pivô! Que pés!','{y} escapa do canto com um passo lateral.','{y} roda para fora do canto e {x} fica a bater nas almofadas.'],
+  d_clinch:['{y} agarra-se e sai das cordas no clinch.','{y} amarra {x} e, no break, já está fora das cordas.','Clinch de {y}: quando o árbitro os separa, já estão no meio.'],
   wobbly:['{x} levanta-se com as pernas bambas!','Pernas bambas! {x} não está firme.','{x} está de pé, mas as pernas não respondem.'],
-  wobblyR:['{x} ainda tem as pernas bambas e é empurrado para trás.','As pernas de {x} ainda tremem.'],
-  tiredRopes:['{y} está cansado e já não consegue sair das cordas.','Sem pernas, {y} vai ficando encostado.'],
+  wobblyR:['{x} ainda tem as pernas bambas e é empurrado para trás.','As pernas de {x} ainda tremem.','{x} ainda não recuperou as pernas. Anda aos ziguezagues.','{x} está tonto, procura o equilíbrio.'],
+  tiredRopes:['{y} está cansado e já não consegue sair das cordas.','Sem pernas, {y} vai ficando encostado.','{y} já não tem pernas para fugir. {x} aproveita.'],
   ant_jab:['{a} apanhou {d} a entrar com o jab!','{d} tenta entrar e leva logo com o jab de {a}.','Jab de {a} na entrada! {d} tem de recomeçar.'],
-  ant_back:['Jab de recuo de {a}! {d} não consegue fechar.','{a} recua a picar com o jab e trava {d}.'],
+  ant_back:['Jab de recuo de {a}! {d} não consegue fechar.','{a} recua a picar com o jab e trava {d}.','{a} anda para trás e o jab vai à frente: {d} tem de parar.'],
   ant_check:['Check hook de {a}! Apanhou {d} a entrar!','{d} entra e leva com o check hook de {a}!','{a} roda e espeta o gancho na entrada de {d}.'],
-  antMiss:['{d} entra apesar do jab de {a}.','{d} passa por baixo do jab e entra.'],
+  antMiss:['{d} entra apesar do jab de {a}.','{d} passa por baixo do jab e entra.','{a} tenta travá-lo, mas {d} já está lá dentro.'],
   ctr_cross:['CROSS-COUNTER! {a} solta o direto por cima do golpe de {d}!','Cross-counter de {a}! Por cima do braço de {d}!','Ao mesmo tempo e por cima: cross-counter de {a}!'],
-  cc_both:['Os dois acertam ao mesmo tempo! {a} tentou o cross-counter cedo demais.','Troca simultânea! O cross-counter de {a} saiu sem timing.'],
-  ctr_pivot:['Pivô de {a} e {p} de ângulo! {d} ficou virado para o lado errado.','{a} roda sobre o pé e acerta de lado com o {p}!'],
-  ctr_side:['Passo lateral e {p} de {a}! Ângulo perfeito.','{a} sai para o lado e castiga com o {p} enquanto {d} se vira.'],
-  ctr_clinch:['No break, {a} sai a bater com o {p}!','{a} solta o {p} curto mal o árbitro os separa!'],
+  cc_both:['Os dois acertam ao mesmo tempo! {a} tentou o cross-counter cedo demais.','Troca simultânea! O cross-counter de {a} saiu sem timing.','{a} quis cruzar por cima e levou também. Dois golpes ao mesmo tempo!'],
+  ctr_pivot:['Pivô de {a} e {p} de ângulo! {d} ficou virado para o lado errado.','{a} roda sobre o pé e acerta de lado com o {p}!','{d} ataca o vazio e {a}, já de lado, responde com o {p}.'],
+  ctr_side:['Passo lateral e {p} de {a}! Ângulo perfeito.','{a} sai para o lado e castiga com o {p} enquanto {d} se vira.','Um passo para o lado e o {p} de {a} entra pelo ângulo.'],
+  ctr_clinch:['No break, {a} sai a bater com o {p}!','{a} solta o {p} curto mal o árbitro os separa!','Saída do clinch com {p} de {a}! {d} ainda tinha as mãos em baixo.'],
   center:['Voltam ao centro do ringue.','Os dois estudam-se no meio do ringue.','{x} corta o ringue e procura o ataque.','{x} anda à volta, a trabalhar o jab.'],
   heard:['{x} ouve o canto e muda logo para {s}.','{x} acena ao treinador. Agora é {s}.','Ordem do canto cumprida: {x} passa a {s}.'],
   heardLate:['Finalmente! {x} lá ouviu o treinador: {s}.','Demorou, mas {x} percebeu o recado. Agora em {s}.','Só agora {x} ouve o canto vermelho. {s}!'],
@@ -1599,7 +1636,10 @@ const LINES={
   end:['Gongo! Fim do round {n}.','Termina o round {n}. Cada um para o seu canto.']
 };
 let recent=[];
+function fclock(){return F?(F.round||0)*2e5+(F.ft||0):0}                                   // relógio da luta que não volta atrás entre rounds
+function lineOk(type,ms){return!F||!F.lc||F.lc[type]==null||fclock()-F.lc[type]>=ms}         // para não repetir o mesmo tipo de comentário seguido
 function line(type,v){
+  if(F){F.lc=F.lc||{};F.lc[type]=fclock()}
   let opts=LINES[type].filter(l=>!recent.includes(l));if(!opts.length)opts=LINES[type];
   const l=pick(opts);recent.push(l);if(recent.length>14)recent.shift();
   return l.replace(/\{(\w)\}/g,(m,k)=>v[k]??'');
@@ -1610,7 +1650,7 @@ function fighter(src,mine){
     hp:100,st:mine?clamp(100-(src.fatigue||0)*.5,40,100):100,kd:0,cut:0,conf:mine?src.conf:confBase(src),strat:'Equilibrado',
     rs:newRS(),dx:newDX(),wobbly:0,tot:{thrown:0,landed:0,power:0,dmg:0},card:0,dmgTaken:0,ps:{},dfs:{},cts:{},liv:[0,0],bodyAcc:0,hunch:0,headL:0,bodyL:0,lowT:0,lastK:'jab',
     pos:{x:mine?60:180,y:mine?132:44,tx:mine?60:180,ty:mine?132:44},an:{pose:'guard',t0:0,dur:1,arm:'L'},lastArm:'R',flash:0};
-  initBel(x,src,mine);return x;
+  initBel(x,src,mine);x.bel0={...x.bel};return x;
 }
 function newRS(){return{thrown:0,landed:0,power:0,dmg:0,kd:0,cl:0,ctl:0}}
 function pickKeys(o,ks){const r={};if(o)for(const k of ks)if(o[k]!=null)r[k]=o[k];return r}
@@ -2092,10 +2132,11 @@ const GAP={longe:50,meio:35,perto:22},DMUL={longe:.8,meio:1,perto:1.15},DCOST={l
 function prefD(x){return DI[DPREF[x.style]||'meio']}
 function pesEff(x){let v=clamp(x.pes??20,1,100);if(x.st<50)v*=1-TUNE.pesSt+TUNE.pesSt*Math.max(0,x.st)/50;if(x.hp<50)v*=1-TUNE.pesHp+TUNE.pesHp*Math.max(0,x.hp)/50;if(F&&x.wobbly>F.ft)v*=TUNE.wobP;return v} // Pés que contam agora (5.4)
 function ringPow(x){return pesEff(x)+TUNE.dIQ*clamp(x.iq??20,0,100)+TUNE.dStrat*((STRAT[x.strat]||STRAT.Equilibrado).agg-.5)*100}
-function newDX(){return{d:{longe:0,meio:0,perto:0},z:{centro:0,cordas:0,canto:0},ctl:0,xw:{longe:0,meio:0,perto:0},ant:[0,0],cc:[0,0,0],ang:[0,0],clo:[0,0],esc:{pes:0,clinch:0,bater:0}}}
+function newDX(){return{d:{longe:0,meio:0,perto:0},z:{centro:0,cordas:0,canto:0},ctl:0,xw:{longe:0,meio:0,perto:0},ant:[0,0],cc:[0,0,0],ang:[0,0],clo:[0,0],esc:{pes:0,clinch:0,bater:0},wob:[0,0]}}
 function distTick(){ // conta o tempo (segundos de relógio) de cada um em cada distância e sítio do ringue
   if(!F||!F.inRound)return;const dt=Math.max(0,F.ft-(F.dT||0));F.dT=F.ft;if(!dt)return;const s=dt*3/1000;
-  for(const x of[F.me,F.op]){x.dx.d[F.dist]+=s;x.dx.z[F.zp!==x||F.zone==='center'?'centro':F.zone==='ropes'?'cordas':'canto']+=s}
+  for(const x of[F.me,F.op]){x.dx.d[F.dist]+=s;x.dx.z[F.zp!==x||F.zone==='center'?'centro':F.zone==='ropes'?'cordas':'canto']+=s;
+    const w=clamp(x.wobbly-(F.ft-dt),0,dt);if(w)x.dx.wob[1]+=w*3/1000} // segundos com as pernas bambas
   if(F.ctl){F.ctl.dx.ctl+=s;F.ctl.rs.ctl+=s}
 }
 function otherOf(x){return x===F.me?F.op:F.me}
@@ -2127,7 +2168,7 @@ async function ringStep(){
         kp.dx.ant[0]++;const back=k==='jab'&&(F.zp===kp||F.dist!=='longe');
         const r=await punch(kp,cl,k,kp.strat,1.1,true,0,{tgt:'head',ant:1,ln:k==='jab'?(back?'ant_back':'ant_jab'):'ant_check',noCC:true});if(F.over)return;
         if(r==='hit'||r==='clean'){kp.dx.ant[1]++;F.dw=kp;ev='ant'}
-        else{di++;ev='in';if(Math.random()<.4)say(line('antMiss',{a:kp.nick,d:cl.nick}))}
+        else{di++;ev='in';if(Math.random()<.4&&lineOk('antMiss',10000))say(line('antMiss',{a:kp.nick,d:cl.nick}))}
       }else if(F.zone!=='center'&&F.zp===cl){zoneIn();if(di<tgt)di++} // o que quer perto estava encostado: sai a andar para a frente
       else{const was=di;if(di<tgt)di++;if(Math.random()<TUNE.zPush){zoneOut(kp);ev='push'}else ev=di>was?'in':null}
     }else{
@@ -2170,13 +2211,13 @@ async function footwork(){
   const{ev,cl,kp,d0}=r,v={x:cl&&cl.nick,y:kp&&kp.nick};let msg=null;
   if(ev==='push')msg=line(F.zone==='corner'?'cornered':'ropes',v);
   else if(ev==='esc'||ev==='escC')msg=line(z0==='corner'?'d_pivotC':'d_pivot',{x:otherOf(zp0||kp).nick,y:(zp0||kp).nick});
-  else if(ev==='stuck'&&kp.st<35&&Math.random()<.5)msg=line('tiredRopes',v);
+  else if(ev==='stuck'&&kp.st<35&&Math.random()<.5&&lineOk('tiredRopes',15000))msg=line('tiredRopes',v);
   else if(ev==='in'&&F.dist==='perto'&&d0!=='perto')msg=line('d_in',v);
-  else if(ev==='keep'&&F.dist==='longe'&&kp.skills.jab>0)msg=line('d_keep',v);
-  else if(ev==='keep'&&F.zone==='center'&&kp.style==='Outboxer'&&Math.random()<.3)msg=line('circle',v);
-  else if(F.dist==='meio'&&d0!=='meio'&&Math.random()<.25)msg=line('d_mid',v);
-  else if(F.zone==='center'&&z0!=='center')msg=line('center',v);
-  for(const x of[F.me,F.op])if(x.wobbly>F.ft&&Math.random()<.35){act(x,'stagger',700);if(!msg&&Math.random()<.5)msg=line('wobblyR',{x:x.nick})} // A4: animação própria das pernas bambas
+  else if(ev==='keep'&&F.dist==='longe'&&kp.skills.jab>0&&lineOk('d_keep',12000))msg=line('d_keep',v);
+  else if(ev==='keep'&&F.zone==='center'&&kp.style==='Outboxer'&&Math.random()<.3&&lineOk('circle',12000))msg=line('circle',v);
+  else if(F.dist==='meio'&&d0!=='meio'&&Math.random()<.25&&lineOk('d_mid',20000))msg=line('d_mid',v);
+  else if(F.zone==='center'&&z0!=='center'&&lineOk('center',8000))msg=line('center',v);
+  for(const x of[F.me,F.op])if(x.wobbly>F.ft&&!msg&&Math.random()<.2&&lineOk('wobblyR',8000))msg=line('wobblyR',{x:x.nick}); // as pernas bambas vêem-se no desenho (x.wobA)
   placeRing();
   if(msg&&Math.random()<.6)say(msg);
   hud();
@@ -2308,14 +2349,16 @@ function ctrChance(x,o,fam,ck,b0){ // cabeça e ombro abrem mais; aparar e pés 
 function livP(att,def,lv,ctr){ // gancho ao fígado: golpe forte, adversário cansado, trabalho ao corpo antes, curta distância; o Queixo ajuda pouco
   return TUNE.livK*(.6+att.forca/100)*(1+(lv-1)*.15)*fmods(att).dmg*(def.st<30?1.8:def.st<60?1.3:1)*(1+Math.min(1.5,(def.bodyAcc||0)/40))*(1+TUNE.livClose*closeRange())*(1+.15*(50-(def.queixo??50))/50)*(ctr?1.5:1);
 }
-function varLine(att,k,body,clean,dmg,first,v){ // variações do Guia: só texto (tema 1.4)
-  const c=[];
-  if(k==='jab'&&!body){if(att.style==='Outboxer'&&dmg<4)c.push('flicker');if(dmg>6)c.push('powerjab')}
-  if(k==='direto'&&!body){if(first)c.push('leadright');if(clean)c.push('corkscrew')}
-  if(k==='ganchoF'){if(body)c.push('shovel');else if(att.style!=='Outboxer')c.push('pivot')}
-  if((k==='upperF'||k==='upperT')&&!body){c.push('hookercut');if(att.style==='In-fighter')c.push('leaping')}
-  if((k==='overhand'||k==='ganchoT')&&!body&&att.style==='Puncher'&&dmg>6)c.push('bolo');
-  return c.length?line('v_'+pick(c),v):null;
+function varLine(att,k,body,clean,dmg,first,v){ // variações do Guia: só texto (tema 1.4), conforme o golpe, o estilo, o alvo e a distância
+  const c=[],d=curDist();
+  if(k==='jab'&&!body&&d!=='perto'){if(att.style==='Outboxer'&&dmg<4)c.push('flicker');if(dmg>6)c.push('powerjab')}
+  if(k==='direto'&&!body){if(first&&d!=='perto')c.push('leadright');if(clean)c.push('corkscrew')}
+  if(k==='ganchoF'){if(body){if(d!=='longe')c.push('shovel')}else if(att.style!=='Outboxer'&&d!=='longe')c.push('pivot')}
+  if((k==='ganchoF'||k==='ganchoT')&&!body){if(d==='perto')c.push('shortH');else if(d==='meio')c.push('wideH')}
+  if((k==='upperF'||k==='upperT')&&!body){if(d!=='longe')c.push('hookercut');if(d==='perto')c.push('shortU');else if(att.style==='In-fighter')c.push('leaping')}
+  if((k==='overhand'||k==='ganchoT')&&!body&&att.style==='Puncher'&&dmg>6&&d!=='longe')c.push('bolo');
+  const ok=c.filter(x=>lineOk('v_'+x,25000)); // a mesma variação não volta logo a seguir
+  return ok.length?line('v_'+pick(ok),v):null;
 }
 /* ---- cross-counter (4.3): contra o jab ou o direto à cabeça, o direto por cima sem defender primeiro. Tenta mais com Ring IQ e crença no direto;
    o timing depende de Ring IQ, Técnica, Velocidade e do nível do direto. Se resulta: o golpe dele não entra e o direto entra com muita hipótese de
@@ -2373,7 +2416,7 @@ async function punch(att,def,k,strat,bonus,talk,flow=0,o={}){
     act(def,body?'hurtBody':'hurt',300);def.flash=performance.now()+150;
     setT(def,def.pos.x+u.dx*(clean?9:5),def.pos.y+u.dy*(clean?9:5));
     const cls=att.mine?'me':'';
-    const txt=o.ln?line(o.ln,v):ctr?line('ctr_'+o.sub,v):(Math.random()<TUNE.varP&&(talk||dmg>7||body)&&varLine(att,k,body,clean,dmg,o.first,v))||(body?line('body',v):talk||dmg>7?line('hit_'+k,v):null);
+    const txt=o.ln?line(o.ln,v):ctr?line('ctr_'+o.sub,v):(Math.random()<TUNE.varP&&(talk||dmg>7||body)&&varLine(att,k,body,clean,dmg,o.first,v))||(body?line('body',v):talk||dmg>7?line(k==='jab'&&dist==='perto'?'hit_jabC':'hit_'+k,v):null);
     if(clean||def.hp<=0){F.react={by:att.mine?'me':'op',until:performance.now()+1800};F.zoom={until:performance.now()+1300*spd(),cx:(att.pos.x+def.pos.x)/2,cy:(att.pos.y+def.pos.y)/2};F.crowd=performance.now()+1500;F.flashes=performance.now()+1200;if(ctr)say(txt,cls);say(line('clean',v),'sys')}
     else if(txt)say(txt,cls);
     await fsleep(dur*.55+(clean?200:60));
@@ -2433,7 +2476,7 @@ async function knockdown(x,att,kind){
   }else{
     F.count=null;act(x,'stagger',900);x.hp=Math.max(kind?x.hp:0,12+x.resistencia*.3+x.st*.18+((x.queixo??50)-50)*.1);if(x.st>=70)say(`${x.nick} ainda tem pernas. Levantou-se com fôlego!`);else if(x.st<=30)say(`${x.nick} levanta-se, mas está completamente vazio.`);
     say(line('up',{d:x.nick}),'sys');act(att,'guard',1);await fsleep(900);act(x,'guard',1);F.refLock=false;if(kind==='liver')x.hunch=F.ft+TUNE.livT;
-    x.wobbly=F.ft+TUNE.wobT*(kind==='liver'?.5:1)*(x.st<40?1.3:1);say(line('wobbly',{x:x.nick}),x.mine?'bad':'');act(x,'stagger',900); // pernas bambas (5.4): Pés caem muito durante um bocado
+    x.wobbly=F.ft+TUNE.wobT*(kind==='liver'?.5:1)*(x.st<40?1.3:1);x.dx.wob[0]++;say(line('wobbly',{x:x.nick}),x.mine?'bad':'');act(x,'stagger',900); // pernas bambas (5.4): Pés caem muito durante um bocado
     F.zone='center';F.zp=null;F.dist='meio';F.ctl=null; // recomeça a meio do ringue
   }
   hud();
@@ -2572,6 +2615,22 @@ function ordTxt(o){
 }
 function kdTxt(k){return `R${k.r} ${mmss(k.t)} · ${k.me?'caíste':'ele caiu'} com ${PNL[k.k]||'um golpe'}${k.kind==='flash'?' (queda relâmpago)':k.kind==='liver'?' ao fígado':''}`}
 function majority(arr){const c={};let b=arr[0],n=0;for(const x of arr){c[x]=(c[x]||0)+1;if(c[x]>n){n=c[x];b=x}}return b}
+/* ---- confiança vs realidade (3.2) na análise: onde a crença e o resultado se afastaram (só o teu atleta). sc = impacto aproximado ---- */
+const DNO={bloqueio:'o bloqueio',aparar:'o aparar',cabeca:'o movimento de cabeça',ombro:'o shoulder roll',pes:'o trabalho de pés',clinch:'o clinch'};
+function confNotes(x){
+  const out=[],tot=x.tot.thrown||0,acc=tot?x.tot.landed/tot:0,b0=k=>x.bel0&&x.bel0[k]!=null?x.bel0[k]:lvOf(x,k);
+  for(const k of PKEYS){const p=x.ps[k];if(!p)continue;const[t,l]=p;
+    if(t>=8&&l/t<=Math.min(.3,acc*.6))out.push({s:-1,g:'over',k,sc:(t*acc-l)*.8,t:`Tentou o ${pLow(k)} ${t} vezes, só entrou ${l}.`,tip:'Confia demais nele: o Sparring põe a confiança no sítio.'})}
+  for(const k of PKEYS){const lv=x.skills[k]||0,t=(x.ps[k]||[0])[0];
+    if(lv>=2&&tot>=25&&t<=1&&b0(k)<=lv-.8)out.push({s:-1,g:'under',k,sc:1+lv*.5,t:`Quase não usou o ${pLow(k)}, que já sabe bem.`,tip:'Ainda não confia nele: o Sparring e as lutas dão-lhe confiança.'})}
+  const dT=Object.values(x.dfs).reduce((t,v)=>t+v[0],0),dOk=Object.values(x.dfs).reduce((t,v)=>t+v[1],0)/Math.max(1,dT);
+  for(const k of DKEYS){const lv=x.def[k]||0,t=(x.dfs[k]||[0])[0];
+    if(k!=='clinch'&&lv>=2&&dT>=20&&t<=1&&b0(k)<=lv-.8)out.push({s:-1,g:'under',k,sc:1+lv*.5,t:`${t?'Quase não usou':'Não usou'} ${DNO[k]} que treinaste.`,tip:'Ainda não confia: o Sparring dá-lhe confiança.'});
+    const d=x.dfs[k];if(d&&d[0]>=12&&d[0]>=dT*.3&&d[1]/d[0]<=Math.min(.2,dOk*.5))out.push({s:-1,g:'over',k,sc:(d[0]*.45-d[1])*.4,t:`Tentou ${DNO[k]} ${d[0]} vezes, só resultou ${d[1]}.`,tip:'Confia demais nela e usa-a contra golpes errados (Ring IQ, Sparring).'})}
+  for(const k of[...PKEYS,...DKEYS]){const p=k in DEFS?x.dfs[k]:x.ps[k];if(!p||p[0]<6)continue;const r=p[1]/p[0];
+    if(r>=.6&&b0(k)<=lvOf(x,k)-.8)out.push({s:1,g:'good',k,sc:2,t:`${k in DEFS?DNO[k].replace(/^o /,'O '):'O '+pLow(k)} resultou ${p[1]} em ${p[0]}: mais do que ele acreditava.`,tip:''})}
+  return out.sort((p,q)=>q.sc-p.sc);
+}
 function anReasons(win,draw){
   const{me,op}=F,a=F.a,R=[];const add=(g,s,sc,t,k)=>{if(sc>=2)R.push({g,s,sc,t,k})};
   const rr=F.rr,stMin=i=>{let m=101,r=0;rr.forEach((x,j)=>{if(x.st[i]<m){m=x.st[i];r=j+1}});return{m,r}};
@@ -2613,7 +2672,7 @@ function anReasons(win,draw){
   // 5) counters (medido): golpes que entraram logo a seguir a uma defesa
   {const ct=x=>Object.values(x.cts).reduce((t,c)=>t+c[1],0),top=x=>{const e=Object.entries(x.cts).sort((p,q)=>q[1][1]-p[1][1])[0];return e?DEFN[e[0]]:''},cm=ct(me),co=ct(op);if(Math.abs(cm-co)>=3){
     add('ctr',Math.sign(cm-co),Math.abs(cm-co)*1.2,cm>co?`Os teus counters entraram ${cm} vezes, sobretudo depois ${top(me)}${co?` (os dele: ${co})`:''}.`
-      :`Os counters dele entraram ${co} vezes, sobretudo depois ${top(op)}${cm?` (os teus: ${cm})`:''}.|Os counters vêm do Ring IQ e das defesas de cabeça e ombro (Corda de esquiva, Sparring).`)}}
+      :`Os counters dele entraram ${co} vezes, sobretudo depois ${top(op)}${cm?` (os teus: ${cm})`:''}.|${(()=>{const f=(Object.entries(op.cts).sort((p,q)=>q[1][1]-p[1][1])[0]||[''])[0];return f==='cabeca'||f==='ombro'?'Ele lia os teus retos: varia o jab e o direto com ganchos e golpes ao corpo.':f==='pes'?'Ele saía de lado e batia de ângulo: corta-lhe o ringue em vez de o seguir.':f==='clinch'?'Ele saía do clinch a bater: mãos em cima no break.':'Os teus counters também vêm do Ring IQ e das defesas de cabeça e ombro (Corda de esquiva, Sparring).'})()}`)}}
   // 6) fôlego: golpes lançados já sem pernas (fôlego ≤ 30 acerta menos e é mais fácil de acertar)
   {const pm=me.lowT/Math.max(1,me.tot.thrown),po=op.lowT/Math.max(1,op.tot.thrown),d=po-pm,sm=stMin(0),so=stMin(1);
    const pr=(F.sx['Pressão']||0)/Math.max(1,Object.values(F.sx).reduce((t,v)=>t+v,0));
@@ -2641,6 +2700,37 @@ function anReasons(win,draw){
   // 11) forma no dia
   {const f=F.form0;if(f&&Math.abs(f.sc)>=.3){const r=(f.reasons.find(x=>x[0]===(f.sc>0?'+':'−'))||'').slice(2);
     add('form',Math.sign(f.sc),Math.abs(f.sc)*8,f.sc>0?`Chegou em grande forma${r?` (${r})`:''}.`:`Chegou fora de forma${r?` (${r})`:''}.|Na semana da luta, alivia o plano.`)}}
+  // 12) distância e ringue (tema 5): batalha da distância, encostado às cordas/canto, antecipação, cross-counter, fígado, confiança
+  {const pw=x=>{x=Math.abs(x);return x<5?'ligeiramente':x<12?'claramente':'muito'},D=[me.dx,op.dx],T=DN.reduce((t,d)=>t+D[0].d[d],0)||1;
+   const DW={longe:'longe',meio:'a meia distância',perto:'perto'},pc=v=>Math.round(100*v)+'%',sm=stMin(0),so=stMin(1);
+   const pm=DPREF[me.style]||'meio',po=DPREF[op.style]||'meio';
+   if(T>=30&&pm!==po){const fm=D[0].d[pm]/T,fo=D[0].d[po]/T,df=fm-fo;
+     if(Math.abs(df)>=.15){const s=Math.sign(df),W=s>0?me:op,L=s>0?op:me,dp=(W.pes??0)-(L.pes??0),di=(W.iq??0)-(L.iq??0),why=[];
+       if(dp>=4)why.push(s>0?`tinhas ${pw(dp)} melhores Pés`:`ele tinha ${pw(dp)} melhores Pés`);
+       if(di>=6)why.push(s>0?`lias melhor a luta (Ring IQ)`:`ele lia melhor a luta (Ring IQ)`);
+       const lt=s>0?so:sm;if(lt.m<=35)why.push(s>0?'ele ficou sem pernas':'ficaste sem pernas com o cansaço');
+       const w=why.length?` ${why.join(' e ').replace(/^./,c=>c.toUpperCase())}.`:'';
+       add('dist',s,Math.abs(df)*18,s>0?`Ganhaste a batalha da distância: ${pc(fm)} da luta foi ${DW[pm]}, onde o ${me.style} quer estar (${DW[po]}, onde ele queria, só ${pc(fo)}).${w}`
+         :`Perdeste a batalha da distância: ${pc(fo)} da luta foi ${DW[po]}, onde ele queria; ${DW[pm]}, onde o ${me.style} quer estar, só ${pc(fm)}.${w}|${dp>=4?`Treina Pés (${ATR_TR.pes}).`:di>=6?'O Ring IQ cresce com lutas e Sparring.':lt.m<=35?`Treina Resistência (${ATR_TR.resistencia}): sem fôlego vão-se as pernas.`:'Os Pés e o Ring IQ decidem a distância.'}`)}}
+   const enc=x=>x.z.cordas+x.z.canto,TT=x=>x.z.centro+enc(x)||1,fm=enc(D[0])/TT(D[0]),fo=enc(D[1])/TT(D[1]);
+   if(Math.abs(fm-fo)>=.12&&Math.max(fm,fo)>=.2){const s=fm>fo?-1:1,X=s<0?D[0]:D[1],cn=Math.round(X.z.canto),why=[];
+     const P=s<0?me:op,Q=s<0?op:me,dp=(Q.pes??0)-(P.pes??0),lt=s<0?sm:so;
+     if(lt.m<=35)why.push(s<0?'Sem fôlego, já não tinhas pernas para sair.':'Sem fôlego, ele já não tinha pernas para sair.');
+     else if(X.wob[1]>=10)why.push(s<0?'As pernas bambas depois da queda não ajudaram.':'Depois da queda, com as pernas bambas, não conseguia sair.');
+     else if(dp>=4)why.push(s<0?'Ele cortava-te o ringue com os Pés.':'Os teus Pés cortavam-lhe o ringue.');
+     add('trap',s,Math.abs(fm-fo)*15+cn/25,s<0?`Passaste ${pc(fm)} da luta encostado às cordas${cn>=8?` (${cn} s no canto)`:''}: ali defende-se pior e as combinações entram.${why.length?' '+why[0]:''}|Treina Pés (Corda) para sair com pivôs; o Clinch também tira das cordas.`
+       :`Encostaste-o às cordas ${pc(fo)} da luta${cn>=8?` (${cn} s no canto)`:''}: ali defende pior e as combinações entram.${why.length?' '+why[0]:''}`)}
+   const am=D[0].ant[1],ao=D[1].ant[1];if(Math.abs(am-ao)>=3){const s=Math.sign(am-ao),n=Math.max(am,ao),I=s>0?op:me;
+     add('ant',s,Math.abs(am-ao)*.9,s>0?`Apanhaste-o a entrar ${n} vezes (jab e check hook): ${I.style==='In-fighter'?'o In-fighter não conseguia encurtar':'não o deixaste encurtar a distância'}.`
+       :`Ele apanhou-te a entrar ${n} vezes com o jab e o check hook${me.style==='In-fighter'?': o teu In-fighter não conseguia encurtar':''}.|Para entrar sem levar: Pés e Ring IQ (Sparring).`)}
+   const cm=D[0].cc[1],co=D[1].cc[1];if(Math.abs(cm-co)>=1&&Math.max(cm,co)>=2){const s=Math.sign(cm-co),n=Math.max(cm,co);
+     add('cc',s,Math.abs(cm-co)*2,s>0?`O teu cross-counter entrou ${n} vezes: o direto por cima do golpe dele.`:`Ele apanhou-te com o cross-counter ${n} vezes, por cima do teu jab e do teu direto.|Jab menos previsível: Técnica (Pads) e Ring IQ (Sparring).`)}
+   if(D[0].cc[2]>=3)add('ccm',-1,D[0].cc[2]*.8,`Tentaste o cross-counter ${D[0].cc[2]} vezes sem timing: levaste ao mesmo tempo.|O timing vem do Ring IQ, da Técnica e da Velocidade.`);
+   const lv=x=>x.liv[0]+x.liv[1],lm=lv(me),lo=lv(op);if(lm!==lo&&Math.max(lm,lo)>=1){const s=Math.sign(lm-lo),X=s>0?me:op,n=lv(X),f=X.liv[1];
+     add('liver',s,X.liv[0]*2.5+f*4,s>0?`O gancho ao fígado entrou ${n===1?'uma vez':n+' vezes'}${f?` (${f} com queda)`:''}: ${n===1?'ficou sem ar':'perdia o ar de cada vez'}.`
+       :`Levaste ${n===1?'um gancho':n+' ganchos'} ao fígado${f?` (${f} com queda)`:''}: ${n===1?'ficaste sem ar':'perdias o ar de cada vez'}.|Bloqueio (Bola medicinal) e Resistência protegem o corpo.`)}
+   const cf=confNotes(me).filter(x=>x.s<0)[0];if(cf)add('conf',-1,cf.sc,`${cf.t} ${cf.g==='over'?'Confiava demais.':'Não confia.'}|${cf.tip}`);
+  }
   {const st=R.find(x=>x.g==='stam'),at=R.find(x=>x.g==='attr');if(st&&at&&at.k==='resistencia'&&at.s===st.s)R.splice(R.indexOf(at),1)}
   const pickR=s=>{const used=new Set(),out=[];for(const x of R.filter(x=>s==null||x.s===s).sort((p,q)=>q.sc-p.sc)){if(used.has(x.g))continue;used.add(x.g);out.push(x);if(out.length>=3)break}return out};
   const main=draw?pickR(null):pickR(win?1:-1);
@@ -2649,7 +2739,7 @@ function anReasons(win,draw){
   return{why:main.map(sp),plus:plus?sp(plus):null};
 }
 function dzOf(x){const r=o=>Object.fromEntries(Object.entries(o).map(([k,v])=>[k,Math.round(v)]));const D=x.dx; // distância e ringue (A3), para a análise do A4
-  return{d:r(D.d),z:r(D.z),ctl:Math.round(D.ctl),xw:{...D.xw},ant:D.ant.slice(),cc:D.cc.slice(),ang:D.ang.slice(),clo:D.clo.slice(),esc:{...D.esc}}}
+  return{d:r(D.d),z:r(D.z),ctl:Math.round(D.ctl),xw:{...D.xw},ant:D.ant.slice(),cc:D.cc.slice(),ang:D.ang.slice(),clo:D.clo.slice(),esc:{...D.esc},wob:[D.wob[0],Math.round(D.wob[1])],pf:DPREF[x.style]||'meio'}}
 function buildAnalysis(){
   const{me,op}=F,r=F.over,a=F.a;
   if(F.rr.length<Math.min(F.round,F.rounds)){const x=rrOf(null);x.p=1;F.rr.push(x)}
@@ -2669,7 +2759,7 @@ function buildAnalysis(){
     rr:F.rr.map(x=>[x.s?x.s[0]:null,x.s?x.s[1]:null,x.dn[0],x.dn[1],x.st[0],x.st[1],x.l[0],x.l[1],x.p?1:0]),
     ps:[ps(me),ps(op)],hb:[[me.headL,me.bodyL],[op.headL,op.bodyL]],df:[df(me),df(op)],ct:[ct(me),ct(op)],lv:[me.liv.slice(),op.liv.slice()],
     kdl:F.kdl.slice(0,6).map(kdTxt),ord:F.ordLog.slice(-8).map(ordTxt),ordN:F.ordLog.length,talk:F.talks.map(t=>({t:`${t.r===1?'Antes do R1':'Antes do R'+t.r}: ${t.n}`,c:t.lab==='CERTA'?'ok':t.lab==='MEIA CERTA'?'half':t.lab==='ERRADA'?'bad':''})),
-    sx:Object.entries(F.sx).sort((p,q)=>q[1]-p[1]).map(([k,v])=>`${k} ${Math.round(100*v/tot)}%`).join(' · '),why,plus,dz:[dzOf(me),dzOf(op)]};
+    sx:Object.entries(F.sx).sort((p,q)=>q[1]-p[1]).map(([k,v])=>`${k} ${Math.round(100*v/tot)}%`).join(' · '),why,plus,dz:[dzOf(me),dzOf(op)],cf:confNotes(me).slice(0,3).map(x=>({s:x.s,t:x.t}))};
 }
 /* ---- histórico de lutas ----
    a.hist: uma entrada pequena por luta (mais antiga primeiro): {w semana, o alcunha do adversário, ac academia, os estilo dele,
@@ -2723,7 +2813,7 @@ function resultInfo(title,body,an){
 }
 function showAnalysis(an,back,tab){
   tab=tab||'res';
-  const T=[['res','RESUMO'],['golpes','GOLPES'],['rounds','ROUNDS'],['canto','CANTO']];
+  const T=[['res','RESUMO'],['golpes','GOLPES'],['ringue','RINGUE'],['rounds','ROUNDS'],['canto','CANTO']];
   const res=an.res==='V'?'VITÓRIA':an.res==='D'?'DERROTA':'EMPATE';
   const hd=`<h2>ANÁLISE · <span style="color:${an.res==='V'?'var(--green)':an.res==='D'?'#ff6b5a':'var(--gold)'}">${res}</span> VS ${an.opp.toUpperCase()}</h2>
     <div class="seg sub2">${T.map(([k,n])=>`<button data-ant="${k}" class="${tab===k?'on':''}">${n}</button>`).join('')}</div>`;
@@ -2753,7 +2843,31 @@ function showAnalysis(an,back,tab){
       <div class="atab">${head('DEFESAS · RESULTOU / TENTOU','TU','ELE')}
       ${dks.map(k=>`<span>${DEFS[k].sh||DEFS[k].n}</span>${v2(dd(an.df[0],k),dd(an.df[1],k))}`).join('')}
       <span>Counters entraram/tentou</span>${v2(`${ctn(an.ct[0])[0]}/${ctn(an.ct[0])[1]}`,`${ctn(an.ct[1])[0]}/${ctn(an.ct[1])[1]}`)}</div>
-      <p class="meta">${ctl(an.ct[0])?`Os teus counters: ${ctl(an.ct[0])}. `:''}${ctl(an.ct[1])?`Os dele: ${ctl(an.ct[1])}. `:''}${lv[0][0]+lv[0][1]+lv[1][0]+lv[1][1]?`Fígado: tu ${lt(lv[0])}, ele ${lt(lv[1])}.`:'Counter = golpe logo a seguir a uma defesa que resultou.'}</p>`;
+      <p class="meta">${ctl(an.ct[0])?`Os teus counters: ${ctl(an.ct[0])}. `:''}${ctl(an.ct[1])?`Os dele: ${ctl(an.ct[1])}. `:''}${lv[0][0]+lv[0][1]+lv[1][0]+lv[1][1]?`Fígado: tu ${lt(lv[0])}, ele ${lt(lv[1])}.`:ctl(an.ct[0])||ctl(an.ct[1])?'':'Counter = golpe logo a seguir a uma defesa que resultou.'}</p>
+      ${an.cf&&an.cf.length?`<h3>CONFIANÇA</h3><div class="olist">${an.cf.slice(0,2).map(x=>`<div class="${x.s>0?'ok':'bad'}">${x.t}</div>`).join('')}</div>`:''}`;
+  }else if(tab==='ringue'){
+    const z=an.dz;
+    if(!z)body='<div class="empty">Sem dados de distância nesta luta.</div>';
+    else{const[m,o]=z,T=DN.reduce((t,d)=>t+m.d[d],0)||1,pc=d=>Math.round(100*m.d[d]/T);
+      const ms=s=>{s=Math.round(s||0);return s?`${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`:'-'},fr=a=>a&&a[0]?`${a[1]}/${a[0]}`:'-';
+      const tt=x=>x.z.centro+x.z.cordas+x.z.canto||1,DL={longe:'longe',meio:'a meio',perto:'perto'};
+      const row=(n,a,b,show=true)=>show?`<span>${n}</span>${v2(a,b)}`:'';
+      body=`<div class="dbar">${DN.map(d=>`<i class="${d}"><s style="width:${pc(d)}%"></s><b>${d.toUpperCase()} ${pc(d)}%</b></i>`).join('')}</div>
+      <p class="meta">Preferem: tu ${DL[m.pf]} (${an.mSty}), ele ${DL[o.pf]} (${an.oSty}).</p>
+      <div class="atab">${head('DISTÂNCIA E RINGUE','TU','ELE')}
+      ${DN.map(d=>row(`Trocas ganhas ${DL[d]}`,m.xw[d],o.xw[d])).join('')}
+      ${row('Controlo do ringue',Math.round(100*m.ctl/tt(m))+'%',Math.round(100*o.ctl/tt(o))+'%')}
+      ${row('Encostado às cordas',ms(m.z.cordas),ms(o.z.cordas))}
+      ${row('Encostado no canto',ms(m.z.canto),ms(o.z.canto))}
+      ${row('Saídas (pés/clinch/bater)',`${m.esc.pes}/${m.esc.clinch}/${m.esc.bater}`,`${o.esc.pes}/${o.esc.clinch}/${o.esc.bater}`)}
+      ${row('Pernas bambas',ms(m.wob[1]),ms(o.wob[1]))}</div>
+      <div class="atab">${head('CONTRA-ATAQUE · ENTROU/TENTOU','TU','ELE')}
+      ${row('Antecipação',fr(m.ant),fr(o.ant))}
+      ${row('Cross-counter',fr(m.cc),fr(o.cc))}
+      ${row('Cross sem timing',m.cc[2]||'-',o.cc[2]||'-',m.cc[2]+o.cc[2]>0)}
+      ${row('Ângulo (pivô/lado)',fr(m.ang),fr(o.ang))}
+      ${row('Sair do clinch a bater',fr(m.clo),fr(o.clo))}</div>
+      <p class="meta">Antecipação: apanhá-lo a entrar. Cross-counter: o direto por cima do golpe dele; sem timing, os dois acertam.</p>`}
   }else if(tab==='rounds'){
     const cls=(a,b)=>a>b?'cme':a<b?'cop':'';
     body=`<div class="atab rtab"><b>R</b><b>PONTOS</b><b>QUEDAS</b><b>FÔLEGO</b><b>ACERTOS</b>
@@ -2823,12 +2937,21 @@ function drawFighter(c,cx,gy,face,lk,gl,f,now,t){
       break;
   }
   if(tier>1&&pose!=='guard'){uy+=1}
+  const ln=f.lean||0,wb=pose==='sit'?0:f.wobA||0; // A4: encostado às cordas/canto; pernas bambas
+  if(ln>.05&&pose!=='clinch'&&pose!=='sit'){ux-=Math.round(4*ln);if(pose==='guard'){lead='high';rear='high';uy+=1;if(Math.sin(t*5)>.7)ux+=1}} // costas nas cordas, guarda fechada
+  if(wb>.3){ux+=Math.round(Math.sin(t*6.5)*2*wb);uy+=2;if(pose==='guard'){lead='tlow';rear='low'}}                                       // tronco a balançar, mãos em baixo
   if(st==='In-fighter'&&pose!=='sit'&&pose!=='win'&&pose!=='win1'&&pose!=='belt'&&pose!=='celebrate'&&!f.robe)uy+=3;
   const AX=f.armX||0;
   const moving=Math.hypot(f.pos.tx-f.pos.x,f.pos.ty-f.pos.y)>.8;const step=moving&&Math.sin(t*(tier===1?16:tier===2?11:7))>0?(tier===3?1:2):0;
   if(pose==='sit'){P(-10,-11,20,3,'#5a3d26');P(-10,-11,20,1,'#7a5636');P(-9,-8,2,8,'#2a1f17');P(7,-8,2,8,'#2a1f17');
     P(-8,-18,15,7,tr);P(-8,-18,15,1,'#f1e5d0');P(4,-16,9,4,sk);P(9,-13,4,11,sk);P(9,-13,1,11,sh);P(8,-3,8,3,'#151515');P(-3,-14,6,3,sk)}
-  else{P(-7-step,-18,4,16,sk);P(2+step,-18,4,16,sk);P(-7-step,-18,1,16,sh);P(2+step,-18,1,16,sh);
+  else if(wb>.3){const j=Math.round(Math.sin(t*9)); // pernas bambas: joelhos para dentro, a tremer
+    if(f.rope&&ln>.5)ropesBehind(P,f.rope);
+    P(-7,-18,4,8,sk);P(2,-18,4,8,sk);P(-6+j,-10,4,8,sk);P(1+j,-10,4,8,sk);P(-7,-18,1,8,sh);P(-6+j,-10,1,8,sh);P(2,-18,1,8,sh);P(1+j,-10,1,8,sh);
+    P(-8+j,-3,6,3,'#151515');P(1+j,-3,7,3,'#151515');
+  P(-8,-27,15,10,tr);P(-8,-27,15,1,'#f1e5d0');P(-1,-22,1,4,'rgba(0,0,0,.25)')}
+  else{if(f.rope&&ln>.5)ropesBehind(P,f.rope);
+  P(-7-step,-18,4,16,sk);P(2+step,-18,4,16,sk);P(-7-step,-18,1,16,sh);P(2+step,-18,1,16,sh);
   P(-9-step,-3,6,3,'#151515');P(2+step,-3,7,3,'#151515');
   P(-8,-27,15,10,tr);P(-8,-27,15,1,'#f1e5d0');P(-1,-22,1,4,'rgba(0,0,0,.25)')}
   const T=(dx,dy,w,h,col)=>P(dx+ux,dy+uy,w,h,col);
@@ -2861,8 +2984,13 @@ function drawFighter(c,cx,gy,face,lk,gl,f,now,t){
   if(f.robe){T(-10,-42,19,23,f.robe);T(-11,-40,3,17,f.robe);T(7,-40,3,17,f.robe);T(-5,-42,9,3,'#e8b13a');T(-10,-30,19,1,'#e8b13a');T(-10,-20,19,1,'#e8b13a');T(-11,-24,3,4,gl);T(7,-24,3,4,gl);return}
   arm('rear',rear);
   arm('lead',lead);
+  if(wb>.3)for(let i=0;i<3;i++){const g=t*5+i*2.09;T(Math.round(Math.cos(g)*8),-60+Math.round(Math.sin(g)*2),2,2,i===1?'#f1e5d0':'#f5d36a')} // tonto: estrelas à volta da cabeça
   if(pose==='belt'){T(-8,-69,22,4,'#e8b13a');T(-8,-66,22,1,'#9c7420');T(-1,-71,8,8,'#f5d36a');T(1,-69,4,4,'#d4452f')}
   if(now<f.flash){c.fillStyle='rgba(255,255,255,.5)';c.fillRect(Math.round(cx-12),Math.round(gy-56+uy),24,40)}
+}
+function ropesBehind(P,r){ // as cordas atrás das costas de quem está encostado (vistas de lado); no canto, o poste e a almofada
+  if(r.post){P(-21,-46,3,45,'#8d8d8d');P(-22,-48,5,12,r.post)}
+  [[-39,r.c],[-29,'#e8e8ee'],[-17,r.c]].forEach(([y,col])=>{P(-28,y,16,2,col);P(-12,y+1,6,2,col)}); // as cordas cedem onde ele se encosta
 }
 function drawRef(c,cx,gy,face,pose,t){
   const P=(dx,dy,w,h,col)=>{c.fillStyle=col;c.fillRect(Math.round(face===1?cx+dx:cx-dx-w),Math.round(gy+dy),w,h)};
@@ -3100,6 +3228,12 @@ function ringLoop(now){
   const dt=Math.min(.05,(now-(F.lt||now))/1000);F.lt=now;const mul=F.paused||F.towelAsk?0:(F.fast?3.3:1)/slowF();
   const mv=(o,sp)=>{const dx=o.tx-o.x,dy=o.ty-o.y,d=Math.hypot(dx,dy);const v=sp*dt*mul*(d>30?1:.55+.45*d/30);if(d<=v||d<.01){o.x=o.tx;o.y=o.ty}else{o.x+=dx/d*v;o.y+=dy/d*v}};
   for(const x of[F.me,F.op])mv(x.pos,x.robe?40:(x.an.pose==='hurt'||x.an.pose==='hurtBody'?90:70)*(x.st>=70?1:x.st>30?.82:.6));
+  for(const x of[F.me,F.op]){ // A4 (animações do tema 5): encostado às cordas/canto (x.lean) e pernas bambas (x.wobA), 0..1 com transição suave
+    const dn=x.an.pose==='down'||x.an.pose==='ko',tr=F.inRound&&F.zp===x&&F.zone!=='center'&&!x.robe&&!dn&&x.an.pose!=='clinch';
+    x.lean=clamp((x.lean||0)+(tr?1:-1)*dt*mul*3,0,1);
+    x.wobA=clamp((x.wobA||0)+(F.inRound&&x.wobbly>F.ft&&!dn&&!x.robe?1:-1)*dt*mul*4,0,1);
+    x.rope=null;if(tr){const L=x.pos.x<120,Fr=x.pos.y>88;x.rope=F.zone==='corner'?{c:L?'#d4452f':'#2d6db3',post:L&&Fr?'#d4452f':!L&&!Fr?'#2d6db3':'#e8e0d0'}:F.zs===2?{c:'#d4452f'}:F.zs===3?{c:'#2d6db3'}:null}
+  }
   refFollow();
   mv(F.ref,52);
   crewUpdate(now,t,dt,mul);
@@ -3124,7 +3258,9 @@ function ringLoop(now){
   // people sorted by depth (those still outside, behind the back ropes, first)
   const A=proj(RING.x0,RING.y0),B=proj(RING.x1,RING.y0),D=proj(RING.x1,RING.y1),E=proj(RING.x0,RING.y1);
   const hF=30,hN=44;
-  const pm=proj(F.me.pos.x,F.me.pos.y),po=proj(F.op.pos.x,F.op.pos.y),pr=proj(F.ref.x,F.ref.y);
+  const lo=x=>{if(!(x.lean>0))return[0,0];const u=unit(otherOf(x),x);return[u.dx*7*x.lean,u.dy*7*x.lean]}; // encostado: as costas chegam às cordas
+  const om=lo(F.me),oo=lo(F.op);
+  const pm=proj(F.me.pos.x+om[0],F.me.pos.y+om[1]),po=proj(F.op.pos.x+oo[0],F.op.pos.y+oo[1]),pr=proj(F.ref.x,F.ref.y);
   let fm=pm.x<=po.x?1:-1;if(Math.abs(pm.x-po.x)<3)fm=F.lastFace||1;F.lastFace=fm;
   const mid=(pm.x+po.x)/2;
   const wf=(x,def)=>{if(!x.robe)return def;const dx=x.pos.tx-x.pos.x;return Math.abs(dx)>1.5?(dx>0?1:-1):def};
