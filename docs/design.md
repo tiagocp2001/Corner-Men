@@ -29,7 +29,7 @@ Regras gerais que orientam todos os temas.
 
 Ordem: 8 → 5 → 1 → 3 → 4.
 
-### Tema 8 — Atributos físicos, técnicos e mentais · *Em aberto (proposta feita)*
+### Tema 8 — Atributos físicos, técnicos e mentais · *Decidido*
 - **Hoje:** 5 atributos em barra (Força, Velocidade, Resistência, Defesa, Técnica) + potencial; corpo (altura, alcance) fixo; traços de personalidade (Trabalhador, Teimoso, Cabeça fria, Preguiçoso, Coração de leão); talentos escondidos (Mão pesada, Mãos rápidas, Motor inesgotável, Queixo de ferro); confiança e forma variáveis.
 - **Guia:** 11 físicos (potência, velocidade de mãos, explosividade, resistência, recuperação, agilidade, equilíbrio, coordenação, queixo, durabilidade, alcance/altura), 10 técnicos/táticos (timing, precisão, gestão da distância, defesa, footwork, Ring IQ, volume, versatilidade, antecipação/reflexos, controlo do ringue) e 7 mentais (coração, calma, disciplina, confiança, concentração, instinto finalizador, adaptabilidade/ouvir o canto).
 - **Proposta:** 8 barras em 2 colunas de 4, cada uma a juntar vários atributos do Guia:
@@ -46,10 +46,12 @@ Ordem: 8 → 5 → 1 → 3 → 4.
   - O volume de golpes (work rate) fica ligado à estratégia (Pressão/Equilibrado/Cautela), não a uma barra.
   - Ligações: Ring IQ acelera o "ouvir o canto" já implementado; Pés decide a distância (tema 5); Queixo decide quedas e KOs.
 - **Ecrã:** a Ficha mostra 2 colunas de 4 barras (FÍSICO / TÉCNICO). A Ficha já está apertada a 390×720; tem de ser reorganizada.
-- **Perguntas ao Tiago:** ver conversa de 7 nov 2026 (8 barras? mentais como traços? Queixo treinável? Ring IQ por experiência?).
 - **Decisões:**
   - 8.1 **Decidido:** 8 barras — Força, Velocidade, Resistência, Queixo (físicos) / Técnica, Defesa, Pés, Ring IQ (técnicos).
-  - 8.2 **Direção do Tiago (a confirmar a proposta):** todos os atletas têm um pouco de cada atributo mental; o conjunto é a personalidade.
+  - 8.2 **Decidido — mentais:** todos os atletas têm os 7 mentais do Guia, cada um com o seu valor (Coração, Calma, Disciplina, Confiança, Concentração, Instinto finalizador, Ouvir o canto). A **personalidade** é um nome que sai do que se destaca (ex.: muito coração + pouca calma → "Guerreiro impulsivo"); os traços atuais (Teimoso, Cabeça fria…) passam a nascer daqui.
+    - **Ecrã:** só o nome da personalidade e 2–3 palavras sobre o que se destaca; sem barras nem números (o jogador descobre o atleta a vê-lo lutar).
+    - **Mudam devagar** com a carreira (confiança com vitórias, calma com experiência, coração após vitórias sofridas…).
+    - **Não se treinam no ginásio:** só com experiência e com o treino mental (tema 10).
   - 8.3 **Decidido:** Queixo difícil de treinar (pescoço, core); desce com a idade e com cada KO sofrido.
   - 8.4 **Decidido:** Ring IQ cresce sobretudo com experiência (lutas e sparring), pouco com treinos de ginásio.
 
