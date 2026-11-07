@@ -116,7 +116,7 @@ O build de teste gera-se a partir do `index.html` por substituição de texto (o
 
 ## Em discussão: alinhar o jogo com o "Guia Completo de Boxe"
 
-O Tiago quer o jogo baseado num guia de boxe que escreveu. Os temas estão a ser decididos um a um, e **nada disto está implementado**:
+O Tiago quer o jogo baseado num guia de boxe que escreveu. **As decisões, o plano por fases e o estado de cada tema estão em `docs/design.md` — é a referência; mantê-lo atualizado.** Os temas estão a ser decididos um a um, e **nada disto está implementado**:
 
 1. **Golpes:** numeração 1–6 (frente/trás), overhand, cabeça/corpo como alvo, variações (jab duplo, power jab, flicker jab, check hook, shovel hook, cross-counter…), que treino ensina cada golpe, uso dos números pelo comentador.
 2. Combinações clássicas (1-2, 1-1-2, 1-2-3, 1-2-3-2, 2-3-2, 1-6-3-2, gancho duplo, mudança de nível) e fintas.
