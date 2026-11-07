@@ -1,7 +1,7 @@
 // Offline + auto-update: the game page is fetched from the network first (so friends get
 // updates whenever they're online) and falls back to the cached copy when offline.
 // Fonts and icons are cache-first. Bump VERSION when you want to force a full refresh.
-const VERSION = 'v10';
+const VERSION = 'v11';
 const CACHE = 'cornermen-' + VERSION;
 const CORE = ['./', './index.html', './manifest.json', './icons/icon-180.png', './icons/icon-192.png', './icons/icon-512.png'];
 
