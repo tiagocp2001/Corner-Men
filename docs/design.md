@@ -26,7 +26,7 @@ Regras gerais que orientam todos os temas.
 | 0.4 | **Ecrã fixo:** cada tema diz onde aparece no ecrã e o que sai ou se junta para caber. | Decidido |
 | 0.5 | **Animações:** cada ação do Guia fica marcada como *usa animação existente*, *precisa de animação nova* ou *só texto*. Lista "Animações necessárias" no fim deste documento. Cada fase implementa-se em dois passos: mecânica com animações existentes + comentador; depois uma passagem de animação com capturas para o Tiago aprovar. Poucas animações, só as que mudam a leitura da luta. | Decidido |
 
-## Fase A — Núcleo da luta · *Em aberto*
+## Fase A — Núcleo da luta · *Decidido*
 
 Ordem: 8 → 5 → 1 → 3 → 4.
 
@@ -88,10 +88,14 @@ Ordem: 8 → 5 → 1 → 3 → 4.
   - 3.2 **Decidido — confiança em cada habilidade (vale para golpes e defesas):** cada habilidade tem um **nível real** (decide se resulta) e um **nível em que o atleta acredita** (decide se a usa). Habilidade nova começa com pouca confiança; cada sucesso em sparring/luta sobe a crença, cada falhanço desce; a Confiança e a personalidade puxam para cima/baixo; Ring IQ alto corrige mais depressa. Também se ajusta durante a luta. O jogador vê notas vagas na Ficha ("ainda não confia", "confia demais") e números na análise ("tentou o overhand 15 vezes, entrou 2"). O sparring serve também para ganhar confiança. O treinador poder corrigir no canto decide-se no plano de combate.
   - 3.3 **Decidido — counters por defesa** (tabela do Guia + Pés e Clinch): slip para dentro do jab → 2 ou cross-counter; slip para fora do jab → 4 ou 6 ao corpo; slip do direto → 3; pendular do gancho → gancho/uppercut do lado contrário; aparar o jab → 1 ou 2; pull back → 2; shoulder roll → 2 por cima; bloqueio de gancho → gancho da mesma mão; *pivô/passo lateral → ataque de ângulo (gancho ou direto)*; *clinch → ao separar, gancho/uppercut curto*. Hipótese de counter: família (cabeça e ombro mais; aparar e pés médio; bloqueio e clinch menos), nível da defesa, Ring IQ, Técnica, confiança. Se não souber o golpe, usa a alternativa; senão não há counter. Counter tem bónus de precisão e dano (mais quedas relâmpago ao queixo). Comentador diz o nome; análise conta counters por defesa.
 
-### Tema 4 — Contra-ataque
+### Tema 4 — Contra-ataque · *Decidido*
 - **Hoje:** Contra-golpe dispara depois de uma defesa.
 - **Guia:** contra-ataque antes, ao mesmo tempo e depois.
-- **Decisões:** —
+- **Decisões:**
+  - 4.1 **Decidido — depois:** defender e responder (tabela 3.3).
+  - 4.2 **Decidido — antes (antecipação):** quando o adversário tenta aproximar-se, o atleta pode apanhá-lo a entrar com jab ou check hook; se resultar, a distância não encurta e ele leva o golpe. Depende de Ring IQ, Velocidade, Pés e do nível do jab/gancho da frente.
+  - 4.3 **Decidido — ao mesmo tempo (cross-counter):** contra jab ou direto, direto por cima sem defender primeiro. Arriscado (se falhar o timing, os dois acertam); se resultar, grande hipótese de queda relâmpago. Depende de Ring IQ, Técnica, Velocidade e do nível do direto.
+  - 4.4 **Decidido:** ser bom contra-atacante vem de Ring IQ (o mais importante), níveis das defesas e dos golpes de resposta, e confiança. Drills de parceiro como treino → tema dos treinos.
 
 ## Fase B — Camada tática · *Em aberto*
 
