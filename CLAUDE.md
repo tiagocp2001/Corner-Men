@@ -39,7 +39,7 @@ Secções (procurar pelos comentários `/* ===== X ===== */`):
 
 | Secção | Conteúdo principal |
 |---|---|
-| `DATA` | `CATS` (Pena, Superpena, Ligeiro, Pesado), `CATMOD`, `GIFTS` (talentos escondidos), `ATTRS`/`ATTR_G` (8 atributos), `MENT`/`PERS1`/`PERS2` (mentais e nomes de personalidade), `TIERS` (Amador → Regional → Nacional → Mundial), `ECON`, `EQ` (equipamento), `UPG` (melhorias e treinadores), `TR` (treinos), `SKILLS` (golpes), `DEFS` (defesas), `COMBOS`, `STRAT` (estratégias de luta), `TUNE` |
+| `DATA` | `CATS` (Pena, Superpena, Ligeiro, Pesado), `CATMOD`, `GIFTS` (talentos escondidos), `ATTRS`/`ATTR_G` (8 atributos), `MENT`/`PERS1`/`PERS2` (mentais e nomes de personalidade), `TIERS` (Amador → Regional → Nacional → Mundial), `ECON`, `EQ` (equipamento), `UPG` (melhorias e treinadores), `TR` (treinos), `SKILLS` (7 golpes), `DEFS` (6 defesas), `LEARN`, confiança (`belOf`/`belUpd`), `DIST_FIT`/`curDist` (distância, neutra até ao A3), `COMBOS`, `STRAT` (estratégias de luta), `TUNE` |
 | body / style levels | Altura e alcance (`H_BASE`, `rollBody`, `bodyType`: Compacto/Médio/Longo), níveis de estilo 0–5 (`sty`, `styleCap`, `styleFit`, `addStyleXP`), efeitos físicos na luta (`phys`, `skillF`, `sf`, `topF`) |
 | `STATE` | `newGame`, `makeAthlete`, `save`/`load`, `KEY` |
 | `OFFERS` | Propostas de luta, `makeOpp` (adversários de academias rivais), scouting |
@@ -59,7 +59,7 @@ Secções (procurar pelos comentários `/* ===== X ===== */`):
 - **Plano semanal:** 3 treinos por semana; o plano tem de ser revisto todas as semanas (resumo antes de avançar e badges). Os atributos físicos sem treino durante mais de 3 semanas perdem condição, com mínimo.
 - **Estilos:** triângulo clássico — **In-fighter > Outboxer > Puncher > In-fighter**. A força da vantagem cresce com o nível do estilo (quase nada no amador, completa no topo). O corpo define o nível máximo de cada estilo. Novos estilos aprendem-se com treinadores especialistas da loja. Na luta escolhe-se o estilo antes do combate e pode trocar-se no intervalo (nível ≥ 2). Os adversários de Nacional/Mundial também trocam.
 - **Estratégias de luta:** Pressão / Equilibrado / Cautela.
-- **Golpes:** jab, direto, gancho, uppercut, direto ao corpo, gancho ao fígado, Contra-golpe (dispara depois de uma defesa). Combinações desbloqueiam com os golpes.
+- **Golpes e defesas:** 7 golpes do Guia (1 jab, 2 direto, 3/4 gancho da frente/de trás, 5/6 uppercut da frente/de trás, overhand) com nível 1–5; o alvo cabeça/corpo escolhe-se na luta (corpo tira fôlego e baixa a guarda; o gancho da frente ao corpo pode dar o efeito do fígado). Aprendem-se nos Pads com o golpe da semana. 6 defesas (bloqueio, aparar, cabeça, ombro, pés, clinch) escolhidas golpe a golpe; quando resultam podem abrir um counter (tabela do Guia). Cada golpe e defesa tem um nível real e um nível em que o atleta acredita (`a.bel`). Combinações pelos números (1-2, 1-2-3…) desbloqueiam com os golpes.
 - **Luta:** rounds de 3 minutos, fôlego, vida, quedas, quedas relâmpago, KO/TKO/médico/toalha/decisão, perguntas no canto (tática certa, meia certa ou errada), comentador "Zé do Micro", cantos com corner men, entrada no ringue e cerimónia com cinturão e confetis.
 - **Economia:** quota fixa dos sócios, renda, manutenção, salários, patrocínios, prémios por escalão, negociação de salários.
 
@@ -133,4 +133,4 @@ O Tiago quer o jogo baseado num guia de boxe que escreveu. **As decisões, o pla
 11. Faltas e golpes ilegais.
 12. Como tudo isto cabe num ecrã fixo.
 
-Último ponto aberto: ver `docs/design.md` (neste momento: **fase A decidida**, a planear a implementação).
+Último ponto aberto: ver `docs/design.md` (neste momento: **fase A em implementação** — A1 e A2 feitos; segue-se o A3, distância).
