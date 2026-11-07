@@ -72,7 +72,9 @@ Ordem: 8 → 5 → 1 → 3 → 4.
 - **Hoje:** jab, direto, gancho, uppercut, direto ao corpo, gancho ao fígado, Contra-golpe.
 - **Guia:** numeração 1–6 (mão da frente/de trás), overhand, cabeça/corpo como alvo, variações (jab duplo, power jab, flicker jab, check hook, shovel hook, cross-counter…), que treino ensina cada golpe, números usados pelo comentador.
 - **Nota:** havia perguntas em aberto deste tema numa conversa anterior que não ficaram registadas; refazem-se aqui.
-- **Decisões:** —
+- **Decisões:**
+  - 1.1 **Decidido:** os golpes do atleta são os 7 do Guia — 1 jab, 2 direto, 3 gancho da frente, 4 gancho de trás, 5 uppercut da frente, 6 uppercut de trás, overhand — cada um com o seu nível.
+  - 1.2 **Decidido:** cabeça ou corpo é o **alvo** do golpe, escolhido pelo atleta na luta (não há golpes "ao corpo" separados). À cabeça: mais quedas e KOs; ao corpo: tira fôlego e baixa a guarda. **Gancho ao fígado** = gancho da frente ao corpo, com uma pequena hipótese de efeito especial: leve (perde muito fôlego, fica curvado uns segundos) ou forte e raro (queda atrasada, difícil levantar-se mesmo lúcido). Hipótese maior com golpe forte, adversário cansado, muito trabalho ao corpo antes, e a curta distância; o Queixo ajuda pouco.
 
 ### Tema 3 — Defesa
 - **Hoje:** defesas com níveis (bloqueio, esquiva, baixar, recuar…).
