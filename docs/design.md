@@ -24,8 +24,9 @@ Regras gerais que orientam todos os temas.
 | 0.2 | **Nível de realismo.** Cada elemento do Guia entra de uma de três formas: **mecânica** (muda o resultado), **texto** (só o comentador e a análise o mencionam) ou **fora**. Decide-se tema a tema. | Decidido |
 | 0.3 | **Regra de ouro:** tudo o que é mecânica tem de se **ver na luta** (animação, comentador) **e na análise pós-luta**. Se o jogador não o vê, não entra. | Decidido |
 | 0.4 | **Ecrã fixo:** cada tema diz onde aparece no ecrã e o que sai ou se junta para caber. | Decidido |
+| 0.5 | **Animações:** cada ação do Guia fica marcada como *usa animação existente*, *precisa de animação nova* ou *só texto*. Lista "Animações necessárias" no fim deste documento. Cada fase implementa-se em dois passos: mecânica com animações existentes + comentador; depois uma passagem de animação com capturas para o Tiago aprovar. Poucas animações, só as que mudam a leitura da luta. | Decidido |
 
-## Fase A — Núcleo da luta · *Em aberto*
+## Fase A — Núcleo da luta · *Decidido*
 
 Ordem: 8 → 5 → 1 → 3 → 4.
 
@@ -55,26 +56,46 @@ Ordem: 8 → 5 → 1 → 3 → 4.
   - 8.3 **Decidido:** Queixo difícil de treinar (pescoço, core); desce com a idade e com cada KO sofrido.
   - 8.4 **Decidido:** Ring IQ cresce sobretudo com experiência (lutas e sparring), pouco com treinos de ginásio.
 
-### Tema 5 — Pés, distância e controlo do ringue
+### Tema 5 — Pés, distância e controlo do ringue · *Decidido*
 - **Hoje:** zonas do ringue e alcance existem; não há distância longa/média/curta explícita.
 - **Guia:** distância longa/média/curta, trabalho de pés, controlo do ringue.
-- **Decisões:** —
+- **Decisões:**
+  - 5.0 **Decidido:** a distância (longe / meio / perto) e o sítio do ringue (centro / cordas / canto) passam a contar na luta (hoje são só visuais).
+  - 5.1 **Decidido — quem decide a distância:** cada atleta tem uma distância preferida que vem do estilo (Outboxer longe, Puncher meio, In-fighter perto). Quando querem distâncias diferentes, disputam-na: conta sobretudo **Pés**, depois **Ring IQ**. Nunca é garantido. A influência da **estratégia** fica por decidir: a estratégia ainda vai ser redefinida (plano de combate); se fizer sentido na altura, entra.
+  - 5.2 **Decidido — efeito de cada distância:** **longe** — jab e direto; alcance conta muito; menos dano, mais pontos; pouco fôlego gasto. **Meio** — direto, combinações, ganchos largos; troca equilibrada. **Perto** — ganchos curtos, uppercuts, corpo, clinch; jab quase sem força; braços longos atrapalham um pouco; mais dano e mais fôlego gasto. Os golpes treinados valem mais ou menos conforme a distância.
+  - 5.3 **Decidido — centro, cordas e canto:** quem ganha a disputa para se aproximar empurra o outro para as cordas e depois para o canto ("cortar o ringue"); quem prefere longe e tem Pés circula e fica no centro. Cordas: defende e foge pior, luta tende para perto. Canto: quase sempre perto, defende ainda pior, combinações fazem mais estragos. Sai-se com Pés (pivô, passo lateral), clinch ou a bater para sair. Em rounds equilibrados, quem dominou o centro tem uma pequena vantagem nos juízes. Comentador e análise (tempo no centro/cordas/canto) mostram isto.
+  - 5.4 **Decidido — estado mexe nos Pés:** os Pés que contam na luta descem com pouco fôlego e com muita dor; logo depois de uma queda, "pernas bambas" (Pés caem muito durante um bocado). O atleta cansado vai sendo empurrado para as cordas.
+  - 5.5 **Decidido — ecrã:** pequena barra LONGE · MEIO · PERTO por cima do ringue, junto ao relógio, além do movimento no ringue, do comentador e da análise.
+- **Animações (tema 5):** pivô/passo lateral e circular — usam o movimento existente; clinch — existe; **encostado às cordas/canto** — nova; **pernas bambas** — nova; a distância vê-se pela distância entre os lutadores no ringue.
 
-### Tema 1 — Golpes
+### Tema 1 — Golpes · *Decidido*
 - **Hoje:** jab, direto, gancho, uppercut, direto ao corpo, gancho ao fígado, Contra-golpe.
 - **Guia:** numeração 1–6 (mão da frente/de trás), overhand, cabeça/corpo como alvo, variações (jab duplo, power jab, flicker jab, check hook, shovel hook, cross-counter…), que treino ensina cada golpe, números usados pelo comentador.
 - **Nota:** havia perguntas em aberto deste tema numa conversa anterior que não ficaram registadas; refazem-se aqui.
-- **Decisões:** —
+- **Decisões:**
+  - 1.1 **Decidido:** os golpes do atleta são os 7 do Guia — 1 jab, 2 direto, 3 gancho da frente, 4 gancho de trás, 5 uppercut da frente, 6 uppercut de trás, overhand — cada um com o seu nível.
+  - 1.2 **Decidido:** cabeça ou corpo é o **alvo** do golpe, escolhido pelo atleta na luta (não há golpes "ao corpo" separados). À cabeça: mais quedas e KOs; ao corpo: tira fôlego e baixa a guarda. **Gancho ao fígado** = gancho da frente ao corpo, com uma pequena hipótese de efeito especial: leve (perde muito fôlego, fica curvado uns segundos) ou forte e raro (queda atrasada, difícil levantar-se mesmo lúcido). Hipótese maior com golpe forte, adversário cansado, muito trabalho ao corpo antes, e a curta distância; o Queixo ajuda pouco.
+  - 1.3 **Decidido:** o Contra-golpe deixa de ser um tipo de golpe. Um counter é um dos 7 golpes lançado logo a seguir a uma defesa, com bónus por apanhar o adversário aberto; o golpe que sai depende da defesa (tabela do Guia). O comentador e a análise chamam-lhe counter. O que torna um atleta bom a contra-atacar decide-se nos temas da defesa e do contra-ataque.
+  - 1.4 **Decidido — variações:** nenhuma é golpe treinado à parte. **Alvo:** jab/direto/gancho/uppercut ao corpo. **Distância:** gancho e uppercut curtos (perto) ou largos/longos (meio). **Outros temas:** jab duplo/triplo, gancho duplo, hook off the jab → combinações; feint jab, range finder → fintas; check hook, cross-counter → contra-ataque; straight left → guarda; jab de recuo → distância (usado quando é empurrado). **Só texto (comentador):** power jab, flicker jab, lead right, pivot hook, shovel hook, leaping uppercut, bolo punch, corkscrew, hookercut. Ilegais → faltas.
+  - 1.5 **Decidido (provisório, o Tiago pode mudar depois):** o comentador usa os números do Guia sobretudo nas combinações ("1-2!", "1-6-3-2"), e o nome nos golpes soltos; a Ficha mostra o número ao lado de cada golpe ("3 Gancho da frente").
+  - 1.6 **Decidido — como se treinam:** nas **luvas de foco** o treinador escolhe o golpe da semana (muita experiência nesse golpe; pode ser um golpe que o atleta ainda não sabe, se os atributos deixarem — aprende-o em algumas sessões). Os outros treinos dão um pouco aos golpes ligados (Guia): saco pesado → 2, 4, overhand; saco de ângulo → 3–6; saco de velocidade → 1; saco duplo elástico → 1, 2; shadowboxing → todos um pouco; sparring → os golpes mais usados. Lista final de treinos no tema dos treinos.
 
-### Tema 3 — Defesa
+### Tema 3 — Defesa · *Decidido*
 - **Hoje:** defesas com níveis (bloqueio, esquiva, baixar, recuar…).
 - **Guia:** 6 famílias — bloqueio, parry, movimento de cabeça, ombro, pés, clinch — cada uma abre um contra-golpe específico.
-- **Decisões:** —
+- **Decisões:**
+  - 3.1 **Decidido — 6 famílias**, cada uma com nível 1–5: **Bloqueio** (tudo um pouco, ganchos e corpo; seguro, absorve algum dano, quase não abre counters), **Aparar/parry** (retos; sem dano; não serve contra ganchos), **Movimento de cabeça** (slip contra retos, pendular contra ganchos/overhand; sem dano, melhores counters; gasta fôlego e piora com o cansaço), **Ombro** (direto e retos; ótimo para contra-atacar; precisa de timing/Ring IQ, arriscado), **Pés** (recuar, pivô, passo lateral; evita combinações inteiras; liga à distância; gasta fôlego), **Clinch** (magoado/cansado, perto; trava e recupera um pouco; árbitro separa, juízes não gostam). O atleta escolhe sozinho conforme o golpe que vem, os níveis, a distância e o estado; o estilo pesa (Outboxer: pés e aparar; In-fighter: cabeça e bloqueio; Puncher: bloqueio).
+  - 3.2 **Decidido — confiança em cada habilidade (vale para golpes e defesas):** cada habilidade tem um **nível real** (decide se resulta) e um **nível em que o atleta acredita** (decide se a usa). Habilidade nova começa com pouca confiança; cada sucesso em sparring/luta sobe a crença, cada falhanço desce; a Confiança e a personalidade puxam para cima/baixo; Ring IQ alto corrige mais depressa. Também se ajusta durante a luta. O jogador vê notas vagas na Ficha ("ainda não confia", "confia demais") e números na análise ("tentou o overhand 15 vezes, entrou 2"). O sparring serve também para ganhar confiança. O treinador poder corrigir no canto decide-se no plano de combate.
+  - 3.3 **Decidido — counters por defesa** (tabela do Guia + Pés e Clinch): slip para dentro do jab → 2 ou cross-counter; slip para fora do jab → 4 ou 6 ao corpo; slip do direto → 3; pendular do gancho → gancho/uppercut do lado contrário; aparar o jab → 1 ou 2; pull back → 2; shoulder roll → 2 por cima; bloqueio de gancho → gancho da mesma mão; *pivô/passo lateral → ataque de ângulo (gancho ou direto)*; *clinch → ao separar, gancho/uppercut curto*. Hipótese de counter: família (cabeça e ombro mais; aparar e pés médio; bloqueio e clinch menos), nível da defesa, Ring IQ, Técnica, confiança. Se não souber o golpe, usa a alternativa; senão não há counter. Counter tem bónus de precisão e dano (mais quedas relâmpago ao queixo). Comentador diz o nome; análise conta counters por defesa.
 
-### Tema 4 — Contra-ataque
+### Tema 4 — Contra-ataque · *Decidido*
 - **Hoje:** Contra-golpe dispara depois de uma defesa.
 - **Guia:** contra-ataque antes, ao mesmo tempo e depois.
-- **Decisões:** —
+- **Decisões:**
+  - 4.1 **Decidido — depois:** defender e responder (tabela 3.3).
+  - 4.2 **Decidido — antes (antecipação):** quando o adversário tenta aproximar-se, o atleta pode apanhá-lo a entrar com jab ou check hook; se resultar, a distância não encurta e ele leva o golpe. Depende de Ring IQ, Velocidade, Pés e do nível do jab/gancho da frente.
+  - 4.3 **Decidido — ao mesmo tempo (cross-counter):** contra jab ou direto, direto por cima sem defender primeiro. Arriscado (se falhar o timing, os dois acertam); se resultar, grande hipótese de queda relâmpago. Depende de Ring IQ, Técnica, Velocidade e do nível do direto.
+  - 4.4 **Decidido:** ser bom contra-atacante vem de Ring IQ (o mais importante), níveis das defesas e dos golpes de resposta, e confiança. Drills de parceiro como treino → tema dos treinos.
 
 ## Fase B — Camada tática · *Em aberto*
 
@@ -118,6 +139,8 @@ Ordem: 8 → 5 → 1 → 3 → 4.
 
 ## Adiado (não começar sem o Tiago pedir)
 
+- **Update visual maior** do jogo: o Tiago quer fazê-lo depois. Por agora a prioridade é definir como as coisas funcionam; as passagens de animação de cada fase ficam no mínimo necessário para se perceber a luta.
+
 - Dinheiro no fim de jogo (ainda sem direção).
 - Taças sazonais e pesagem (a definir como funcionam).
 - Acelerar o título Amador, animações dos golpes ao corpo, golpe especial.
@@ -126,3 +149,10 @@ Ordem: 8 → 5 → 1 → 3 → 4.
 ## Ideias da pesquisa (Boxing Gym Story e MMA Manager 2) por encaixar
 
 Noites de luta organizadas pelo ginásio · hall da fama / reformados como treinadores · parceiro de sparring contratado · treinadores com nível máximo · prémio da primeira vitória contra cada adversário · equipamento de patrocinador · pontuação anual de legado · rivalidades e desforras · galeria de momentos · prolongar a carreira · Novo Jogo+ com o que passa bem explicado. Regras: lutas curtas com 1–2 decisões que contam; ganhar tem de pagar claramente mais do que perder.
+
+## Animações necessárias
+
+| Ação | Tema | Estado |
+|---|---|---|
+| Encostado às cordas / ao canto | Distância | Por fazer |
+| Pernas bambas (depois de uma queda) | Distância | Por fazer |
