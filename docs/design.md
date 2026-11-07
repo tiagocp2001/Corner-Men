@@ -49,6 +49,9 @@ Ordem: 8 → 5 → 1 → 3 → 4.
 - **Perguntas ao Tiago:** ver conversa de 7 nov 2026 (8 barras? mentais como traços? Queixo treinável? Ring IQ por experiência?).
 - **Decisões:**
   - 8.1 **Decidido:** 8 barras — Força, Velocidade, Resistência, Queixo (físicos) / Técnica, Defesa, Pés, Ring IQ (técnicos).
+  - 8.2 **Direção do Tiago (a confirmar a proposta):** todos os atletas têm um pouco de cada atributo mental; o conjunto é a personalidade.
+  - 8.3 **Decidido:** Queixo difícil de treinar (pescoço, core); desce com a idade e com cada KO sofrido.
+  - 8.4 **Decidido:** Ring IQ cresce sobretudo com experiência (lutas e sparring), pouco com treinos de ginásio.
 
 ### Tema 5 — Pés, distância e controlo do ringue
 - **Hoje:** zonas do ringue e alcance existem; não há distância longa/média/curta explícita.
