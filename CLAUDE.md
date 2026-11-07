@@ -99,6 +99,7 @@ O build de teste gera-se a partir do `index.html` por substituição de texto (o
 ## Regras de trabalho com o Tiago
 
 - **Quando ele diz "responde antes de fazeres" (ou "explica antes"), não implementar nada:** explicar o plano e fazer perguntas, e só avançar depois de ele confirmar.
+- Não avisar o Tiago de pequenas alterações de arrumação (documentação, notas, commits de rotina); só falar delas se houver uma razão importante.
 - Fazer perguntas quando há decisões de design em aberto, em vez de assumir. Ele gosta de conversar sobre o design, tema a tema.
 - **Ecrã fixo, sem scroll:** tudo tem de caber num ecrã de telemóvel vertical, com navegação por menus e separadores. Verificar com capturas a 390×720/760.
 - Pixel art coerente (fonte Press Start 2P, paleta quente; o vermelho é o teu canto e o azul o adversário). Atletas originais, **não** personagens do Hajime no Ippo.
