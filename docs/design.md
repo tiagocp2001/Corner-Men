@@ -106,7 +106,8 @@ Ordem: 8 → 5 → 1 → 3 → 4.
 - **Ordens do canto durante o round:** Pressão / Equilibrado / Cautela. O treinador grita até o atleta ouvir; o ritmo a que ouve depende do estado atual (cansado/dorido ouve mais devagar; muito cansado e muito dorido não ouve). Se o gongo tocar antes, ouve no intervalo.
 - **Toalha a meio do round**, com confirmação (a luta pára enquanto se confirma).
 - **Análise pós-luta:** Resumo, Golpes, Rounds, Canto; motivos com dica de treino; diferenças de atributos ditas por palavras, sem números.
-- **Em curso:** histórico de todas as lutas na Ficha (análise completa só das últimas 3) e escolha de estratégia no canto entre rounds.
+- **Histórico de lutas** na Ficha (separador LUTAS, páginas de 4): registo curto de todas as lutas; análise completa só das últimas 3.
+- **Estratégia no canto** entre rounds: a ordem que ficou por ouvir aparece já escolhida; o treinador pode mudá-la.
 
 ## Adiado (não começar sem o Tiago pedir)
 
