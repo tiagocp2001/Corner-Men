@@ -6,7 +6,7 @@ Estados usados: **Em aberto** (a discutir) · **Decidido** (pronto a implementar
 
 ## Como trabalhamos
 
-1. Os temas vêm do "Guia Completo de Boxe" do Tiago, agrupados em fases por ordem de dependência.
+1. Os temas vêm do "Guia Completo de Boxe" do Tiago (`docs/Guia_Completo_de_Boxe.pdf`; texto pesquisável em `docs/guia-boxe.txt`), agrupados em fases por ordem de dependência.
 2. Para cada tema, uma ficha curta: **hoje no jogo · o que o Guia diz · proposta · o que o jogador vê e decide · o que muda no ecrã · fica de fora**. Depois, 2–3 perguntas ao Tiago; as respostas ficam escritas aqui.
 3. Decide-se a fase inteira antes de implementar. Implementa-se por fase, publica-se no `main` para jogar e sentir.
 4. O equilíbrio (simulações, números) fica para depois de tudo estar implementado.
@@ -14,24 +14,39 @@ Estados usados: **Em aberto** (a discutir) · **Decidido** (pronto a implementar
 
 ---
 
-## Fase 0 — Visão · *Em aberto*
+## Fase 0 — Visão · *Decidido*
 
 Regras gerais que orientam todos os temas.
 
 | # | Proposta | Estado |
 |---|---|---|
-| 0.1 | **O jogador é o treinador, não o lutador.** Decide três coisas: o **treino**, o **plano de luta** e as **ordens do canto** (durante o round e no intervalo). Os golpes, um a um, são automáticos. | Em aberto |
-| 0.2 | **Nível de realismo.** Cada elemento do Guia entra de uma de três formas: **mecânica** (muda o resultado), **texto** (só o comentador e a análise o mencionam) ou **fora**. Decide-se tema a tema. | Em aberto |
-| 0.3 | **Regra de ouro:** tudo o que é mecânica tem de se **ver na luta** (animação, comentador) **e na análise pós-luta**. Se o jogador não o vê, não entra. | Em aberto |
-| 0.4 | **Ecrã fixo:** cada tema diz onde aparece no ecrã e o que sai ou se junta para caber. | Em aberto |
+| 0.1 | **O jogador é o treinador, não o lutador.** Decide três coisas: o **treino**, o **plano de luta** e as **ordens do canto** (durante o round e no intervalo). Os golpes, um a um, são automáticos. | Decidido |
+| 0.2 | **Nível de realismo.** Cada elemento do Guia entra de uma de três formas: **mecânica** (muda o resultado), **texto** (só o comentador e a análise o mencionam) ou **fora**. Decide-se tema a tema. | Decidido |
+| 0.3 | **Regra de ouro:** tudo o que é mecânica tem de se **ver na luta** (animação, comentador) **e na análise pós-luta**. Se o jogador não o vê, não entra. | Decidido |
+| 0.4 | **Ecrã fixo:** cada tema diz onde aparece no ecrã e o que sai ou se junta para caber. | Decidido |
 
 ## Fase A — Núcleo da luta · *Em aberto*
 
 Ordem: 8 → 5 → 1 → 3 → 4.
 
-### Tema 8 — Atributos físicos, técnicos e mentais
-- **Hoje:** 5 atributos (Força, Velocidade, Resistência, Defesa, Técnica) + potencial.
-- **Guia:** atributos físicos, técnicos e mentais. Proposta antiga: juntar **Pés**, **Queixo** e **Ring IQ**.
+### Tema 8 — Atributos físicos, técnicos e mentais · *Em aberto (proposta feita)*
+- **Hoje:** 5 atributos em barra (Força, Velocidade, Resistência, Defesa, Técnica) + potencial; corpo (altura, alcance) fixo; traços de personalidade (Trabalhador, Teimoso, Cabeça fria, Preguiçoso, Coração de leão); talentos escondidos (Mão pesada, Mãos rápidas, Motor inesgotável, Queixo de ferro); confiança e forma variáveis.
+- **Guia:** 11 físicos (potência, velocidade de mãos, explosividade, resistência, recuperação, agilidade, equilíbrio, coordenação, queixo, durabilidade, alcance/altura), 10 técnicos/táticos (timing, precisão, gestão da distância, defesa, footwork, Ring IQ, volume, versatilidade, antecipação/reflexos, controlo do ringue) e 7 mentais (coração, calma, disciplina, confiança, concentração, instinto finalizador, adaptabilidade/ouvir o canto).
+- **Proposta:** 8 barras em 2 colunas de 4, cada uma a juntar vários atributos do Guia:
+
+  | Físicos | Junta (Guia) | Técnicos | Junta (Guia) |
+  |---|---|---|---|
+  | Força | potência, explosividade | Técnica | precisão, timing, coordenação |
+  | Velocidade | velocidade de mãos, reflexos | Defesa | defesa |
+  | Resistência | resistência, recuperação | **Pés** (novo) | footwork, agilidade, equilíbrio, gestão da distância, controlo do ringue |
+  | **Queixo** (novo) | queixo, durabilidade | **Ring IQ** (novo) | Ring IQ, antecipação, versatilidade, ouvir o canto |
+
+  - Alcance e altura continuam no corpo (fixos, não se treinam).
+  - Os **mentais** não viram barras: são **traços de personalidade** (1–2 por atleta), alargando a lista atual — ex.: Coração de leão (coração), Cabeça fria (calma), Trabalhador (disciplina), Teimoso (não ouve bem o canto), + novos como Finalizador (instinto finalizador) e Concentrado (não se desliga nos últimos rounds). Confiança continua a ser um valor que sobe e desce.
+  - O volume de golpes (work rate) fica ligado à estratégia (Pressão/Equilibrado/Cautela), não a uma barra.
+  - Ligações: Ring IQ acelera o "ouvir o canto" já implementado; Pés decide a distância (tema 5); Queixo decide quedas e KOs.
+- **Ecrã:** a Ficha mostra 2 colunas de 4 barras (FÍSICO / TÉCNICO). A Ficha já está apertada a 390×720; tem de ser reorganizada.
+- **Perguntas ao Tiago:** ver conversa de 7 nov 2026 (8 barras? mentais como traços? Queixo treinável? Ring IQ por experiência?).
 - **Decisões:** —
 
 ### Tema 5 — Pés, distância e controlo do ringue
