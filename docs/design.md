@@ -83,7 +83,9 @@ Ordem: 8 → 5 → 1 → 3 → 4.
 ### Tema 3 — Defesa
 - **Hoje:** defesas com níveis (bloqueio, esquiva, baixar, recuar…).
 - **Guia:** 6 famílias — bloqueio, parry, movimento de cabeça, ombro, pés, clinch — cada uma abre um contra-golpe específico.
-- **Decisões:** —
+- **Decisões:**
+  - 3.1 **Decidido — 6 famílias**, cada uma com nível 1–5: **Bloqueio** (tudo um pouco, ganchos e corpo; seguro, absorve algum dano, quase não abre counters), **Aparar/parry** (retos; sem dano; não serve contra ganchos), **Movimento de cabeça** (slip contra retos, pendular contra ganchos/overhand; sem dano, melhores counters; gasta fôlego e piora com o cansaço), **Ombro** (direto e retos; ótimo para contra-atacar; precisa de timing/Ring IQ, arriscado), **Pés** (recuar, pivô, passo lateral; evita combinações inteiras; liga à distância; gasta fôlego), **Clinch** (magoado/cansado, perto; trava e recupera um pouco; árbitro separa, juízes não gostam). O atleta escolhe sozinho conforme o golpe que vem, os níveis, a distância e o estado; o estilo pesa (Outboxer: pés e aparar; In-fighter: cabeça e bloqueio; Puncher: bloqueio).
+  - 3.2 **Decidido — confiança em cada habilidade (vale para golpes e defesas):** cada habilidade tem um **nível real** (decide se resulta) e um **nível em que o atleta acredita** (decide se a usa). Habilidade nova começa com pouca confiança; cada sucesso em sparring/luta sobe a crença, cada falhanço desce; a Confiança e a personalidade puxam para cima/baixo; Ring IQ alto corrige mais depressa. Também se ajusta durante a luta. O jogador vê notas vagas na Ficha ("ainda não confia", "confia demais") e números na análise ("tentou o overhand 15 vezes, entrou 2"). O sparring serve também para ganhar confiança. O treinador poder corrigir no canto decide-se no plano de combate.
 
 ### Tema 4 — Contra-ataque
 - **Hoje:** Contra-golpe dispara depois de uma defesa.
