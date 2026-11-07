@@ -131,4 +131,4 @@ O Tiago quer o jogo baseado num guia de boxe que escreveu. **As decisões, o pla
 11. Faltas e golpes ilegais.
 12. Como tudo isto cabe num ecrã fixo.
 
-Último ponto aberto: as perguntas do **tema 1 (golpes)**, à espera de resposta do Tiago.
+Último ponto aberto: ver `docs/design.md` (neste momento, as perguntas do **tema 8 — atributos**).

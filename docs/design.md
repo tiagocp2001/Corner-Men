@@ -94,6 +94,7 @@ Ordem: 8 → 5 → 1 → 3 → 4.
 ### Tema 10 — Treino mental e tático
 - **Guia:** vídeos do adversário, plano de combate, peso/pesagem.
 - **Liga com:** pesagem (adiada), "chave do plano" da pesquisa a outros jogos.
+- **A decidir aqui:** como funciona mudar de estilo/plano durante a luta (incluindo o adversário), e se o canto deve dar uma pista do que o canto dele vai mudar no intervalo.
 - **Decisões:** —
 
 ### Tema 11 — Faltas e golpes ilegais
