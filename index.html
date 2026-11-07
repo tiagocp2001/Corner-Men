@@ -199,6 +199,23 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .tks button{background:var(--panel2);border:2px solid var(--line);color:var(--fg);padding:7px 7px 6px;text-align:left;font-family:var(--f-body);font-size:12px;line-height:1.2;cursor:pointer;display:flex;flex-direction:column;gap:3px;min-width:0}
 .tks button strong{font-family:var(--f-display);font-size:7px;font-weight:400;line-height:1.5}
 .tks button span{color:var(--muted)}
+.sheet.an{height:100%;gap:7px;overflow:hidden}
+.anb{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:6px}
+.anend{font-family:var(--f-display);font-size:8px;line-height:1.7;color:var(--fg)}
+.cme{color:#ff9a86;font-style:normal} .cop{color:#9cc4ec;font-style:normal} .lowst{color:var(--gold);font-style:normal;text-decoration:underline}
+.kv b em{font-style:normal}
+.why{display:grid;grid-template-columns:12px 1fr;gap:6px;background:var(--panel2);border:2px solid var(--line);padding:6px 8px;font-size:13px;line-height:1.25}
+.why i{font-style:normal;font-family:var(--f-display);font-size:8px;line-height:1.6;color:var(--muted)}
+.why b.tip{font-weight:400;color:var(--gold)}
+.why.g{border-left-color:var(--green)} .why.g i{color:var(--green)} .why.b{border-left-color:var(--red)} .why.b i{color:#ff6b5a}
+.atab{display:grid;grid-template-columns:1fr 64px 64px;gap:2px 8px;font-size:12px;background:var(--panel2);border:2px solid var(--line);padding:5px 8px;align-items:baseline}
+.atab b{font-family:var(--f-display);font-size:6px;color:var(--muted);font-weight:400;letter-spacing:.06em;text-align:right}
+.atab b:first-child{text-align:left} .atab b.me{color:#ff9a86} .atab b.op{color:#9cc4ec}
+.atab span.v{font-family:var(--f-mono);font-size:17px;text-align:right;line-height:1}
+.rtab{grid-template-columns:22px 1fr 1fr 1fr 1fr} .rtab b{text-align:center} .rtab span.v{text-align:center;color:var(--fg)}
+.olist{display:flex;flex-direction:column;gap:3px;font-size:12px;line-height:1.2}
+.olist div{background:var(--panel2);border-left:3px solid var(--line);padding:3px 6px}
+.olist .ok{border-left-color:var(--green)} .olist .bad{border-left-color:var(--red)} .olist .half{border-left-color:var(--gold)}
 .verdict{border:3px solid;padding:10px 12px;display:flex;flex-direction:column;gap:4px}
 .verdict b{font-family:var(--f-display);font-size:11px;font-weight:400}
 .verdict.ok{border-color:#5fbf4a;background:rgba(95,191,74,.12)} .verdict.ok b{color:#8fe07a}
@@ -674,7 +691,7 @@ function panelAth(){
   const a=cur();const t=TIERS[a.tier];
   const inF=S.sub!=='plano';
   const sub=`<div class="seg"><button data-sub="ficha" class="${inF?'on':''}">Ficha</button><button data-sub="plano" class="${!inF?'on':''}">Plano</button></div>`
-    +(inF?`<div class="seg sub2"><button data-sub="ficha" class="${S.sub!=='golpes'?'on':''}">ATRIBUTOS</button><button data-sub="golpes" class="${S.sub==='golpes'?'on':''}">GOLPES</button></div>`:'');
+    +(inF?`<div class="seg sub2"><button data-sub="ficha" class="${S.sub!=='golpes'?'on':''}">ATRIBUTOS</button><button data-sub="golpes" class="${S.sub==='golpes'?'on':''}">GOLPES</button>${a.lastAn?'<button data-lastan="1">ÚLTIMA LUTA</button>':''}</div>`:'');
   if(S.sub==='golpes'){
     const ch=(on,txt)=>`<span class="chip ${on?'':'lock'}" style="font-size:11px;padding:0 4px">${txt}</span>`;
     const soc=Object.keys(SKILLS).map(k=>a.skills[k]>0?ch(1,`${SKILLS[k].n} nv ${a.skills[k]}`):ch(0,`${SKILLS[k].n}: ${lockReason(a,k)}`)).join('');
@@ -820,6 +837,7 @@ document.addEventListener('click',e=>{
     note(`Luta marcada: ${a.nick} vs ${o.opp.nick}, semana ${a.fight.week}.`);render();return}
   if(d.scout){const a=cur(),o=a.offers.find(x=>x.id===d.scout);if(o)showScout(o.opp,a,o.inWeeks);return}
   if(d.scoutf){const a=cur();if(a.fight)showScout(a.fight.opp,a,weeksTo(a));return}
+  if(d.lastan){const a=cur();if(a.lastAn)showAnalysis(a.lastAn);return}
   if(d.dismiss){const a=S.roster.find(x=>x.id===d.dismiss);if(a)askDismiss(a);return}
   if(d.rej){const a=cur();a.offers=a.offers.filter(x=>x.id!==d.rej);render();return}
   if(d.eq){const id=d.eq,e=EQ[id],have=S.eq[id]||0;if(have>=e.max)return;const c=e.cost[have];if(S.money<c)return;
@@ -1333,7 +1351,7 @@ function fighter(src,mine){
   initBody(src,src.tier!=null?2:3);const fst=(mine&&src.fstyle&&styleLv(src,src.fstyle)>0)?src.fstyle:src.style;
   return{h:src.h,r:src.r,sty:src.sty,slv:Math.max(1,styleLv(src,fst)),armX:clamp(Math.round(((src.r-src.h)-2.5)/3),-1,2),hs:clamp((src.h||175)/178,.9,1.12),name:src.name,nick:src.nick,style:fst,trait:src.trait,look:src.look,mine,...src.attrs,skills:{jab:1,direto:0,gancho:0,uppercut:0,corpoDireto:0,figado:0,contra:0,...src.skills},def:{bloqueio:1,esquiva:0,clinch:0,...(src.def||{})},src,cat:src.cat||'Ligeiro',gift:src.gift||null,
     hp:100,st:mine?clamp(100-(src.fatigue||0)*.5,40,100):100,kd:0,cut:0,conf:mine?src.conf:60,strat:'Equilibrado',
-    rs:newRS(),tot:{thrown:0,landed:0,power:0,dmg:0},card:0,dmgTaken:0,
+    rs:newRS(),tot:{thrown:0,landed:0,power:0,dmg:0},card:0,dmgTaken:0,ps:{},dfs:{block:0,slip:0,duck:0,back:0},headL:0,bodyL:0,lowT:0,lastK:'jab',
     pos:{x:mine?60:180,y:mine?132:44,tx:mine?60:180,ty:mine?132:44},an:{pose:'guard',t0:0,dur:1,arm:'L'},lastArm:'R',flash:0};
 }
 function newRS(){return{thrown:0,landed:0,power:0,dmg:0,kd:0}}
@@ -1342,8 +1360,8 @@ function startFight(a,done){
   const f=a.fight;
   if(!f.opp.grown){const wk=Math.max(0,S.week-(f.opp.made||S.week));for(const[k]of ATTRS)f.opp.attrs[k]=clamp(f.opp.attrs[k]+R(0,.45)*wk,5,99);f.opp.grown=true}
   F={a,done,me:fighter(a,true),op:fighter(f.opp,false),round:1,rounds:f.rounds,log:[],fast:false,over:null,ft:0,
-    zoom:null,crowd:0,flashes:0,ref:{x:120,y:60,tx:120,ty:60,pose:'stand'},count:null,big:null,lastScore:[10,10],zone:'center',ord:null,ordLog:[],deaf:0,live:false,inRound:false};
-  F.me.form=formOf(a).sc*TUNE.formK;F.op.form=0;F.venue=venueIdx({tier:a.tier,title:f.title});
+    zoom:null,crowd:0,flashes:0,ref:{x:120,y:60,tx:120,ty:60,pose:'stand'},count:null,big:null,lastScore:[10,10],zone:'center',ord:null,ordLog:[],deaf:0,live:false,inRound:false,rr:[],kdl:[],talks:[],sx:{}};
+  F.form0=formOf(a);F.me.form=F.form0.sc*TUNE.formK;F.op.form=0;F.venue=venueIdx({tier:a.tier,title:f.title});
   F.op.strat=f.opp.style==='In-fighter'?'Pressão':f.opp.style==='Outboxer'?'Cautela':'Equilibrado';
   $('#fightRoot').innerHTML=`<div class="fight">
     <div class="stagew"><div class="stage"><canvas class="px" id="ring" width="240" height="240"></canvas><button class="snd" id="pauseF" aria-label="Pausa">II</button><div class="ford" id="fOrd" aria-live="polite"></div>
@@ -1586,10 +1604,11 @@ async function runFight(){
     say(F.over.draw?`Os juízes dão empate: ${a}-${b}.`:`Decisão dos juízes, ${Math.max(a,b)}-${Math.min(a,b)}: vitória de ${F.over.win?F.me.nick:F.op.nick}!`,'sys');
   }
   fc.innerHTML='';await ceremony();
+  const an=buildAnalysis();F.a.lastAn=an;
   const r=finishFight();
   const done=F.done;
   SFX.ambient(0);$('#fightRoot').innerHTML='';F=null;
-  await info(r.title,r.html);
+  await resultInfo(r.title,r.html,an);
   done(r.line);
 }
 const TACTICS={
@@ -1759,6 +1778,7 @@ function preTalk(mid){
             eff=lack+(lvl===1?'Bónus no próximo round.':lvl===.5?'Ajuda um pouco no próximo round.':'Não ajuda nada. Pode até piorar.');
           }
         }
+        F.talks.push({r:mid?F.round+1:1,n:x.n,lab,kind,dis:disadv});
         say(`${me.nick}: ${reply}`,cls);SFX.play(cls==='ok'?'good':cls==='half'?'half':'bad');
         $('#fctl').innerHTML=`<div class="verdict ${cls}"><b>${lab}</b><span>${me.nick}: ${reply}</span><span class="meta">${eff}</span></div>`;
         setTimeout(res,F&&F.fast?600:2600);
@@ -1774,6 +1794,7 @@ function scoreRound(){
   if(Math.abs(tm-to)>(tm+to)*.08){if(tm>to)os=9;else ms=9}
   ms-=o.kd;os-=m.kd;
   F.me.card+=ms;F.op.card+=os;F.lastScore=[ms,os];
+  F.rr.push(rrOf([ms,os]));
 }
 function choosePunch(x,i){
   const ks=Object.keys(x.skills).filter(k=>x.skills[k]>0&&k!=='contra');
@@ -1827,7 +1848,7 @@ async function exchange(){
   if(me.trait==='Teimoso'&&Math.random()<(me.calm?.1:.25))myStrat='Pressão';
   const aM=STRAT[myStrat].agg*(me.style==='In-fighter'?1+TUNE.sagg:me.style==='Outboxer'?1-TUNE.sagg:1)*fmods(me).vol;
   const aO=STRAT[op.strat].agg*(op.style==='In-fighter'?1+TUNE.sagg:op.style==='Outboxer'?1-TUNE.sagg:1)*fmods(op).vol;
-  const att=Math.random()<aM/(aM+aO)?me:op,def=att===me?op:me;
+  const att=Math.random()<aM/(aM+aO)?me:op,def=att===me?op:me;F.sx[me.strat]=(F.sx[me.strat]||0)+1;
   const strat=att===me?myStrat:att.strat;
   const u=unit(def,att);
   setT(att,def.pos.x+u.dx*33,def.pos.y+u.dy*33);
@@ -1865,9 +1886,9 @@ const PDUR={jab:230,direto:320,gancho:360,uppercut:340,corpoDireto:320,figado:36
 async function punch(att,def,k,strat,bonus,talk,flow=0){
   const lv=att.skills[k]||1,sk=SKILLS[k];let e=edge(att.style,def.style);e*=e>0?sf(att):sf(def);const fx=x=>Math.max(x.baseFix||0,x.roundFix||0);if(att.mine&&e<0)e*=1-fx(att);if(def.mine&&e>0)e*=1-fx(def);const ar=att.rb||{},dr=def.rb||{};
   let hit=.5+(att.tecnica+att.velocidade-def.defesa-def.velocidade)/TUNE.hitDiv+sk.h+lv*.025+e*.05*TUNE.edge+phys(att,def,k,!!sk.body)-STRAT[def.strat].def-(def.style==='In-fighter'?TUNE.sdA:def.style==='Outboxer'?TUNE.sdD:TUNE.sdC)*sf(def)/.74+(att.st<=30?-.1:att.st<70?-.03:0)+(def.st<=30?TUNE.tdB:def.st<70?TUNE.tdA:0)+(att.conf-50)/500+(att.hitB||0)+(att.tacB||0)+(ar.hit||0)-(dr.def||0)+flow+(att.form||0)*.04-((def.def&&def.def.bloqueio)||0)*.008-((def.def&&def.def.esquiva)||0)*.012;
-  hit=clamp(hit,.12,.9);
+  hit=clamp(hit,.12,.9);att.lastK=k;if(att.st<=30)att.lowT++;
   att.st=clamp(att.st-(TUNE.pc+STRAT[strat].cost*TUNE.scm)*(att.style==='Puncher'?1-.15*sf(att):1)*(1.5-att.resistencia/100*TUNE.resK-(1-TUNE.resK)*.35)*(att.calm===true?.85:att.calm?.93:1)*(ar.stam||1)*fmods(att).cost*(1-(att.form||0)*.1),0,100);
-  att.rs.thrown++;att.tot.thrown++;
+  att.rs.thrown++;att.tot.thrown++;const PS=att.ps[k]||(att.ps[k]=[0,0,0]);PS[0]++;
   const arm=sk.arm||(k==='jab'?'L':k==='direto'?'R':(att.lastArm==='L'?'R':'L'));att.lastArm=arm;
   const body=!!sk.body||((k==='gancho'||k==='direto')&&Math.random()<(ar.body||0));
   const v={a:att.nick,d:def.nick};
@@ -1882,7 +1903,7 @@ async function punch(att,def,k,strat,bonus,talk,flow=0){
     if(body){dmg*=.75;def.st=clamp(def.st-(sk.liver?9:sk.body?7:5)*TUNE.bdm,0,100)}
     const chin=1.3-def.resistencia/100;
     dmg*=(1.15-def.resistencia/250*TUNE.resK-(1-TUNE.resK)*.14);dmg*=TUNE.dk/(TUNE.dk+def.resistencia*TUNE.dr);dmg*=topF(def);
-    def.hp-=dmg;def.dmgTaken+=dmg;def.st=clamp(def.st-dmg*(clean?.8:.55)*chin*TUNE.hd,0,100);att.rs.landed++;att.tot.landed++;att.rs.dmg+=dmg;att.tot.dmg+=dmg;if(k!=='jab'){att.rs.power++;att.tot.power++}
+    def.hp-=dmg;def.dmgTaken+=dmg;def.st=clamp(def.st-dmg*(clean?.8:.55)*chin*TUNE.hd,0,100);att.rs.landed++;att.tot.landed++;PS[1]++;PS[2]+=dmg;if(body)att.bodyL++;else att.headL++;att.rs.dmg+=dmg;att.tot.dmg+=dmg;if(k!=='jab'){att.rs.power++;att.tot.power++}
     if(!body&&dmg>8&&Math.random()<.18+(ar.cut||0))def.cut++;
     res=clean?'clean':'hit';SFX.play(clean?'clean':body?'body':k==='jab'?'jab':'power');
     act(def,body?'hurtBody':'hurt',300);def.flash=performance.now()+150;
@@ -1907,7 +1928,7 @@ async function punch(att,def,k,strat,bonus,talk,flow=0){
     else if(r<W[0]){res='block';act(def,'block',dur*1.3)}
     else if(r<W[0]+W[1]){res='slip';act(def,'slip',dur*1.2,{side:Math.random()<.5?1:-1})}
     else{res='back';act(def,'guard',1);setT(def,def.pos.x+u.dx*12,def.pos.y+u.dy*12)}
-    SFX.play(res==='block'?'block':'whiff');
+    def.dfs[res]++;SFX.play(res==='block'?'block':'whiff');
     def.st=clamp(def.st-(res==='block'?1.6:res==='back'?.5:.8)*(1.3-def.resistencia/100),0,100);
     if(talk&&Math.random()<.55)say(line(res,v),def.mine?'me':'');
     await fsleep(dur*.55+60);
@@ -1918,7 +1939,7 @@ async function punch(att,def,k,strat,bonus,talk,flow=0){
   return res;
 }
 async function knockdown(x,att,kind){
-  if(F.over)return;x.kd++;att.rs.kd++;
+  if(F.over)return;x.kd++;att.rs.kd++;F.kdl.push({r:F.round,t:Math.round(clockS()),me:!!x.mine,k:att.lastK,kind:kind||''});
   act(x,'down',99999);act(att,'guard',1);SFX.play('fall');F.react={by:att.mine?'me':'op',until:performance.now()+4000};
   say(line(kind||'down',{a:att.nick,d:x.nick}),'sys');F.crowd=performance.now()+2500;
   if(kind){if(!x.mine)x.src.glass=(x.src.glass||0)+1;if(!att.mine)att.src.fk=(att.src.fk||0)+1;F.zoom={until:performance.now()+1600,cx:x.pos.x,cy:x.pos.y};F.flashes=performance.now()+1500}
@@ -2024,6 +2045,186 @@ function finishFight(){
   html+=`<p class="hint">Dano sofrido: ${Math.round(F.me.dmgTaken)} · <b>Recuperação: ${rec} semana${rec>1?'s':''} sem treinar.</b></p>`;
   if(r.win)S.members=Math.min(capacity(),S.members+RI(0,2));
   return{title,html:st+html,line:lineTxt};
+}
+
+/* ---- análise pós-luta ----
+   Contadores leves recolhidos na luta, sem mexer no resultado nem nos números aleatórios: golpes por tipo (ps), cabeça/corpo,
+   defesas que resultaram (dfs), golpes lançados sem fôlego (lowT), rounds (F.rr), quedas (F.kdl), palavras no canto (F.talks),
+   estratégia por troca (F.sx) e ordens (F.ordLog). buildAnalysis() junta tudo num resumo compacto, guardado em a.lastAn,
+   com 1-3 razões ordenadas por impacto estimado (pontos percentuais de vitória, pelos alvos de equilíbrio do CLAUDE.md,
+   ou pelo tamanho da diferença medida). Só entra uma razão se os números a confirmarem. */
+const ATR_TR={forca:'Saco ou Musculação',velocidade:'Pera ou Shadow boxing',resistencia:'Corrida ou Corda',defesa:'Sparring ou Corda de esquiva',tecnica:'Pads ou Shadow boxing'};
+const PK=['jab','direto','gancho','uppercut','corpoDireto','figado','contra'];
+const PN={jab:'Jab',direto:'Direto',gancho:'Gancho',uppercut:'Uppercut',corpoDireto:'Direto corpo',figado:'Fígado',contra:'Contra-golpe'};
+const PNL={jab:'um jab',direto:'um direto',gancho:'um gancho',uppercut:'um uppercut',corpoDireto:'um direto ao corpo',figado:'um gancho ao fígado',contra:'um contra-golpe'};
+function rrOf(s){const{me,op}=F;return{s,dn:[op.rs.kd,me.rs.kd],st:[Math.round(me.st),Math.round(op.st)],l:[me.rs.landed,op.rs.landed],t:[me.rs.thrown,op.rs.thrown],sty:[me.style,op.style],sm:me.strat}}
+function mmss(t){t=clamp(Math.round(t),0,179);return `${Math.floor(t/60)}:${String(t%60).padStart(2,'0')}`}
+const apc=(a,b)=>b?Math.round(100*a/b):0;
+function ordTxt(o){
+  const why=[];if(o.f>=.5)why.push(o.f>=.8?'muito cansado':'cansado');if(o.h>=.5)why.push(o.kd?'abanado da queda':o.h>=.8?'muito dorido':'dorido');
+  const w=why.length?` (${why.join(' e ')})`:'';
+  const hd=`R${o.r} ${mmss(o.t)} · pediste ${o.s}`;
+  if(o.heard){const d=Math.max(0,Math.round(o.got-o.t));return{c:'ok',t:`${hd}: ouviu ${d} s depois${d>=TUNE.hearSlow?w:''}`}}
+  if(o.deaf)return{c:'bad',t:`${hd}: não te ouviu${w||' (já não te ouvia neste round)'}`};
+  if(o.lost==='bell')return{c:'half',t:`${hd}: o gongo tocou antes de ele ouvir${w}`};
+  if(o.lost==='replaced')return{c:'',t:`${hd}: trocaste de ordem antes de ele ouvir`};
+  if(o.lost==='cancel')return{c:'',t:`${hd}: desististe da ordem`};
+  return{c:'',t:`${hd}: a luta acabou antes de ele ouvir`};
+}
+function kdTxt(k){return `R${k.r} ${mmss(k.t)} · ${k.me?'caíste':'ele caiu'} com ${PNL[k.k]||'um golpe'}${k.kind==='flash'?' (queda relâmpago)':''}`}
+function majority(arr){const c={};let b=arr[0],n=0;for(const x of arr){c[x]=(c[x]||0)+1;if(c[x]>n){n=c[x];b=x}}return b}
+function anReasons(win,draw){
+  const{me,op}=F,a=F.a,R=[];const add=(g,s,sc,t,k)=>{if(sc>=2)R.push({g,s,sc,t,k})};
+  const rr=F.rr,stMin=i=>{let m=101,r=0;rr.forEach((x,j)=>{if(x.st[i]<m){m=x.st[i];r=j+1}});return{m,r}};
+  const accM=apc(me.tot.landed,me.tot.thrown),accO=apc(op.tot.landed,op.tot.thrown);
+  const P=(x,k)=>x.ps[k]||[0,0,0];
+  // 1) atributos (≈ +3,2 pontos percentuais por ponto de média: +5 em tudo ≈ 66%)
+  {const dA=ATTRS.map(([k,n])=>({k,n,d:me[k]-op[k]})),avg=dA.reduce((t,x)=>t+x.d,0)/5;
+   const eff=(k,s)=>{ // efeito medido do atributo, só se for no mesmo sentido
+     if(k==='tecnica'||k==='velocidade')return s*(accM-accO)>=4?(s>0?` Acertaste ${accM}% dos golpes, ele ${accO}%.`:` Ele acertou ${accO}% dos golpes, tu ${accM}%.`):'';
+     if(k==='defesa')return s*(accM-accO)>=4?(s>0?` Ele só acertou ${accO}% dos golpes.`:` Só acertaste ${accM}% dos golpes.`):'';
+     if(k==='forca'){const dm=me.tot.landed?me.tot.dmg/me.tot.landed:0,dO=op.tot.landed?op.tot.dmg/op.tot.landed:0;return s*(dm-dO)>dm*.1&&s*(dm-dO)>dO*.1?(s>0?' Cada golpe teu fazia mais estrago.':' Cada golpe dele fazia mais estrago.'):''}
+     if(k==='resistencia'){const l=rr.at(-1);return l&&s*(l.st[0]-l.st[1])>=8?` Fôlego no fim: ${l.st[0]} contra ${l.st[1]}.`:''}
+     return ''};
+   if(Math.abs(avg)>=2){const s=Math.sign(avg),top=dA.slice().sort((x,y)=>s*(y.d-x.d))[0],one=Math.abs(top.d-avg)>=2;
+     add('attr',s,Math.abs(avg)*3.2,s>0?`Estavas mais bem preparado: +${Math.round(avg)} de média nos atributos${one?`, sobretudo ${top.n} (+${Math.round(top.d)})`:''}.${eff(top.k,1)}`
+       :`Ele estava mais bem preparado: +${Math.round(-avg)} de média nos atributos${one?`, sobretudo ${top.n} (+${Math.round(-top.d)})`:''}.${eff(top.k,-1)}|${one?`Treina ${top.n} (${ATR_TR[top.k]}).`:'Precisas de mais semanas de treino antes de lutas deste nível.'}`,one?top.k:'')}
+   else{const top=dA.slice().sort((x,y)=>Math.abs(y.d)-Math.abs(x.d))[0],s=Math.sign(top.d);
+     if(Math.abs(top.d)>=8)add('attr',s,Math.abs(top.d)*.64,s>0?`A tua ${top.n} fez diferença: +${Math.round(top.d)} do que ele.${eff(top.k,1)}`:`Ele tinha mais ${top.n} (+${Math.round(-top.d)}).${eff(top.k,-1)}|Treina-a com ${ATR_TR[top.k]}.`,top.k)}}
+  // 2) estilo (≈ 5 pontos no amador → 13 no topo), descontando a tática certa no canto
+  {const ms=majority(rr.map(x=>x.sty[0]).concat(me.style)),os=majority(rr.map(x=>x.sty[1]).concat(op.style)),e=edge(ms,os);
+   if(e>0){add('style',1,5+8*clamp((me.slv-1)/4,0,1),`O teu estilo (${ms}) tem vantagem sobre o dele (${os}).`)}
+   else if(e<0){const fix=clamp(me.baseFix||0,0,1),sc=(5+8*clamp((op.slv-1)/4,0,1));const st=F.talks.find(t=>t.kind==='style');
+     const beat=STYLES.find(x=>edge(x,os)>0),has=styleLv(a,beat)>0;
+     const tip=has?`|Tens ${beat} nível ${styleLv(a,beat)}: escolhe-o antes da luta.`:`|Contra um ${os}, o ${beat} leva vantagem (treinador na Loja).`;
+     if(fix>=1)add('style',1,4,`O estilo dele (${os}) tinha vantagem sobre o teu (${ms}), mas a tática certa no canto anulou-a.`);
+     else add('style',-1,sc*(1-fix),`O estilo dele (${os}) tem vantagem sobre o teu (${ms})${fix>0?'; a tática no canto só a reduziu a metade':st&&st.lab==='ERRADA'?' e a tática no canto não resultou':''}.${tip}`)}}
+  // 3) alcance (+10 cm ≈ 0 no amador → +6 no topo, com jab e direto)
+  {const dr=Math.round(me.r-op.r);if(Math.abs(dr)>=5){const L=dr>0?me:op,S=dr>0?op:me;
+    const acc=x=>{const j=P(x,'jab'),d=P(x,'direto');return apc(j[1]+d[1],j[0]+d[0])},aL=acc(L),aS=acc(S);
+    const ob=aL-aS>=3;add('reach',dr>0?1:-1,Math.abs(dr)/10*(1+6*skillF(L,['jab','direto'])),dr>0?`Os teus braços são ${dr} cm mais longos${ob?`: ${aL}% dos teus jabs e diretos entraram, contra ${aS}% dos dele`:': o jab e o direto chegam primeiro'}.`
+      :`Os braços dele são ${-dr} cm mais longos${ob?`: ${aL}% dos jabs e diretos dele entraram, contra ${aS}% dos teus`:': o jab e o direto dele chegam primeiro'}.|Contra braços longos, ganchos e golpes ao corpo rendem mais.`)}}
+  // 4) corpo a combinar com o estilo (≈ nada no amador → ~5 no topo)
+  {const fv=x=>{const f=styleFit(x,x.style);return(f>0?5:f<0?-2:0)*clamp(((x.slv||1)-1)/4,.15,1)},d=fv(me)-fv(op);
+   if(Math.abs(d)>=2){const fm=styleFit(me,me.style);
+     add('body',Math.sign(d),Math.abs(d),d>0?(fm>0?`O teu corpo (${bodyType(me)}) combina com ${me.style}: o estilo rende mais.`:`O corpo dele (${bodyType(op)}) não combina com ${op.style}.`)
+       :(fm<0?`O teu corpo (${bodyType(me)}) não combina com ${me.style}.|Vê os estilos que combinam em Atletas → Golpes.`:`O corpo dele (${bodyType(op)}) combina com ${op.style}: o estilo rende-lhe mais.`))}}
+  // 5) contra-golpe (medido)
+  {const cm=P(me,'contra')[1],co=P(op,'contra')[1];if(Math.abs(cm-co)>=3){
+    add('ctr',Math.sign(cm-co),Math.abs(cm-co)*1.2,cm>co?`O teu Contra-golpe acertou ${cm} vezes depois de defesas${co?` (o dele: ${co})`:''}.`
+      :`O contra-golpe dele entrou ${co} vezes depois de falhares${cm?` (o teu: ${cm})`:''}.|${me.skills.contra?'O Contra-golpe sobe com Sparring.':'Aprende o Contra-golpe: Técnica 25 e Esquiva lateral.'}`)}}
+  // 6) fôlego: golpes lançados já sem pernas (fôlego ≤ 30 acerta menos e é mais fácil de acertar)
+  {const pm=me.lowT/Math.max(1,me.tot.thrown),po=op.lowT/Math.max(1,op.tot.thrown),d=po-pm,sm=stMin(0),so=stMin(1);
+   const pr=(F.sx['Pressão']||0)/Math.max(1,Object.values(F.sx).reduce((t,v)=>t+v,0));
+   if(Math.abs(d)>=.08){if(d<0&&sm.m<=30)add('stam',-1,-d*40,`Ficaste sem fôlego no R${sm.r} (${sm.m}): ${Math.round(pm*100)}% dos teus golpes saíram já sem pernas.|Treina Resistência (${ATR_TR.resistencia})${pr>=.35?' ou usa Equilibrado em vez de Pressão':''}.`);
+     else if(d>0&&so.m<=30)add('stam',1,d*40,`Ele ficou sem fôlego no R${so.r} (${so.m}) e tu aguentaste: ${Math.round(po*100)}% dos golpes dele saíram já sem pernas.`)}}
+  // 7) trabalho ao corpo (tira fôlego)
+  {const d=me.bodyL-op.bodyL;if(Math.abs(d)>=6){const s=Math.sign(d),v=s>0?stMin(1):stMin(0);if(v.m<=50)
+    add('bodyw',s,Math.abs(d)*.5,s>0?`O trabalho ao corpo (${me.bodyL} golpes) tirou-lhe o fôlego: ficou com ${v.m} no fim do R${v.r}.`:`Ele trabalhou-te o corpo (${op.bodyL} golpes) e tirou-te o fôlego: ficaste com ${v.m} no fim do R${v.r}.|Defesa e Resistência ajudam.`)}}
+  // 8) quedas
+  {const kl=F.over&&F.over.how==='KO'?F.kdl.slice(0,-1):F.kdl,nO=kl.filter(k=>!k.me).length,nM=kl.filter(k=>k.me).length,d=nO-nM,vz=n=>n===1?'uma vez':n+' vezes';if(d){const ks=kl.filter(k=>k.me===(d<0)).slice(0,3).map(k=>`R${k.r}, ${PNL[k.k]||'golpe'}`).join('; ');
+    add('kd',Math.sign(d),Math.abs(d)*8,d>0?`Mandaste-o ao tapete ${vz(nO)} (${ks})${nM?`; tu caíste ${vz(nM)}`:''}.`:`Foste ao tapete ${vz(nM)} (${ks})${nO?`; ele caiu ${vz(nO)}`:''}.|Mais Resistência e Defesa ajudam a aguentar.`)}}
+  // 9) troca de golpes (uma só: a maior entre precisão, duelo de jab e golpes pesados)
+  {const jm=P(me,'jab')[1],jo=P(op,'jab')[1],wm=me.tot.power,wo=op.tot.power,dA=accM-accO;
+   const ga=(me.tecnica+me.velocidade-op.defesa-op.velocidade)-(op.tecnica+op.velocidade-me.defesa-me.velocidade);
+   if(Math.abs(dA)>=7){const s=Math.sign(dA),why=s*ga>=8?(s>0?' A tua Técnica e Velocidade passaram a Defesa dele.':' A Técnica e Velocidade dele passaram a tua Defesa.|Treina Defesa (Sparring) e Técnica (Pads).'):'';
+     add('trade',s,Math.abs(dA)*.6,s>0?`Acertaste ${accM}% dos golpes, ele só ${accO}%.${why}`:`Ele acertou ${accO}% dos golpes, tu só ${accM}%.${why}`)}
+   if(Math.abs(jm-jo)>=8){const s=Math.sign(jm-jo),w=s>0?me:op;if((s>0?jm:jo)>=.35*w.tot.landed)
+     add('trade',s,Math.abs(jm-jo)*.4,s>0?`O teu jab entrou ${jm} vezes contra ${jo} dele e marcou o ritmo.`:`O jab dele entrou ${jo} vezes contra ${jm} teus e marcou o ritmo.|A Técnica (Pads) ganha o duelo de jab.`)}
+   if(Math.abs(wm-wo)>=6){const s=Math.sign(wm-wo);
+     add('trade',s,Math.abs(wm-wo)*.5,s>0?`Os teus golpes pesados (diretos, ganchos, uppercuts) entraram ${wm} vezes contra ${wo}.`:`Os golpes pesados dele (diretos, ganchos, uppercuts) entraram ${wo} vezes contra ${wm}.|A Defesa (Sparring) ajuda a pará-los.`)}}
+  // 10) palavras no canto
+  {const ok=F.talks.filter(t=>t.lab==='CERTA').length,bad=F.talks.filter(t=>t.lab==='ERRADA').length;
+   if(ok>=2&&ok>bad)add('talk',1,1.5*ok,`Acertaste ${ok} instruções no canto: cada uma deu um bónus ao round.`);
+   else if(bad>=2&&bad>ok)add('talk',-1,1.5*bad,`${bad} instruções no canto não resultaram.|Vê os atributos do teu atleta antes de escolher.`)}
+  // 11) forma no dia
+  {const f=F.form0;if(f&&Math.abs(f.sc)>=.3){const r=(f.reasons.find(x=>x[0]===(f.sc>0?'+':'−'))||'').slice(2);
+    add('form',Math.sign(f.sc),Math.abs(f.sc)*8,f.sc>0?`Chegou em grande forma${r?` (${r})`:''}.`:`Chegou fora de forma${r?` (${r})`:''}.|Na semana da luta, alivia o plano.`)}}
+  {const st=R.find(x=>x.g==='stam'),at=R.find(x=>x.g==='attr');if(st&&at&&at.k==='resistencia'&&at.s===st.s)R.splice(R.indexOf(at),1)}
+  const pickR=s=>{const used=new Set(),out=[];for(const x of R.filter(x=>s==null||x.s===s).sort((p,q)=>q.sc-p.sc)){if(used.has(x.g))continue;used.add(x.g);out.push(x);if(out.length>=3)break}return out};
+  const main=draw?pickR(null):pickR(win?1:-1);
+  const plus=draw?null:pickR(win?-1:1).filter(x=>x.sc>=4)[0]||null;
+  const sp=x=>{const[t,tip]=x.t.split('|');return{s:x.s,t,tip:tip||'',sc:+x.sc.toFixed(1)}};
+  return{why:main.map(sp),plus:plus?sp(plus):null};
+}
+function buildAnalysis(){
+  const{me,op}=F,r=F.over,a=F.a;
+  if(F.rr.length<Math.min(F.round,F.rounds)){const x=rrOf(null);x.p=1;F.rr.push(x)}
+  const rd=Math.min(F.round,F.rounds),lk=F.kdl.at(-1);
+  let end;
+  if(r.draw)end=`Empate nos juízes, ${me.card}-${op.card}.`;
+  else if(r.how==='pontos')end=`Decisão dos juízes, ${Math.max(me.card,op.card)}-${Math.min(me.card,op.card)}.`;
+  else if(r.how==='KO')end=`KO no R${rd}${lk?` aos ${mmss(lk.t)}, com ${PNL[lk.k]||'um golpe'}${lk.kind==='flash'?' (queda relâmpago)':''}`:''}.`;
+  else if(r.how==='toalha')end=`Atiraste a toalha no R${rd}.`;
+  else end=`O médico parou a luta depois do R${rd}.`;
+  const ps=x=>Object.fromEntries(PK.filter(k=>x.ps[k]).map(k=>[k,x.ps[k].slice(0,2)]));
+  const df=x=>[x.dfs.block,x.dfs.slip,x.dfs.duck,x.dfs.back];
+  const tot=Object.values(F.sx).reduce((t,v)=>t+v,0)||1;
+  const{why,plus}=anReasons(!!r.win,!!r.draw);
+  return{v:1,w:S.week,res:r.draw?'E':r.win?'V':'D',how:r.how,end,opp:op.nick,oSty:op.style,mSty:me.style,card:[me.card,op.card],
+    acc:[[me.tot.landed,me.tot.thrown],[op.tot.landed,op.tot.thrown]],kd:[me.kd,op.kd],
+    rr:F.rr.map(x=>[x.s?x.s[0]:null,x.s?x.s[1]:null,x.dn[0],x.dn[1],x.st[0],x.st[1],x.l[0],x.l[1],x.p?1:0]),
+    ps:[ps(me),ps(op)],hb:[[me.headL,me.bodyL],[op.headL,op.bodyL]],df:[df(me),df(op)],
+    kdl:F.kdl.slice(0,6).map(kdTxt),ord:F.ordLog.slice(-8).map(ordTxt),ordN:F.ordLog.length,talk:F.talks.map(t=>({t:`${t.r===1?'Antes do R1':'Antes do R'+t.r}: ${t.n}`,c:t.lab==='CERTA'?'ok':t.lab==='MEIA CERTA'?'half':t.lab==='ERRADA'?'bad':''})),
+    sx:Object.entries(F.sx).sort((p,q)=>q[1]-p[1]).map(([k,v])=>`${k} ${Math.round(100*v/tot)}%`).join(' · '),why,plus};
+}
+function resultInfo(title,body,an){
+  return new Promise(res=>{
+    const show=()=>{const s=modal(`<h2>${title}</h2>${body}<div class="row2"><button class="btn big" id="mAn">ANÁLISE</button><button class="btn gold big" id="mOk">CONTINUAR</button></div>`);
+      s.querySelector('#mOk').onclick=()=>{closeModal();res()};s.querySelector('#mAn').onclick=()=>showAnalysis(an,show)};
+    show();
+  });
+}
+function showAnalysis(an,back,tab){
+  tab=tab||'res';
+  const T=[['res','RESUMO'],['golpes','GOLPES'],['rounds','ROUNDS'],['canto','CANTO']];
+  const res=an.res==='V'?'VITÓRIA':an.res==='D'?'DERROTA':'EMPATE';
+  const hd=`<h2>ANÁLISE · <span style="color:${an.res==='V'?'var(--green)':an.res==='D'?'#ff6b5a':'var(--gold)'}">${res}</span> VS ${an.opp.toUpperCase()}</h2>
+    <div class="seg sub2">${T.map(([k,n])=>`<button data-ant="${k}" class="${tab===k?'on':''}">${n}</button>`).join('')}</div>`;
+  const pct=([l,t])=>t?Math.round(100*l/t)+'%':'-';
+  const v2=(m,o,cm='cme',co='cop')=>`<span class="v ${cm}">${m}</span><span class="v ${co}">${o}</span>`;
+  const head=(a,b,c)=>`<b>${a}</b><b class="me">${b}</b><b class="op">${c}</b>`;
+  let body='';
+  if(tab==='res'){
+    const wl=(x,tip=true)=>`<div class="why ${x.s>0?'g':'b'}"><i>${x.s>0?'▲':'▼'}</i><span>${x.t}${tip&&x.tip?` <b class="tip">${x.tip}</b>`:''}</span></div>`;
+    body=`<div class="anend">${an.end}</div>
+      <div class="kv"><div><small>PONTOS</small><b><em class="cme">${an.card[0]}</em>-<em class="cop">${an.card[1]}</em></b></div><div><small>ACERTOS</small><b><em class="cme">${pct(an.acc[0])}</em> <em class="cop">${pct(an.acc[1])}</em></b></div><div><small>QUEDAS (TU-ELE)</small><b><em class="cme">${an.kd[0]}</em>-<em class="cop">${an.kd[1]}</em></b></div></div>
+      <div class="meta">Estilos: ${an.mSty} vs ${an.oSty}${an.sx?` · tu em ${an.sx}`:''}</div>
+      <h3>${an.res==='V'?'AS CHAVES DA VITÓRIA':an.res==='D'?'PORQUE PERDESTE':'O QUE PESOU'}</h3>
+      ${an.why.length?an.why.map(x=>wl(x)).join(''):`<div class="why"><i>=</i><span>${an.how==='KO'?'Luta equilibrada decidida por um golpe. No ringue tudo pode acontecer.':'Luta muito equilibrada: nenhum fator se destacou. Decidiu-se nos pormenores.'}</span></div>`}
+      ${an.plus?`<h3>${an.plus.s>0?'MAS CORREU BEM':'APESAR DE'}</h3>${wl(an.plus,an.res!=='V')}`:''}`;
+  }else if(tab==='golpes'){
+    const ks=PK.filter(k=>an.ps[0][k]||an.ps[1][k]);
+    const c=(x,k)=>x[k]?`${x[k][1]}/${x[k][0]}`:'-';
+    const sumD=d=>d[0]+d[1]+d[2]+d[3];
+    body=`<div class="atab">${head('ACERTADOS / LANÇADOS','TU','ELE')}
+      ${ks.map(k=>`<span>${PN[k]}</span>${v2(c(an.ps[0],k),c(an.ps[1],k))}`).join('')}
+      <span>Total</span>${v2(`${an.acc[0][0]}/${an.acc[0][1]}`,`${an.acc[1][0]}/${an.acc[1][1]}`)}
+      <span>Precisão</span>${v2(pct(an.acc[0]),pct(an.acc[1]))}
+      <span>À cabeça / ao corpo</span>${v2(`${an.hb[0][0]}/${an.hb[0][1]}`,`${an.hb[1][0]}/${an.hb[1][1]}`)}</div>
+      <div class="atab">${head('DEFESAS QUE RESULTARAM','TU','ELE')}
+      <span>Bloqueios</span>${v2(an.df[0][0],an.df[1][0])}
+      <span>Esquivas</span>${v2(an.df[0][1],an.df[1][1])}
+      <span>Baixou-se</span>${v2(an.df[0][2],an.df[1][2])}
+      <span>Recuou</span>${v2(an.df[0][3],an.df[1][3])}
+      <span>Golpes parados</span>${v2(pct([sumD(an.df[0]),an.acc[1][1]]),pct([sumD(an.df[1]),an.acc[0][1]]))}</div>
+      <p class="meta">O Contra-golpe só dispara depois de uma defesa que resulte.</p>`;
+  }else if(tab==='rounds'){
+    const cls=(a,b)=>a>b?'cme':a<b?'cop':'';
+    body=`<div class="atab rtab"><b>R</b><b>PONTOS</b><b>QUEDAS</b><b>FÔLEGO</b><b>ACERTOS</b>
+      ${an.rr.map((x,i)=>`<span>${i+1}${x[8]?'*':''}</span><span class="v">${x[0]==null?'-':`<em class="${cls(x[0],x[1])}">${x[0]}-${x[1]}</em>`}</span><span class="v">${x[2]||x[3]?`<em class="cme">${x[2]}</em>-<em class="cop">${x[3]}</em>`:'-'}</span><span class="v"><em class="${x[4]<=30?'lowst':'cme'}">${x[4]}</em> <em class="${x[5]<=30?'lowst':'cop'}">${x[5]}</em></span><span class="v"><em class="cme">${x[6]}</em> <em class="cop">${x[7]}</em></span>`).join('')}</div>
+      <p class="meta"><em class="cme">Tu</em> · <em class="cop">ele</em> · fôlego no fim do round${an.rr.some(x=>x[8])?' · * round interrompido':''}. Abaixo de 30 acerta-se menos.</p>
+      <h3>QUEDAS</h3><div class="olist">${an.kdl.length?an.kdl.map(t=>`<div class="${/caíste/.test(t)?'bad':'ok'}">${t}</div>`).join(''):'<div>Ninguém foi ao tapete.</div>'}</div>`;
+  }else{
+    const ol=an.ord.slice(-(an.ordN>8?7:8));
+    body=`<h3>PALAVRA NO CANTO</h3><div class="olist">${an.talk.length?an.talk.slice(-6).map(t=>`<div class="${t.c}">${t.t}${t.c==='ok'?' · certa':t.c==='half'?' · meia certa':t.c==='bad'?' · errada':''}</div>`).join(''):'<div>Sem conversa no canto.</div>'}</div>
+      <h3>ORDENS DURANTE O ROUND</h3><div class="olist">${ol.length?((an.ordN||0)>ol.length?`<div>… mais ${an.ordN-ol.length} antes</div>`:'')+ol.map(o=>`<div class="${o.c}">${o.t}</div>`).join(''):'<div>Não deste ordens durante os rounds.</div>'}</div>
+      <p class="meta">Quanto mais cansado e tocado, mais demora a ouvir. Muito cansado e muito tocado, não ouve até ao fim do round.</p>`;
+  }
+  const s=modal(hd+`<div class="anb">${body}</div><button class="btn gold big" id="anBack">${back?'VOLTAR':'FECHAR'}</button>`);
+  s.classList.add('an');
+  s.querySelectorAll('[data-ant]').forEach(b=>b.onclick=()=>showAnalysis(an,back,b.dataset.ant));
+  s.querySelector('#anBack').onclick=()=>{if(back)back();else closeModal()};
 }
 
 /* ---- arena fight drawing (elevated front view) ---- */
@@ -2460,7 +2661,7 @@ async function start(){
   S=choice==='new'?null:load();
   let fresh=false;if(!S||!S.roster){newGame();fresh=true}
   S.gymName=S.gymName||'Ginásio Esperança';S.logo=S.logo||0;
-  for(const a of S.roster){migrateStyles(a);initBody(a,2);if(a.fight){migrateStyles(a.fight.opp);initBody(a.fight.opp,clamp(a.tier+1,1,5))}for(const o of a.offers||[]){migrateStyles(o.opp);initBody(o.opp,clamp(a.tier+1,1,5))}}
+  for(const a of S.roster){if(a.lastAn&&(a.lastAn.v!==1||!Array.isArray(a.lastAn.rr)))delete a.lastAn;migrateStyles(a);initBody(a,2);if(a.fight){migrateStyles(a.fight.opp);initBody(a.fight.opp,clamp(a.tier+1,1,5))}for(const o of a.offers||[]){migrateStyles(o.opp);initBody(o.opp,clamp(a.tier+1,1,5))}}
   for(const a of S.roster){for(const k of Object.keys(SKILLS)){a.skills[k]=a.skills[k]||0;a.xp[k]=a.xp[k]||0}a.def=a.def||{bloqueio:1,esquiva:0,clinch:0};a.dxp=a.dxp||{bloqueio:0,esquiva:0,clinch:0};a.combos=a.combos||knownCombos(a).map(c=>c.id);a.recovery=a.recovery||0;if(a.gift===undefined){a.gift=null;a.giftKnown=true}a.weeks=a.weeks||0}
   S.tab=S.tab||'gym';
   render();requestAnimationFrame(world);
