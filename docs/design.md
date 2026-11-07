@@ -56,7 +56,7 @@ Ordem: 8 → 5 → 1 → 3 → 4.
   - 8.3 **Decidido:** Queixo difícil de treinar (pescoço, core); desce com a idade e com cada KO sofrido.
   - 8.4 **Decidido:** Ring IQ cresce sobretudo com experiência (lutas e sparring), pouco com treinos de ginásio.
 
-### Tema 5 — Pés, distância e controlo do ringue
+### Tema 5 — Pés, distância e controlo do ringue · *Decidido*
 - **Hoje:** zonas do ringue e alcance existem; não há distância longa/média/curta explícita.
 - **Guia:** distância longa/média/curta, trabalho de pés, controlo do ringue.
 - **Decisões:**
@@ -65,6 +65,7 @@ Ordem: 8 → 5 → 1 → 3 → 4.
   - 5.2 **Decidido — efeito de cada distância:** **longe** — jab e direto; alcance conta muito; menos dano, mais pontos; pouco fôlego gasto. **Meio** — direto, combinações, ganchos largos; troca equilibrada. **Perto** — ganchos curtos, uppercuts, corpo, clinch; jab quase sem força; braços longos atrapalham um pouco; mais dano e mais fôlego gasto. Os golpes treinados valem mais ou menos conforme a distância.
   - 5.3 **Decidido — centro, cordas e canto:** quem ganha a disputa para se aproximar empurra o outro para as cordas e depois para o canto ("cortar o ringue"); quem prefere longe e tem Pés circula e fica no centro. Cordas: defende e foge pior, luta tende para perto. Canto: quase sempre perto, defende ainda pior, combinações fazem mais estragos. Sai-se com Pés (pivô, passo lateral), clinch ou a bater para sair. Em rounds equilibrados, quem dominou o centro tem uma pequena vantagem nos juízes. Comentador e análise (tempo no centro/cordas/canto) mostram isto.
   - 5.4 **Decidido — estado mexe nos Pés:** os Pés que contam na luta descem com pouco fôlego e com muita dor; logo depois de uma queda, "pernas bambas" (Pés caem muito durante um bocado). O atleta cansado vai sendo empurrado para as cordas.
+  - 5.5 **Decidido — ecrã:** pequena barra LONGE · MEIO · PERTO por cima do ringue, junto ao relógio, além do movimento no ringue, do comentador e da análise.
 - **Animações (tema 5):** pivô/passo lateral e circular — usam o movimento existente; clinch — existe; **encostado às cordas/canto** — nova; **pernas bambas** — nova; a distância vê-se pela distância entre os lutadores no ringue.
 
 ### Tema 1 — Golpes
@@ -124,6 +125,8 @@ Ordem: 8 → 5 → 1 → 3 → 4.
 - **Estratégia no canto** entre rounds: a ordem que ficou por ouvir aparece já escolhida; o treinador pode mudá-la.
 
 ## Adiado (não começar sem o Tiago pedir)
+
+- **Update visual maior** do jogo: o Tiago quer fazê-lo depois. Por agora a prioridade é definir como as coisas funcionam; as passagens de animação de cada fase ficam no mínimo necessário para se perceber a luta.
 
 - Dinheiro no fim de jogo (ainda sem direção).
 - Taças sazonais e pesagem (a definir como funcionam).
