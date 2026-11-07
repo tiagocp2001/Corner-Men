@@ -132,7 +132,8 @@ Ordem: 8 → 5 → 1 → 3 → 4.
 
 ### Tema 9 — Treinos novos
 - **Guia:** saco duplo, maize bag, escada, sparring leve/condicionado/duro, clinch work, HIIT, core/pescoço.
-- **Decisões:** —
+- **Decisões:**
+  - 9.1 **Decidido — velocidade de aprender e melhorar** (vale para golpes, defesas, atributos e estilos): depende do **treinador** (qualidade da equipa técnica: adjunto melhor/mais treinadores; especialista de um estilo ensina mais depressa os golpes desse estilo) e do **atleta** (Disciplina, Concentração, Técnica para golpes novos, fadiga da semana, confiança do dia). Nas luvas de foco, "aprende em ~N sessões" mostra a estimativa desse atleta. Números ficam para o equilíbrio. **Implementar no passo A4.**
 
 ### Tema 10 — Treino mental e tático
 - **Guia:** vídeos do adversário, plano de combate, peso/pesagem.
