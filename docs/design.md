@@ -23,8 +23,8 @@ Regras gerais que orientam todos os temas.
 | 0.1 | **O jogador é o treinador, não o lutador.** Decide três coisas: o **treino**, o **plano de luta** e as **ordens do canto** (durante o round e no intervalo). Os golpes, um a um, são automáticos. | Decidido |
 | 0.2 | **Nível de realismo.** Cada elemento do Guia entra de uma de três formas: **mecânica** (muda o resultado), **texto** (só o comentador e a análise o mencionam) ou **fora**. Decide-se tema a tema. | Decidido |
 | 0.3 | **Regra de ouro:** tudo o que é mecânica tem de se **ver na luta** (animação, comentador) **e na análise pós-luta**. Se o jogador não o vê, não entra. | Decidido |
-| 0.5 | **Animações:** cada ação do Guia fica marcada como *usa animação existente*, *precisa de animação nova* ou *só texto*. Lista "Animações necessárias" no fim deste documento. Cada fase implementa-se em dois passos: mecânica com animações existentes + comentador; depois uma passagem de animação com capturas para o Tiago aprovar. Poucas animações, só as que mudam a leitura da luta. | Decidido |
 | 0.4 | **Ecrã fixo:** cada tema diz onde aparece no ecrã e o que sai ou se junta para caber. | Decidido |
+| 0.5 | **Animações:** cada ação do Guia fica marcada como *usa animação existente*, *precisa de animação nova* ou *só texto*. Lista "Animações necessárias" no fim deste documento. Cada fase implementa-se em dois passos: mecânica com animações existentes + comentador; depois uma passagem de animação com capturas para o Tiago aprovar. Poucas animações, só as que mudam a leitura da luta. | Decidido |
 
 ## Fase A — Núcleo da luta · *Em aberto*
 
