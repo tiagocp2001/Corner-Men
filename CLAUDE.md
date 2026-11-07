@@ -14,19 +14,20 @@ Contexto para o Claude trabalhar neste repositório. Lê isto antes de mexer em 
 
 | Ficheiro | O que é |
 |---|---|
-| `index.html` | O jogo inteiro: HTML + CSS + JS num só ficheiro (~200 KB). É gerado pelo `build.py`; não é a fonte original. |
-| `build.py` | Transforma o `index.html` do artefacto do Claude na app web: título, manifest, ícones, service worker, correção do espaço no fundo e etiqueta de versão (`vN · dia mês ano`). Também incrementa a `VERSION` do `sw.js`. |
+| `index.html` | O jogo inteiro: HTML + CSS + JS num só ficheiro (~200 KB). **É a fonte do jogo**: edita-se diretamente. |
+| `publicar.py` | Prepara uma versão para publicar: sobe a `VERSION` do `sw.js`, atualiza a etiqueta (`vN · dia mês ano`) e confirma que a `KEY` não mudou. |
+| `docs/` | `design.md` (decisões de design, a referência), o Guia de Boxe do Tiago (PDF e texto). |
 | `sw.js` | Service worker: página network-first (atualiza sozinho com internet, funciona offline), resto cache-first. |
 | `manifest.json` | PWA (adicionar ao ecrã principal), `lang: pt-PT`, orientação vertical. |
 | `icons/` | Ícones 180/192/512. |
 
 ### Fluxo de atualização
 
-A fonte de trabalho é o **artefacto do Claude** (um único HTML). Para publicar:
+A fonte do jogo é o **`index.html` do repositório** (até à v9 era um artefacto do Claude transformado pelo antigo `build.py`; isso acabou — não voltar a usar o artefacto antigo, perdia todas as mudanças feitas depois). Para publicar:
 
-1. Obter o `index.html` mais recente do artefacto.
-2. `python3 build.py <caminho para esse index.html>` — escreve `./index.html` e sobe a versão do `sw.js`.
-3. Commit e push para `main`. O GitHub Pages republica em 1–2 minutos.
+1. Trabalhar e testar no branch de trabalho.
+2. `python3 publicar.py` — sobe a versão do `sw.js`, atualiza a etiqueta e verifica a `KEY`.
+3. Levar para o `main` e fazer push. O GitHub Pages republica em 1–2 minutos.
 
 **Antes de enviar:** confirmar que a chave do save (`const KEY='corner-men-v6'` no código) **não mudou** sem o Tiago saber. Mudar a chave apaga o progresso de todos os jogadores. Só se muda de propósito (ex.: mudanças de regras incompatíveis, quando o Tiago diz "começa de novo").
 
