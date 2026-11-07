@@ -216,6 +216,16 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .cseg2{display:grid;grid-template-columns:1fr 1fr;gap:4px}
 .cseg .btn,.cseg2 .btn{font-size:7px;padding:9px 3px 7px}
 .cseg .btn.on,.cseg2 .btn.on{background:var(--gold);color:#1b140c;border-color:#9c7420}
+.cseg .btn.pend{border-color:#ff9a86;color:#ffd9cf;animation:pend .7s steps(2) infinite}
+@keyframes pend{50%{border-color:var(--line);color:var(--muted)}}
+.btn.towel{background:#e9dfcc;border-color:#9a8f7c;color:#3a2a1c}
+.rctl{display:flex;flex-direction:column;gap:4px}
+.rctl h3{margin:0}
+.tconf{border:3px solid #d4452f;background:rgba(212,69,47,.12);padding:8px 10px;display:flex;flex-direction:column;gap:6px}
+.tconf b{font-family:var(--f-display);font-size:10px;font-weight:400;color:#ff9a86}
+.tconf span{font-size:13px;line-height:1.3}
+.ford{position:absolute;left:5px;bottom:5px;z-index:3;background:rgba(10,8,6,.82);border:1px solid #d4452f;color:#ffd9cf;font-family:var(--f-display);font-size:7px;line-height:1.5;padding:4px 6px;pointer-events:none;display:none;max-width:60%}
+.ford.on{display:block} .ford i{font-style:normal;color:var(--gold)} .ford.deaf{background:rgba(120,24,14,.9);border-color:#ff6b5a;color:#fff} .ford.ok{border-color:#5fbf4a;color:#8fe07a}
 </style>
 
 <div id="app">
@@ -241,7 +251,7 @@ const fmt=n=>Math.round(n).toLocaleString('pt-PT');
 /* ================= DATA ================= */
 const CATS=['Pena','Superpena','Ligeiro','Pesado'];
 const CAT_KG={Pena:'57 kg',Superpena:'59 kg',Ligeiro:'61 kg',Pesado:'+91 kg'};
-const TUNE=Object.assign({hitDiv:350,hvy:1.55,resK:.3,qk:.45,mk:.45,cleanMul:6,normMul:.45,cleanP:.02,forK:.04,judge:.8,giftK:.35,train:.2,decay:.3,decayFloor:.88,formK:1,dmg:.88,edge:.25,sagg:0,hprec:6,flash:.4,ctr:.2,ctrA:.3,sdA:-.02,sdD:.1,sdC:.02,tdA:.03,tdB:.08,pc:.8,scm:.5,hd:.5,bdm:.5,cr:20,dk:30,dr:.55,topD:.13,punD:.12,punF:.4,ctrK:.06,inCtr:.3,inCl:.2,sfB:.42,sfK:.116,rch:.03,fitP:.015,fitN:.006},window.__TUNE||{});
+const TUNE=Object.assign({hitDiv:350,hvy:1.55,resK:.3,qk:.45,mk:.45,cleanMul:6,normMul:.45,cleanP:.02,forK:.04,judge:.8,giftK:.35,train:.2,decay:.3,decayFloor:.88,formK:1,dmg:.88,edge:.25,sagg:0,hprec:6,flash:.4,ctr:.2,ctrA:.3,sdA:-.02,sdD:.1,sdC:.02,tdA:.03,tdB:.08,pc:.8,scm:.5,hd:.5,bdm:.5,cr:20,dk:30,dr:.55,topD:.13,punD:.12,punF:.4,ctrK:.06,inCtr:.3,inCl:.2,sfB:.42,sfK:.116,rch:.03,fitP:.015,fitN:.006,hearB:6,hearSt:24,hearHp:30,hearKd:.35,hearJit:.25,hearDeaf:.8,hearSlow:12,hearCalm:.8,hearStub:1.3},window.__TUNE||{});
 const CATMOD={Pena:{vol:1.25,dmg:.85,flash:.6,cost:.9},Superpena:{vol:1.15,dmg:.92,flash:.8,cost:.95},Ligeiro:{vol:1,dmg:1,flash:1,cost:1},Pesado:{vol:.75,dmg:1.3,flash:1.8,cost:1.25}};
 CATMOD.Pesado.dmg=TUNE.hvy;
 const GIFTS={
@@ -1305,6 +1315,11 @@ const LINES={
   ropes:['{x} encosta {y} às cordas.','{y} está nas cordas!','{x} empurra {y} contra as cordas.'],
   cornered:['{y} está preso no canto!','{x} encurrala {y} no canto.','Canto! {y} tem de sair dali.'],
   center:['Voltam ao centro do ringue.','Os dois estudam-se no meio do ringue.','{x} corta o ringue e procura o ataque.','{x} anda à volta, a trabalhar o jab.'],
+  heard:['{x} ouve o canto e muda logo para {s}.','{x} acena ao treinador. Agora é {s}.','Ordem do canto cumprida: {x} passa a {s}.'],
+  heardLate:['Finalmente! {x} lá ouviu o treinador: {s}.','Demorou, mas {x} percebeu o recado. Agora em {s}.','Só agora {x} ouve o canto vermelho. {s}!'],
+  slow:['{x} está a sofrer... não sei se te está a ouvir.','{x} olha para o canto, mas parece ausente.','Gritam do canto vermelho, mas {x} tem a cabeça noutro lado.'],
+  deaf:['{x} já não ouve nada. Está a lutar por instinto!','Podem gritar à vontade: {x} não ouve o canto!','{x} está tão cansado e dorido que nem ouve o treinador.'],
+  lost:['{x} não chegou a ouvir a instrução antes do gongo.','O round acaba antes de {x} perceber o que lhe gritavam.'],
   start:['Toca o gongo! Round {n}!','Round {n}. Os lutadores saem dos cantos.','Começa o round {n}!'],
   end:['Gongo! Fim do round {n}.','Termina o round {n}. Cada um para o seu canto.']
 };
@@ -1327,11 +1342,11 @@ function startFight(a,done){
   const f=a.fight;
   if(!f.opp.grown){const wk=Math.max(0,S.week-(f.opp.made||S.week));for(const[k]of ATTRS)f.opp.attrs[k]=clamp(f.opp.attrs[k]+R(0,.45)*wk,5,99);f.opp.grown=true}
   F={a,done,me:fighter(a,true),op:fighter(f.opp,false),round:1,rounds:f.rounds,log:[],fast:false,over:null,ft:0,
-    zoom:null,crowd:0,flashes:0,ref:{x:120,y:60,tx:120,ty:60,pose:'stand'},count:null,big:null,lastScore:[10,10],zone:'center'};
+    zoom:null,crowd:0,flashes:0,ref:{x:120,y:60,tx:120,ty:60,pose:'stand'},count:null,big:null,lastScore:[10,10],zone:'center',ord:null,ordLog:[],deaf:0,live:false,inRound:false};
   F.me.form=formOf(a).sc*TUNE.formK;F.op.form=0;F.venue=venueIdx({tier:a.tier,title:f.title});
   F.op.strat=f.opp.style==='In-fighter'?'Pressão':f.opp.style==='Outboxer'?'Cautela':'Equilibrado';
   $('#fightRoot').innerHTML=`<div class="fight">
-    <div class="stagew"><div class="stage"><canvas class="px" id="ring" width="240" height="240"></canvas><button class="snd" id="pauseF" aria-label="Pausa">II</button>
+    <div class="stagew"><div class="stage"><canvas class="px" id="ring" width="240" height="240"></canvas><button class="snd" id="pauseF" aria-label="Pausa">II</button><div class="ford" id="fOrd" aria-live="polite"></div>
       <div class="fhead"><div class="fside" id="fL"></div><div class="fclock" id="fClock"></div><div class="fside rt" id="fR"></div></div></div></div>
     <div class="booth" id="booth"><div class="fcom" id="fcom" aria-live="polite"></div><div class="caster"><canvas id="caster" width="40" height="48"></canvas><span>ZÉ DO MICRO</span></div></div>
     <div class="fctl" id="fctl"></div></div>`;
@@ -1353,7 +1368,7 @@ function hud(){
     const cut=x.cut+(pv.cut||0);
     el.querySelector('.meta').innerHTML=`${x.kd?`Quedas ${x.kd}`:''}${x.kd&&cut?' · ':''}${cut?`Cortes ${cut}`:''}${ps?` <b style="color:var(--gold);font-weight:400">+${Math.round(ps)} fôlego</b>`:''}${ph?` <b style="color:#ff9a86;font-weight:400">+${Math.round(ph)} vida</b>`:''}${pv.cut?' <b style="color:#ff9a86;font-weight:400">-1 corte</b>':''}&nbsp;`;
   };
-  side($('#fL'),F.me);side($('#fR'),F.op);
+  side($('#fL'),F.me);side($('#fR'),F.op);ordInd();
   const left=Math.max(0,180-F.ft/1000*3);
   $('#fClock').innerHTML=F.ended?`${F.a.fight.title?'TÍTULO<br>':''}FIM<b>${F.over&&F.over.how?F.over.how.toUpperCase().slice(0,7):''}</b>`:`${F.a.fight.title?'TÍTULO<br>':''}ROUND ${Math.min(F.round,F.rounds)}/${F.rounds}<b>${Math.floor(left/60)}:${String(Math.floor(left%60)).padStart(2,'0')}</b>`;
 }
@@ -1385,12 +1400,12 @@ function drawCaster(now){
 }
 function spd(){return F.fast?.3:1}
 function slowF(){return F.zoom&&performance.now()<F.zoom.until?2.4:1}
-async function fsleep(ms,count=true){if(count)F.ft+=ms;await sleep(ms*spd()*slowF());while(F&&F.paused)await sleep(120);hud()}
+async function fsleep(ms,count=true){if(count){F.ft+=ms;orderTick()}await sleep(ms*spd()*slowF());while(F&&(F.paused||F.towelAsk))await sleep(120);hud()}
 function act(x,pose,dur,extra={}){x.an={pose,t0:performance.now(),dur:Math.max(1,dur*spd()*slowF()),arm:extra.arm||x.an.arm,side:extra.side||1,body:!!extra.body}}
 async function waitArrive(maxMs){
   const t0=performance.now();
   while(F&&performance.now()-t0<maxMs*spd()){if([F.me,F.op].every(x=>Math.hypot(x.pos.tx-x.pos.x,x.pos.ty-x.pos.y)<1.5))break;await sleep(40)}
-  if(F){F.ft+=(performance.now()-t0)/spd();hud()}
+  if(F){F.ft+=(performance.now()-t0)/spd();orderTick();hud()}
 }
 function setT(x,tx,ty){x.pos.tx=clamp(tx,LIM.x0,LIM.x1);x.pos.ty=clamp(ty,LIM.y0,LIM.y1)}
 function unit(a,b){const dx=b.pos.x-a.pos.x,dy=b.pos.y-a.pos.y,d=Math.hypot(dx,dy)||1;return{dx:dx/d,dy:dy/d,d}}
@@ -1461,20 +1476,100 @@ function opSwitch(){
   if(!opts.length)return;op.style=opts[0];op.slv=styleLv(op,op.style);
   say(`O canto de ${op.nick} mexe-se: ele muda para ${op.style}!`,'sys');
 }
+/* ---- ordens do canto durante o round ----
+   Gritas uma estratégia; o atleta só a cumpre quando te "ouve". A demora (em segundos do relógio) cresce com o cansaço,
+   com a vida perdida e com as quedas neste round; muito cansado e muito tocado, não ouve até ao fim do round.
+   A toalha é para o árbitro: acaba a luta logo (com confirmação). F.autoOrd agenda ordens nos testes (window.__sim). */
+const SHOUT={'Pressão':['Vai! Em cima dele!','Pressão! Não o deixes respirar!','Agora! Mãos e para a frente!'],'Equilibrado':['Com cabeça! Faz o teu boxe!','Calma! Nem para a frente nem para trás!','Equilibra! Jab e respira!'],'Cautela':['Guarda alta! Sai daí!','Cautela! Mexe-te e defende!','Para trás! Não troques com ele!']};
+function hearFactors(x){return{f:clamp((70-x.st)/50,0,1),h:clamp((60-x.hp)/45,0,1)+TUNE.hearKd*((F.op.rs&&F.op.rs.kd)||0)}}
+function hearDelay(x){
+  const{f,h}=hearFactors(x);
+  if(F.deaf===F.round||(f>=TUNE.hearDeaf&&h>=TUNE.hearDeaf))return Infinity;
+  const tr=x.trait==='Cabeça fria'?TUNE.hearCalm:x.trait==='Teimoso'?TUNE.hearStub:1;
+  return(TUNE.hearB+TUNE.hearSt*f+TUNE.hearHp*Math.min(1,h))*tr*R(1-TUNE.hearJit,1+TUNE.hearJit);
+}
+function clockS(){return F.ft*3/1000}
+function giveOrder(s){
+  if(!F||F.over||!F.inRound||!STRAT[s])return;const me=F.me,o=F.ord;
+  if(o&&o.s===s)return;
+  if(!o&&me.strat===s)return;
+  if(o&&me.strat===s){F.ordLog.push({...o,lost:'cancel'});F.ord=null;say(`Mudas de ideias: ${me.nick} continua em ${s}.`,'sys');roundCtl();return}
+  if(o)F.ordLog.push({...o,lost:'replaced'});
+  F.shout=performance.now()+1800;
+  say(`Gritas do canto: "${pick(SHOUT[s])}"`,'me');
+  const{f,h}=hearFactors(me),d=hearDelay(me);
+  F.ord={r:F.round,s,from:me.strat,t:Math.round(clockS()),st:Math.round(me.st),hp:Math.round(me.hp),kd:(F.op.rs&&F.op.rs.kd)||0,f:+f.toFixed(2),h:+h.toFixed(2),wait:d===Infinity?null:+d.toFixed(1),due:d===Infinity?Infinity:clockS()+d,deaf:d===Infinity};
+  if(F.ord.deaf){F.deaf=F.round;say(line('deaf',{x:me.nick}),'bad')}
+  else if(d>=TUNE.hearSlow)say(line('slow',{x:me.nick}),'half');
+  roundCtl();
+}
+function orderTick(){
+  if(!F||F.over)return;
+  if(F.autoOrd&&F.inRound)autoOrder();
+  const o=F.ord;if(!o||o.deaf||clockS()<o.due)return;
+  F.ord=null;F.me.strat=o.s;F.heard={s:o.s,until:performance.now()+1800};
+  F.ordLog.push({...o,heard:true,got:Math.round(clockS())});
+  say(line(o.wait<TUNE.hearSlow?'heard':'heardLate',{x:F.me.nick,s:o.s}),'ok');
+  roundCtl();
+}
+function autoOrder(){
+  const me=F.me,c=clockS();
+  for(const a of F.autoOrd){
+    if(a.done===F.round||(a.done&&!a.each))continue;
+    if((a.round==null||a.round===F.round)&&(a.t==null||c>=a.t)&&(a.hp==null||me.hp<=a.hp)&&(a.st==null||me.st<=a.st)&&(a.kd==null||((F.op.rs&&F.op.rs.kd)||0)>=a.kd)){
+      a.done=F.round;if(a.towel){throwTowel();return}giveOrder(a.strat)}
+  }
+}
+function orderLost(){
+  const o=F.ord;F.ord=null;F.heard=null;if(!o)return;
+  F.ordLog.push({...o,lost:F.over?'over':'bell'});
+  if(!F.over)say(line('lost',{x:F.me.nick}),'bad');
+}
+function askTowel(){if(!F||F.over||!F.live)return;F.towelAsk=true;roundCtl()}
+function throwTowel(){
+  F.towelAsk=false;if(!F||F.over)return;
+  if(F.ord){F.ordLog.push({...F.ord,lost:'towel'});F.ord=null}
+  F.over={win:false,how:'toalha'};F.towelT=performance.now();F.big='TOALHA';F.count=null;F.refLock=true;F.ref.pose='stand';
+  F.ref.tx=clamp(F.me.pos.x+18,LIM.x0,LIM.x1);F.ref.ty=clamp(F.me.pos.y-8,LIM.y0,LIM.y1);
+  if(F.me.an.pose!=='down')act(F.me,'guard',1);act(F.op,'guard',1);
+  SFX.play('bell');say(`A toalha voa do canto vermelho! O árbitro pára a luta. ${F.me.nick} está salvo, mas perde.`,'sys');
+  roundCtl();hud();
+}
+function roundCtl(){
+  const fc=$('#fctl');if(!F||!fc)return;
+  if(F.towelAsk&&!F.over){
+    fc.innerHTML=`<div class="tconf"><b>ATIRAR A TOALHA?</b><span>A luta acaba já: ${F.me.nick} perde por desistência, mas sai sem mais castigo.</span>
+      <div class="cseg2"><button class="btn" id="tNo">CONTINUAR A LUTA</button><button class="btn red" id="tYes">ATIRAR</button></div></div>`;
+    $('#tNo').onclick=()=>{F.towelAsk=false;roundCtl()};$('#tYes').onclick=throwTowel;return;
+  }
+  const me=F.me,o=F.ord,on=F.inRound&&!F.over;
+  fc.innerHTML=`<div class="rctl"><h3>GRITAR DO CANTO</h3><div class="cseg">${Object.keys(STRAT).map(k=>`<button class="btn ${me.strat===k?'on':''} ${o&&o.s===k?'pend':''}" data-o="${k}" ${on?'':'disabled'}>${k.toUpperCase()}</button>`).join('')}</div>
+    <div class="cseg2"><button class="btn towel" id="towelR" ${F.live&&!F.over?'':'disabled'}>ATIRAR A TOALHA</button><button class="btn" id="fast">${F.fast?'VEL. NORMAL':'ACELERAR'}</button></div></div>`;
+  fc.querySelectorAll('[data-o]').forEach(b=>b.onclick=()=>giveOrder(b.dataset.o));
+  $('#towelR').onclick=askTowel;
+  $('#fast').onclick=()=>{F.fast=!F.fast;$('#fast').textContent=F.fast?'VEL. NORMAL':'ACELERAR'};
+  ordInd();
+}
+function ordInd(){
+  const el=$('#fOrd');if(!el||!F)return;const o=F.ord;let cls='',t='';
+  if(o&&!F.over){if(o.deaf){cls='deaf';t='NÃO TE OUVE!'}else{cls='';t=`A OUVIR${'.'.repeat(1+Math.floor(performance.now()/400)%3)}<br><i>${o.s.toUpperCase()}</i>`}}
+  else if(F.heard&&performance.now()<F.heard.until&&!F.over){cls='ok';t=`OUVIU!<br><i>${F.heard.s.toUpperCase()}</i>`}
+  el.className='ford'+(t?' on ':'')+cls;if(el.innerHTML!==t)el.innerHTML=t;
+}
 async function runFight(){
   const fc=$('#fctl');
   await enterRing();
   await preTalk();
   for(F.round=1;F.round<=F.rounds;F.round++){
     F.ft=0;F.me.rs=newRS();F.op.rs=newRS();
-    fc.innerHTML=`<button class="btn" id="fast">${F.fast?'VELOCIDADE NORMAL':'ACELERAR'}</button>`;setBooth(true);
-    $('#fast').onclick=()=>{F.fast=!F.fast;$('#fast').textContent=F.fast?'VELOCIDADE NORMAL':'ACELERAR'};
+    F.ord=null;F.heard=null;F.live=true;F.inRound=false;roundCtl();setBooth(true);
     say(line('start',{n:F.round}),'sys');SFX.play('bell');
     if(F.round===1){const fm=F.me.form||0;if(fm>=.3)say(`${F.me.nick} entra em grande forma, muito solto.`,'sys');else if(fm<=-.3)say(`${F.me.nick} parece pesado hoje...`,'sys')}
     if(F.crew)setCrew('round');act(F.me,'guard',1);act(F.op,'guard',1);
     setT(F.me,98,88);setT(F.op,142,88);F.refLock=false;F.zone='center';
-    await waitArrive(3000);F.ft=0;hud();
+    await waitArrive(3000);F.ft=0;if(!F.over){F.inRound=true;roundCtl()}hud();
     while(F.ft<60000&&!F.over){await exchange();if(F.over)break;await fsleep(R(450,950)/((fmods(F.me).vol+fmods(F.op).vol)/2))}
+    orderLost();F.inRound=false;F.live=false;F.towelAsk=false;if(!F.over)roundCtl();
     if(F.over)break;
     say(line('end',{n:F.round}),'sys');SFX.play('bell');scoreRound();
     toCorners();
@@ -1725,7 +1820,7 @@ async function footwork(){
 }
 async function exchange(){
   const{me,op}=F;
-  await footwork();
+  await footwork();if(F.over)return;
   {const cl=x=>(x.def&&x.def.clinch)||0;const need=x=>cl(x)>0&&(x.st<=30||x.hp<35);const lv=Math.max(cl(me),cl(op));
    if(lv>0&&Math.random()<((need(me)||need(op))?.14+.02*lv:.04+.01*lv)){await clinch(need(me)&&need(op)?pick([me,op]):need(me)?me:need(op)?op:cl(me)>cl(op)?me:cl(op)>cl(me)?op:pick([me,op]));return}}
   let myStrat=me.strat;
@@ -1778,7 +1873,7 @@ async function punch(att,def,k,strat,bonus,talk,flow=0){
   const v={a:att.nick,d:def.nick};
   const dur=PDUR[k]*(att.st>=70?1:att.st>30?1.1:1.25);
   act(att,sk.anim||k,dur,{arm,body});
-  await fsleep(dur*.45);
+  await fsleep(dur*.45);if(F.over){act(att,'guard',1);return 'over'}
   const u=unit(att,def);
   let res;
   if(Math.random()<hit){
@@ -1823,7 +1918,7 @@ async function punch(att,def,k,strat,bonus,talk,flow=0){
   return res;
 }
 async function knockdown(x,att,kind){
-  x.kd++;att.rs.kd++;
+  if(F.over)return;x.kd++;att.rs.kd++;
   act(x,'down',99999);act(att,'guard',1);SFX.play('fall');F.react={by:att.mine?'me':'op',until:performance.now()+4000};
   say(line(kind||'down',{a:att.nick,d:x.nick}),'sys');F.crowd=performance.now()+2500;
   if(kind){if(!x.mine)x.src.glass=(x.src.glass||0)+1;if(!att.mine)att.src.fk=(att.src.fk||0)+1;F.zoom={until:performance.now()+1600,cx:x.pos.x,cy:x.pos.y};F.flashes=performance.now()+1500}
@@ -1836,8 +1931,8 @@ async function knockdown(x,att,kind){
   if(x.gift==='queixo')getup+=.15;
   const ok=x.kd<3&&Math.random()<getup;
   const upAt=ok?RI(4,8):11;
-  for(let i=1;i<=10;i++){F.count=i;await fsleep(520);if(i===upAt)break}
-  F.ref.pose='stand';
+  for(let i=1;i<=10;i++){F.count=i;await fsleep(520);if(i===upAt||F.over)break}
+  F.ref.pose='stand';if(F.over){F.count=null;hud();return}
   if(!ok){
     F.count=null;F.big='KO!';F.over={win:!x.mine,how:'KO'};act(x,'ko',99999);
     F.zoom={until:performance.now()+2200,cx:x.pos.x,cy:x.pos.y};F.crowd=performance.now()+4000;F.flashes=performance.now()+3000;
@@ -2212,6 +2307,8 @@ function crewUpdate(now,t,dt,mul){
       else if(m.lk.role==='help')pose=f.cut>0&&Math.floor(t/2.5)%2===0?'ice':(Math.floor(t/3+m.i)%2?'towel':'water');
       else pose='shout';
     }else if(F.crewMode==='end'&&F.over){const won=F.over.draw?false:(m.side==='me')===!!F.over.win;pose=F.over.draw?'watch':won?'cheer':'worry'}
+    else if(m.side==='me'&&F.towelT&&now-F.towelT<900&&m.lk.role==='help')pose='towel';
+    else if(m.side==='me'&&F.shout&&now<F.shout&&m.lk.role==='boss')pose='shout';
     else if(F.react&&now<F.react.until){pose=F.react.by===m.side?'cheer':'worry'}
     else if(m.lk.role!=='help'&&Math.sin(t*.8+m.i*2+(m.side==='me'?0:1.3))>.82)pose='shout';
     m.pose=pose;
@@ -2254,7 +2351,7 @@ function ringLoop(now){
   if(!ARENA)buildArena();
   if(F.count!==F._cnt){F._cnt=F.count;if(F.count)SFX.play('count',F.count)}
   const c=cv.getContext('2d');const t=now/1000;
-  const dt=Math.min(.05,(now-(F.lt||now))/1000);F.lt=now;const mul=F.paused?0:(F.fast?3.3:1)/slowF();
+  const dt=Math.min(.05,(now-(F.lt||now))/1000);F.lt=now;const mul=F.paused||F.towelAsk?0:(F.fast?3.3:1)/slowF();
   const mv=(o,sp)=>{const dx=o.tx-o.x,dy=o.ty-o.y,d=Math.hypot(dx,dy);const v=sp*dt*mul*(d>30?1:.55+.45*d/30);if(d<=v||d<.01){o.x=o.tx;o.y=o.ty}else{o.x+=dx/d*v;o.y+=dy/d*v}};
   for(const x of[F.me,F.op])mv(x.pos,x.robe?40:(x.an.pose==='hurt'||x.an.pose==='hurtBody'?90:70)*(x.st>=70?1:x.st>30?.82:.6));
   refFollow();
@@ -2309,6 +2406,10 @@ function ringLoop(now){
   post(c,E.x,E.y,hN,'#d4452f');post(c,D.x,D.y,hN,'#e8e8ee');
   list.filter(o=>o.fr).forEach(o=>o.d());
   c.restore();
+  if(F.towelT){const p=clamp((now-F.towelT)/650,0,1),q=proj(F.me.pos.x,F.me.pos.y),x0=26,y0=196,tx=q.x-10,ty=q.y-4;
+    const x=x0+(tx-x0)*p,y=y0+(ty-y0)*p-Math.sin(p*Math.PI)*46;c.fillStyle='#f1e5d0';
+    if(p<1){const fl=Math.floor(now/70)%2;c.fillRect(Math.round(x-4),Math.round(y-(fl?3:2)),9,fl?6:4);c.fillStyle='#c9c0ae';c.fillRect(Math.round(x-4),Math.round(y+(fl?2:1)),9,1)}
+    else{c.fillRect(Math.round(x-5),Math.round(y-1),11,3);c.fillStyle='#c9c0ae';c.fillRect(Math.round(x-5),Math.round(y+1),11,1)}}
   if(F.count){c.fillStyle='rgba(0,0,0,.55)';c.fillRect(96,70,48,30);c.fillStyle='#fff';c.font='20px "Press Start 2P", monospace';c.textAlign='center';c.fillText(String(F.count),120,95)}
   if(F.confetti){if(!F.conf)F.conf=Array.from({length:150},(_,i)=>({x:Math.random()*240,y0:-Math.random()*260,v:.6+Math.random()*1.1,w:2+Math.random()*3,ph:Math.random()*6,c:['#e8b13a','#d4452f','#2d6db3','#f1e5d0','#74b35d','#f5d36a'][i%6]}));
     const el=(now-F.confetti)/1000;for(const q of F.conf){const y=q.y0+el*q.v*55;if(y<-4||y>244)continue;const x=q.x+Math.sin(el*q.w+q.ph)*5;c.fillStyle=q.c;const fl=Math.sin(el*q.w*2+q.ph)>0;c.fillRect(Math.round(x),Math.round(y),fl?3:1,2)}}
