@@ -61,6 +61,7 @@ Ordem: 8 → 5 → 1 → 3 → 4.
 - **Decisões:**
   - 5.0 **Decidido:** a distância (longe / meio / perto) e o sítio do ringue (centro / cordas / canto) passam a contar na luta (hoje são só visuais).
   - 5.1 **Decidido — quem decide a distância:** cada atleta tem uma distância preferida que vem do estilo (Outboxer longe, Puncher meio, In-fighter perto). Quando querem distâncias diferentes, disputam-na: conta sobretudo **Pés**, depois **Ring IQ**. Nunca é garantido. A influência da **estratégia** fica por decidir: a estratégia ainda vai ser redefinida (plano de combate); se fizer sentido na altura, entra.
+  - 5.2 **Decidido — efeito de cada distância:** **longe** — jab e direto; alcance conta muito; menos dano, mais pontos; pouco fôlego gasto. **Meio** — direto, combinações, ganchos largos; troca equilibrada. **Perto** — ganchos curtos, uppercuts, corpo, clinch; jab quase sem força; braços longos atrapalham um pouco; mais dano e mais fôlego gasto. Os golpes treinados valem mais ou menos conforme a distância.
 
 ### Tema 1 — Golpes
 - **Hoje:** jab, direto, gancho, uppercut, direto ao corpo, gancho ao fígado, Contra-golpe.
