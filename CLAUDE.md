@@ -29,7 +29,7 @@ A fonte do jogo é o **`index.html` do repositório** (até à v9 era um artefac
 2. `python3 publicar.py` — sobe a versão do `sw.js`, atualiza a etiqueta e verifica a `KEY`.
 3. Levar para o `main` e fazer push. O GitHub Pages republica em 1–2 minutos.
 
-**Antes de enviar:** confirmar que a chave do save (`const KEY='corner-men-v6'` no código) **não mudou** sem o Tiago saber. Mudar a chave apaga o progresso de todos os jogadores. Só se muda de propósito (ex.: mudanças de regras incompatíveis, quando o Tiago diz "começa de novo").
+**Antes de enviar:** confirmar que a chave do save (`const KEY='corner-men-v7'` no código; passou de v6 para v7 na fase A, por decisão do Tiago, com um aviso único no menu a quem tinha um save antigo) **não mudou** sem o Tiago saber. Mudar a chave apaga o progresso de todos os jogadores. Só se muda de propósito (ex.: mudanças de regras incompatíveis, quando o Tiago diz "começa de novo").
 
 ## Arquitetura do jogo (`index.html`)
 
@@ -39,7 +39,7 @@ Secções (procurar pelos comentários `/* ===== X ===== */`):
 
 | Secção | Conteúdo principal |
 |---|---|
-| `DATA` | `CATS` (Pena, Superpena, Ligeiro, Pesado), `CATMOD`, `GIFTS` (talentos escondidos), `TIERS` (Amador → Regional → Nacional → Mundial), `ECON`, `EQ` (equipamento), `UPG` (melhorias e treinadores), `TR` (treinos), `SKILLS` (golpes), `DEFS` (defesas), `COMBOS`, `STRAT` (estratégias de luta), `TUNE` |
+| `DATA` | `CATS` (Pena, Superpena, Ligeiro, Pesado), `CATMOD`, `GIFTS` (talentos escondidos), `ATTRS`/`ATTR_G` (8 atributos), `MENT`/`PERS1`/`PERS2` (mentais e nomes de personalidade), `TIERS` (Amador → Regional → Nacional → Mundial), `ECON`, `EQ` (equipamento), `UPG` (melhorias e treinadores), `TR` (treinos), `SKILLS` (golpes), `DEFS` (defesas), `COMBOS`, `STRAT` (estratégias de luta), `TUNE` |
 | body / style levels | Altura e alcance (`H_BASE`, `rollBody`, `bodyType`: Compacto/Médio/Longo), níveis de estilo 0–5 (`sty`, `styleCap`, `styleFit`, `addStyleXP`), efeitos físicos na luta (`phys`, `skillF`, `sf`, `topF`) |
 | `STATE` | `newGame`, `makeAthlete`, `save`/`load`, `KEY` |
 | `OFFERS` | Propostas de luta, `makeOpp` (adversários de academias rivais), scouting |
@@ -55,7 +55,7 @@ Secções (procurar pelos comentários `/* ===== X ===== */`):
 
 ### Sistemas principais (resumo)
 
-- **Atletas:** 5 atributos (Força, Velocidade, Resistência, Defesa, Técnica) com potencial, idade, traço de personalidade, estilo e níveis de estilo, golpes e defesas com níveis 1–5, fadiga, confiança e forma, altura e alcance. Talento escondido com probabilidade 1/15. O primeiro atleta é **sempre peso Pena**; o resto é aleatório.
+- **Atletas:** 8 atributos em 2 grupos — FÍSICO: Força, Velocidade, Resistência, Queixo (de nascença, escala própria ~50, desce com a idade e com KOs); TÉCNICO: Técnica, Defesa, Pés, Ring IQ (sobe sobretudo com lutas e sparring) — com potencial, idade (faz anos), 7 mentais escondidos (`a.ment`: Coração, Calma, Disciplina, Confiança, Concentração, Instinto finalizador, Ouvir o canto) de onde sai o nome da personalidade (`persona`), estilo e níveis de estilo, golpes e defesas com níveis 1–5, fadiga, confiança e forma, altura e alcance. Talento escondido com probabilidade 1/15. O primeiro atleta é **sempre peso Pena**; o resto é aleatório.
 - **Plano semanal:** 3 treinos por semana; o plano tem de ser revisto todas as semanas (resumo antes de avançar e badges). Os atributos físicos sem treino durante mais de 3 semanas perdem condição, com mínimo.
 - **Estilos:** triângulo clássico — **In-fighter > Outboxer > Puncher > In-fighter**. A força da vantagem cresce com o nível do estilo (quase nada no amador, completa no topo). O corpo define o nível máximo de cada estilo. Novos estilos aprendem-se com treinadores especialistas da loja. Na luta escolhe-se o estilo antes do combate e pode trocar-se no intervalo (nível ≥ 2). Os adversários de Nacional/Mundial também trocam.
 - **Estratégias de luta:** Pressão / Equilibrado / Cautela.
@@ -118,7 +118,7 @@ O build de teste gera-se a partir do `index.html` por substituição de texto (o
 
 ## Em discussão: alinhar o jogo com o "Guia Completo de Boxe"
 
-O Tiago quer o jogo baseado num guia de boxe que escreveu. **As decisões, o plano por fases e o estado de cada tema estão em `docs/design.md` — é a referência; mantê-lo atualizado.** Os temas estão a ser decididos um a um, e **nada disto está implementado**:
+O Tiago quer o jogo baseado num guia de boxe que escreveu. **As decisões, o plano por fases e o estado de cada tema estão em `docs/design.md` — é a referência; mantê-lo atualizado.** Os temas estão a ser decididos um a um. Fase A em implementação (A1 = tema 8, atributos e mentais, feito); o resto ainda não está implementado:
 
 1. **Golpes:** numeração 1–6 (frente/trás), overhand, cabeça/corpo como alvo, variações (jab duplo, power jab, flicker jab, check hook, shovel hook, cross-counter…), que treino ensina cada golpe, uso dos números pelo comentador.
 2. Combinações clássicas (1-2, 1-1-2, 1-2-3, 1-2-3-2, 2-3-2, 1-6-3-2, gancho duplo, mudança de nível) e fintas.

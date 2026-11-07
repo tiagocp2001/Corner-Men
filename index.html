@@ -151,8 +151,8 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .fatbox small{font-family:var(--f-display);font-size:6px;color:var(--muted);letter-spacing:.06em}
 .fatbox b{font-family:var(--f-mono);font-size:20px;font-weight:400;line-height:1}
 .fatbox p{grid-column:1/-1;font-size:12px;color:var(--muted)}
-.mini{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
-.mini div{background:var(--panel2);border:2px solid var(--line);padding:4px 5px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.mini{display:grid;grid-template-columns:repeat(8,1fr);gap:3px}
+.mini div{background:var(--panel2);border:2px solid var(--line);padding:4px 3px;display:flex;flex-direction:column;gap:3px;min-width:0}
 .mini small{font-family:var(--f-display);font-size:6px;color:var(--muted);letter-spacing:.06em}
 .mini b{font-family:var(--f-mono);font-size:20px;font-weight:400;line-height:1}
 .mini .low{border-color:var(--red)} .mini .low small{color:var(--red)}
@@ -199,6 +199,12 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .card.ficha{gap:3px;padding:5px 10px}
 .card.ficha .who .meta{font-size:12px;line-height:1.25}
 .card.ficha .stats{gap:1px}
+.stats2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stats2 .stat{grid-template-columns:66px 1fr 20px;gap:4px;font-size:12px;line-height:1.1}
+.stats2 .num{font-size:15px}
+.card.ficha .stats2 .stats{gap:2px}
+.sg{font-family:var(--f-display);font-size:6px;color:var(--muted);letter-spacing:.06em;line-height:1.6}
+.card.ficha .pers{font-size:12px} .card.ficha .pers b{color:var(--gold);font-weight:400}
 .card.ficha .meta{line-height:1.25}
 .card.hist{gap:5px;padding:7px 8px;overflow:hidden}
 .hhd{display:flex;align-items:center;justify-content:space-between;gap:6px;flex:none}
@@ -289,7 +295,7 @@ const fmt=n=>Math.round(n).toLocaleString('pt-PT');
 /* ================= DATA ================= */
 const CATS=['Pena','Superpena','Ligeiro','Pesado'];
 const CAT_KG={Pena:'57 kg',Superpena:'59 kg',Ligeiro:'61 kg',Pesado:'+91 kg'};
-const TUNE=Object.assign({hitDiv:350,hvy:1.55,resK:.3,qk:.45,mk:.45,cleanMul:6,normMul:.45,cleanP:.02,forK:.04,judge:.8,giftK:.35,train:.2,decay:.3,decayFloor:.88,formK:1,dmg:.88,edge:.25,sagg:0,hprec:6,flash:.4,ctr:.2,ctrA:.3,sdA:-.02,sdD:.1,sdC:.02,tdA:.03,tdB:.08,pc:.8,scm:.5,hd:.5,bdm:.5,cr:20,dk:30,dr:.55,topD:.13,punD:.12,punF:.4,ctrK:.06,inCtr:.3,inCl:.2,sfB:.42,sfK:.116,rch:.03,fitP:.015,fitN:.006,hearB:6,hearSt:24,hearHp:30,hearKd:.35,hearJit:.25,hearDeaf:.8,hearSlow:12,hearCalm:.8,hearStub:1.3},window.__TUNE||{});
+const TUNE=Object.assign({hitDiv:350,hvy:1.55,resK:.3,qk:.45,mk:.45,cleanMul:6,normMul:.45,cleanP:.02,forK:.04,judge:.8,giftK:.35,train:.2,decay:.3,decayFloor:.88,formK:1,dmg:.88,edge:.25,sagg:0,hprec:6,flash:.4,ctr:.2,ctrA:.3,sdA:-.02,sdD:.1,sdC:.02,tdA:.03,tdB:.08,pc:.8,scm:.5,hd:.5,bdm:.5,cr:20,dk:30,dr:.55,topD:.13,punD:.12,punF:.4,ctrK:.06,inCtr:.3,inCl:.2,sfB:.42,sfK:.116,rch:.03,fitP:.015,fitN:.006,hearB:6,hearSt:24,hearHp:30,hearKd:.35,hearJit:.25,hearDeaf:.8,hearSlow:12,hearCalm:.8,hearStub:1.3,qxK:.35,qxD:.1,qxG:.15,qxKO:3,qxAge:28,qxYear:1.5,iqFight:10,hearIQ:.25,discG:.25,discF:.3,discQ:.06,stubT:40,stubTalk:.45,stubFight:.35,calmL:8,calmSt:.06,corG:.15,concK:.03,finK:.3,confDrift:.06,mentSd:18,mentOut:15},window.__TUNE||{});
 const CATMOD={Pena:{vol:1.25,dmg:.85,flash:.6,cost:.9},Superpena:{vol:1.15,dmg:.92,flash:.8,cost:.95},Ligeiro:{vol:1,dmg:1,flash:1,cost:1},Pesado:{vol:.75,dmg:1.3,flash:1.8,cost:1.25}};
 CATMOD.Pesado.dmg=TUNE.hvy;
 const GIFTS={
@@ -350,15 +356,45 @@ function phys(att,def,k,body){
   const fit=styleFit(att,att.style);b+=(fit>0?TUNE.fitP:fit<0?-TUNE.fitN:0)*clamp(((att.slv||1)-1)/4,.15,1)*skillF(att,['jab','direto','gancho','uppercut']);
   return b;
 }
-const TRAITS={
-  'Trabalhador':'Ganha mais 25% nos treinos.',
-  'Teimoso':'Às vezes ignora a estratégia do canto.',
-  'Cabeça fria':'Perde menos confiança nas derrotas.',
-  'Preguiçoso':'Ganha menos 20% nos treinos, mas cansa-se menos.',
-  'Coração de leão':'Mais difícil de derrubar de vez.'
-};
-const ATTRS=[['forca','Força'],['velocidade','Velocidade'],['resistencia','Resistência'],['defesa','Defesa'],['tecnica','Técnica']];
-const SHORT={forca:'For',velocidade:'Vel',resistencia:'Res',defesa:'Def',tecnica:'Téc'};
+/* ---- atributos (tema 8): 8 barras em 2 grupos. O Queixo é de nascença (escala própria: ~50 = normal em qualquer escalão),
+   quase não se treina e desce com a idade e com cada KO sofrido. O Ring IQ sobe sobretudo com lutas e sparring. Os Pés treinam-se
+   com Corda e Shadow boxing (a distância, que os usa a sério, vem no tema 5). ---- */
+const ATTRS=[['forca','Força'],['velocidade','Velocidade'],['resistencia','Resistência'],['queixo','Queixo'],['tecnica','Técnica'],['defesa','Defesa'],['pes','Pés'],['iq','Ring IQ']];
+const ATTR_G=[['FÍSICO',['forca','velocidade','resistencia','queixo']],['TÉCNICO',['tecnica','defesa','pes','iq']]];
+const ATTR_N=Object.fromEntries(ATTRS);
+const SHORT={forca:'For',velocidade:'Vel',resistencia:'Res',queixo:'Qxo',tecnica:'Téc',defesa:'Def',pes:'Pés',iq:'IQ'};
+const DECAY_K=['forca','velocidade','resistencia']; // perdem condição sem treino (o Queixo não: só desce com a idade e com KOs)
+function attrLow(k){return k==='iq'?'Ring IQ':ATTR_N[k].toLowerCase()}
+function gs(){return(Math.random()+Math.random()+Math.random()-1.5)*2} // ~normal(0,1)
+function rollChin(){return clamp(Math.round(50+gs()*13),22,85)}
+function chinK(x){return clamp(1+TUNE.qxK*(50-(x.queixo??50))/50,.6,1.5)} // >1 = queixo fraco (cai mais)
+/* ---- mentais (tema 8.2): 7 valores escondidos (5-95, 50 = normal) em a.ment. Não se treinam: mudam devagar com a carreira.
+   A personalidade é o nome do que se destaca (≥ TUNE.mentOut acima ou abaixo de 50); o jogador só vê o nome e 2-3 palavras. ---- */
+const MENT=[['cor','Coração'],['calma','Calma'],['disc','Disciplina'],['conf','Confiança'],['conc','Concentração'],['fin','Instinto finalizador'],['ouvir','Ouvir o canto']];
+const MENT_W={cor:['muito coração','pouca garra'],calma:['muito calmo','pouca calma'],disc:['disciplinado','pouco disciplinado'],conf:['confiante','inseguro'],conc:['concentrado','distrai-se'],fin:['sabe acabar lutas','hesita em acabar'],ouvir:['ouve bem o canto','ouve pouco o canto']};
+const PERS1={'cor+':'Coração de leão','cor-':'Sem garra','calma+':'Cabeça fria','calma-':'Esquentado','disc+':'Trabalhador','disc-':'Preguiçoso','conf+':'Confiante','conf-':'Inseguro','conc+':'Concentrado','conc-':'Distraído','fin+':'Finalizador','fin-':'Hesitante','ouvir+':'Bom aluno','ouvir-':'Teimoso'};
+const PERS2=Object.fromEntries(Object.entries({
+  'cor+|calma-':'Guerreiro impulsivo','cor+|fin+':'Fera','cor+|conf+':'Destemido','cor+|disc+':'Operário incansável','calma+|conc+':'Calculista',
+  'calma+|fin-':'Cauteloso','disc+|ouvir+':'Aluno exemplar','conf+|ouvir-':'Arrogante','conf-|calma-':'Nervoso','conf+|disc-':'Vaidoso',
+  'calma-|fin+':'Predador','conc-|disc-':'Boémio','calma-|ouvir-':'Cabeça quente','cor-|conf-':'Frágil de cabeça','conc+|disc+':'Profissional'
+}).map(([k,v])=>[k.split('|').sort().join('|'),v]));
+function rollMental(){const m={};for(const[k]of MENT)m[k]=clamp(Math.round(50+gs()*TUNE.mentSd),5,95);return m}
+function mv(x,k){const m=x&&x.ment,v=m&&m[k];return v==null?50:v}
+function persona(x){
+  const st=MENT.map(([k])=>({k,d:mv(x,k)-50})).filter(o=>Math.abs(o.d)>=TUNE.mentOut).sort((p,q)=>Math.abs(q.d)-Math.abs(p.d)).map(o=>o.k+(o.d>0?'+':'-'));
+  let n=null;const t=Math.min(3,st.length);
+  for(let i=0;i<t&&!n;i++)for(let j=i+1;j<t&&!n;j++)n=PERS2[[st[i],st[j]].sort().join('|')]||null;
+  let one=false;if(!n){n=st.length?PERS1[st[0]]:'Equilibrado';one=st.length>0}
+  const w=st.slice(one?1:0,3).map(s=>MENT_W[s.slice(0,-1)][s.endsWith('+')?0:1]); // um traço só: o nome já o diz
+  return{n,w:st.length?w:['nada se destaca']};
+}
+// efeitos dos mentais (substituem os traços antigos Trabalhador, Preguiçoso, Teimoso, Cabeça fria, Coração de leão)
+function discMul(x){return 1+TUNE.discG*(mv(x,'disc')-50)/50}                    // ganho nos treinos
+function fatMul(x){return 1-TUNE.discF*clamp((50-mv(x,'disc'))/50,0,1)}          // pouca disciplina: não puxa por si, cansa-se menos
+function stubP(x){return clamp((TUNE.stubT-mv(x,'ouvir'))/TUNE.stubT,0,1)}       // 0 = ouve o canto; 1 = muito teimoso
+function confBase(x){return 40+.4*mv(x,'conf')}                                   // confiança "natural" para onde a confiança do dia volta
+function hearMul(x){const o=mv(x,'ouvir'),m=o>=50?1-(1-TUNE.hearCalm)*(o-50)/50:1+(TUNE.hearStub-1)*(50-o)/50;
+  return m*(1-TUNE.hearIQ*clamp(((x.iq??20)-20)/60,-.25,1))}                      // Ouvir o canto e Ring IQ: ouve mais depressa
 const TIERS=[
   {n:'Amador',rounds:3,base:12,purse:[200,400],share:.5,cost:30,spons:20},
   {n:'Regional',rounds:4,base:32,purse:[900,1800],share:.4,cost:120,spons:70},
@@ -375,16 +411,16 @@ function weeklyCosts(){
 function sponsors(){let v=Math.max(0,Math.round(S.pop-20));for(const a of S.roster)if(a.titles.length)v+=[15,50,150,450][Math.min(3,a.titles.length-1)];return v}
 const TR={
   saco:{n:'Saco',eq:'saco',g:{forca:3,resistencia:.8},f:12,d:'Força'},
-  sparring:{n:'Sparring',eq:'sparring',g:{defesa:2.4,tecnica:1.4,velocidade:.6},f:14,d:'Defesa, técnica'},
+  sparring:{n:'Sparring',eq:'sparring',g:{defesa:2.4,tecnica:1.2,velocidade:.6,iq:.9},f:14,d:'Defesa, técnica, Ring IQ'},
   corrida:{n:'Corrida',eq:null,g:{resistencia:3},f:11,d:'Resistência'},
-  shadow:{n:'Shadow boxing',eq:null,g:{tecnica:1.8,velocidade:1.4},f:7,d:'Técnica, velocidade'},
-  corda:{n:'Corda',eq:'corda',g:{resistencia:2,velocidade:2},f:11,d:'Resistência, pés'},
+  shadow:{n:'Shadow boxing',eq:null,g:{tecnica:1.6,velocidade:1.2,pes:1},f:7,d:'Técnica, pés'},
+  corda:{n:'Corda',eq:'corda',g:{resistencia:2,velocidade:1.4,pes:1.8},f:11,d:'Resistência, pés'},
   pads:{n:'Pads',eq:'pads',g:{tecnica:3,velocidade:.6},f:11,d:'Técnica, golpes',xp:true},
   pesos:{n:'Musculação',eq:'pesos',g:{forca:3.6},f:14,d:'Força'},
   pera:{n:'Pera',eq:'pera',g:{velocidade:2.8,tecnica:1},f:8,d:'Velocidade'},
   esquiva:{n:'Corda de esquiva',eq:'esquiva',g:{defesa:3,velocidade:.8},f:9,d:'Defesa'},
   pneu:{n:'Pneu e marreta',eq:'pneu',g:{forca:2.4,resistencia:2.2},f:16,d:'Força, resist.'},
-  bola:{n:'Bola medicinal',eq:'bola',g:{resistencia:2.2,defesa:1},f:12,d:'Aguentar golpes'},
+  bola:{n:'Bola medicinal',eq:'bola',g:{resistencia:2.2,defesa:1,queixo:.8},f:12,d:'Aguentar golpes'},
   estIn:{n:'Estilo In-fighter',eq:null,up:'cIn',sty:'In-fighter',g:{},f:12,d:'Aprende o estilo In-fighter'},
   estOut:{n:'Estilo Outboxer',eq:null,up:'cOut',sty:'Outboxer',g:{},f:11,d:'Aprende o estilo Outboxer'},
   estPun:{n:'Estilo Puncher',eq:null,up:'cPun',sty:'Puncher',g:{},f:12,d:'Aprende o estilo Puncher'},
@@ -438,7 +474,7 @@ const DAYS=['SEGUNDA','TERÇA','QUARTA','QUINTA','SEXTA','SÁBADO'];
 
 /* ================= STATE ================= */
 let S=null;
-const KEY='corner-men-v6';
+const KEY='corner-men-v7';
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function load(){try{const t=localStorage.getItem(KEY);return t?JSON.parse(t):null}catch(e){return null}}
 function look(){return{skin:pick(SKINS),hair:pick(HAIRS),trunk:pick(TRUNKS)}}
@@ -446,23 +482,25 @@ function makeAthlete(cat,o={}){
   const pot=o.pot??RI(40,88);
   const bd=o.h?{h:o.h,r:o.r}:rollBody(cat);
   const a={h:bd.h,r:bd.r,id:'a'+Date.now()+RI(0,9999),name:o.name||pick(FIRST)+' '+pick(LAST),nick:o.nick||pick(NICKS),age:o.age||RI(16,21),cat,
-    style:o.style||styleForBody(bodyType({cat,h:bd.h,r:bd.r})),trait:o.trait||pick(Object.keys(TRAITS)),salary:o.salary||RI(30,45),look:o.look||look(),
+    style:o.style||styleForBody(bodyType({cat,h:bd.h,r:bd.r})),ment:o.ment?Object.assign(Object.fromEntries(MENT.map(([k])=>[k,50])),o.ment):rollMental(),bw:RI(0,51),salary:o.salary||RI(30,45),look:o.look||look(),
     attrs:{},cap:{},pot,fatigue:0,conf:55,injury:0,skills:{jab:1,direto:0,gancho:0,uppercut:0,corpoDireto:0,figado:0,contra:0},xp:{jab:0,direto:0,gancho:0,uppercut:0,corpoDireto:0,figado:0,contra:0},def:{bloqueio:1,esquiva:0,clinch:0},dxp:{bloqueio:0,esquiva:0,clinch:0},combos:[],recovery:0,
     rec:{w:0,l:0,d:0,ko:0},tier:0,rank:10,titles:[],fight:null,offers:[],plan:['saco','corrida','sparring'],gift:o.gift===undefined?rollGift(cat):o.gift,giftKnown:false,weeks:0,hint:null,base:{},peak:{},lastT:{},tlog:[],refusals:0};
-  for(const[k]of ATTRS){a.attrs[k]=RI(8,20)+(o.boost||0);a.cap[k]=clamp(pot+RI(-12,12),28,99)}
+  for(const[k]of ATTRS){a.attrs[k]=k==='queixo'?rollChin():k==='iq'?RI(6,16)+(o.boost||0):RI(8,20)+(o.boost||0);a.cap[k]=k==='queixo'?a.attrs[k]+RI(3,8):clamp(pot+RI(-12,12),28,99)}
   if(o.attrs)Object.assign(a.attrs,o.attrs);
+  if(o.attrs&&o.attrs.queixo!=null)a.cap.queixo=a.attrs.queixo+5;
+  a.conf=Math.round(confBase(a));
   for(const[k]of ATTRS){a.base[k]=a.attrs[k];a.peak[k]=a.attrs[k];a.lastT[k]=0}
   initBody(a,o.slv==null?RI(1,2):o.slv);
   return a;
 }
-function rating(a){const s=ATTRS.reduce((t,[k])=>t+a.attrs[k],0)/5;return s+Object.values(a.skills).reduce((t,v)=>t+(v||0),0)*1.5}
+function rating(a){const s=ATTRS.reduce((t,[k])=>t+a.attrs[k],0)/ATTRS.length;return s+Object.values(a.skills).reduce((t,v)=>t+(v||0),0)*1.5}
 function stars(pot){return clamp(Math.round(pot/18),1,5)}
 function starStr(n){return '★'.repeat(n)+'☆'.repeat(5-n)}
 function potRange(a){const s=stars(a.pot),m=S.up.treinador?0:1;const lo=clamp(s-m,1,5),hi=clamp(s+m,1,5);return lo===hi?starStr(lo):starStr(lo)+' a '+starStr(hi)}
 function newGame(){
-  const st0=[RI(9,16),RI(9,16),RI(9,16),RI(9,16),RI(9,16)];{let sum=st0.reduce((t,v)=>t+v,0);while(sum<62){st0[RI(0,4)]++;sum++}while(sum>62){const i=RI(0,4);if(st0[i]>8){st0[i]--;sum--}}}
+  const TK=ATTRS.map(([k])=>k).filter(k=>k!=='queixo'),st0=TK.map(()=>RI(9,16));{let sum=st0.reduce((t,v)=>t+v,0);while(sum<86){st0[RI(0,6)]++;sum++}while(sum>86){const i=RI(0,6);if(st0[i]>8){st0[i]--;sum--}}}
   const cat0='Pena',bd0=rollBody(cat0);let sty0=styleForBody(bodyType({cat:cat0,...bd0}));while(styleFit({cat:cat0,...bd0},sty0)<0)sty0=styleForBody(bodyType({cat:cat0,...bd0}));
-  const rui=makeAthlete(cat0,{h:bd0.h,r:bd0.r,style:sty0,age:RI(17,20),salary:35,pot:RI(64,76),slv:2,look:{...look(),trunk:'#d4452f'},attrs:Object.fromEntries(ATTRS.map(([k],i)=>[k,st0[i]]))});
+  const rui=makeAthlete(cat0,{h:bd0.h,r:bd0.r,style:sty0,age:RI(17,20),salary:35,pot:RI(64,76),slv:2,look:{...look(),trunk:'#d4452f'},attrs:{...Object.fromEntries(TK.map((k,i)=>[k,st0[i]])),queixo:clamp(rollChin(),42,70)}});
   S={week:1,money:500,pop:5,members:4,up:{},eq:{saco:1,sparring:1,corda:0,pera:0,pads:0,pesos:0,esquiva:0,pneu:0,bola:0},
     roster:[rui],sel:0,tab:'gym',sub:'ficha',shopSub:'eq',
     rivals:[{n:'Academia Tubarão',lvl:0},{n:'Boxe Clube Ribeira',lvl:0},{n:'Punhos de Aço',lvl:1},{n:'Ginásio Estrela do Norte',lvl:0},{n:'Clube Leões da Margem',lvl:2}],
@@ -523,15 +561,15 @@ function makeOpp(a,title){
   const r=t.base+RI(-4,6)+Math.min(rv.lvl,6)+(12-a.rank)*.9+(title?6:0);
   const bd=rollBody(a.cat);const st=styleForBody(bodyType({cat:a.cat,...bd}));
   const used=S.roster.map(x=>x.nick);const o={name:pick(FIRST)+' '+pick(LAST),nick:pick(NICKS.filter(n=>!used.includes(n))),academy:rv.n,style:st,look:{...look(),trunk:pick(TRUNKS.filter(c=>c!==a.look.trunk))},attrs:{},
-    skills:{jab:1+Math.floor(r/25),direto:r>22?1+Math.floor(r/30):0,gancho:r>34?1+Math.floor(r/40):0,uppercut:r>28?1+Math.floor(r/38):0,corpoDireto:r>30?1+Math.floor(r/45):0,figado:r>40?1+Math.floor(r/50):0,contra:r>30?Math.min(5,1+Math.floor((r-30)/12)):0},def:{bloqueio:1+Math.floor(r/30),esquiva:r>26?1+Math.floor(r/40):0,clinch:r>22?1+Math.floor(r/45):0},rating:0,trait:pick(Object.keys(TRAITS))};
-  for(const[k]of ATTRS)o.attrs[k]=clamp(r+RI(-7,7),5,99);
+    skills:{jab:1+Math.floor(r/25),direto:r>22?1+Math.floor(r/30):0,gancho:r>34?1+Math.floor(r/40):0,uppercut:r>28?1+Math.floor(r/38):0,corpoDireto:r>30?1+Math.floor(r/45):0,figado:r>40?1+Math.floor(r/50):0,contra:r>30?Math.min(5,1+Math.floor((r-30)/12)):0},def:{bloqueio:1+Math.floor(r/30),esquiva:r>26?1+Math.floor(r/40):0,clinch:r>22?1+Math.floor(r/45):0},rating:0,ment:rollMental()};
+  for(const[k]of ATTRS)o.attrs[k]=k==='queixo'?clamp(rollChin()+a.tier*2,20,92):clamp(r+RI(-7,7),5,99);
   if(st==='In-fighter')o.attrs.forca+=4;if(st==='Outboxer')o.attrs.defesa+=4;if(st==='Puncher')o.attrs.forca+=4;
   o.rating=rating(o);o.made=S.week;o.cat=a.cat;o.gift=rollGift(a.cat);o.h=bd.h;o.r=bd.r;initBody(o,clamp(a.tier+1+RI(0,1)+(title?1:0),1,5));
   if(a.tier>=2){const others=shuffle(STYLES.filter(x=>x!==o.style));others.slice(0,a.tier>=3?2:1).forEach(x=>{o.sty[x]=Math.min(styleCap(o,x),Math.max(1,o.sty[o.style]-RI(0,1)))})}
   const n=clamp(Math.round(RI(0,3)+a.tier*4+(r-14)/5),0,40);const w=Math.round(n*R(.5,.85));
   o.rec={w,l:n-w,ko:Math.round(w*R(.2,.6))};
   o.fk=n>=4&&Math.random()<clamp((o.attrs.tecnica-35)/60,0,.6)?RI(1,Math.max(1,Math.floor(n/4))):0;
-  o.glass=n>=4&&o.attrs.resistencia<24&&Math.random()<.6?RI(1,2):0;
+  o.glass=n>=4&&o.attrs.queixo<40&&Math.random()<.6?RI(1,2):0;
   return o;
 }
 function scoutOf(o){
@@ -547,7 +585,7 @@ function scoutOf(o){
   const u=Math.max(2,o.scout.u-(S.up.treinador?2:0));
   return{...o.scout,u};
 }
-function scoutRating(o){const sc=scoutOf(o);return ATTRS.reduce((t,[k])=>t+(sc.attrs[k][0]+sc.attrs[k][1])/2,0)/5+Object.values(o.skills).reduce((t,v)=>t+(v||0),0)*1.5}
+function scoutRating(o){const sc=scoutOf(o);return ATTRS.reduce((t,[k])=>t+(sc.attrs[k][0]+sc.attrs[k][1])/2,0)/ATTRS.length+Object.values(o.skills).reduce((t,v)=>t+(v||0),0)*1.5}
 function showScout(o,a,when){
   const sc=scoutOf(o);const n=o.rec.w+o.rec.l;
   const prec=n<=2?'Muito pouca informação':n<=5?'Informação razoável':n<=10?'Boa informação':'Muito bem estudado';
@@ -561,7 +599,7 @@ function showScout(o,a,when){
     ${o.fk?`<p class="hint"><span class="warn">Mão perigosa:</span> já fez ${o.fk} queda${o.fk>1?'s':''} relâmpago a adversários que estavam inteiros.</p>`:''}
     ${o.gift&&(o.rec.w+o.rec.l)>=5?`<p class="hint"><span class="warn">Dom conhecido:</span> ${GIFTS[o.gift].n}. ${GIFTS[o.gift].d}</p>`:''}
     ${o.glass?`<p class="hint"><span class="good">Queixo frágil:</span> já foi ao chão ${o.glass} vez${o.glass>1?'es':''} sem estar ferido.</p>`:''}
-    <div class="r" style="grid-template-columns:1fr"><div><strong>TÁTICAS CONTRA UM ${o.style.toUpperCase()}</strong>${TACTICS[o.style].good.map(g=>`<p>Resulta: <b style="color:var(--fg)">${g.n}</b> (precisa de ${ATTR_N[g.need].toLowerCase()}${a.attrs[g.need]>=(sc.attrs[g.need][0]+sc.attrs[g.need][1])/2-3?'':', <span class="warn">o teu atleta pode não ter</span>'})</p>`).join('')}<p>Ajuda em parte: ${TACTICS[o.style].half.map(h=>h.n.toLowerCase()).join(', ')}.</p></div></div>
+    <div class="r" style="grid-template-columns:1fr"><div><strong>TÁTICAS CONTRA UM ${o.style.toUpperCase()}</strong>${TACTICS[o.style].good.map(g=>`<p>Resulta: <b style="color:var(--fg)">${g.n}</b> (precisa de ${attrLow(g.need)}${a.attrs[g.need]>=(sc.attrs[g.need][0]+sc.attrs[g.need][1])/2-3?'':', <span class="warn">o teu atleta pode não ter</span>'})</p>`).join('')}<p>Ajuda em parte: ${TACTICS[o.style].half.map(h=>h.n.toLowerCase()).join(', ')}.</p></div></div>
     <p class="hint">${edge(a.style,o.style)>0?`<span class="good">O estilo de ${a.nick} tem vantagem.</span>`:edge(a.style,o.style)<0?`<span class="warn">O estilo de ${a.nick} está em desvantagem.</span>`:'Mesmo estilo: ninguém tem vantagem.'} ${when?`Faltam ${when} semanas: ele também vai treinar até lá.`:''}${weeks>0?` Dados de há ${weeks} semana${weeks>1?'s':''}.`:''}</p>`,'FECHAR');
 }
 function addOffer(a,easy){
@@ -668,7 +706,7 @@ function planWarns(a){
   const end=projFat(a,a.plan);if(end>70)W.push(`<span class="warn">⚠ fadiga ≈${end}: risco de lesão</span>`);
   const trained=new Set(a.plan.filter(p=>trainOK(a,p)).flatMap(p=>Object.keys(TR[p].g)));
   if(a.plan.some(p=>!trainOK(a,p)))trained.add('resistencia');
-  const lost=['forca','velocidade','resistencia'].filter(k=>{const l=losing(a,k);return l&&l.lvl==='red'&&!trained.has(k)});
+  const lost=DECAY_K.filter(k=>{const l=losing(a,k);return l&&l.lvl==='red'&&!trained.has(k)});
   if(lost.length)W.push(`<span class="lossr">↓ perde ${lost.map(k=>SHORT[k]).join(', ')} esta semana</span>`);
   const w=weeksTo(a);if(a.fight&&w===1&&end>45)W.push(`<span class="warn">🥊 luta na próxima semana: convém aliviar</span>`);
   if(a.plan.some(p=>!trainOK(a,p)))W.push(`<span class="meta">sem equipamento num treino: fica a correr</span>`);
@@ -731,7 +769,7 @@ function panelAth(){
           ${pr?'<span class="meta">PRINCIPAL</span>':lv>0?`<button class="btn" data-mainsty="${st}" style="font-size:7px;padding:6px">PRINCIPAL</button>`:''}</div>`}).join('')}</div></div>`;
   }
   if(S.sub==='plano'){
-    let f=Math.max(0,a.fatigue-15);for(const p of a.plan)f=clamp(f+TR[trainOK(a,p)?p:'corrida'].f,0,100);
+    const f=projFat(a,a.plan);
     const w=weeksTo(a);
     return selector()+sub+miniStats(a)+`<button class="slot planbox" data-editplan="1"><span><strong>PLANO DA SEMANA · ${!canTrain(a)?'a descansar':needsReview(a)?'<span style="color:var(--red)">⏳ por rever</span>':'<span style="color:var(--green)">✅ revisto</span>'}</strong><span class="pl">${a.plan.map(p=>TR[p].n).join(' · ')}</span></span><em class="ed">EDITAR<br>PLANO</em></button>
       <div class="card plancard"><div class="meta">Fadiga agora: <b>${Math.round(a.fatigue)}</b> · no fim da semana: <b class="${f>70?'warn':''}">≈${Math.round(f)}</b></div>
@@ -745,15 +783,16 @@ function panelAth(){
   return selector()+sub+`<div class="card ficha" style="overflow:auto;min-height:0">
     <div class="who"><canvas width="32" height="32" id="portrait"></canvas><div style="min-width:0">
       <div class="nm">${a.name.split(' ')[0]} <em>"${a.nick}"</em> ${a.name.split(' ').slice(1).join(' ')}</div>
-      <div class="meta">${a.age} anos · peso ${a.cat.toLowerCase()} (${CAT_KG[a.cat]}) · ${a.style} ${styleLv(a,a.style)} · ${a.trait}</div>
+      <div class="meta">${a.age} anos · peso ${a.cat.toLowerCase()} (${CAT_KG[a.cat]}) · ${a.style} ${styleLv(a,a.style)}</div>
       <div class="meta">${bodyLine(a)}</div>
       <div class="meta">${a.rec.w}V ${a.rec.l}D ${a.rec.d}E (${a.rec.ko} KO) · #${a.rank} ${t.n}${a.titles.length?' · '+a.titles.length+' título':''}</div>
-      ${fightLine(a)}</div></div>
-    <div class="stats">${ATTRS.map(([k,n])=>`<div class="stat"><span>${n}</span><div class="bar"><i style="width:${clamp(a.attrs[k],0,100)}%"></i></div><span class="num">${Math.floor(a.attrs[k])}</span></div>`).join('')}</div>
+      ${a.fight||!(a.injury>0||a.recovery>0)?fightLine(a):''}${a.injury>0||a.recovery>0?`<div class="meta">${a.injury>0?`<span class="warn">lesionado ${a.injury} sem.</span>`:''}${a.injury>0&&a.recovery>0?' · ':''}${a.recovery>0?`<span class="warn">recupera ${a.recovery} sem.</span>`:''}</div>`:''}</div></div>
+    ${(()=>{const p=persona(a);return `<div class="meta pers"><b>${p.n}</b>${p.w.length?' · '+p.w.slice(0,p.n.length>14?2:3).join(', '):''}</div>`})()}
+    <div class="stats2">${ATTR_G.map(([g,ks])=>`<div class="stats"><small class="sg">${g}</small>${ks.map(k=>`<div class="stat"><span>${ATTR_N[k]}</span><div class="bar"><i style="width:${clamp(a.attrs[k],0,100)}%"></i></div><span class="num">${Math.floor(a.attrs[k])}</span></div>`).join('')}</div>`).join('')}</div>
     <div class="row2"><div class="stat" style="grid-template-columns:52px 1fr"><span>Fadiga</span><div class="bar ${a.fatigue>60?'red':'gold'}"><i style="width:${a.fatigue}%"></i></div></div>
       <div class="stat" style="grid-template-columns:70px 1fr"><span>Confiança</span><div class="bar blue"><i style="width:${a.conf}%"></i></div></div></div>
-    <div class="meta">Potencial <span class="stars">${potRange(a)}</span>${a.injury>0?` · <span class="warn">lesionado ${a.injury} sem.</span>`:''}${a.recovery>0?` · <span class="warn">recupera ${a.recovery} sem.</span>`:''}</div>
-    <div style="display:flex;gap:8px;align-items:center;justify-content:space-between">${a.giftKnown?(a.gift?`<div class="meta"><b style="color:var(--gold)">Dom: ${GIFTS[a.gift].n}</b> · ${GIFTS[a.gift].d}</div>`:'<div class="meta">Sem dom especial.</div>'):a.hint?`<div class="meta">Pista: ${GIFTS[a.hint].n.toLowerCase()}? Ainda por confirmar.</div>`:'<div></div>'}
+    <div class="meta">Potencial <span class="stars">${potRange(a)}</span></div>
+    <div style="display:flex;gap:8px;align-items:center;justify-content:space-between">${a.giftKnown?(a.gift?`<div class="meta" title="${GIFTS[a.gift].d}"><b style="color:var(--gold)">Dom: ${GIFTS[a.gift].n}</b></div>`:'<div class="meta">Sem dom especial.</div>'):a.hint?`<div class="meta">Pista: ${GIFTS[a.hint].n.toLowerCase()}? Ainda por confirmar.</div>`:'<div></div>'}
     ${S.roster.length>1?`<button class="btn" data-dismiss="${a.id}" style="font-size:7px;padding:7px 8px 5px;flex:none">DISPENSAR</button>`:''}</div></div>`;
 }
 function panelFights(){
@@ -799,7 +838,7 @@ function formOf(a){
   const L=(a.tlog||[]).slice(-4);const avg=L.length?L.reduce((t,x)=>t+x.n,0)/L.length:2;
   if(L.length>=3&&avg>=2)add(.25,'treinou com regularidade');else if(avg<1)add(-.35,'treinou pouco nas últimas semanas');
   const last=L.at(-1);if(last&&last.rest&&last.n>0)add(.15,'aliviou na última semana');
-  const lostN=['forca','velocidade','resistencia'].filter(k=>a.peak&&a.attrs[k]<a.peak[k]-1.5).length;if(lostN)add(-.15*lostN,'perdeu condição física');
+  const lostN=DECAY_K.filter(k=>a.peak&&a.attrs[k]<a.peak[k]-1.5).length;if(lostN)add(-.15*lostN,'perdeu condição física');
   add((a.conf-55)/150,a.conf>=55?'confiante':'com pouca confiança');
   if(a.recovery>0)add(-.4,'ainda não recuperou da última luta');
   sc=clamp(sc,-1,1);
@@ -874,9 +913,9 @@ document.addEventListener('click',e=>{
   if(t.id==='resetBtn'){const m=modal(`<h2>COMEÇAR DE NOVO?</h2><p class="hint">Perdes todo o progresso deste ginásio.</p><div class="row2"><button class="btn" id="rNo">CANCELAR</button><button class="btn red" id="rYes">APAGAR TUDO</button></div>`);
     m.querySelector('#rNo').onclick=closeModal;m.querySelector('#rYes').onclick=async()=>{ENT=[];occ={};newGame();closeModal();await setupGym();render()};return}
 });
-function projFat(a,plan){let f=Math.max(0,a.fatigue-15);for(const p of plan){const t=TR[trainOK(a,p)?p:'corrida'];f=clamp(f+(t.f>0&&a.trait==='Preguiçoso'?t.f*.7:t.f),0,100)}return Math.round(f)}
+function projFat(a,plan){let f=Math.max(0,a.fatigue-15);for(const p of plan){const t=TR[trainOK(a,p)?p:'corrida'];f=clamp(f+(t.f>0?t.f*fatMul(a):t.f),0,100)}return Math.round(f)}
 function losing(a,k){
-  if(!['forca','velocidade','resistencia'].includes(k)||!a.lastT||a.lastT[k]===undefined)return null;
+  if(!DECAY_K.includes(k)||!a.lastT||a.lastT[k]===undefined)return null;
   const d=S.week-a.lastT[k];if(d<3)return null;
   const base=(a.base&&a.base[k])||0,peak=(a.peak&&a.peak[k])||a.attrs[k];
   const floor=Math.max(base,peak*TUNE.decayFloor),lost=Math.max(0,peak-a.attrs[k]);
@@ -884,13 +923,13 @@ function losing(a,k){
   return {lvl:d>=4?'red':'warn',lost};
 }
 function lossMark(a,k){const l=losing(a,k);if(!l)return '';
-  return l.lvl==='red'?` <span class="lossr" title="perde condição no fim desta semana se não treinar">↓${l.lost>.05?' −'+l.lost.toFixed(1):''}</span>`
+  return l.lvl==='red'?` <span class="lossr" title="perde condição no fim desta semana se não treinar${l.lost>.05?' (já perdeu '+l.lost.toFixed(1)+')':''}">↓</span>`
   :` <span class="lossw" title="começa a perder condição se continuar sem treino">↓</span>`}
 function fatBox(a,plan){const now=Math.round(a.fatigue),end=projFat(a,plan);const col=v=>v>70?'red':v>45?'gold':'green';
   return `<div class="fatbox"><div class="fl"><small>FADIGA AGORA</small><b>${now}</b><div class="bar ${col(now)}"><i style="width:${now}%"></i></div></div><div class="fl"><small>FIM DA SEMANA</small><b class="${end>70?'warn':''}">≈${end}</b><div class="bar ${col(end)}"><i style="width:${end}%"></i></div></div><p>${end>70?'Acima de 70: risco de lesão.':end>45?'Cansado: treina menos bem e chega pior às lutas.':'Bom nível de fadiga.'}</p></div>`}
 function miniStats(a){
-  const min=Math.min(...ATTRS.map(([k])=>a.attrs[k]));
-  return `<div class="mini">${ATTRS.map(([k])=>`<div class="${a.attrs[k]===min?'low':''}"><small>${SHORT[k].toUpperCase()}${lossMark(a,k)}</small><b>${Math.floor(a.attrs[k])}</b><div class="bar ${a.attrs[k]===min?'red':''}"><i style="width:${clamp(a.attrs[k],0,100)}%"></i></div></div>`).join('')}</div>`;
+  const min=Math.min(...ATTRS.filter(([k])=>k!=='queixo').map(([k])=>a.attrs[k]));
+  return `<div class="mini">${ATTRS.map(([k])=>`<div class="${a.attrs[k]===min&&k!=='queixo'?'low':''}"><small>${SHORT[k].toUpperCase()}${lossMark(a,k)}</small><b>${Math.floor(a.attrs[k])}</b><div class="bar ${a.attrs[k]===min&&k!=='queixo'?'red':''}"><i style="width:${clamp(a.attrs[k],0,100)}%"></i></div></div>`).join('')}</div>`;
 }
 function trainTargets(a,t){return Object.keys(t.g).map(k=>`${SHORT[k]} ${Math.floor(a.attrs[k])}`).join(' · ')}
 function editPlan(a){
@@ -945,7 +984,7 @@ async function advanceWeek(){
       if(id==='descanso'){rested=true;a.fatigue=Math.max(0,a.fatigue+t.f);a.conf=clamp(a.conf+3,0,100);continue}
       nT++;
       if(a.fatigue>70&&Math.random()<(a.fatigue-65)/90){injured=true;break}
-      const q=clamp(.6+a.conf/250+R(-.1,.1)+(S.up.treinador?.05:0)+(a.trait==='Trabalhador'?.05:a.trait==='Preguiçoso'?-.08:0),.35,1);
+      const q=clamp(.6+a.conf/250+R(-.1,.1)+(S.up.treinador?.05:0)+TUNE.discQ*(mv(a,'disc')-50)/50,.35,1);
       const m=(id==='sparring'&&S.up.ringue)?1.25:1;
       for(const[k,b]of Object.entries(t.g))gain(a,k,b,q,m);
       if(t.sty)addStyleXP(a,t.sty,Math.round(4*q),up,true);
@@ -955,7 +994,7 @@ async function advanceWeek(){
         while(pts-->0){const k=pick(known);a.xp[k]++;while(a.skills[k]<5&&a.xp[k]>=a.skills[k]*8){a.xp[k]-=a.skills[k]*8;a.skills[k]++;up.push(`${SKILLS[k].n} nv ${a.skills[k]}`)}}}
       if(id==='sparring'||id==='esquiva'){const ks=id==='esquiva'?['esquiva']:['bloqueio','clinch'];const kn=ks.filter(k=>a.def[k]>0);let pts=Math.round((id==='esquiva'?5:4)*q);
         while(kn.length&&pts-->0){const k=pick(kn);a.dxp[k]++;while(a.def[k]<5&&a.dxp[k]>=a.def[k]*8){a.dxp[k]-=a.def[k]*8;a.def[k]++;up.push(`${DEFS[k].n} nv ${a.def[k]}`)}}}
-      a.fatigue=clamp(a.fatigue+(a.trait==='Preguiçoso'?t.f*.7:t.f),0,100);
+      a.fatigue=clamp(a.fatigue+(t.f>0?t.f*fatMul(a):t.f),0,100);
     }
     a.tlog.push({n:nT,rest:rested});
     const parts=ATTRS.map(([k])=>{const d=a.attrs[k]-before[k];return d>=.1?`${SHORT[k]} +${d.toFixed(1)}`:''}).filter(Boolean).concat(up,checkUnlocks(a).map(g=>'aprendeu '+g));
@@ -965,11 +1004,16 @@ async function advanceWeek(){
   for(const a of S.roster){
     a.tlog=(a.tlog||[]).slice(-6);a.base=a.base||{...a.attrs};a.peak=a.peak||{...a.attrs};a.lastT=a.lastT||{};
     const lost=[];
-    for(const k of['forca','velocidade','resistencia']){
+    for(const k of DECAY_K){
       if(a.lastT[k]===undefined)a.lastT[k]=S.week;
       if(S.week-a.lastT[k]>3){const floor=Math.max(a.base[k],a.peak[k]*TUNE.decayFloor);if(a.attrs[k]>floor){const d=Math.min(TUNE.decay,a.attrs[k]-floor);a.attrs[k]-=d;if(d>.05)lost.push(SHORT[k])}}
     }
     if(lost.length)lines.push(`<b>${a.nick}</b> <span class="warn">está a perder condição física (${lost.join(', ')}) por falta de treino.</span>`);
+    a.conf=clamp(a.conf+(confBase(a)-a.conf)*TUNE.confDrift,0,100);
+    if(a.bw==null)a.bw=RI(0,51);
+    if(S.week%52===a.bw){a.age++;const qd=a.age>=TUNE.qxAge?TUNE.qxYear*(a.age-TUNE.qxAge+1):0;
+      if(qd){a.attrs.queixo=Math.max(5,a.attrs.queixo-qd);a.cap.queixo=Math.max(5,(a.cap.queixo||a.attrs.queixo)-qd)}
+      lines.push(`<b>${a.nick}</b> fez ${a.age} anos.${qd?' <span class="warn">Já não aguenta os golpes como antes.</span>':''}`);note(`${a.nick} fez ${a.age} anos.`)}
   }
   const fightLines=[];
   const fees=S.members*ECON.fee,spons=sponsors(),WC=weeklyCosts();
@@ -1006,7 +1050,7 @@ async function advanceWeek(){
 }
 function gain(a,k,base,q,mult=1){
   let g=TUNE.train*base*(.3+.9*q)*(1-a.fatigue/160)*mult;
-  if(a.trait==='Trabalhador')g*=1.25;if(a.trait==='Preguiçoso')g*=.8;if(S.up.treinador)g*=1.2;
+  g*=discMul(a);if(S.up.treinador)g*=1.2;
   g*=clamp((a.cap[k]-a.attrs[k])/20,.06,1);
   a.attrs[k]=clamp(a.attrs[k]+g,0,a.cap[k]+2);
   if(g>.02){a.lastT=a.lastT||{};a.lastT[k]=S.week;a.peak=a.peak||{};a.peak[k]=Math.max(a.peak[k]||0,a.attrs[k])}
@@ -1024,7 +1068,7 @@ async function negotiate(a){
   const req=Math.max(Math.round(a.salary*a.pendingRaise/5)*5,a.pendingRaise>=1.6?[45,90,220,600][a.tier]:0),ctr=Math.round((a.salary+req)/2/5)*5;a.pendingRaise=0;
   return new Promise(res=>{
     const m=modal(`<h2>${a.nick.toUpperCase()} QUER UM AUMENTO</h2><p class="hint">${a.titles.length?'Depois do título':'Depois de uma série de vitórias'}, ${a.nick} pede para passar de ${a.salary} € para <b>${req} € por semana</b>.</p>
-      <p class="hint">Personalidade: ${a.trait} · Confiança ${Math.round(a.conf)}${a.refusals?` · já recusaste ${a.refusals} vez${a.refusals>1?'es':''}`:''}</p>
+      <p class="hint">Personalidade: ${persona(a).n} · Confiança ${Math.round(a.conf)}${a.refusals?` · já recusaste ${a.refusals} vez${a.refusals>1?'es':''}`:''}</p>
       <div class="rows"><button class="btn gold" id="nA">ACEITAR (${req} €)</button><button class="btn" id="nC">CONTRAPROPOSTA (${ctr} €)</button><button class="btn red" id="nR">RECUSAR</button></div>`);
     const end=t=>{closeModal();note(t);info('NEGOCIAÇÃO',`<p class="hint">${t}</p>`).then(res)};
     const refuse=async(t)=>{a.conf=clamp(a.conf-12,0,100);a.refusals=(a.refusals||0)+1;
@@ -1034,7 +1078,7 @@ async function negotiate(a){
         q.querySelector('#lPay').onclick=()=>{a.salary=req;a.refusals=0;a.conf=clamp(a.conf+8,0,100);end(`${a.nick} fica, agora a ganhar ${req} € por semana.`)};
       }else end(t+' Ficou com menos confiança.')};
     m.querySelector('#nA').onclick=()=>{a.salary=req;a.refusals=0;a.conf=clamp(a.conf+6,0,100);end(`${a.nick} aceita: agora ganha ${req} € por semana.`)};
-    m.querySelector('#nC').onclick=()=>{const p=.5+(a.conf-50)/150+(a.trait==='Trabalhador'?.15:a.trait==='Teimoso'?-.2:a.trait==='Cabeça fria'?.05:0);
+    m.querySelector('#nC').onclick=()=>{const p=.5+(a.conf-50)/150+(mv(a,'disc')-50)/330-.2*stubP(a)+(mv(a,'calma')-50)/1000;
       if(Math.random()<p){a.salary=ctr;a.refusals=0;end(`${a.nick} aceita a contraproposta: ${ctr} € por semana.`)}else refuse(`${a.nick} recusa a contraproposta.`)};
     m.querySelector('#nR').onclick=()=>refuse(`Recusaste o aumento de ${a.nick}.`);
   });
@@ -1042,7 +1086,7 @@ async function negotiate(a){
 function talent(cat){
   return new Promise(res=>{
     const used=S.roster.map(x=>x.nick);const a=makeAthlete(cat,{boost:RI(0,6),nick:pick(NICKS.filter(n=>!used.includes(n)))});
-    const vis=ATTRS.map(([k,n])=>[n,a.attrs[k]]).sort((x,y)=>y[1]-x[1]);
+    const vis=ATTRS.filter(([k])=>k!=='queixo').map(([k,n])=>[n,a.attrs[k]]).sort((x,y)=>y[1]-x[1]);const pz=persona(a);
     const desc=v=>v>=22?'alta':v>=15?'média':'fraca';
     const hr=S.up.treinador?[.8,.04]:[.55,.12];
     a.hint=a.gift?(Math.random()<hr[0]?a.gift:null):(Math.random()<hr[1]?pick(Object.keys(GIFTS)):null);
@@ -1054,8 +1098,8 @@ function talent(cat){
     const s=modal(`<h2>TALENTO DESCOBERTO</h2><div class="talent" style="display:flex;flex-direction:column;gap:8px">
       <canvas width="32" height="32" id="tp"></canvas><p class="quote">Encontraste-o ${pick(FOUND)}.</p>
       <div class="r" style="grid-template-columns:1fr"><div><strong>${a.name} "${a.nick}"</strong>
-      <p>${a.age} anos · peso ${cat.toLowerCase()} (${CAT_KG[cat]}) · estilo provável: ${a.style} · ${a.trait}</p><p>${bodyLine(a)}</p>
-      <div class="chips" style="margin:4px 0">${[vis[0],vis[1],vis[4]].map(([n,v])=>`<span class="chip">${n}: ${desc(v)}</span>`).join('')}</div>
+      <p>${a.age} anos · peso ${cat.toLowerCase()} (${CAT_KG[cat]}) · estilo provável: ${a.style}</p><p>Personalidade: <b>${pz.n}</b>${pz.w.length?' · '+pz.w.join(', '):''}</p><p>${bodyLine(a)}</p>
+      <div class="chips" style="margin:4px 0">${[vis[0],vis[1],vis.at(-1)].map(([n,v])=>`<span class="chip">${n}: ${desc(v)}</span>`).join('')}<span class="chip">Queixo: ${a.attrs.queixo>=60?'duro':a.attrs.queixo<=40?'frágil':'normal'}</span></div>
       <p>Potencial <span class="stars">${potRange(a)}</span> · pede ${a.salary} €/semana</p>
       ${a.hint?`<p class="quote" style="text-align:left;color:var(--gold)">"${pick(GIFTS[a.hint].hint)}"</p>`:''}</div></div>${cmp}</div>
       <div class="row2"><button class="btn" id="ig">IGNORAR</button><button class="btn gold" id="tk">${curA?'TROCAR':'TRAZER'}</button></div>`);
@@ -1372,8 +1416,8 @@ function line(type,v){
 }
 function fighter(src,mine){
   initBody(src,src.tier!=null?2:3);const fst=(mine&&src.fstyle&&styleLv(src,src.fstyle)>0)?src.fstyle:src.style;
-  return{h:src.h,r:src.r,sty:src.sty,slv:Math.max(1,styleLv(src,fst)),armX:clamp(Math.round(((src.r-src.h)-2.5)/3),-1,2),hs:clamp((src.h||175)/178,.9,1.12),name:src.name,nick:src.nick,style:fst,trait:src.trait,look:src.look,mine,...src.attrs,skills:{jab:1,direto:0,gancho:0,uppercut:0,corpoDireto:0,figado:0,contra:0,...src.skills},def:{bloqueio:1,esquiva:0,clinch:0,...(src.def||{})},src,cat:src.cat||'Ligeiro',gift:src.gift||null,
-    hp:100,st:mine?clamp(100-(src.fatigue||0)*.5,40,100):100,kd:0,cut:0,conf:mine?src.conf:60,strat:'Equilibrado',
+  return{h:src.h,r:src.r,sty:src.sty,slv:Math.max(1,styleLv(src,fst)),armX:clamp(Math.round(((src.r-src.h)-2.5)/3),-1,2),hs:clamp((src.h||175)/178,.9,1.12),name:src.name,nick:src.nick,style:fst,ment:src.ment||{},look:src.look,mine,...src.attrs,skills:{jab:1,direto:0,gancho:0,uppercut:0,corpoDireto:0,figado:0,contra:0,...src.skills},def:{bloqueio:1,esquiva:0,clinch:0,...(src.def||{})},src,cat:src.cat||'Ligeiro',gift:src.gift||null,
+    hp:100,st:mine?clamp(100-(src.fatigue||0)*.5,40,100):100,kd:0,cut:0,conf:mine?src.conf:confBase(src),strat:'Equilibrado',
     rs:newRS(),tot:{thrown:0,landed:0,power:0,dmg:0},card:0,dmgTaken:0,ps:{},dfs:{block:0,slip:0,duck:0,back:0},headL:0,bodyL:0,lowT:0,lastK:'jab',
     pos:{x:mine?60:180,y:mine?132:44,tx:mine?60:180,ty:mine?132:44},an:{pose:'guard',t0:0,dur:1,arm:'L'},lastArm:'R',flash:0};
 }
@@ -1381,7 +1425,7 @@ function newRS(){return{thrown:0,landed:0,power:0,dmg:0,kd:0}}
 function fightFlow(a){return new Promise(res=>startFight(a,res))}
 function startFight(a,done){
   const f=a.fight;
-  if(!f.opp.grown){const wk=Math.max(0,S.week-(f.opp.made||S.week));for(const[k]of ATTRS)f.opp.attrs[k]=clamp(f.opp.attrs[k]+R(0,.45)*wk,5,99);f.opp.grown=true}
+  if(!f.opp.grown){const wk=Math.max(0,S.week-(f.opp.made||S.week));for(const[k]of ATTRS)if(k!=='queixo')f.opp.attrs[k]=clamp(f.opp.attrs[k]+R(0,.45)*wk,5,99);f.opp.grown=true}
   F={a,done,me:fighter(a,true),op:fighter(f.opp,false),round:1,rounds:f.rounds,log:[],fast:false,over:null,ft:0,
     zoom:null,crowd:0,flashes:0,ref:{x:120,y:60,tx:120,ty:60,pose:'stand'},count:null,big:null,lastScore:[10,10],zone:'center',ord:null,ordLog:[],deaf:0,live:false,inRound:false,rr:[],kdl:[],talks:[],sx:{}};
   F.form0=formOf(a);F.me.form=F.form0.sc*TUNE.formK;F.op.form=0;F.venue=venueIdx({tier:a.tier,title:f.title});
@@ -1528,7 +1572,7 @@ function hearFactors(x){return{f:clamp((70-x.st)/50,0,1),h:clamp((60-x.hp)/45,0,
 function hearDelay(x,j=1){ // segundos que demoraria a ouvir se ficasse sempre neste estado (Infinity = não ouve)
   const{f,h}=hearFactors(x);
   if(f>=TUNE.hearDeaf&&h>=TUNE.hearDeaf)return Infinity;
-  const tr=x.trait==='Cabeça fria'?TUNE.hearCalm:x.trait==='Teimoso'?TUNE.hearStub:1;
+  const tr=hearMul(x); // Ouvir o canto + Ring IQ
   return(TUNE.hearB+TUNE.hearSt*f+TUNE.hearHp*Math.min(1,h))*tr*j;
 }
 function clockS(){return F.ft*3/1000}
@@ -1644,7 +1688,7 @@ async function runFight(){
 const TACTICS={
   'In-fighter':{
     good:[
-      {n:'Esperar e contra-atacar',need:'velocidade',t:['Deixa-o vir. Esquiva e responde na hora.','Ele vai entrar a matar. Sai da linha e castiga.','Não vás ao encontro dele. Deixa-o falhar e responde.']},
+      {n:'Esperar e contra-atacar',need:'iq',t:['Deixa-o vir. Esquiva e responde na hora.','Ele vai entrar a matar. Sai da linha e castiga.','Não vás ao encontro dele. Deixa-o falhar e responde.']},
       {n:'Guarda fechada e aguentar',need:'defesa',t:['Fecha a guarda, aguenta a tempestade e ele cansa-se.','Cotovelos colados, queixo em baixo. Ele vai gastar-se.']},
       {n:'Jab e sair pelos lados',need:'tecnica',t:['Jab na cara e sai sempre para o lado. Nunca para trás.','Jab, passo ao lado, jab. Não lhe dês um alvo parado.']}
     ],
@@ -1655,7 +1699,7 @@ const TACTICS={
   'Outboxer':{
     good:[
       {n:'Pressão constante',need:'resistencia',t:['Corta-lhe o ringue e não o deixes respirar.','Anda sempre para a frente. Ele não aguenta pressão.']},
-      {n:'Encurralar nos cantos',need:'velocidade',t:['Fecha-lhe as saídas e mete-o no canto.','Passos curtos, corta os ângulos, leva-o às cordas.']},
+      {n:'Encurralar nos cantos',need:'pes',t:['Fecha-lhe as saídas e mete-o no canto.','Passos curtos, corta os ângulos, leva-o às cordas.']},
       {n:'Bater no corpo',need:'forca',t:['Vai ao corpo até ele baixar a guarda.','Ele fecha a cabeça? Então parte-lhe as costelas.']}
     ],
     half:[
@@ -1677,7 +1721,6 @@ const MENTAL=[
   {n:'Motivar',m:'conf',t:['Vais ganhar isto! Acredita em ti!','Treinaste para isto. Hoje é a tua noite!','Ninguém trabalhou mais do que tu.']},
   {n:'Acalmar',m:'calm',t:['Respira. Faz o teu boxe e mais nada.','Calma. Uma coisa de cada vez.','Esquece o público. Só tu e ele.']}
 ];
-const ATTR_N=Object.fromEntries(ATTRS);
 const INTROS=[
   n=>`No canto, ${n} bate as luvas uma na outra. Olha para ti à espera de uma última palavra.`,
   n=>`${n} encosta-se às cordas e respira fundo. Antes do primeiro round, quer ouvir o plano.`,
@@ -1702,7 +1745,7 @@ const SITS=[
       {n:'Poupar energia',t:'Não te gastes, o round é longo.',lvl:0}]},
   {id:'meTired',when:F=>F.me.st<50,q:['O teu atleta está a ficar sem fôlego. O que lhe dizes?','As pernas dele estão a pesar. Como o guias?'],
    o:[{n:'Jab e clinch',t:'Usa o jab e agarra quando ele entrar. Ganha tempo.',lvl:1,need:'defesa',eff:{stam:.75,def:.04}},
-      {n:'Só contra-atacar',t:'Não ataques primeiro, responde só quando ele falhar.',lvl:.5,need:'velocidade',eff:{def:.04,stam:.85}},
+      {n:'Só contra-atacar',t:'Não ataques primeiro, responde só quando ele falhar.',lvl:.5,need:'iq',eff:{def:.04,stam:.85}},
       {n:'Tudo por tudo',t:'Gasta o que tens antes que acabe o gás!',lvl:0,eff:{stam:1.3}},
       {n:'Motivar',t:'Tu aguentas! Não pares!',lvl:0,eff:{conf:4}}]},
   {id:'opCut',when:F=>F.op.cut>0,q:['Ele tem um corte acima do olho. Como aproveitas?','O sangue está a escorrer-lhe para o olho. E agora?'],
@@ -1716,7 +1759,7 @@ const SITS=[
       {n:'Ignorar',t:'Não é nada, luta normalmente.',lvl:0},
       {n:'Trocar golpes',t:'Ele cortou-te? Corta-o tu também!',lvl:0,eff:{def:-.04}}]},
   {id:'meDown',when:F=>F.me.kd>0,q:['O teu atleta já foi ao tapete. O que lhe dizes?','Ele levantou-se, mas ainda está tonto. Plano?'],
-   o:[{n:'Recuperar as pernas',t:'Fica longe, mexe-te, recupera a cabeça.',lvl:1,need:'velocidade',eff:{def:.07,stam:.85}},
+   o:[{n:'Recuperar as pernas',t:'Fica longe, mexe-te, recupera a cabeça.',lvl:1,need:'pes',eff:{def:.07,stam:.85}},
       {n:'Agarrar quando vier',t:'Se ele vier, agarra-o e ganha tempo.',lvl:.5,need:'resistencia',eff:{def:.04}},
       {n:'Responder logo',t:'Mostra-lhe que não te assustou! Ataca!',lvl:0,eff:{def:-.05}},
       {n:'Motivar',t:'Isso não foi nada! Tu és mais forte!',lvl:0,eff:{conf:6}}]},
@@ -1726,7 +1769,7 @@ const SITS=[
       {n:'Deixá-lo recuperar',t:'Calma, já ganhaste o round.',lvl:0},
       {n:'Só golpes grandes',t:'Só bombas, acaba com ele com um golpe.',lvl:0,eff:{hit:-.04,dmg:.08}}]},
   {id:'opPower',when:F=>F.op.rs.power>=3,q:['Ele está a acertar-te com golpes pesados. Como corriges?','Os ganchos dele estão a entrar. O que mudas?'],
-   o:[{n:'Sair para o lado',t:'Sai para o lado da mão forte dele, sempre.',lvl:1,need:'velocidade',eff:{def:.07}},
+   o:[{n:'Sair para o lado',t:'Sai para o lado da mão forte dele, sempre.',lvl:1,need:'pes',eff:{def:.07}},
       {n:'Fechar a guarda',t:'Cotovelos colados, aguenta e responde.',lvl:.5,need:'defesa',eff:{def:.04}},
       {n:'Trocar com ele',t:'Ele bate? Tu bates mais!',lvl:0,eff:{def:-.04,dmg:.04}},
       {n:'Acalmar',t:'Respira, isso passa.',lvl:0}]},
@@ -1786,16 +1829,16 @@ function preTalk(mid){
         const x=opts[+b.dataset.tk];me.strat=strat;if(!mid){me.style=fsty;me.slv=Math.max(1,styleLv(a,fsty));a.fstyle=fsty}disadv=edge(me.style,op.style)<0;
         let lvl=x.lvl,why='';
         if(lvl>0&&x.need&&!attrOk(a,o,x.need)){lvl=lvl===1?.5:0;why='attr'}
-        if(lvl>0&&a.trait==='Teimoso'&&Math.random()<.3){lvl=lvl===1?.5:0;why='teimoso'}
+        if(lvl>0&&Math.random()<TUNE.stubTalk*stubP(a)){lvl=lvl===1?.5:0;why='teimoso'}
         let cls,lab,eff,reply;
         if(x.m){
           if(x.m==='conf'){me.conf=clamp(me.conf+8,0,100);reply=pick(['"Vou dar tudo, treinador!"','"Hoje é a minha noite."','"Deixa comigo."'])}
           else{me.calm=true;reply=pick(['"Ok. Estou concentrado."','"Respira... pronto."','"Estou tranquilo."'])}
           cls='info';lab='PALAVRA MENTAL';eff=x.m==='conf'?'Mais confiança, mas não muda nada contra o estilo dele.':'Gasta menos fôlego, mas não muda nada contra o estilo dele.';
         }else{
-          reply=lvl===1?pick(['"Percebido. Sei exatamente o que fazer."','"É isso. Vou fazer assim."','"Boa. Já vi onde ele falha."']):lvl===.5?(why==='attr'?`"Vou tentar... mas não sei se tenho ${ATTR_N[x.need].toLowerCase()} para isso."`:why==='teimoso'?'"Hmm. Vou ver."':pick(['"Ok, vou tentar isso."','"Pode ser."'])):(why==='teimoso'?'"Eu lá dentro resolvo."':why==='attr'?'"Não sei se consigo, treinador."':pick(['"Ok..." Não parece muito convencido.','"Tens a certeza?"','Acena, mas olha para o outro lado.']));
+          reply=lvl===1?pick(['"Percebido. Sei exatamente o que fazer."','"É isso. Vou fazer assim."','"Boa. Já vi onde ele falha."']):lvl===.5?(why==='attr'?`"Vou tentar... mas não sei se tenho ${attrLow(x.need)} para isso."`:why==='teimoso'?'"Hmm. Vou ver."':pick(['"Ok, vou tentar isso."','"Pode ser."'])):(why==='teimoso'?'"Eu lá dentro resolvo."':why==='attr'?'"Não sei se consigo, treinador."':pick(['"Ok..." Não parece muito convencido.','"Tens a certeza?"','Acena, mas olha para o outro lado.']));
           cls=lvl===1?'ok':lvl===.5?'half':'bad';lab=lvl===1?'CERTA':lvl===.5?'MEIA CERTA':'ERRADA';
-          const lack=why==='attr'?`Falta-lhe ${ATTR_N[x.need].toLowerCase()} para isso. `:why==='teimoso'?'Não te ouviu bem. ':'';
+          const lack=why==='attr'?`Falta-lhe ${attrLow(x.need)} para isso. `:why==='teimoso'?'Não te ouviu bem. ':'';
           if(kind==='style'){
             if(!mid){me.baseFix=disadv?lvl:0;me.tacB=!disadv?lvl*.03:0;
               eff=lack+(lvl===1?(disadv?'A desvantagem de estilo desaparece durante toda a luta.':'Pequeno bónus de acerto durante toda a luta.'):lvl===.5?(disadv?'A desvantagem de estilo fica reduzida a metade durante a luta.':'Bónus pequeno de acerto.'):`Essa tática não resulta contra um ${op.style.toLowerCase()}.`);}
@@ -1826,6 +1869,8 @@ function scoreRound(){
   F.me.card+=ms;F.op.card+=os;F.lastScore=[ms,os];
   F.rr.push(rrOf([ms,os]));
 }
+function finM(x,o){return(o.hp<40||o.st<25)?1+TUNE.finK*(mv(x,'fin')-50)/50:1} // Instinto finalizador: vai buscá-lo quando está magoado
+function concF(att,def){if(!F||F.rounds<2)return 0;const late=clamp((F.round-1)/(F.rounds-1),0,1);return TUNE.concK*late*(mv(att,'conc')-mv(def,'conc'))/50} // Concentração nos últimos rounds
 function choosePunch(x,i){
   const ks=Object.keys(x.skills).filter(k=>x.skills[k]>0&&k!=='contra');
   if(i===0&&Math.random()<(x.style==='Outboxer'?.75:x.style==='In-fighter'?.35:.5))return 'jab';
@@ -1875,9 +1920,9 @@ async function exchange(){
   {const cl=x=>(x.def&&x.def.clinch)||0;const need=x=>cl(x)>0&&(x.st<=30||x.hp<35);const lv=Math.max(cl(me),cl(op));
    if(lv>0&&Math.random()<((need(me)||need(op))?.14+.02*lv:.04+.01*lv)){await clinch(need(me)&&need(op)?pick([me,op]):need(me)?me:need(op)?op:cl(me)>cl(op)?me:cl(op)>cl(me)?op:pick([me,op]));return}}
   let myStrat=me.strat;
-  if(me.trait==='Teimoso'&&Math.random()<(me.calm?.1:.25))myStrat='Pressão';
-  const aM=STRAT[myStrat].agg*(me.style==='In-fighter'?1+TUNE.sagg:me.style==='Outboxer'?1-TUNE.sagg:1)*fmods(me).vol;
-  const aO=STRAT[op.strat].agg*(op.style==='In-fighter'?1+TUNE.sagg:op.style==='Outboxer'?1-TUNE.sagg:1)*fmods(op).vol;
+  if(Math.random()<TUNE.stubFight*stubP(me)*(me.calm?.4:1))myStrat='Pressão';
+  const aM=STRAT[myStrat].agg*(me.style==='In-fighter'?1+TUNE.sagg:me.style==='Outboxer'?1-TUNE.sagg:1)*fmods(me).vol*finM(me,op);
+  const aO=STRAT[op.strat].agg*(op.style==='In-fighter'?1+TUNE.sagg:op.style==='Outboxer'?1-TUNE.sagg:1)*fmods(op).vol*finM(op,me);
   const att=Math.random()<aM/(aM+aO)?me:op,def=att===me?op:me;F.sx[me.strat]=(F.sx[me.strat]||0)+1;
   const strat=att===me?myStrat:att.strat;
   const u=unit(def,att);
@@ -1892,7 +1937,7 @@ async function exchange(){
     const res=await punch(att,def,k,strat,1,i===n-1,seq&&i>0?.06:0);
     if(F.over)return;
     if(res==='hit'||res==='clean')landed++;
-    if((res==='slip'||res==='duck'||res==='block')&&(def.skills.contra||0)>0&&Math.random()<Math.min(.18,TUNE.ctrK*def.skills.contra/5*(.6+def.velocidade/150)*(res==='block'?.35:1)*(def.style!=='In-fighter'?1.2:1)*(att.style==='In-fighter'?1-TUNE.inCtr-(att.slv>=4?TUNE.inCl:0):1))){say(line('counter',{d:def.nick}),def.mine?'me':'');await punch(def,att,'contra',def.strat,1,true);if(F.over)return;if(Math.random()<.5)break}
+    if((res==='slip'||res==='duck'||res==='block')&&(def.skills.contra||0)>0&&Math.random()<Math.min(.18,TUNE.ctrK*def.skills.contra/5*(.6+def.velocidade/150)*(.85+(def.iq??20)/200)*(res==='block'?.35:1)*(def.style!=='In-fighter'?1.2:1)*(att.style==='In-fighter'?1-TUNE.inCtr-(att.slv>=4?TUNE.inCl:0):1))){say(line('counter',{d:def.nick}),def.mine?'me':'');await punch(def,att,'contra',def.strat,1,true);if(F.over)return;if(Math.random()<.5)break}
     if(res==='block'&&Math.random()<.35)break;
   }
   if(n>=2&&landed>=2)say(line('combo',{a:att.nick,n:landed}),att.mine?'me':'');
@@ -1915,9 +1960,9 @@ async function clinch(who){
 const PDUR={jab:230,direto:320,gancho:360,uppercut:340,corpoDireto:320,figado:360};
 async function punch(att,def,k,strat,bonus,talk,flow=0){
   const lv=att.skills[k]||1,sk=SKILLS[k];let e=edge(att.style,def.style);e*=e>0?sf(att):sf(def);const fx=x=>Math.max(x.baseFix||0,x.roundFix||0);if(att.mine&&e<0)e*=1-fx(att);if(def.mine&&e>0)e*=1-fx(def);const ar=att.rb||{},dr=def.rb||{};
-  let hit=.5+(att.tecnica+att.velocidade-def.defesa-def.velocidade)/TUNE.hitDiv+sk.h+lv*.025+e*.05*TUNE.edge+phys(att,def,k,!!sk.body)-STRAT[def.strat].def-(def.style==='In-fighter'?TUNE.sdA:def.style==='Outboxer'?TUNE.sdD:TUNE.sdC)*sf(def)/.74+(att.st<=30?-.1:att.st<70?-.03:0)+(def.st<=30?TUNE.tdB:def.st<70?TUNE.tdA:0)+(att.conf-50)/500+(att.hitB||0)+(att.tacB||0)+(ar.hit||0)-(dr.def||0)+flow+(att.form||0)*.04-((def.def&&def.def.bloqueio)||0)*.008-((def.def&&def.def.esquiva)||0)*.012;
+  let hit=.5+(att.tecnica+att.velocidade-def.defesa-def.velocidade)/TUNE.hitDiv+sk.h+lv*.025+e*.05*TUNE.edge+phys(att,def,k,!!sk.body)-STRAT[def.strat].def-(def.style==='In-fighter'?TUNE.sdA:def.style==='Outboxer'?TUNE.sdD:TUNE.sdC)*sf(def)/.74+(att.st<=30?-.1:att.st<70?-.03:0)+(def.st<=30?TUNE.tdB:def.st<70?TUNE.tdA:0)+(att.conf-50)/500+(att.hitB||0)+(att.tacB||0)+(ar.hit||0)-(dr.def||0)+flow+concF(att,def)+(att.form||0)*.04-((def.def&&def.def.bloqueio)||0)*.008-((def.def&&def.def.esquiva)||0)*.012;
   hit=clamp(hit,.12,.9);att.lastK=k;if(att.st<=30)att.lowT++;
-  att.st=clamp(att.st-(TUNE.pc+STRAT[strat].cost*TUNE.scm)*(att.style==='Puncher'?1-.15*sf(att):1)*(1.5-att.resistencia/100*TUNE.resK-(1-TUNE.resK)*.35)*(att.calm===true?.85:att.calm?.93:1)*(ar.stam||1)*fmods(att).cost*(1-(att.form||0)*.1),0,100);
+  att.st=clamp(att.st-(TUNE.pc+STRAT[strat].cost*TUNE.scm)*(att.style==='Puncher'?1-.15*sf(att):1)*(1.5-att.resistencia/100*TUNE.resK-(1-TUNE.resK)*.35)*(att.calm===true?.85:att.calm?.93:1)*(1+TUNE.calmSt*(50-mv(att,'calma'))/50)*(ar.stam||1)*fmods(att).cost*(1-(att.form||0)*.1),0,100);
   att.rs.thrown++;att.tot.thrown++;const PS=att.ps[k]||(att.ps[k]=[0,0,0]);PS[0]++;
   const arm=sk.arm||(k==='jab'?'L':k==='direto'?'R':(att.lastArm==='L'?'R':'L'));att.lastArm=arm;
   const body=!!sk.body||((k==='gancho'||k==='direto')&&Math.random()<(ar.body||0));
@@ -1928,7 +1973,7 @@ async function punch(att,def,k,strat,bonus,talk,flow=0){
   const u=unit(att,def);
   let res;
   if(Math.random()<hit){
-    let dmg=(3+att.forca*TUNE.forK+lv*.9)*sk.d*(att.style==='Puncher'?1+TUNE.punD*sf(att)*(def.style==='Outboxer'?.4:1):1)*(.55+.45*att.st/100)*R(.75,1.25)*(1+e*.1*TUNE.edge)*STRAT[strat].dmg*bonus*(1+(ar.dmg||0))*fmods(att).dmg*(fmods(def).chin<1&&!body?1-.15*TUNE.giftK:1)*TUNE.dmg;
+    let dmg=(3+att.forca*TUNE.forK+lv*.9)*sk.d*(att.style==='Puncher'?1+TUNE.punD*sf(att)*(def.style==='Outboxer'?.4:1):1)*(.55+.45*att.st/100)*R(.75,1.25)*(1+e*.1*TUNE.edge)*STRAT[strat].dmg*bonus*(1+(ar.dmg||0))*fmods(att).dmg*(fmods(def).chin<1&&!body?1-.15*TUNE.giftK:1)*(body?1:1+TUNE.qxD*(50-(def.queixo??50))/50)*TUNE.dmg;
     const clean=!body&&Math.random()<.05+TUNE.cleanP+lv*.012+(k==='gancho'||k==='uppercut'?.03:0)+(sk.counter?.02:0);dmg*=clean?TUNE.cleanMul:TUNE.normMul;
     if(body){dmg*=.75;def.st=clamp(def.st-(sk.liver?9:sk.body?7:5)*TUNE.bdm,0,100)}
     const chin=1.3-def.resistencia/100;
@@ -1945,7 +1990,7 @@ async function punch(att,def,k,strat,bonus,talk,flow=0){
     if(def.hp<=0){await knockdown(def,att);return res}
     if(!F.over&&(clean||sk.liver)){
       const base={jab:.01,direto:.045,uppercut:.08,gancho:.09,figado:.025}[k]||0;
-      let pf=base*(.5+att.tecnica/60*TUNE.resK+(1-TUNE.resK)*.58)*(1+(lv-1)*.25)*(.8+att.forca/150)*(bonus>1?2:1)*clamp(1.4-def.resistencia/100*TUNE.resK-(1-TUNE.resK)*.35,.5,1.4)*(def.st<=30?1.5:def.st<70?1.15:1)*(def.hp<50?1.3:1)*fmods(att).flash*fmods(def).chin;
+      let pf=base*(.5+att.tecnica/60*TUNE.resK+(1-TUNE.resK)*.58)*(1+(lv-1)*.25)*(.8+att.forca/150)*(bonus>1?2:1)*clamp(1.4-def.resistencia/100*TUNE.resK-(1-TUNE.resK)*.35,.5,1.4)*(def.st<=30?1.5:def.st<70?1.15:1)*(def.hp<50?1.3:1)*fmods(att).flash*fmods(def).chin*chinK(def);
       pf*=topF(def);if(att.style==='Puncher')pf*=1+TUNE.punF*sf(att)*(def.style==='Outboxer'?.4:1);
       if(Math.random()<Math.min(.18,pf*TUNE.flash)){await knockdown(def,att,sk.liver?'liver':'flash');return res}
     }
@@ -1953,7 +1998,7 @@ async function punch(att,def,k,strat,bonus,talk,flow=0){
   }else{
     const r=Math.random();
     let W=def.style==='Outboxer'?[.4,.4,.2]:def.style==='Puncher'?[.6,.25,.15]:[.5,.35,.15];
-    {const dd=def.def||{bloqueio:1,esquiva:1};const b=W[0]*(.6+.2*(dd.bloqueio||0)),sl=(dd.esquiva||0)>0?W[1]*(.6+.2*dd.esquiva):0,bk=W[2]+.1;const tt=b+sl+bk;W=[b/tt,sl/tt,bk/tt]}
+    {const dd=def.def||{bloqueio:1,esquiva:1};const b=W[0]*(.6+.2*(dd.bloqueio||0)),sl=(dd.esquiva||0)>0?W[1]*(.6+.2*dd.esquiva):0,bk=(W[2]+.1)*(.8+.4*clamp((def.pes??20)/60,0,1));const tt=b+sl+bk;W=[b/tt,sl/tt,bk/tt]}
     if(k==='gancho'&&r<(def.style==='In-fighter'?.6:.4)){res='duck';act(def,'duck',dur*1.2)}
     else if(r<W[0]){res='block';act(def,'block',dur*1.3)}
     else if(r<W[0]+W[1]){res='slip';act(def,'slip',dur*1.2,{side:Math.random()<.5?1:-1})}
@@ -1977,8 +2022,8 @@ async function knockdown(x,att,kind){
   setT(att,nc[0],nc[1]);if(Math.random()<.5)act(att,'win',2600);
   await fsleep(700);
   F.refLock=true;F.ref.tx=clamp(x.pos.x+(x.pos.x<120?24:-24),LIM.x0,LIM.x1);F.ref.ty=clamp(x.pos.y-10,LIM.y0,LIM.y1);F.ref.pose='count';
-  let getup=.45+x.resistencia/220+x.conf/500+(x.trait==='Coração de leão'?.15:0)-x.kd*.12+(x.st-50)/250;
-  if(kind)getup=x.resistencia>=25||x.gift==='queixo'?1:clamp(getup+.3,0,.94);
+  let getup=.45+x.resistencia/220+x.conf/500+TUNE.corG*(mv(x,'cor')-50)/50+TUNE.qxG*((x.queixo??50)-50)/50-x.kd*.12+(x.st-50)/250;
+  if(kind)getup=x.resistencia>=25||(x.queixo??50)>=60||x.gift==='queixo'?1:clamp(getup+.3,0,.94);
   if(x.gift==='queixo')getup+=.15;
   const ok=x.kd<3&&Math.random()<getup;
   const upAt=ok?RI(4,8):11;
@@ -1989,7 +2034,7 @@ async function knockdown(x,att,kind){
     F.zoom={until:performance.now()+2200,cx:x.pos.x,cy:x.pos.y};F.crowd=performance.now()+4000;F.flashes=performance.now()+3000;
     say(line('ko',{a:att.nick,d:x.nick}),'sys');await fsleep(1500);
   }else{
-    F.count=null;act(x,'stagger',900);x.hp=Math.max(kind?x.hp:0,12+x.resistencia*.3+x.st*.18);if(x.st>=70)say(`${x.nick} ainda tem pernas. Levantou-se com fôlego!`);else if(x.st<=30)say(`${x.nick} levanta-se, mas está completamente vazio.`);
+    F.count=null;act(x,'stagger',900);x.hp=Math.max(kind?x.hp:0,12+x.resistencia*.3+x.st*.18+((x.queixo??50)-50)*.1);if(x.st>=70)say(`${x.nick} ainda tem pernas. Levantou-se com fôlego!`);else if(x.st<=30)say(`${x.nick} levanta-se, mas está completamente vazio.`);
     say(line('up',{d:x.nick}),'sys');act(att,'guard',1);await fsleep(900);act(x,'guard',1);F.refLock=false;
   }
   hud();
@@ -2034,12 +2079,23 @@ function corner(){
         F.prev=null;
         if(act_==='corte'){me.cut=Math.max(0,me.cut-1);me.hp=clamp(me.hp+4,0,100);say('Tratas o corte com vaselina e gelo.','sys')}
         else{me.st=clamp(me.st+18,0,100);say('Mandas respirar fundo. Recupera o fôlego.','sys')}
-        if(strat===s0&&me.trait==='Teimoso'&&Math.random()<.3)say(`${me.nick} acena, mas tu sabes que não vai ouvir.`);
+        if(strat===s0&&Math.random()<.4*stubP(me))say(`${me.nick} acena, mas tu sabes que não vai ouvir.`);
         res('go');
       };
     };
     draw();
   });
+}
+function afterFight(a,r){ // experiência da luta: Ring IQ, mentais (devagar) e Queixo depois de um KO
+  const m=a.ment=a.ment||rollMental(),add=(k,v)=>{m[k]=clamp(m[k]+v,5,95)},out=[];
+  const rds=Math.min(F.round,F.rounds),hard=!!r.win&&(F.me.kd>0||(r.how==='pontos'&&Math.abs(F.me.card-F.op.card)<=2));
+  add('conf',r.draw?0:r.win?(r.how==='KO'?2:1.2):(r.how==='KO'?-3:-1.5));add('calma',.6);add('ouvir',.3);if(rds>=6)add('conc',.5);
+  if(hard)add('cor',2);if(r.win&&r.how==='KO')add('fin',1);
+  const b=a.attrs.iq;gain(a,'iq',TUNE.iqFight*rds/3,1);
+  if(a.attrs.iq-b>=.1)out.push(`Ganhou experiência no ringue: Ring IQ +${(a.attrs.iq-b).toFixed(1)}.`);
+  if(hard)out.push(`Uma vitória sofrida: ${a.nick} sai dela com mais coração.`);
+  if(!r.win&&!r.draw&&r.how==='KO'){a.attrs.queixo=Math.max(5,a.attrs.queixo-TUNE.qxKO);a.cap.queixo=Math.max(5,(a.cap.queixo||a.attrs.queixo)-TUNE.qxKO);out.push(`<span class="warn">O KO deixa marcas: o queixo de ${a.nick} já não é o mesmo.</span>`)}
+  return out.map(t=>`<p class="hint">${t}</p>`).join('');
 }
 function finishFight(){
   const a=F.a,f=a.fight,r=F.over;
@@ -2067,7 +2123,7 @@ function finishFight(){
     html=`<p class="hint">Academia (${Math.round(sh*100)}% menos ${fc} € de custos da luta) <span class="good">+${fmt(cash)} €</span> · Atleta ${fmt(f.purse*(1-sh))} € · Popularidade +${pg}</p><p class="hint">${rk}</p>`;
     lineTxt=`${a.nick} venceu ${f.opp.nick} (${r.how}).`;note(lineTxt);
   }else{
-    a.streak=0;a.rec.l++;S.money=Math.max(0,S.money-TIERS[a.tier].cost);const lc=r.how==='toalha'?8:a.trait==='Cabeça fria'?8:16;a.conf=clamp(a.conf-lc,0,100);
+    a.streak=0;a.rec.l++;S.money=Math.max(0,S.money-TIERS[a.tier].cost);const lc=r.how==='toalha'?8:Math.round(16-TUNE.calmL*clamp((mv(a,'calma')-50)/40,-.5,1));a.conf=clamp(a.conf-lc,0,100);
     const old=a.rank;a.rank=Math.min(15,a.rank+(f.title?3:RI(1,2)));S.pop=Math.max(0,S.pop-1);
     let inj='';if(r.how==='KO'&&Math.random()<.5){a.injury=RI(1,3);inj=` Saiu lesionado: mais ${a.injury} semana${a.injury>1?'s':''} parado.`}
     title=r.how==='KO'?'DERROTA POR KO':r.how==='toalha'?'ATIRASTE A TOALHA':'DERROTA';
@@ -2075,6 +2131,7 @@ function finishFight(){
     lineTxt=`${a.nick} perdeu com ${f.opp.nick} (${r.how}).`;note(lineTxt);
   }
   const rec=clamp(1+Math.round(F.me.dmgTaken/70)+(F.me.kd)+(r.how==='KO'&&!r.win?1:0),1,5);
+  html+=afterFight(a,r);
   a.recovery=rec;a.fatigue=clamp(a.fatigue+25,0,100);a.fight=null;
   {const m=revealGift(a,'na luta');if(m)html+=`<p class="hint"><b style="color:var(--gold)">${m}</b></p>`}
   html+=`<p class="hint">Dano sofrido: ${Math.round(F.me.dmgTaken)} · <b>Recuperação: ${rec} semana${rec>1?'s':''} sem treinar.</b></p>`;
@@ -2088,7 +2145,8 @@ function finishFight(){
    estratégia por troca (F.sx) e ordens (F.ordLog). buildAnalysis() junta tudo num resumo compacto, guardado no histórico (a.hist, só nas 3 lutas mais recentes),
    com 1-3 razões ordenadas por impacto estimado (pontos percentuais de vitória, pelos alvos de equilíbrio do CLAUDE.md,
    ou pelo tamanho da diferença medida). Só entra uma razão se os números a confirmarem. */
-const ATR_TR={forca:'Saco ou Musculação',velocidade:'Pera ou Shadow boxing',resistencia:'Corrida ou Corda',defesa:'Sparring ou Corda de esquiva',tecnica:'Pads ou Shadow boxing'};
+const ATR_TR={forca:'Saco ou Musculação',velocidade:'Pera ou Shadow boxing',resistencia:'Corrida ou Corda',queixo:'Bola medicinal, mas sobe pouco',defesa:'Sparring ou Corda de esquiva',tecnica:'Pads ou Shadow boxing',pes:'Corda ou Shadow boxing',iq:'Sparring e lutas'};
+function trTip(k,n){return k==='queixo'?'O Queixo quase não se treina: protege-o com Defesa e evita trocas abertas.':k==='iq'?'O Ring IQ cresce com lutas e com Sparring.':`Treina ${n} (${ATR_TR[k]}).`}
 const PK=['jab','direto','gancho','uppercut','corpoDireto','figado','contra'];
 const PN={jab:'Jab',direto:'Direto',gancho:'Gancho',uppercut:'Uppercut',corpoDireto:'Direto corpo',figado:'Fígado',contra:'Contra-golpe'};
 const PNL={jab:'um jab',direto:'um direto',gancho:'um gancho',uppercut:'um uppercut',corpoDireto:'um direto ao corpo',figado:'um gancho ao fígado',contra:'um contra-golpe'};
@@ -2115,19 +2173,20 @@ function anReasons(win,draw){
   const accM=apc(me.tot.landed,me.tot.thrown),accO=apc(op.tot.landed,op.tot.thrown);
   const P=(x,k)=>x.ps[k]||[0,0,0];
   // 1) atributos (≈ +3,2 pontos percentuais por ponto de média: +5 em tudo ≈ 66%)
-  {const dA=ATTRS.map(([k,n])=>({k,n,d:me[k]-op[k]})),avg=dA.reduce((t,x)=>t+x.d,0)/5;
+  {const dA=ATTRS.map(([k,n])=>({k,n,d:(me[k]??0)-(op[k]??0)})),avg=dA.reduce((t,x)=>t+x.d,0)/ATTRS.length;
    const pv=x=>{x=Math.abs(x);return x<5?'ligeiramente':x<12?'claramente':'muito'}; // diferença dita por palavras, sem números
    const eff=(k,s)=>{ // efeito medido do atributo, só se for no mesmo sentido
      if(k==='tecnica'||k==='velocidade')return s*(accM-accO)>=4?(s>0?` Acertaste ${accM}% dos golpes, ele ${accO}%.`:` Ele acertou ${accO}% dos golpes, tu ${accM}%.`):'';
      if(k==='defesa')return s*(accM-accO)>=4?(s>0?` Ele só acertou ${accO}% dos golpes.`:` Só acertaste ${accM}% dos golpes.`):'';
      if(k==='forca'){const dm=me.tot.landed?me.tot.dmg/me.tot.landed:0,dO=op.tot.landed?op.tot.dmg/op.tot.landed:0;return s*(dm-dO)>dm*.1&&s*(dm-dO)>dO*.1?(s>0?' Cada golpe teu fazia mais estrago.':' Cada golpe dele fazia mais estrago.'):''}
+     if(k==='queixo'){const d=F.kdl.filter(x=>x.me).length-F.kdl.filter(x=>!x.me).length;return s*d<0?(s>0?' Aguentaste melhor os golpes que entraram.':' Foste tu quem sentiu mais os golpes.'):''}
      if(k==='resistencia'){const l=rr.at(-1);return l&&s*(l.st[0]-l.st[1])>=8?` Fôlego no fim: ${l.st[0]} contra ${l.st[1]}.`:''}
      return ''};
    if(Math.abs(avg)>=2){const s=Math.sign(avg),top=dA.slice().sort((x,y)=>s*(y.d-x.d))[0],one=Math.abs(top.d-avg)>=2;
      add('attr',s,Math.abs(avg)*3.2,s>0?`Estavas ${pv(avg)} mais bem preparado nos atributos${one?`, sobretudo em ${top.n}`:''}.${eff(top.k,1)}`
-       :`Ele estava ${pv(avg)} mais bem preparado nos atributos${one?`, sobretudo em ${top.n}`:''}.${eff(top.k,-1)}|${one?`Treina ${top.n} (${ATR_TR[top.k]}).`:'Precisas de mais semanas de treino antes de lutas deste nível.'}`,one?top.k:'')}
+       :`Ele estava ${pv(avg)} mais bem preparado nos atributos${one?`, sobretudo em ${top.n}`:''}.${eff(top.k,-1)}|${one?trTip(top.k,top.n):'Precisas de mais semanas de treino antes de lutas deste nível.'}`,one?top.k:'')}
    else{const top=dA.slice().sort((x,y)=>Math.abs(y.d)-Math.abs(x.d))[0],s=Math.sign(top.d);
-     if(Math.abs(top.d)>=8)add('attr',s,Math.abs(top.d)*.64,s>0?`A tua ${top.n} fez diferença: eras ${pv(top.d)} superior.${eff(top.k,1)}`:`Ele tinha ${pv(top.d)} mais ${top.n} do que tu.${eff(top.k,-1)}|Treina-a com ${ATR_TR[top.k]}.`,top.k)}}
+     if(Math.abs(top.d)>=8)add('attr',s,Math.abs(top.d)*.64,s>0?`A tua ${top.n} fez diferença: eras ${pv(top.d)} superior.${eff(top.k,1)}`:`Ele tinha ${pv(top.d)} mais ${top.n} do que tu.${eff(top.k,-1)}|${trTip(top.k,top.n)}`,top.k)}}
   // 2) estilo (≈ 5 pontos no amador → 13 no topo), descontando a tática certa no canto
   {const ms=majority(rr.map(x=>x.sty[0]).concat(me.style)),os=majority(rr.map(x=>x.sty[1]).concat(op.style)),e=edge(ms,os);
    if(e>0){add('style',1,5+8*clamp((me.slv-1)/4,0,1),`O teu estilo (${ms}) tem vantagem sobre o dele (${os}).`)}
@@ -2160,7 +2219,7 @@ function anReasons(win,draw){
     add('bodyw',s,Math.abs(d)*.5,s>0?`O trabalho ao corpo (${me.bodyL} golpes) tirou-lhe o fôlego: ficou com ${v.m} no fim do R${v.r}.`:`Ele trabalhou-te o corpo (${op.bodyL} golpes) e tirou-te o fôlego: ficaste com ${v.m} no fim do R${v.r}.|Defesa e Resistência ajudam.`)}}
   // 8) quedas
   {const kl=F.over&&F.over.how==='KO'?F.kdl.slice(0,-1):F.kdl,nO=kl.filter(k=>!k.me).length,nM=kl.filter(k=>k.me).length,d=nO-nM,vz=n=>n===1?'uma vez':n+' vezes';if(d){const ks=kl.filter(k=>k.me===(d<0)).slice(0,3).map(k=>`R${k.r}, ${PNL[k.k]||'golpe'}`).join('; ');
-    add('kd',Math.sign(d),Math.abs(d)*8,d>0?`Mandaste-o ao tapete ${vz(nO)} (${ks})${nM?`; tu caíste ${vz(nM)}`:''}.`:`Foste ao tapete ${vz(nM)} (${ks})${nO?`; ele caiu ${vz(nO)}`:''}.|Mais Resistência e Defesa ajudam a aguentar.`)}}
+    add('kd',Math.sign(d),Math.abs(d)*8,d>0?`Mandaste-o ao tapete ${vz(nO)} (${ks})${nM?`; tu caíste ${vz(nM)}`:''}.`:`Foste ao tapete ${vz(nM)} (${ks})${nO?`; ele caiu ${vz(nO)}`:''}.|A Defesa evita os golpes; o Queixo decide se aguentas os que entram.`)}}
   // 9) troca de golpes (uma só: a maior entre precisão, duelo de jab e golpes pesados)
   {const jm=P(me,'jab')[1],jo=P(op,'jab')[1],wm=me.tot.power,wo=op.tot.power,dA=accM-accO;
    const ga=(me.tecnica+me.velocidade-op.defesa-op.velocidade)-(op.tecnica+op.velocidade-me.defesa-me.velocidade);
@@ -2737,12 +2796,15 @@ async function pauseMenu(){
 
 async function start(){
   try{document.fonts&&document.fonts.ready.then(()=>{ARENA=null})}catch(e){}
+  {let old=[];try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(/^corner-men-v\d+$/.test(k)&&k!==KEY)old.push(k)}}catch(e){}
+   if(old.length){try{old.forEach(k=>localStorage.removeItem(k))}catch(e){}
+     await info('NOVA VERSÃO',`<p class="hint">O Corner Men tem regras novas: atletas com 8 atributos (agora também Queixo, Pés e Ring IQ) e uma personalidade própria.</p><p class="hint">Por isso o jogo recomeça do zero. O teu ginásio antigo não passa para esta versão.</p>`,'COMEÇAR')}}
   const choice=await menu('start');
   S=choice==='new'?null:load();
   let fresh=false;if(!S||!S.roster){newGame();fresh=true}
   S.gymName=S.gymName||'Ginásio Esperança';S.logo=S.logo||0;
   for(const a of S.roster){migrateHist(a);migrateStyles(a);initBody(a,2);if(a.fight){migrateStyles(a.fight.opp);initBody(a.fight.opp,clamp(a.tier+1,1,5))}for(const o of a.offers||[]){migrateStyles(o.opp);initBody(o.opp,clamp(a.tier+1,1,5))}}
-  for(const a of S.roster){for(const k of Object.keys(SKILLS)){a.skills[k]=a.skills[k]||0;a.xp[k]=a.xp[k]||0}a.def=a.def||{bloqueio:1,esquiva:0,clinch:0};a.dxp=a.dxp||{bloqueio:0,esquiva:0,clinch:0};a.combos=a.combos||knownCombos(a).map(c=>c.id);a.recovery=a.recovery||0;if(a.gift===undefined){a.gift=null;a.giftKnown=true}a.weeks=a.weeks||0}
+  for(const a of S.roster){for(const k of Object.keys(SKILLS)){a.skills[k]=a.skills[k]||0;a.xp[k]=a.xp[k]||0}a.def=a.def||{bloqueio:1,esquiva:0,clinch:0};a.dxp=a.dxp||{bloqueio:0,esquiva:0,clinch:0};a.combos=a.combos||knownCombos(a).map(c=>c.id);a.recovery=a.recovery||0;a.ment=a.ment||rollMental();for(const[k]of ATTRS){if(a.attrs[k]==null)a.attrs[k]=k==='queixo'?50:10;if(a.cap[k]==null)a.cap[k]=a.attrs[k]+5}if(a.gift===undefined){a.gift=null;a.giftKnown=true}a.weeks=a.weeks||0}
   S.tab=S.tab||'gym';
   render();requestAnimationFrame(world);
   if(fresh){await setupGym();render()}

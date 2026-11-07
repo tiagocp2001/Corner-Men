@@ -30,7 +30,7 @@ Regras gerais que orientam todos os temas.
 
 Ordem: 8 → 5 → 1 → 3 → 4.
 
-### Tema 8 — Atributos físicos, técnicos e mentais · *Decidido*
+### Tema 8 — Atributos físicos, técnicos e mentais · *Implementado* (A1)
 - **Hoje:** 5 atributos em barra (Força, Velocidade, Resistência, Defesa, Técnica) + potencial; corpo (altura, alcance) fixo; traços de personalidade (Trabalhador, Teimoso, Cabeça fria, Preguiçoso, Coração de leão); talentos escondidos (Mão pesada, Mãos rápidas, Motor inesgotável, Queixo de ferro); confiança e forma variáveis.
 - **Guia:** 11 físicos (potência, velocidade de mãos, explosividade, resistência, recuperação, agilidade, equilíbrio, coordenação, queixo, durabilidade, alcance/altura), 10 técnicos/táticos (timing, precisão, gestão da distância, defesa, footwork, Ring IQ, volume, versatilidade, antecipação/reflexos, controlo do ringue) e 7 mentais (coração, calma, disciplina, confiança, concentração, instinto finalizador, adaptabilidade/ouvir o canto).
 - **Proposta:** 8 barras em 2 colunas de 4, cada uma a juntar vários atributos do Guia:
@@ -55,6 +55,11 @@ Ordem: 8 → 5 → 1 → 3 → 4.
     - **Não se treinam no ginásio:** só com experiência e com o treino mental (tema 10).
   - 8.3 **Decidido:** Queixo difícil de treinar (pescoço, core); desce com a idade e com cada KO sofrido.
   - 8.4 **Decidido:** Ring IQ cresce sobretudo com experiência (lutas e sparring), pouco com treinos de ginásio.
+- **Implementado (A1, save novo `corner-men-v7`):**
+  - 8.1 Ficha com 2 colunas FÍSICO / TÉCNICO. Treinos: Corda e Shadow boxing → Pés; Sparring → Ring IQ (pouco); Bola medicinal → Queixo (muito pouco). Só Força, Velocidade e Resistência perdem condição sem treino.
+  - 8.2 Mentais escondidos (5–95). Personalidade = nome do par que mais se destaca (ex.: Guerreiro impulsivo, Calculista, Arrogante, Aluno exemplar) ou de um só (Coração de leão, Teimoso, Trabalhador…); "Equilibrado" se nada se destaca. Efeitos: Disciplina → ganho nos treinos e fadiga; Ouvir o canto (+ Ring IQ) → rapidez a ouvir e teimosia; Calma → confiança perdida nas derrotas e fôlego; Coração → levantar-se; Concentração → últimos rounds; Instinto finalizador → agressividade com o adversário magoado; Confiança → valor para onde a confiança do dia volta. Mudam com as lutas (confiança, calma, coração em vitórias sofridas, finalizador em KOs).
+  - 8.3 Queixo de nascença (escala própria, ~50 = normal em qualquer escalão): quedas, quedas relâmpago, dano à cabeça e levantar-se. Desce em cada derrota por KO e a partir dos 28 anos (os atletas fazem anos).
+  - 8.4 Ring IQ sobe em cada luta (mais com mais rounds) e um pouco com Sparring; acelera o ouvir o canto e ajuda o contra-golpe. Pés: por agora só o recuar como defesa (a distância vem no tema 5). Algumas táticas do canto pedem agora Pés ou Ring IQ.
 
 ### Tema 5 — Pés, distância e controlo do ringue · *Decidido*
 - **Hoje:** zonas do ringue e alcance existem; não há distância longa/média/curta explícita.
