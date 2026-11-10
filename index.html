@@ -48,6 +48,32 @@ canvas.px{width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp
 .nav button.go:disabled{opacity:.5}
 .nav button.go.fightgo{background:var(--red);border-color:#8f2a1b;color:#fff}
 .badge{position:absolute;top:-6px;right:-3px;background:var(--red);color:#fff;font-size:7px;padding:3px 4px;font-family:var(--f-display)}
+/* relógio: tempo a correr sozinho (▶ / pausa, ×1 / ×2), dias da semana por cima do ginásio, avisos curtos e cartões */
+.nav .clkb{display:grid;grid-template-columns:1.5fr 1fr;gap:3px;min-width:0}
+.nav .clkb button{padding:0;min-width:0;display:flex;align-items:center;justify-content:center}
+.nav .clkb button.fightgo{grid-column:1/-1;padding:12px 2px 10px}
+.nav button.go.run{background:var(--panel2);color:var(--gold);border-color:var(--gold)}
+.nav button.spd{color:var(--fg);font-size:8px} .nav button.spd.x2{color:var(--gold);border-color:var(--gold)}
+.icp{display:block;width:0;height:0;border-style:solid;border-width:7px 0 7px 11px;border-color:transparent transparent transparent currentColor}
+.icpa{display:block;width:12px;height:14px;border-left:4px solid currentColor;border-right:4px solid currentColor;box-sizing:border-box}
+.days{position:absolute;left:5px;top:5px;right:54px;z-index:2;display:grid;grid-template-columns:repeat(7,1fr);gap:2px;line-height:1;pointer-events:none}
+.days i{position:relative;font-style:normal;font-family:var(--f-display);font-size:6px;color:#9c8a70;background:rgba(0,0,0,.7);padding:5px 0 4px;text-align:center;overflow:hidden}
+.days i u{position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(232,177,58,.5);text-decoration:none}
+.days i span{position:relative}
+.days i.tr::after{content:'';position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--red)}
+.days i.dn{color:var(--fg)} .days i.now{color:#fff}
+.days.off i u{background:rgba(170,160,145,.35)}
+.toasts{position:absolute;left:5px;right:5px;top:23px;z-index:2;display:flex;flex-direction:column;gap:3px;align-items:flex-start;pointer-events:none;line-height:1.05}
+.toast{max-width:100%;box-sizing:border-box;font-family:var(--f-mono);font-size:16px;background:rgba(10,8,6,.88);border-left:3px solid var(--gold);color:var(--fg);padding:3px 7px;animation:tin .25s steps(3);transition:opacity .5s}
+.toast b{font-weight:400;color:var(--gold)} .toast .warn{font-size:inherit}
+.toast.wk{align-self:stretch;border:1px solid var(--gold);border-left-width:3px;padding:4px 7px}
+.toast.wk div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.toast.out{opacity:0}
+@keyframes tin{from{transform:translateX(-12px);opacity:0}}
+@media (prefers-reduced-motion:reduce){.toast{animation:none}}
+.cardb{display:flex;flex-direction:column;gap:6px}
+.cardb .btn small{display:block;font-family:var(--f-body);font-size:12px;letter-spacing:0;margin-top:3px;opacity:.85}
+#pauseBtn{font-size:7px!important}
 .seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;flex:none}
 .seg button{background:var(--panel);border:2px solid var(--line);color:var(--muted);padding:6px 4px;font-family:var(--f-body);font-size:13px;cursor:pointer;min-width:0;line-height:1.2}
 .seg button b{display:block;font-family:var(--f-display);font-size:6px;letter-spacing:.08em;margin-bottom:2px;font-weight:400}
@@ -289,7 +315,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 
 <div id="app">
   <div class="hud" id="hud"></div>
-  <div class="screen" id="gymScreen"><canvas class="px" id="gym" width="240" height="136"></canvas><div class="tagl" id="tagl"></div><button class="snd" id="pauseBtn" aria-label="Pausa">II</button></div>
+  <div class="screen" id="gymScreen"><canvas class="px" id="gym" width="240" height="136"></canvas><div class="tagl" id="tagl"></div><div class="days" id="days"></div><div class="toasts" id="toasts"></div><button class="snd" id="pauseBtn" aria-label="Menu">MENU</button></div>
   <div class="panel" id="panel"></div>
   <div class="nav" id="nav"></div>
 </div>
@@ -788,17 +814,19 @@ function render(){
   if(!S)return;
   $('#hud').innerHTML=`<div><small>DINHEIRO</small><b>${fmt(S.money)} €</b></div><div><small>POPULAR.</small><b>${Math.round(S.pop)}</b></div><div><small>SÓCIOS</small><b>${S.members}/${capacity()}</b></div><div><small>SEMANA</small><b>${S.week}</b></div>`;
   $('#tagl').style.display='none';
-  const nOff=S.roster.reduce((t,a)=>t+a.offers.length,0),nRev=S.roster.filter(needsReview).length;
+  const nOff=S.roster.reduce((t,a)=>t+a.offers.length,0);
   const tabs=[['gym','GINÁSIO'],['ath','ATLETAS'],['go',''],['fights','LUTAS'],['shop','LOJA']];
   $('#nav').innerHTML=tabs.map(([id,n])=>id==='go'
-    ?`<button class="go ${anyFightNow()?'fightgo':''}" id="goBtn" ${busy?'disabled':''}>${anyFightNow()?'IR PARA<br>A LUTA':'AVANÇAR<br>SEMANA'}</button>`
-    :`<button data-tab="${id}" class="${S.tab===id?'on':''}">${n}${id==='fights'&&nOff?`<span class="badge">${nOff}</span>`:''}${id==='ath'&&nRev?`<span class="badge">${nRev}</span>`:''}</button>`).join('');
+    ?(anyFightNow()?`<div class="clkb"><button class="go fightgo" id="goBtn" ${busy?'disabled':''}>IR PARA<br>A LUTA</button></div>`
+      :`<div class="clkb"><button class="go ${S.run?'run':''}" id="goBtn" ${busy?'disabled':''} aria-label="${S.run?'Parar o tempo':'Pôr o tempo a andar'}"><i class="${S.run?'icpa':'icp'}"></i></button><button class="spd ${(S.spd||1)>1?'x2':''}" id="spdBtn" aria-label="Velocidade do tempo">×${S.spd||1}</button></div>`)
+    :`<button data-tab="${id}" class="${S.tab===id?'on':''}">${n}${id==='fights'&&nOff?`<span class="badge">${nOff}</span>`:''}</button>`).join('');
   const P=$('#panel');
   if(S.tab==='gym')P.innerHTML=panelGym();
   if(S.tab==='ath')P.innerHTML=panelAth();
   if(S.tab==='fights')P.innerHTML=panelFights();
   if(S.tab==='shop')P.innerHTML=panelShop();
   const pc=$('#portrait');if(pc)drawPortrait(pc,cur().look);
+  drawClock();
   save();
 }
 function anyFightNow(){return S.roster.some(a=>a.fight&&a.fight.week===S.week)}
@@ -809,35 +837,6 @@ function fightLine(a){
   return `<div class="meta">${a.fight.title?'<b class="warn">TÍTULO</b> · ':''}Luta vs <b>${a.fight.opp.nick}</b> · <b class="${w<=0?'warn':''}" style="${w>0?'color:var(--gold)':''}">${when}</b></div>`;
 }
 function canTrain(a){return !(a.injury>0||a.recovery>0)}
-function needsReview(a){return canTrain(a)&&a.revWeek!==S.week}
-function planWarns(a){
-  const W=[];if(!canTrain(a))return W;
-  const end=projFat(a,a.plan);if(end>70)W.push(`<span class="warn">⚠ fadiga ≈${end}: risco de lesão</span>`);
-  const trained=new Set(a.plan.filter(p=>trainOK(a,p)).flatMap(p=>Object.keys(TR[p].g)));
-  if(a.plan.some(p=>!trainOK(a,p)))trained.add('resistencia');
-  const lost=DECAY_K.filter(k=>{const l=losing(a,k);return l&&l.lvl==='red'&&!trained.has(k)});
-  if(lost.length)W.push(`<span class="lossr">↓ perde ${lost.map(k=>SHORT[k]).join(', ')} esta semana</span>`);
-  const w=weeksTo(a);if(a.fight&&w===1&&end>45)W.push(`<span class="warn">🥊 luta na próxima semana: convém aliviar</span>`);
-  if(a.plan.some(p=>!trainOK(a,p)))W.push(`<span class="meta">sem equipamento num treino: fica a correr</span>`);
-  return W;
-}
-function weekSummary(){
-  if(window.__SIM)return Promise.resolve(true);
-  return new Promise(res=>{
-    const pend=S.roster.filter(needsReview).length;
-    const rows=S.roster.map((a,i)=>{
-      if(!canTrain(a))return `<div class="sumr"><div><strong>${a.nick}</strong> <span class="meta">· a descansar (${a.injury>0?'lesão':'recuperação da luta'})</span></div></div>`;
-      const W=planWarns(a);const rv=!needsReview(a);
-      return `<div class="sumr"><div style="min-width:0"><strong>${rv?'✅':'⏳'} ${a.nick}</strong> <span class="meta">${rv?'revisto':'por rever'}</span>
-        <div class="meta">${a.plan.map(p=>TR[p].n).join(' · ')} · fadiga ≈${projFat(a,a.plan)}</div>${W.map(x=>`<div style="font-size:12px">${x}</div>`).join('')}</div>
-        <button class="btn" data-sumgo="${i}">MUDAR</button></div>`}).join('');
-    const m=modal(`<h2>SEMANA ${S.week} · PLANOS</h2><p class="hint">${pend?`${pend} atleta${pend>1?'s':''} com o plano por rever.`:'Todos os planos revistos.'}</p><div class="rows">${rows}</div>
-      <div class="row2" style="margin-top:8px"><button class="btn" id="sumNo">VOLTAR</button><button class="btn ${pend?'':'gold'}" id="sumOk">${pend?'AVANÇAR MESMO ASSIM':'AVANÇAR'}</button></div>`);
-    m.querySelector('#sumNo').onclick=()=>{closeModal();res(false)};
-    m.querySelector('#sumOk').onclick=()=>{$('#modalRoot').innerHTML='';res(true)};
-    m.querySelectorAll('[data-sumgo]').forEach(b=>b.onclick=()=>{S.tab='ath';S.sel=+b.dataset.sumgo;S.sub='plano';closeModal();res(false);editPlan(S.roster[S.sel])});
-  });
-}
 function nameTag(a){
   if(!a.fight)return a.nick;
   const w=weeksTo(a),col=w<=1?'var(--red)':'var(--gold)';
@@ -845,7 +844,7 @@ function nameTag(a){
 }
 function selector(){
   return `<div class="seg">${CATS.map(c=>{const i=S.roster.findIndex(x=>x.cat===c);const x=S.roster[i];
-    return `<button ${x?`data-sel="${i}"`:'disabled'} class="${x&&i===S.sel?'on':''}" style="position:relative">${x&&(S.tab==='fights'?x.offers.length>0:needsReview(x))?`<i class="rdot" title="${S.tab==='fights'?'tem propostas':'plano por rever'}"></i>`:''}<b>${c.toUpperCase()}</b>${x?nameTag(x):'vazio'}</button>`}).join('')}</div>`;
+    return `<button ${x?`data-sel="${i}"`:'disabled'} class="${x&&i===S.sel?'on':''}" style="position:relative">${x&&S.tab==='fights'&&x.offers.length>0?`<i class="rdot" title="tem propostas"></i>`:''}<b>${c.toUpperCase()}</b>${x?nameTag(x):'vazio'}</button>`}).join('')}</div>`;
 }
 function panelGym(){
   const fees=S.members*ECON.fee+sponsors(),WC=weeklyCosts(),sal=WC.total;
@@ -853,7 +852,7 @@ function panelGym(){
   return `<div class="kv"><div><small>ENTRADAS/SEM</small><b class="good">+${fmt(fees)} €</b></div><div><small>DESPESAS/SEM</small><b class="warn">-${fmt(sal)} €</b></div><div><small>SALDO/SEM</small><b class="${fees-sal>=0?'good':'warn'}">${fees-sal>=0?'+':''}${fmt(fees-sal)} €</b></div></div>
   ${fights?`<h3>LUTAS MARCADAS</h3><div class="rows">${fights}</div>`:`<div class="empty">Nenhuma luta marcada. Vê as propostas em Lutas.</div>`}
   <h3>DIÁRIO</h3><div class="log">${S.log.map(l=>`<span><b>S${l.w}</b> ${l.t}</span>`).join('')}</div>
-  <div class="row2"><button class="btn" id="helpBtn">COMO JOGAR</button><button class="btn" id="menuBtn">MENU</button></div>`;
+  <div class="row2" style="grid-template-columns:1fr 1fr 1fr;gap:5px"><button class="btn" id="repBtn" ${S.rep?'':'disabled'}>RELATÓRIO</button><button class="btn" id="helpBtn">COMO JOGAR</button><button class="btn" id="menuBtn">MENU</button></div>`;
 }
 function panelAth(){
   const a=cur();const t=TIERS[a.tier];
@@ -882,11 +881,11 @@ function panelAth(){
       <div class="meta" style="font-size:11px">In-fighter vence Outboxer, Outboxer vence Puncher, Puncher vence In-fighter. O corpo decide o nível máximo de cada estilo.</div></div>`;
   }
   if(S.sub==='plano'){
-    const f=projFat(a,a.plan);
-    const w=weeksTo(a);
-    return selector()+sub+miniStats(a)+`<button class="slot planbox" data-editplan="1"><span><strong>PLANO DA SEMANA · ${!canTrain(a)?'a descansar':needsReview(a)?'<span style="color:var(--red)">⏳ por rever</span>':'<span style="color:var(--green)">✅ revisto</span>'}</strong><span class="pl">${a.plan.map(p=>TR[p].n).join(' · ')}</span></span><em class="ed">EDITAR<br>PLANO</em></button>
+    const f=projFat(a,weekPlan(a));
+    const w=weeksTo(a),ov=a.ovr&&a.ovr.w===S.week;
+    return selector()+sub+miniStats(a)+`<button class="slot planbox" data-editplan="1"><span><strong>PLANO · ${!canTrain(a)?'a descansar':'<span style="color:var(--green)">todas as semanas</span>'}</strong><span class="pl">${a.plan.map(p=>TR[p].n).join(' · ')}</span></span><em class="ed">EDITAR<br>PLANO</em></button>
       <div class="card plancard"><div class="meta">Fadiga agora: <b>${Math.round(a.fatigue)}</b> · no fim da semana: <b class="${f>70?'warn':''}">≈${Math.round(f)}</b></div>
-      ${!canTrain(a)?'':f>70?'<div class="warn">Acima de 70 há risco de lesão. Troca um treino por descanso.</div>':'<div class="meta">O plano repete-se todas as semanas até o mudares.</div>'}
+      ${!canTrain(a)?'':f>70?'<div class="warn">Acima de 70 há risco de lesão. Troca um treino por descanso.</div>':ov?`<div class="meta">Só esta semana: <b style="color:var(--gold);font-weight:400">${weekPlan(a).map(p=>TR[p].n).join(' · ')}</b>. Para a semana volta o plano normal.</div>`:'<div class="meta">O plano repete-se todas as semanas até o mudares. Só te chamo se houver motivo.</div>'}
       ${a.plan.includes('pads')&&trainOK(a,'pads')?`<div class="meta">Pads · golpe da semana: <b style="color:var(--gold);font-weight:400">${a.padF?pName(a.padF)+' ('+padTxt(a,a.padF)+')':'livre'}</b></div>`:''}
       ${a.injury>0?`<div class="warn">Lesionado: ${a.injury} semana${a.injury>1?'s':''} só a recuperar.</div>`:''}
       ${a.recovery>0?`<div class="warn">A recuperar da luta: ${a.recovery} semana${a.recovery>1?'s':''} sem treinar.</div>`:''}
@@ -993,7 +992,8 @@ function info(title,body,btn='CONTINUAR'){
   return new Promise(res=>{const s=modal(`<h2>${title}</h2>${body}<button class="btn gold big" id="mOk">${btn}</button>`);s.querySelector('#mOk').onclick=()=>{closeModal();res()}});
 }
 function help(){
-  return info('COMO JOGAR',`<p class="hint">És o dono de um ginásio de bairro. Em cada semana escolhes 3 treinos para cada lutador (em Atletas, Plano da semana) e carregas em Avançar semana.</p>
+  return info('COMO JOGAR',`<p class="hint">És o dono de um ginásio de bairro. O tempo corre sozinho: carrega em ▶ para andar, em ❚❚ para parar e em ×2 para ir mais depressa. Pára sozinho quando é preciso decidir alguma coisa.</p>
+  <p class="hint">Cada lutador tem um plano de 3 treinos por semana (em Atletas, Plano) que se repete até o mudares.</p>
   <p class="hint">As lutas marcam-se com 6 a 8 semanas de antecedência. Treina, gere a fadiga e, no dia, dá ordens no canto entre rounds.</p>
   <p class="hint">Mais equipamento desbloqueia treinos e traz mais sócios, que pagam mensalidades. Às vezes aparece um talento escondido.</p>`,'VAMOS A ISSO');
 }
@@ -1025,13 +1025,15 @@ document.addEventListener('click',e=>{
   if(d.up){const u=UPG.find(x=>x.id===d.up);if(!u||S.up[u.id]||S.money<u.cost)return;
     S.money-=u.cost;S.up[u.id]=true;SFX.play('buy');if(u.id==='pintura'||u.id==='ringue')S.pop+=6;if(u.id==='balneario')S.pop+=2;
     S.roster.forEach(checkUnlocks);note(`Compraste: ${u.n}.`);render();return}
-  if(t.id==='goBtn'){advanceWeek();return}
+  if(t.id==='goBtn'){if(anyFightNow())advanceWeek();else if(!busy){S.run=!S.run;render()}return}
+  if(t.id==='spdBtn'){const v=TIME.speeds;S.spd=v[(v.indexOf(S.spd||1)+1)%v.length];render();return}
+  if(t.id==='repBtn'){if(S.rep)info(`SEMANA ${S.rep.w}`,S.rep.html,'FECHAR');return}
   if(t.id==='helpBtn'){help();return}
   if(t.id==='menuBtn'){pauseMenu();return}
   if(t.id==='resetBtn'){const m=modal(`<h2>COMEÇAR DE NOVO?</h2><p class="hint">Perdes todo o progresso deste ginásio.</p><div class="row2"><button class="btn" id="rNo">CANCELAR</button><button class="btn red" id="rYes">APAGAR TUDO</button></div>`);
     m.querySelector('#rNo').onclick=closeModal;m.querySelector('#rYes').onclick=async()=>{ENT=[];occ={};newGame();closeModal();await setupGym();render()};return}
 });
-function projFat(a,plan){let f=Math.max(0,a.fatigue-15);for(const p of plan){const t=TR[trainOK(a,p)?p:'corrida'];f=clamp(f+(t.f>0?t.f*fatMul(a):t.f),0,100)}return Math.round(f)}
+function projFat(a,plan){const n=wkDone(a);let f=n?a.fatigue:Math.max(0,a.fatigue-15);for(const p of plan.slice(n)){/* a meio da semana: só os treinos que faltam */const t=TR[trainOK(a,p)?p:'corrida'];f=clamp(f+(t.f>0?t.f*fatMul(a):t.f),0,100)}return Math.round(f)}
 function losing(a,k){
   if(!DECAY_K.includes(k)||!a.lastT||a.lastT[k]===undefined)return null;
   const d=S.week-a.lastT[k];if(d<3)return null;
@@ -1056,17 +1058,15 @@ function editPlan(a){
   const draft=[...a.plan];let pf=a.padF||null;
   const draw=()=>{
     const ch=draft.some((p,i)=>p!==a.plan[i]);
-    const s=modal(`<h2>PLANO DE ${a.nick.toUpperCase()}</h2><p class="hint">Semana ${S.week} · ${needsReview(a)?'⏳ por rever':'✅ revisto'} · toca num treino para o mudar</p>${miniStats(a)}${fatBox(a,draft)}
+    const s=modal(`<h2>PLANO DE ${a.nick.toUpperCase()}</h2><p class="hint">${a.ovr&&a.ovr.w===S.week?`Só esta semana: ${weekPlan(a).map(p=>TR[p].n).join(' · ')} (um plano novo anula). Toca`:'Repete-se todas as semanas · toca'} num treino para o mudar</p>${miniStats(a)}${fatBox(a,draft)}
       <div class="slots">${draft.map((p,i)=>{const tr=TR[p],ok=trainOK(a,p);
-        return `<button class="slot" data-ps="${i}"><span class="n">${i+1}</span><span><strong>${tr.n}${p!==a.plan[i]?' <span style="color:var(--gold)">· novo</span>':''}</strong><span class="meta">${ok?(Object.keys(tr.g).length?'Treina '+trainTargets(a,tr):tr.d):'Sem equipamento: fica a correr'}</span></span><em>MUDAR</em></button>`}).join('')}</div>
+        return `<button class="slot" data-ps="${i}"><span class="n">${i+1}</span><span><strong>${tr.n}${p!==a.plan[i]?' <span style="color:var(--gold)">· novo</span>':''}${i<wkDone(a)?' <span style="color:var(--muted)">· feito</span>':''}</strong><span class="meta">${ok?(Object.keys(tr.g).length?'Treina '+trainTargets(a,tr):tr.d):'Sem equipamento: fica a correr'}</span></span><em>MUDAR</em></button>`}).join('')}</div>
       ${draft.some(p=>p==='pads'&&trainOK(a,p))?`<button class="slot padf" id="pFoc"><span class="n">◎</span><span><strong>PADS · GOLPE DA SEMANA</strong><span class="meta">${pf?`${pName(pf)} · ${padTxt(a,pf,draft)}`:'Livre: um pouco em todos os golpes que sabe'}</span></span><em>MUDAR</em></button>`:''}
-      <div class="row2"><button class="btn" id="pKeep">MANTER ANTERIOR</button><button class="btn gold" id="pOk">CONFIRMAR PLANO</button></div>
-      <button class="btn" id="pX" style="font-size:7px">FECHAR SEM REVER</button>`);
+      <div class="row2"><button class="btn" id="pX">CANCELAR</button><button class="btn gold" id="pOk">CONFIRMAR PLANO</button></div>`);
     s.querySelectorAll('[data-ps]').forEach(b=>b.onclick=()=>pickSlot(+b.dataset.ps));
     if(s.querySelector('#pFoc'))s.querySelector('#pFoc').onclick=pickFocus;
     s.querySelector('#pX').onclick=closeModal;
-    s.querySelector('#pKeep').onclick=()=>{a.revWeek=S.week;closeModal()};
-    s.querySelector('#pOk').onclick=()=>{const chg=draft.some((p,i)=>p!==a.plan[i]);a.plan=[...draft];a.padF=pf;a.revWeek=S.week;
+    s.querySelector('#pOk').onclick=()=>{const chg=draft.some((p,i)=>p!==a.plan[i]);a.plan=[...draft];a.padF=pf;if(chg)delete a.ovr;
       if(chg){const e=ENT.find(x=>x.id===a.id);if(e){release(e);e.state='idle'}}closeModal()};
   };
   const pickFocus=()=>{ // golpe da semana nos Pads (tema 1.6): pode ser um que ainda não sabe, se os atributos deixarem
@@ -1089,43 +1089,166 @@ function editPlan(a){
 }
 
 /* ================= WEEK ================= */
-async function advanceWeek(){
-  if(busy)return;busy=true;render();
-  if(anyFightNow()){
-    for(const a of S.roster){
-      if(!(a.fight&&a.fight.week===S.week))continue;
-      if(a.injury>0){await info('LUTA CANCELADA',`<p class="hint">${a.nick} está lesionado. A luta com ${a.fight.opp.nick} foi cancelada. Popularidade -2.</p>`);note(`Luta de ${a.nick} cancelada por lesão.`);a.fight=null;S.pop=Math.max(0,S.pop-2);continue}
-      await fightFlow(a);
-    }
-    busy=false;render();return;
-  }
-  if(!(await weekSummary())){busy=false;render();return}
-  const lines=[];
-  const reveals=[];
+/* ---- relógio (experiência): o tempo corre sozinho. Uma semana dura TIME.weekMs à velocidade ×1 (window.__TIME sobrepõe, para testes).
+   Os 3 treinos do plano resolvem-se ao longo da semana (TIME.sessDays: Seg, Qua, Sex) em sessionStep; o fecho da semana (condição física,
+   anos, contas, sócios, propostas...) acontece uma só vez em weekEnd. O tempo pára sozinho quando é preciso o jogador (dia de luta, cartões)
+   e nunca anda com uma janela ou uma luta abertas. O plano é uma ordem permanente: só aparece um cartão quando há motivo (planAlerts).
+   No save: S.wt (0..1, parte da semana já passada), S.wstep (treinos já feitos esta semana), S.run, S.spd, S.wchk (semana em que os avisos
+   do plano já foram vistos), S.rep (último relatório), a.wk (semana em curso do atleta), a.ovr (plano só desta semana), a.wcd (avisos em espera). ---- */
+const TIME=Object.assign({
+  weekMs:45000,      // duração de uma semana em ×1
+  speeds:[1,2],      // velocidades do botão
+  sessDays:[0,2,4],  // dias dos 3 treinos (0 = Seg)
+  resume:true,       // depois de um cartão resolvido com um toque, o tempo volta a andar se estava a andar
+  offerCard:true,    // uma proposta nova pára o tempo com um cartão
+  warnCd:4,          // semanas sem repetir um aviso do plano depois de "MANTER"
+  easeCd:2,          // semanas sem repetir depois de aceitar a sugestão ou de ir mudar o plano
+  toastMs:4200,noticeMs:9000
+},window.__TIME||{});
+const WDAYS=['SEG','TER','QUA','QUI','SEX','SÁB','DOM'];
+let clkLast=0,stay=false;
+const sessAt=i=>(TIME.sessDays[i]+.5)/7;
+function weekPlan(a){return a.ovr&&a.ovr.w===S.week?a.ovr.p:a.plan}          // o plano desta semana (pode estar aliviado só esta semana)
+function wkDone(a){return a.wk&&a.wk.w===S.week?(S.wstep||0):0}               // treinos desta semana que já passaram
+function toast(html,cls,ms){
+  const el=$('#toasts');if(!el)return;const d=document.createElement('div');d.className='toast '+(cls||'');d.innerHTML=html;el.appendChild(d);
+  while(el.children.length>5)el.firstChild.remove();
+  setTimeout(()=>{d.classList.add('out');setTimeout(()=>d.remove(),500)},ms||TIME.toastMs);
+}
+function drawClock(){
+  const el=$('#days');if(!el||!S)return;
+  if(el.children.length!==7)el.innerHTML=WDAYS.map((d,i)=>`<i class="${TIME.sessDays.includes(i)?'tr':''}"><u></u><span>${d}</span></i>`).join('');
+  const t=clamp(S.wt||0,0,1)*7;el.classList.toggle('off',!S.run);
+  for(let i=0;i<7;i++){const c=el.children[i];c.firstChild.style.width=clamp(t-i,0,1)*100+'%';c.classList.toggle('dn',t>=i+1);c.classList.toggle('now',t>=i&&t<i+1)}
+}
+function clockHeld(){return busy||!!F||document.hidden||!!$('#modalRoot').innerHTML||!!$('#fightRoot').innerHTML}
+function clockTick(){
+  const now=performance.now(),dt=Math.min(250,now-clkLast);clkLast=now;
+  if(!S)return;
+  if(S.run&&!clockHeld())clockAdvance(dt*(S.spd||1)/TIME.weekMs);
+  drawClock();
+}
+function clockAdvance(d){
+  if(anyFightNow()){S.run=false;render();return}
+  if(S.wchk!==S.week&&!(S.wt>0)){S.wchk=S.week;const c=S.roster.flatMap(planAlerts);if(c.length){clockDo(()=>runCards(c));return}} // avisos do plano: uma vez, no início da semana
+  S.wt=(S.wt||0)+d;
+  let cards=[],did=false;
+  while((S.wstep||0)<3&&S.wt>=sessAt(S.wstep||0)&&!cards.length){cards=sessionStep();did=true}
+  if(cards.length){clockDo(()=>runCards(cards));return}
+  if(S.wt>=1){clockDo(()=>endWeek());return}
+  if(did)render();
+}
+async function clockDo(fn){ // um passo com janelas: o tempo fica parado e só volta a andar se nada ficou por decidir
+  busy=true;stay=false;const was=S.run;render();
+  try{await fn()}finally{busy=false}
+  S.run=!!was&&TIME.resume&&!stay&&!anyFightNow();
+  if(anyFightNow()&&was)toast('<b>DIA DE LUTA</b>','wk');
+  render();
+}
+function card(c){ // cartão curto com escolhas de um toque: {title, body, opts:[{t, cls, fn, stay}]}
+  return new Promise(res=>{
+    const m=modal(`<h2>${c.title}</h2>${c.body}<div class="cardb">${c.opts.map((o,i)=>`<button class="btn ${o.cls||''}" data-card="${i}">${o.t}</button>`).join('')}</div>`);
+    m.querySelectorAll('[data-card]').forEach(b=>b.onclick=()=>{const o=c.opts[+b.dataset.card];closeModal();if(o.stay)stay=true;if(o.fn)o.fn();res(o)});
+  });
+}
+async function runCards(cards){for(const c of cards){if(c.a&&!S.roster.includes(c.a))continue;await card(c);if(stay)break}}
+function openPlan(a){const i=S.roster.indexOf(a);if(i<0)return;S.tab='ath';S.sel=i;S.sub='plano';render();editPlan(a)}
+function setCd(a,k,n){a.wcd=a.wcd||{};a.wcd[k]=S.week+n}
+function easePlan(a,lim){ // troca os treinos mais pesados por descanso até a fadiga prevista caber no limite
+  const p=[...weekPlan(a)],out=[],fOf=id=>TR[trainOK(a,id)?id:'corrida'].f;
+  while(projFat(a,p)>lim){let bi=-1;p.forEach((id,i)=>{if(id!=='descanso'&&(bi<0||fOf(id)>fOf(p[bi])))bi=i});if(bi<0)break;out.push(TR[p[bi]].n);p[bi]='descanso'}
+  return{p,out};
+}
+/* avisos do plano: só quando há motivo (fadiga alta, luta na próxima semana, condição física a descer). Quem escolhe MANTER não volta a
+   ser avisado do mesmo durante TIME.warnCd semanas. */
+function planAlerts(a){
+  const out=[];if(!canTrain(a))return out;
+  const pl=weekPlan(a),end=projFat(a,pl),w=weeksTo(a),A=a.nick.toUpperCase();
+  const mk=(key,title,txt,act)=>{if(a.wcd&&a.wcd[key]>S.week)return;
+    out.push({a,title,body:`<p class="hint">${txt}</p>`,opts:[
+      ...(act?[{t:act.t,cls:'gold',fn:()=>{a.ovr={w:S.week,p:act.p};setCd(a,key,TIME.easeCd)}}]:[]),
+      {t:'MUDAR O PLANO',stay:true,fn:()=>{setCd(a,key,TIME.easeCd);openPlan(a)}},
+      {t:'MANTER',fn:()=>setCd(a,key,TIME.warnCd)}]})};
+  if(end>70){const e=easePlan(a,70);
+    mk('fat',`${A} ESTÁ MUITO CANSADO`,`Fadiga ${Math.round(a.fatigue)} agora e ≈${end} no fim da semana com este plano. Acima de 70 há risco de lesão.`,
+      e.out.length?{t:`ALIVIAR ESTA SEMANA<small>${e.out.join(' e ')} → Descanso, só esta semana</small>`,p:e.p}:null)}
+  else if(a.fight&&w===1&&end>45){const e=easePlan(a,45);
+    mk('fight',`${A} LUTA NA PRÓXIMA SEMANA`,`Luta com ${a.fight.opp.nick} daqui a 1 semana e, com este plano, chega cansado (fadiga ≈${end}).`,
+      e.out.length?{t:`ALIVIAR ESTA SEMANA<small>${e.out.join(' e ')} → Descanso, só esta semana</small>`,p:e.p}:null)}
+  const trained=new Set(pl.filter(p=>trainOK(a,p)).flatMap(p=>Object.keys(TR[p].g)));
+  if(pl.some(p=>!trainOK(a,p)))trained.add('resistencia');
+  const lost=DECAY_K.filter(k=>{const l=losing(a,k);return l&&l.lvl==='red'&&!trained.has(k)});
+  if(lost.length){
+    const val=id=>lost.reduce((t,k)=>t+(TR[id].g[k]||0),0),nid=Object.keys(TR).filter(id=>trainOK(a,id)&&val(id)>0).sort((x,y)=>val(y)-val(x))[0];
+    let act=null;
+    if(nid){const tot=id=>Object.values(TR[trainOK(a,id)?id:'corrida'].g).reduce((t,v)=>t+v,0);let si=-1;pl.forEach((id,i)=>{if(si<0||tot(id)<=tot(pl[si]))si=i});
+      if(si>=0){const p=[...pl];p[si]=nid;if(projFat(a,p)<=70)act={t:`TREINAR ESTA SEMANA<small>${TR[pl[si]].n} → ${TR[nid].n}, só esta semana</small>`,p}}}
+    mk('dec:'+lost.join(),`${A} VAI PERDER CONDIÇÃO`,`Há 4 semanas sem treinar ${lost.map(k=>ATTRS.find(x=>x[0]===k)[1]).join(' e ')}: desce no fim desta semana se não treinar.`,act)}
+  return out;
+}
+function padCard(a,k,isNew){
+  const n=pName(k);
+  return{a,title:isNew?`${a.nick.toUpperCase()} APRENDEU: ${n.toUpperCase()}`:`${n.toUpperCase()} NO NÍVEL 5`,
+    body:`<p class="hint">${isNew?`O golpe da semana nos Pads deu resultado. Queres ensinar-lhe outro golpe ou continuar a melhorar este?`:`${a.nick} já não tem mais nada a aprender neste golpe. Escolhe outro golpe da semana para os Pads.`}</p>`,
+    opts:[{t:'ESCOLHER OUTRO GOLPE',cls:'gold',stay:true,fn:()=>openPlan(a)},isNew?{t:`CONTINUAR COM ${n.toUpperCase()}`}:{t:'PADS LIVRES<small>um pouco em todos os golpes que sabe</small>',fn:()=>{a.padF=null}}]};
+}
+function injuryCard(a){
+  return{a,title:`${a.nick.toUpperCase()} LESIONOU-SE`,body:`<p class="hint">Excesso de treino com a fadiga alta. Fica ${a.injury} semana${a.injury>1?'s':''} só a recuperar.${a.fight?` <span class="warn">Tem luta marcada com ${a.fight.opp.nick}: se não recuperar a tempo, é cancelada.</span>`:''}</p>`,
+    opts:[{t:'CONTINUAR',cls:'gold'}]};
+}
+function offerCard(a,o){
+  return{a,title:`${o.title?'LUTA PELO TÍTULO':'NOVA PROPOSTA'} · ${a.nick.toUpperCase()}`,
+    body:`<p class="hint">${o.title?`${a.nick} é desafiante oficial ao título ${TIERS[a.tier].n}. `:''}Contra <b style="color:var(--fg)">${o.opp.nick}</b> · daqui a ${o.inWeeks} semanas · ${o.rounds} rounds · ${fmt(o.purse)} €.</p>`,
+    opts:[{t:'VER PROPOSTAS',cls:'gold',stay:true,fn:()=>{const i=S.roster.indexOf(a);if(i>=0){S.tab='fights';S.sel=i;render()}}},{t:'DEPOIS'}]};
+}
+/* ---- um treino do plano (o n.º S.wstep desta semana) para todos os atletas; devolve os cartões que precisam do jogador ---- */
+function beginWeek(a){
+  a.wk={w:S.week,b:{...a.attrs},up:[],nT:0};
+  a.weeks=(a.weeks||0)+1;if(a.weeks>=3){const m=revealGift(a,'nos treinos');if(m){a.wk.rev=m;toast(`<b>${m}</b>`)}}
+  a.fatigue=Math.max(0,a.fatigue-15);
+  a.tlog=a.tlog||[];
+  if(a.injury>0){a.wk.rest='inj';a.fatigue=Math.max(0,a.fatigue-20)}
+  else if(a.recovery>0){a.wk.rest='rec';a.fatigue=Math.max(0,a.fatigue-20)}
+}
+function sessionStep(){
+  const i=S.wstep||0,cards=[];if(i>=3)return cards;
   for(const a of S.roster){
-    a.weeks=(a.weeks||0)+1;if(a.weeks>=3){const m=revealGift(a,'nos treinos');if(m)reveals.push(m)}
-    a.fatigue=Math.max(0,a.fatigue-15);
-    a.tlog=a.tlog||[];
-    if(a.injury>0){a.tlog.push({n:0,rest:true});a.fatigue=Math.max(0,a.fatigue-20);lines.push(`<b>${a.nick}</b> esteve a recuperar da lesão.`);continue}
-    if(a.recovery>0){a.tlog.push({n:0,rest:true});a.fatigue=Math.max(0,a.fatigue-20);a.recovery--;lines.push(`<b>${a.nick}</b> descansou depois da luta. ${a.recovery?`Faltam ${a.recovery} semana${a.recovery>1?'s':''} de recuperação.`:'Já pode voltar a treinar.'}`);continue}
-    const before={...a.attrs};let injured=false;const up=[];let nT=0,rested=false;
-    for(const p of a.plan){
-      const id=trainOK(a,p)?p:'corrida';const t=TR[id];
-      if(id==='descanso'){rested=true;a.fatigue=Math.max(0,a.fatigue+t.f);a.conf=clamp(a.conf+3,0,100);continue}
-      nT++;
-      if(a.fatigue>70&&Math.random()<(a.fatigue-65)/90){injured=true;break}
-      const q=clamp(sessQ(a)+R(-.1,.1),.3,1.15); // qualidade da sessão (9.1): atleta (Disciplina, Concentração, confiança) e equipa técnica
-      const m=(id==='sparring'&&S.up.ringue)?1.25:1;
-      for(const[k,b]of Object.entries(t.g))gain(a,k,b,q,m);
-      if(t.sty)addStyleXP(a,t.sty,Math.round(4*q),up,true);
-      if(id==='sparring')addStyleXP(a,a.style,Math.max(1,Math.round(1.4*q*m)),up,false);
-      trainSkills(a,id,q*m,up);
-      a.fatigue=clamp(a.fatigue+(t.f>0?t.f*fatMul(a):t.f),0,100);
-    }
-    a.tlog.push({n:nT,rest:rested});
-    const parts=ATTRS.map(([k])=>{const d=a.attrs[k]-before[k];return d>=.1?`${SHORT[k]} +${d.toFixed(1)}`:''}).filter(Boolean).concat(up,checkUnlocks(a).map(g=>'aprendeu '+g));
-    if(injured){a.injury=RI(1,3);lines.push(`<b>${a.nick}</b> <span class="warn">lesionou-se por excesso de treino (${a.injury} sem.).</span> ${parts.join(', ')}`);note(`${a.nick} lesionou-se no treino.`)}
-    else lines.push(`<b>${a.nick}</b>: ${parts.join(', ')||'semana leve'} · fadiga ${Math.round(a.fatigue)}`);
+    if(!a.wk||a.wk.w!==S.week)beginWeek(a);
+    const k=a.wk;if(k.rest||k.inj)continue;
+    const p=weekPlan(a)[i],id=trainOK(a,p)?p:'corrida',t=TR[id];
+    if(id==='descanso'){k.rested=true;a.fatigue=Math.max(0,a.fatigue+t.f);a.conf=clamp(a.conf+3,0,100);toast(`<b>${a.nick}</b> · Descanso`);continue}
+    k.nT++;
+    if(a.fatigue>70&&Math.random()<(a.fatigue-65)/90){k.inj=true;a.injury=RI(1,3);note(`${a.nick} lesionou-se no treino.`);cards.push(injuryCard(a));continue}
+    const b0={...a.attrs},n0=k.up.length,pf=a.padF,l0=pf?a.skills[pf]||0:0;
+    const q=clamp(sessQ(a)+R(-.1,.1),.3,1.15); // qualidade da sessão (9.1): atleta (Disciplina, Concentração, confiança) e equipa técnica
+    const m=(id==='sparring'&&S.up.ringue)?1.25:1;
+    for(const[x,b]of Object.entries(t.g))gain(a,x,b,q,m);
+    if(t.sty)addStyleXP(a,t.sty,Math.round(4*q),k.up,true);
+    if(id==='sparring')addStyleXP(a,a.style,Math.max(1,Math.round(1.4*q*m)),k.up,false);
+    trainSkills(a,id,q*m,k.up);
+    a.fatigue=clamp(a.fatigue+(t.f>0?t.f*fatMul(a):t.f),0,100);
+    k.up.push(...checkUnlocks(a).map(g=>'aprendeu '+g));
+    const g=ATTRS.filter(([x])=>a.attrs[x]-b0[x]>=.05).map(([x])=>'+'+SHORT[x]);
+    toast(`<b>${a.nick}</b> · ${t.n} ✓ ${g.join(' ')}${k.up.length>n0?` · <span class="good">${k.up.slice(n0).join(', ')}</span>`:''}`);
+    if(id==='pads'&&pf&&(a.skills[pf]||0)>l0&&(l0===0||a.skills[pf]>=5))cards.push(padCard(a,pf,l0===0));
+  }
+  S.wstep=i+1;return cards;
+}
+/* ---- fecho da semana: uma só vez por semana, depois dos 3 treinos. Devolve as propostas novas (para os cartões). ---- */
+function weekEnd(){
+  while((S.wstep||0)<3)sessionStep();
+  const lines=[],short=[],reveals=[];
+  for(const a of S.roster){
+    if(!a.wk||a.wk.w!==S.week)beginWeek(a);
+    const k=a.wk;delete a.wk;if(a.ovr&&a.ovr.w<=S.week)delete a.ovr;
+    if(a.wcd)for(const x of Object.keys(a.wcd))if(a.wcd[x]<=S.week)delete a.wcd[x];
+    if(k.rev)reveals.push(k.rev);
+    if(k.rest==='inj'){a.tlog.push({n:0,rest:true});lines.push(`<b>${a.nick}</b> esteve a recuperar da lesão.`);short.push(`${a.nick}: lesionado`);continue}
+    if(k.rest==='rec'){a.tlog.push({n:0,rest:true});a.recovery--;lines.push(`<b>${a.nick}</b> descansou depois da luta. ${a.recovery?`Faltam ${a.recovery} semana${a.recovery>1?'s':''} de recuperação.`:'Já pode voltar a treinar.'}`);short.push(`${a.nick}: ${a.recovery?'a recuperar da luta':'pronto para treinar'}`);continue}
+    a.tlog.push({n:k.nT,rest:!!k.rested});
+    const parts=ATTRS.map(([x])=>{const d=a.attrs[x]-k.b[x];return d>=.1?`${SHORT[x]} +${d.toFixed(1)}`:''}).filter(Boolean).concat(k.up);
+    if(k.inj){lines.push(`<b>${a.nick}</b> <span class="warn">lesionou-se por excesso de treino (${a.injury} sem.).</span> ${parts.join(', ')}`);short.push(`${a.nick}: <span class="warn">lesionou-se</span>`)}
+    else{lines.push(`<b>${a.nick}</b>: ${parts.join(', ')||'semana leve'} · fadiga ${Math.round(a.fatigue)}`);short.push(`${a.nick}: ${parts.join(', ')||'semana leve'}`)}
   }
   for(const a of S.roster){
     a.tlog=(a.tlog||[]).slice(-6);a.base=a.base||{...a.attrs};a.peak=a.peak||{...a.attrs};a.lastT=a.lastT||{};
@@ -1134,16 +1257,15 @@ async function advanceWeek(){
       if(a.lastT[k]===undefined)a.lastT[k]=S.week;
       if(S.week-a.lastT[k]>3){const floor=Math.max(a.base[k],a.peak[k]*TUNE.decayFloor);if(a.attrs[k]>floor){const d=Math.min(TUNE.decay,a.attrs[k]-floor);a.attrs[k]-=d;if(d>.05)lost.push(SHORT[k])}}
     }
-    if(lost.length)lines.push(`<b>${a.nick}</b> <span class="warn">está a perder condição física (${lost.join(', ')}) por falta de treino.</span>`);
+    if(lost.length){lines.push(`<b>${a.nick}</b> <span class="warn">está a perder condição física (${lost.join(', ')}) por falta de treino.</span>`);short.push(`<span class="warn">${a.nick} perde ${lost.join(', ')}</span>`)}
     a.conf=clamp(a.conf+(confBase(a)-a.conf)*TUNE.confDrift,0,100);
     if(a.bw==null)a.bw=RI(0,51);
     if(S.week%52===a.bw){a.age++;const qd=a.age>=TUNE.qxAge?TUNE.qxYear*(a.age-TUNE.qxAge+1):0;
       if(qd){a.attrs.queixo=Math.max(5,a.attrs.queixo-qd);a.cap.queixo=Math.max(5,(a.cap.queixo||a.attrs.queixo)-qd)}
-      lines.push(`<b>${a.nick}</b> fez ${a.age} anos.${qd?' <span class="warn">Já não aguenta os golpes como antes.</span>':''}`);note(`${a.nick} fez ${a.age} anos.`)}
+      lines.push(`<b>${a.nick}</b> fez ${a.age} anos.${qd?' <span class="warn">Já não aguenta os golpes como antes.</span>':''}`);note(`${a.nick} fez ${a.age} anos.`);short.push(`${a.nick} fez ${a.age} anos`)}
   }
-  const fightLines=[];
-  const fees=S.members*ECON.fee,spons=sponsors(),WC=weeklyCosts();
-  S.money=Math.max(0,S.money+fees+spons-WC.total);
+  const fees=S.members*ECON.fee,spons=sponsors(),WC=weeklyCosts(),net=fees+spons-WC.total;
+  S.money=Math.max(0,S.money+net);
   const prevM=S.members,cap=capacity();
   const target=Math.min(cap,3+Math.floor(S.pop/3)+eqUnits()+(S.up.pintura?2:0));
   if(S.members<target)S.members+=Math.min(2,target-S.members);else if(S.members>target)S.members--;
@@ -1151,29 +1273,55 @@ async function advanceWeek(){
   if(!S.up.pintura&&S.members>8&&Math.random()<.4){S.members--;extra='Um sócio saiu a queixar-se do estado das paredes.'}
   for(const r of S.rivals)if(Math.random()<.15&&r.lvl<8)r.lvl+=1;
   S.pop=Math.min(100,S.pop);
-  S.week++;
-  const news=[...reveals];
+  S.week++;S.wt=0;S.wstep=0;
+  const news=[...reveals],newOff=[];
   for(const a of S.roster){
     if(a.injury>0)a.injury--;
     a.offers=a.offers.filter(o=>o.expires>=S.week);
+    const had=new Set(a.offers);
     if(!a.fight&&a.rank<=3&&!a.offers.some(o=>o.title)){if(a.offers.length>=3)a.offers.shift();addOffer(a);news.push(`${a.nick} é desafiante oficial: tem uma proposta para lutar pelo título ${TIERS[a.tier].n}!`)}
     else if(!a.fight&&Math.random()<.3+S.pop/200){const n=a.offers.length;addOffer(a);if(a.offers.length>n)news.push(`Nova proposta para ${a.nick}.`)}
+    for(const o of a.offers)if(!had.has(o))newOff.push([a,o]);
   }
-  note(`Semana fechada: ${fees+spons-WC.total>=0?'+':''}${fees+spons-WC.total} €.`);
+  note(`Semana fechada: ${net>=0?'+':''}${net} €.`);
   const dm=S.members-prevM;
-  SFX.play(fees+spons-WC.total>=0?'coin':'week');
-  await info(`SEMANA ${S.week-1}`,`<div class="rep">
+  SFX.play(net>=0?'coin':'week');
+  // relatório completo: fica guardado para ver quando se quiser (Ginásio → RELATÓRIO)
+  S.rep={w:S.week-1,html:`<div class="rep">
     <div class="r"><div><strong>TREINOS</strong>${lines.map(l=>`<p>${l}</p>`).join('')}</div></div>
-    ${fightLines.length?`<div class="r"><div><strong>LUTAS</strong>${fightLines.map(l=>`<p>${l}</p>`).join('')}</div></div>`:''}
-    <div class="r"><div><strong>CONTAS · SALDO ${fees+spons-WC.total>=0?'+':''}${fmt(fees+spons-WC.total)} €</strong><p>Mensalidades <span class="good">+${fees} €</span>${spons?` · Patrocínios <span class="good">+${spons} €</span>`:''}</p><p>Salários <span class="warn">-${WC.sal} €</span>${WC.staff?` · Staff <span class="warn">-${WC.staff} €</span>`:''} · Renda <span class="warn">-${WC.rent} €</span> · Manutenção <span class="warn">-${WC.maint} €</span></p><p>Sócios ${dm>=0?'+':''}${dm} (agora ${S.members}/${capacity()})${extra?' · '+extra:''}</p></div></div>
+    <div class="r"><div><strong>CONTAS · SALDO ${net>=0?'+':''}${fmt(net)} €</strong><p>Mensalidades <span class="good">+${fees} €</span>${spons?` · Patrocínios <span class="good">+${spons} €</span>`:''}</p><p>Salários <span class="warn">-${WC.sal} €</span>${WC.staff?` · Staff <span class="warn">-${WC.staff} €</span>`:''} · Renda <span class="warn">-${WC.rent} €</span> · Manutenção <span class="warn">-${WC.maint} €</span></p><p>Sócios ${dm>=0?'+':''}${dm} (agora ${S.members}/${capacity()})${extra?' · '+extra:''}</p></div></div>
     ${news.length?`<div class="r"><div><strong>NOVIDADES</strong>${news.map(l=>`<p>${l}</p>`).join('')}</div></div>`:''}
-  </div>`);
+  </div>`};
+  // aviso curto (1 a 3 linhas) que não pára o tempo
+  const l3=[...news,extra].filter(Boolean);
+  toast(`<div><b>SEMANA ${S.week-1}</b> · <span class="${net>=0?'good':'warn'}">${net>=0?'+':''}${fmt(net)} €</span>${dm?` · sócios ${dm>0?'+':''}${dm}`:''}</div><div>${short.join(' · ')}</div>${l3.length?`<div style="color:var(--gold)">${l3.join(' ')}</div>`:''}`,'wk',TIME.noticeMs);
+  return newOff;
+}
+async function endWeek(quiet){
+  const newOff=weekEnd();render();
   for(const a of [...S.roster])if(a.pendingRaise)await negotiate(a);
   const empty=CATS.filter(c=>!S.roster.some(a=>a.cat===c));
   if(empty.length&&S.week>3&&Math.random()<.14+S.pop/400)await talent(pick(empty));
   else if(S.week>3&&Math.random()<.05+S.pop/800)await talent(pick(CATS.filter(c=>!empty.includes(c))));
-  busy=false;render();
+  if(!quiet&&TIME.offerCard)await runCards(newOff.filter(([a,o])=>S.roster.includes(a)&&a.offers.includes(o)).map(([a,o])=>offerCard(a,o)));
 }
+/* ---- botão do dia de luta; fora disso fecha a semana inteira de uma vez (para testes: window.__week()) ---- */
+async function advanceWeek(){
+  if(busy)return;
+  if(anyFightNow()){
+    busy=true;render();
+    for(const a of S.roster){
+      if(!(a.fight&&a.fight.week===S.week))continue;
+      if(a.injury>0){await info('LUTA CANCELADA',`<p class="hint">${a.nick} está lesionado. A luta com ${a.fight.opp.nick} foi cancelada. Popularidade -2.</p>`);note(`Luta de ${a.nick} cancelada por lesão.`);a.fight=null;S.pop=Math.max(0,S.pop-2);continue}
+      await fightFlow(a);
+    }
+    busy=false;S.run=false;render();return;
+  }
+  await clockDo(()=>endWeek(true));
+}
+window.__week=()=>advanceWeek();
+window.__clock=()=>S&&{week:S.week,wt:S.wt||0,step:S.wstep||0,run:!!S.run,spd:S.spd||1,busy};
+document.addEventListener('visibilitychange',()=>{if(document.hidden&&S&&S.run){S.run=false;save();drawClock()}});
 /* ---- golpes e defesas no treino (tema 1.6 e 3): os Pads dão muita experiência ao golpe da semana (a.padF; pode ser um golpe que ainda não sabe,
    se os atributos deixarem: aprende-o em algumas sessões); sem golpe escolhido, espalha pelos que sabe. Os outros treinos dão um pouco aos golpes
    ligados (Guia); o Sparring aos mais usados nas lutas (a.use), a várias defesas e mexe na confiança (sucessos e falhanços). ---- */
@@ -3518,7 +3666,8 @@ async function start(){
   for(const a of S.roster){migrateHist(a);migrateStyles(a);initBody(a,2);if(a.fight){migrateStyles(a.fight.opp);initBody(a.fight.opp,clamp(a.tier+1,1,5))}for(const o of a.offers||[]){migrateStyles(o.opp);initBody(o.opp,clamp(a.tier+1,1,5))}}
   for(const a of S.roster){normSkills(a);a.combos=a.combos||knownCombos(a).map(c=>c.id);a.recovery=a.recovery||0;a.ment=a.ment||rollMental();for(const[k]of ATTRS){if(a.attrs[k]==null)a.attrs[k]=k==='queixo'?50:10;if(a.cap[k]==null)a.cap[k]=a.attrs[k]+5}if(a.gift===undefined){a.gift=null;a.giftKnown=true}a.weeks=a.weeks||0}
   S.tab=S.tab||'gym';
-  render();requestAnimationFrame(world);
+  S.run=false;S.spd=TIME.speeds.includes(S.spd)?S.spd:1;S.wt=clamp(+S.wt||0,0,1);S.wstep=clamp(S.wstep|0,0,3);for(const a of S.roster)delete a.revWeek; // relógio: começa sempre parado
+  render();requestAnimationFrame(world);clkLast=performance.now();setInterval(clockTick,100);
   if(fresh){await setupGym();render()}
   if(!S.seen){S.seen=true;save();await help()}
 }
