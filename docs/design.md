@@ -28,6 +28,7 @@
 - 2.6 **Decidido — pop-ups no ringue:** palavras curtas por cima do pugilista, que sobem e desaparecem. **Dois tipos:** *normal* (pequeno, na cor do canto: defesas "BLOQUEIO/BAIXA/APARA/OMBRO/CLINCH", combinações "1-2-3", "LIMPO!") e *especial* (maior, moldura e brilho dourado, fica mais tempo: técnicas aprendidas "FÍGADO!/SMASH!/JOLTY COUNTER!/CHECK HOOK!", counters, quedas). Sem pop-up para cada jab normal nem números de dano. Aspeto próprio (não imitar o Boxing Gym Story); versão simples agora, final na fase 8.
 - 2.7 **Decidido — desligar:** nas opções do menu de pausa, 3 níveis: todos / só especiais / desligados. Com os pop-ups desligados, o Zé do Micro fala um pouco mais (não muito).
 - 2.8 **Decidido — ordens em balão:** a ordem gritada aparece num balão por cima do nosso treinador (reaparece enquanto o atleta não ouve). **Sem pop-ups por cima do atleta** para as ordens (seria demasiado): fica a caixa atual ("A OUVIR... / NÃO TE OUVE! / OUVIU!"). O canto adversário também tem balões por cima do treinador dele, por agora só gritos de ambiente sem efeito (provisório; voltar a perguntar na fase 6 se passam a ordens a sério).
+- 2.9 **Decidido — atributos "do momento":** durante a luta cada atributo conta menos conforme o estado (temporário, só nessa luta). **Fôlego baixo:** Pés (muito), Velocidade, Força, Defesa, Técnica (um pouco). **Vida baixa (dor):** Queixo (vai cedendo com a dor acumulada e com cada queda na luta), Ring IQ (abanado não pensa; a Calma ajuda), Defesa, Pés, Força e Velocidade (um pouco), Técnica (um pouco). **Outros:** pernas bambas → Pés; Concentração baixa → Técnica nos últimos rounds. Resistência não desce (é o próprio fôlego). Resumo: o cansaço tira o corpo, a dor tira a cabeça. Números na fase 7.
 - 2.3 **Decidido — uma linha de cada vez:** só a frase atual, com a cara pequena de quem fala; as frases importantes ficam mais tempo no ecrã; o retrato grande sai e o espaço vai para o ringue.
 
 Detalhes das ideias das fases 2–4: `docs/pesquisa-bgs.md`.
@@ -196,6 +197,7 @@ Ordem: 8 → 5 → 1 → 3 → 4.
 - **Liga com:** pesagem (adiada), "chave do plano" da pesquisa a outros jogos.
 - **A decidir aqui:** como funciona mudar de estilo/plano durante a luta (incluindo o adversário), e se o canto deve dar uma pista do que o canto dele vai mudar no intervalo.
 - **Lembrar o Tiago aqui:** os balões do canto adversário são, por agora, só gritos de ambiente (fase 2); decidir aqui se o adversário passa a dar ordens a sério durante o round.
+- **Lembrar o Tiago aqui:** o canto entre rounds passa a ser **uma escolha** para o minuto de intervalo — recuperar fôlego / acalmar-motivar (recupera um pouco Ring IQ e Queixo, sobe a confiança; depende de Ouvir o canto, Confiança, Calma e da qualidade do treinador) / corrigir a tática — em vez de bónus somados. Princípio aceite na fase 2; redesenhar aqui e ajustar.
 - **Decisões:** —
 
 ### Tema 11 — Faltas e golpes ilegais
