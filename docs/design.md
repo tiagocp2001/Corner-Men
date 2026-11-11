@@ -23,6 +23,8 @@
 ### Fase 2 — Luta legível · decisões
 - 2.1 **Decidido — duas vozes:** o **Zé do Micro** (locutor: frases curtas sobre o que acontece) + um **comentador ex-pugilista** (fala 1–2 vezes por round, explica o porquê). Nome do comentador provisório; o Tiago pode mudar os nomes mais tarde.
 - 2.2 **Decidido — fala-se menos:** o importante passa sempre (quedas, counters, técnicas especiais, fígado/coração, fim de round, ordens ouvidas, mudanças importantes como "encostou-o ao canto"); o rotineiro (cada jab, bloqueio, esquiva) vê-se no ringue (animação e pop-ups), sem texto.
+- 2.4 **Decidido — rever durante a luta:** tocar na linha do comentador abre o registo do que já foi dito; a luta pára enquanto está aberto.
+- 2.5 **Decidido — o comentador fala pouco:** o que se vê nos pop-ups não precisa de ser dito; de vez em quando pode fazer outro tipo de comentário (histórias, opinião sobre os atletas, o público, a rivalidade, o percurso), quando fizer sentido. Nome provisório: Abílio "Bigorna" Santos.
 - 2.3 **Decidido — uma linha de cada vez:** só a frase atual, com a cara pequena de quem fala; as frases importantes ficam mais tempo no ecrã; o retrato grande sai e o espaço vai para o ringue.
 
 Detalhes das ideias das fases 2–4: `docs/pesquisa-bgs.md`.
