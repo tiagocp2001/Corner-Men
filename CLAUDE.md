@@ -46,17 +46,17 @@ Secções (procurar pelos comentários `/* ===== X ===== */`):
 | `SOUND` | `SFX` — sons 8-bit gerados (sem ficheiros) |
 | `RENDER` | UI em menus num ecrã fixo: separadores Ginásio / Atletas (Ficha → Atributos/Golpes, Plano) / Lutas / Loja |
 | `MODALS`, `INPUT` | `modal`, `info`, handler global de cliques (`data-*`) |
-| `WEEK` | `advanceWeek`: treinos, fadiga, decadência física, economia, eventos, resumo semanal de planos |
+| `WEEK` | Tempo a correr sozinho (experiência): `TIME` (semana de 45 s, ×1/×2, treinos Seg/Qua/Sex; `window.__TIME` sobrepõe nos testes), `clockTick` → `sessionStep` → `endWeek`/`weekEnd`; cartões só com motivo (`planAlerts`, `padCard`, `injuryCard`); aviso curto da semana (`toast`) e relatório completo no Ginásio. Nos testes, `window.__week()` avança uma semana inteira de imediato (`#goBtn` é ▶/❚❚, já não avança semanas) |
 | `GYM WORLD` | Ginásio animado em canvas 240×136: membros e atletas a treinar, treinadores a circular, sons ambiente |
 | `FIGHT` | Simulação da luta (`runFight`, `exchange`, `punch`, `knockdown`, `corner`, `preTalk`), distância e ringue (`ringStep`, `pesEff`, `placeRing`, `footwork`, antecipação `antP`, cross-counter `crossCounter`; dados em `x.dx`), entrada no ringue, cerimónia final |
-| arena drawing | Arena em vista frontal elevada (`buildArena`, `proj`/`unproj`), 4 locais por escalão, público, `ringLoop` |
+| arena drawing | Arena em vista frontal elevada (`buildArena`, `proj`/`unproj`), 4 locais por escalão, público, `ringLoop`; lutadores desenhados por esqueleto de poses (`drawFighter`, `POSE`, `STRK` por golpe, `ANIM` com o saltitar por estilo) |
 | corner men | Treinadores nos cantos (`makeCrew`, `crewUpdate`, `drawCrew`) |
 | `BOOT` | Menu inicial / pausa (`menu`, `pauseMenu`), `start()` |
 
 ### Sistemas principais (resumo)
 
 - **Atletas:** 8 atributos em 2 grupos — FÍSICO: Força, Velocidade, Resistência, Queixo (de nascença, escala própria ~50, desce com a idade e com KOs); TÉCNICO: Técnica, Defesa, Pés, Ring IQ (sobe sobretudo com lutas e sparring) — com potencial, idade (faz anos), 7 mentais escondidos (`a.ment`: Coração, Calma, Disciplina, Confiança, Concentração, Instinto finalizador, Ouvir o canto) de onde sai o nome da personalidade (`persona`), estilo e níveis de estilo, golpes e defesas com níveis 1–5, fadiga, confiança e forma, altura e alcance. Talento escondido com probabilidade 1/15. O primeiro atleta é **sempre peso Pena**; o resto é aleatório.
-- **Plano semanal:** 3 treinos por semana; o plano tem de ser revisto todas as semanas (resumo antes de avançar e badges). Os atributos físicos sem treino durante mais de 3 semanas perdem condição, com mínimo.
+- **Plano semanal:** 3 treinos por semana; o plano é uma ordem permanente — só aparece um cartão quando há motivo (cansaço previsto alto, luta perto, condição a descer, golpe aprendido, lesão), com respostas de um toque. Os atributos físicos sem treino durante mais de 3 semanas perdem condição, com mínimo.
 - **Velocidade de aprender** (golpes, defesas, atributos e estilos): lado do treinador (adjunto, especialistas de estilo; o especialista ensina mais depressa os golpes e defesas do seu estilo) e lado do atleta (Disciplina, Concentração, confiança do dia, fadiga da semana, Técnica num golpe novo) — `sessQ`, `learnK`, constantes no `TUNE`. Nos Pads, "aprende em ~N sessões" é a estimativa desse atleta (`padSess`).
 - **Estilos:** triângulo clássico — **In-fighter > Outboxer > Puncher > In-fighter**. A força da vantagem cresce com o nível do estilo (quase nada no amador, completa no topo). O corpo define o nível máximo de cada estilo. Novos estilos aprendem-se com treinadores especialistas da loja. Na luta escolhe-se o estilo antes do combate e pode trocar-se no intervalo (nível ≥ 2). Os adversários de Nacional/Mundial também trocam.
 - **Estratégias de luta:** Pressão / Equilibrado / Cautela.
