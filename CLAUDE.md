@@ -137,4 +137,4 @@ O Tiago quer o jogo baseado num guia de boxe que escreveu. **As decisões, o pla
 11. Faltas e golpes ilegais.
 12. Como tudo isto cabe num ecrã fixo.
 
-Último ponto aberto: ver `docs/design.md` (neste momento: **fase A feita** — segue-se jogar e sentir a v11 e depois decidir a fase B: combinações e fintas, guarda, estilos).
+Último ponto aberto: ver o **Plano geral** no topo de `docs/design.md` (neste momento: fase 1 — correções da luta).

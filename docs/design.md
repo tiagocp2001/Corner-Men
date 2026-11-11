@@ -1,5 +1,25 @@
 # Corner Men — Documento de design
 
+## Plano geral (refeito a 11 nov 2026)
+
+**Como se trabalha em cada fase:** 1) decidir primeiro, tema a tema, com perguntas; 2) nas coisas visuais, **ver antes de programar** (esboço ou imagem de teste para o Tiago aprovar); 3) implementar a fase toda; 4) publicar, o Tiago joga e dá opinião; 5) uma ronda de ajustes e a fase fecha.
+
+| Fase | O quê | Estado |
+|---|---|---|
+| A | Guia — núcleo da luta (atributos, distância, golpes, defesa, contra-ataque) | Feita (v11) |
+| — | Tempo a correr sozinho + animações dos golpes, 1.ª versão | Feita (v12), à espera da opinião do Tiago |
+| 1 | Correções da luta: luvas e braços na guarda, cordas falsas nas costas, pugilistas sobrepostos | Em curso |
+| 2 | Apresentação da luta: menos texto (duas vozes, pop-ups, ordens em balão, cabine pequena), barras com números, câmara larga → aproximação, juízes/TV/fotógrafos, locutor, árbitro a dar início, levantar depois da queda, proteção de cabeça no amador | Por decidir |
+| 3 | Gestão divertida: ajustes ao tempo, cartões de evento com escolhas, treino visível no ginásio, objetivos curtos, prémio da 1.ª vitória, álbum de momentos | Por decidir |
+| 4 | Ginásio como mapa (ecrã inteiro, escritório, balneário, porta da rua, compras no ginásio) | Por decidir |
+| 5 | Guia — fase B: combinações e fintas, guarda canhota, estilos híbridos | Por decidir |
+| 6 | Guia — fase C: treinos novos, plano de combate e pesagem, faltas, taças sazonais | Por decidir |
+| 7 | Equilíbrio (KOs, estratégias, economia) com simulações | Depois |
+| 8 | Adiados: update visual maior, dinheiro no fim de jogo, golpe especial | Depois |
+
+Detalhes das ideias das fases 2–4: `docs/pesquisa-bgs.md`.
+
+
 Aqui ficam as decisões de design do jogo, tema a tema. É a referência para qualquer sessão futura: **o que está aqui decidido é para seguir; o que está "em aberto" ainda não se implementa.**
 
 Estados usados: **Em aberto** (a discutir) · **Decidido** (pronto a implementar) · **Implementado** (já está no jogo).
