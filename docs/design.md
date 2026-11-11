@@ -25,6 +25,8 @@
 - 2.2 **Decidido — fala-se menos:** o importante passa sempre (quedas, counters, técnicas especiais, fígado/coração, fim de round, ordens ouvidas, mudanças importantes como "encostou-o ao canto"); o rotineiro (cada jab, bloqueio, esquiva) vê-se no ringue (animação e pop-ups), sem texto.
 - 2.4 **Decidido — rever durante a luta:** tocar na linha do comentador abre o registo do que já foi dito; a luta pára enquanto está aberto.
 - 2.5 **Decidido — o comentador fala pouco:** o que se vê nos pop-ups não precisa de ser dito; de vez em quando pode fazer outro tipo de comentário (histórias, opinião sobre os atletas, o público, a rivalidade, o percurso), quando fizer sentido. Nome provisório: Abílio "Bigorna" Santos.
+- 2.6 **Decidido — pop-ups no ringue:** palavras curtas por cima do pugilista, que sobem e desaparecem. **Dois tipos:** *normal* (pequeno, na cor do canto: defesas "BLOQUEIO/BAIXA/APARA/OMBRO/CLINCH", combinações "1-2-3", "LIMPO!") e *especial* (maior, moldura e brilho dourado, fica mais tempo: técnicas aprendidas "FÍGADO!/SMASH!/JOLTY COUNTER!/CHECK HOOK!", counters, quedas). Sem pop-up para cada jab normal nem números de dano. Aspeto próprio (não imitar o Boxing Gym Story); versão simples agora, final na fase 8.
+- 2.7 **Decidido — desligar:** nas opções do menu de pausa, 3 níveis: todos / só especiais / desligados. Com os pop-ups desligados, o Zé do Micro fala um pouco mais (não muito).
 - 2.3 **Decidido — uma linha de cada vez:** só a frase atual, com a cara pequena de quem fala; as frases importantes ficam mais tempo no ecrã; o retrato grande sai e o espaço vai para o ringue.
 
 Detalhes das ideias das fases 2–4: `docs/pesquisa-bgs.md`.
