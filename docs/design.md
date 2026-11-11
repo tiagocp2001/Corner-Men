@@ -31,6 +31,7 @@
 - 2.9 **Decidido — atributos "do momento":** durante a luta cada atributo conta menos conforme o estado (temporário, só nessa luta). **Fôlego baixo:** Pés (muito), Velocidade, Força, Defesa, Técnica (um pouco). **Vida baixa (dor):** Queixo (vai cedendo com a dor acumulada e com cada queda na luta), Ring IQ (abanado não pensa; a Calma ajuda), Defesa, Pés, Força e Velocidade (um pouco), Técnica (um pouco). **Outros:** pernas bambas → Pés; Concentração baixa → Técnica nos últimos rounds. Resistência não desce (é o próprio fôlego). Resumo: o cansaço tira o corpo, a dor tira a cabeça. Números na fase 7.
 - 2.10 **Decidido — estado por palavras:** junto ao nome de cada pugilista no placard aparecem palavras curtas só quando algo desce muito ("SEM PERNAS", "MÃOS LENTAS", "ABANADO", "SEM GUARDA"); também no ecrã do canto, para ajudar a escolher a estratégia.
 - 2.11 **Decidido — barras:** vida e fôlego só com a barra (sem número); a barra pisca a vermelho quando cai de repente; a estratégia por extenso ("PRESSÃO", não "PRE").
+- 2.12 **Decidido — comparar com o adversário:** separador novo na análise ("COMPARAR") com os 8 atributos lado a lado (o nosso atleta a vermelho, o adversário a azul), **com números por agora** — fica preparado para trocar por barras sem números com uma só opção, se o Tiago mudar de ideias. Mentais e técnicas do adversário não aparecem. A parte de conhecer melhor o adversário (ficha mais precisa depois de lutar, vídeos, desforras) fica para a fase 6.
 - 2.3 **Decidido — uma linha de cada vez:** só a frase atual, com a cara pequena de quem fala; as frases importantes ficam mais tempo no ecrã; o retrato grande sai e o espaço vai para o ringue.
 
 Detalhes das ideias das fases 2–4: `docs/pesquisa-bgs.md`.
@@ -200,6 +201,7 @@ Ordem: 8 → 5 → 1 → 3 → 4.
 - **A decidir aqui:** como funciona mudar de estilo/plano durante a luta (incluindo o adversário), e se o canto deve dar uma pista do que o canto dele vai mudar no intervalo.
 - **Lembrar o Tiago aqui:** os balões do canto adversário são, por agora, só gritos de ambiente (fase 2); decidir aqui se o adversário passa a dar ordens a sério durante o round.
 - **Lembrar o Tiago aqui:** o canto entre rounds passa a ser **uma escolha** para o minuto de intervalo — recuperar fôlego / acalmar-motivar (recupera um pouco Ring IQ e Queixo, sobe a confiança; depende de Ouvir o canto, Confiança, Calma e da qualidade do treinador) / corrigir a tática — em vez de bónus somados. Princípio aceite na fase 2; redesenhar aqui e ajustar.
+- **Lembrar o Tiago aqui:** a análise mostra os atributos exatos do adversário (separador COMPARAR, fase 2), o que acaba com a incerteza da ficha antes de uma desforra; decidir aqui se passam a barras sem números ou a intervalos mais precisos depois de lutar.
 - **Decisões:** —
 
 ### Tema 11 — Faltas e golpes ilegais
