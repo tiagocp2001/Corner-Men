@@ -8,7 +8,7 @@
 |---|---|---|
 | A | Guia — núcleo da luta (atributos, distância, golpes, defesa, contra-ataque) | Feita (v11) |
 | — | Tempo a correr sozinho + animações dos golpes, 1.ª versão | Feita (v12), à espera da opinião do Tiago |
-| 1 | Correções da luta: luvas e braços na guarda, cordas falsas nas costas, pugilistas sobrepostos | Em curso |
+| 1 | Correções da luta: guarda com dois ombros (ortodoxo certo nos dois lados), sem cordas falsas, sem sobreposição, cerimónia final com o vencedor e o vencido virados para o público | Feita (v13) |
 | 2 | **Começa pelo guia de estilo** (imagem de teste para aprovar; pessoas da luta e depois do ginásio no mesmo estilo dos pugilistas novos). **Vista decidida:** o nosso atleta **de costas** (à frente, à esquerda) e o adversário **de frente** (ao fundo, à direita), em vez da vista de lado. Apresentação da luta: menos texto (duas vozes, pop-ups, ordens em balão, cabine pequena), barras com números, câmara larga → aproximação, juízes/TV/fotógrafos, locutor, árbitro a dar início, levantar depois da queda, proteção de cabeça no amador | Por decidir |
 | 3 | Gestão divertida: ajustes ao tempo, cartões de evento com escolhas, treino visível no ginásio, objetivos curtos, prémio da 1.ª vitória, álbum de momentos | Por decidir |
 | 4 | Ginásio como mapa (ecrã inteiro, escritório, balneário, porta da rua, compras no ginásio) | Por decidir |
