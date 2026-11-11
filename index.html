@@ -3046,20 +3046,24 @@ const STRIKES={jab:1,direto:1,gancho:1,uppercut:1};
 const ANIM={wind:.17,hit:.42,       // frações da duração do golpe (o impacto na simulação é aos .45)
   rec:10,ease:16,snap:36,           // velocidade das transições (por segundo)
   trail:230,                        // ms que o rasto do golpe fica no ar
-  sep:28,                           // px mínimos no ecrã entre os dois lutadores (só desenho)
+  sep:34,                           // px mínimos no ecrã entre os dois lutadores (só desenho)
+  back:13,                          // px do centro às costas de quem está encostado: as costas tocam nas cordas verdadeiras
+  body:[16,22],                     // px que o lutador ocupa para trás e para a frente (para o árbitro não ficar por cima)
+  refW:8,                           // meia largura do árbitro
   bounce:{'Outboxer':[2.5,2],'In-fighter':[2.1,1],'Puncher':[1.4,0]}}; // saltitar em guarda: [saltos por segundo, altura em px]
 const VK='hx cr ln tw hd hy lex ley lgx lgy rex rey rgx rgy f1x f1y f2x f2y h1 h2'.split(' '),VN=VK.length,VI=Object.fromEntries(VK.map((k,i)=>[k,i]));
-const G0={hx:0,cr:1,ln:2,tw:0,hd:1,hy:0,lex:5,ley:6,lgx:8,lgy:-4,rex:3,rey:7,rgx:7,rgy:-3,f1x:6,f1y:0,f2x:-7,f2y:0,h1:0,h2:1};
+// guarda (vista 3/4): mão da frente esticada para o adversário à altura do queixo; mão de trás encostada à cara, do outro lado do queixo
+const G0={hx:0,cr:1,ln:2,tw:0,hd:1,hy:0,lex:8,ley:4,lgx:14,lgy:-2,rex:5,rey:6,rgx:12,rgy:-4,f1x:6,f1y:0,f2x:-7,f2y:0,h1:0,h2:1};
 const mkPose=(o,b)=>{const s=Object.assign({},b||G0,o);return Float32Array.from(VK,k=>s[k]||0)};
 const ST0={hx:0,cr:-1,ln:0,tw:0,hd:0,hy:0,f1x:4,f1y:0,f2x:-4,f2y:0,h1:0,h2:0,lex:1,ley:7,lgx:2,lgy:13,rex:0,rey:7,rgx:1,rgy:13}; // de pé, braços caídos
 const UPL={lex:2,ley:-9,lgx:3,lgy:-20},UPR={rex:-2,rey:-9,rgx:-3,rgy:-20};
 const POSE={
   guard:mkPose({}),
-  gIn:mkPose({cr:2,ln:4,hd:2,lex:4,ley:5,lgx:7,lgy:-7,rex:4,rey:6,rgx:8,rgy:-6}),          // In-fighter: fechado e curvado
-  gOut:mkPose({cr:0,ln:1,lex:5,ley:5,lgx:11,lgy:-1,f1x:7}),                                // Outboxer: direito, mão da frente solta
-  gPun:mkPose({rex:-1,rey:6,rgx:4,rgy:-2,f2x:-8}),                                         // Puncher: mão de trás armada
-  jabW:mkPose({hx:-1,tw:.2,lex:3,ley:6,lgx:6,lgy:-4}),
-  jabH:mkPose({hx:2,ln:4,tw:-.6,hd:2,lex:9,ley:-2,lgx:18,lgy:-5,f1x:8}),
+  gIn:mkPose({cr:2,ln:4,hd:2,lex:7,ley:3,lgx:14,lgy:-7,rex:5,rey:6,rgx:13,rgy:-2}),          // In-fighter: fechado e curvado
+  gOut:mkPose({cr:0,ln:1,lex:8,ley:5,lgx:15,lgy:1,f1x:7}),                                // Outboxer: direito, mão da frente solta
+  gPun:mkPose({rex:3,rey:6,rgx:11,rgy:-3,f2x:-8}),                                         // Puncher: mão de trás armada
+  jabW:mkPose({hx:-1,tw:.2,lex:5,ley:6,lgx:10,lgy:1,rgx:11,rgy:-6}),
+  jabH:mkPose({hx:2,ln:4,tw:-.6,hd:2,lex:9,ley:-2,lgx:18,lgy:-5,rgx:14,f1x:8}),
   diretoW:mkPose({hx:-1,ln:1,tw:-.4,rex:-2,rey:5,rgx:3,rgy:-2}),
   diretoH:mkPose({hx:4,cr:2,ln:6,tw:1,hd:2,rex:9,rey:-2,rgx:18,rgy:-5,lex:2,ley:7,lgx:5,lgy:-2,f1x:8,h2:2}),
   ganchoFW:mkPose({hx:-1,cr:3,ln:1,tw:.5,lex:-4,ley:3,lgx:-5,lgy:3}),
@@ -3077,9 +3081,9 @@ const POSE={
   hurtU:mkPose({hx:-1,cr:-2,ln:-3,hd:-2,hy:-4,lex:4,ley:7,lgx:7,lgy:3,rex:2,rey:7,rgx:5,rgy:4,h1:1}), // uppercut: queixo para cima
   hurtO:mkPose({hx:-1,cr:5,ln:2,hd:0,hy:3,lex:4,ley:7,lgx:8,lgy:1,rex:2,rey:7,rgx:6,rgy:3}),         // overhand: cabeça para baixo
   hurtB:mkPose({hx:-2,cr:4,ln:6,hd:2,hy:3,lex:1,ley:7,lgx:5,lgy:9,rex:2,rey:7,rgx:6,rgy:10}),        // ao corpo: dobra-se
-  block:mkPose({cr:2,ln:0,hd:0,hy:1,lex:4,ley:3,lgx:7,lgy:-8,rex:4,rey:4,rgx:8,rgy:-7}),
-  blockB:mkPose({cr:3,ln:3,hd:1,hy:1,lex:3,ley:8,lgx:8,lgy:5,rex:4,rey:7,rgx:8,rgy:-4}),
-  duck:mkPose({cr:10,ln:7,hd:2,hy:2,lex:4,ley:5,lgx:7,lgy:-5,rex:4,rey:6,rgx:8,rgy:-4,f1x:8,f2x:-8}),
+  block:mkPose({cr:2,ln:0,hd:0,hy:1,lex:6,ley:1,lgx:11,lgy:-10,rex:6,rey:6,rgx:14,rgy:-2}),
+  blockB:mkPose({cr:3,ln:3,hd:1,hy:1,lex:3,ley:8,lgx:8,lgy:5,rex:5,rey:6,rgx:12,rgy:-4}),
+  duck:mkPose({cr:10,ln:7,hd:2,hy:2,lex:7,ley:4,lgx:13,lgy:-4,rex:5,rey:6,rgx:11,rgy:-3,f1x:8,f2x:-8}),
   slipIn:mkPose({cr:4,ln:6,tw:-.5,hd:3,hy:3}),
   slipOut:mkPose({hx:-1,cr:1,ln:-6,hd:-2}),
   stagger:mkPose({cr:2,ln:-2,hd:-1,hy:1,lex:1,ley:7,lgx:5,lgy:8,rex:-1,rey:7,rgx:3,rgy:9,f1x:4,f2x:-5,h2:0}),
@@ -3164,10 +3168,6 @@ function fFloor(pose,pal,t){ // no tapete: 'down' (apoiado no cotovelo, a tentar
   }
   g_ol=false;
 }
-function ropesBehind(r){ // as cordas atrás das costas de quem está encostado (vistas de lado); no canto, o poste e a almofada
-  if(r.post){fD(-21,-46,3,45,'#8d8d8d');fD(-22,-48,5,12,r.post)}
-  for(let i=0;i<3;i++){const y=i===0?-39:i===1?-29:-17,col=i===1?'#e8e8ee':r.c;fD(-28,y,16,2,col);fD(-12,y+1,6,2,col)} // as cordas cedem onde ele se encosta
-}
 function drawFighter(c,cx,gy,face,lk,gl,f,now,t){
   const an=f.an,pose=an.pose,pal=fPal(f,lk,gl),I=VI,T=TG,D=DV;
   g_c=c;g_cx=cx;g_gy=gy;g_face=face;g_ol=false;
@@ -3221,9 +3221,9 @@ function drawFighter(c,cx,gy,face,lk,gl,f,now,t){
   }
   if(tier>1&&pose!=='guard'&&!cer)T[I.cr]+=1;
   if(ln>.05&&pose!=='clinch'&&pose!=='sit'){T[I.hx]-=4*ln;                                                         // costas nas cordas, guarda alta e fechada
-    if(pose==='guard'){T[I.ln]-=3*ln;T[I.cr]+=1;T[I.lex]=4;T[I.ley]=3;T[I.lgx]=7;T[I.lgy]=-8;T[I.rex]=4;T[I.rey]=4;T[I.rgx]=8;T[I.rgy]=-7;if(Math.sin(t*5)>.7)T[I.hx]+=1}}
+    if(pose==='guard'){T[I.ln]-=3*ln;T[I.cr]+=1;T.set(POSE.block.subarray(I.lex,I.rgy+1),I.lex);if(Math.sin(t*5)>.7)T[I.hx]+=1}}
   if(wb>.3){const j=Math.round(Math.sin(t*9));T[I.ln]+=Math.sin(t*6.5)*2.5*wb;T[I.cr]+=2;T[I.f1x]=3+j;T[I.f2x]=-4+j;T[I.h2]=0;T[I.h1]=0;         // pernas bambas: tronco a balançar, joelhos a tremer
-    if(pose==='guard'){T[I.lex]=1;T[I.ley]=7;T[I.lgx]=5;T[I.lgy]=6;T[I.rex]=0;T[I.rey]=7;T[I.rgx]=3;T[I.rgy]=9}}
+    if(pose==='guard'){T[I.lex]=3;T[I.ley]=7;T[I.lgx]=10;T[I.lgy]=5;T[I.rex]=2;T[I.rey]=8;T[I.rgx]=6;T[I.rgy]=11}}
   if(st==='In-fighter'&&!cer)T[I.cr]+=2;
   if(S)T[I.cr]=Math.min(T[I.cr],7);
   // 2) transição suave para a pose-alvo (os golpes seguem a sua linha de tempo)
@@ -3254,27 +3254,27 @@ function drawFighter(c,cx,gy,face,lk,gl,f,now,t){
   const hx0=Math.round(scx+D[I.hd])-4,hy0=Math.round(sy+D[I.hy])-13;
   const a1x=D[I.f1x],a1y=-4-D[I.f1y]-D[I.h1],a2x=D[I.f2x],a2y=-4-D[I.f2y]-D[I.h2];
   c.fillStyle='rgba(0,0,0,.28)';c.beginPath();c.ellipse(cx,gy,15-lift*2,4-(lift>1?1:0),0,0,Math.PI*2);c.fill();
-  if(f.rope&&ln>.5&&pose!=='sit')ropesBehind(f.rope);
   if(pose==='sit'){fD(-10,-11,20,3,'#5a3d26');fD(-10,-11,20,1,'#7a5636');fD(-9,-8,2,8,'#2a1f17');fD(7,-8,2,8,'#2a1f17')}       // banco
   const hurt=pose==='hurt'||pose==='stagger'||pose==='hurtBody';
-  for(let part=0;part<5;part++)for(let ol=1;ol>=0;ol--){g_ol=!!ol;
+  for(let part=0;part<6;part++)for(let ol=1;ol>=0;ol--){g_ol=!!ol; // pernas, tronco, braço de trás, cabeça, braço da frente
     if(part===0){ // perna de trás
       if(pose==='sit')fLeg(hipx-1,hipY,hipx+8,-4,0,0,pal.skS,pal.skD,pal.trS,pal.btS,pal.gD,hipx+8,hipY+1);
       else fLeg(hipx-2,hipY,a2x,a2y,D[I.h2],D[I.f2y],pal.skS,pal.skD,pal.trS,pal.btS,pal.gD);
     }else if(part===1){ // perna da frente
       if(pose==='sit')fLeg(hipx+1,hipY,hipx+11,-4,0,0,pal.sk,pal.skS,pal.tr,pal.bt,pal.btS,hipx+10,hipY+2);
       else fLeg(hipx+2,hipY,a1x,a1y,D[I.h1],D[I.f1y],pal.sk,pal.skS,pal.tr,pal.bt,pal.btS);
-    }else if(part===2){ // calções, tronco, cabeça
+    }else if(part===2){ // calções e tronco
       const hxr=Math.round(hipx),hyr=Math.round(hipY),sr=Math.round(sy),lnr=scx-hipx;
       fP(hxr-7,hyr-6,14,10,pal.tr);fD(hxr-7,hyr-6,14,2,pal.band);fD(hxr-1-Math.round(tw*2),hyr-4,2,8,pal.stp);fD(hxr-7,hyr-4,2,8,pal.trS);
       for(let j=0;j<4;j++){const x=Math.round(hipx+lnr*(1-j/3.4))-7,w=j<2?14:13;fP(x,sr-1+j*3,w,j===3?hyr-6-(sr+8):3,pal.sk);fD(x,sr-1+j*3,3,j===3?hyr-6-(sr+8):3,pal.skS)}
       const tx=Math.round(scx)-7;fD(tx+10,sr-1,3,2,pal.skL);fD(tx+6,sr+4,7,1,pal.skS);fD(Math.round(hipx+lnr*.4)+2,sr+7,1,1,pal.skS);fD(Math.round(hipx+lnr*.2)+2,sr+9,1,1,pal.skS);
       fP(Math.round(scx+D[I.hd]*.5)-2,sr-4,5,4,pal.sk);
-      fHead(hx0,hy0,pal,0,hurt,tier);
+    }else if(part===4){ // cabeça por cima do braço de trás: a luva de trás espreita à frente e por baixo do queixo
+      const sr=Math.round(sy);fHead(hx0,hy0,pal,0,hurt,tier);
       if(robe){const R=f.robe,rx=Math.round(scx)-9;fP(rx,sr-2,19,24,R);fP(rx-1,sr,3,16,R);fP(rx+17,sr,3,16,R);
         fD(rx+5,sr-2,9,3,'#e8b13a');fD(rx,sr+9,19,1,'#e8b13a');fD(rx,sr+19,19,1,'#e8b13a');fD(rx+9,sr+1,1,20,'rgba(0,0,0,.22)');fP(rx-1,sr+16,4,5,pal.g);fP(rx+16,sr+16,4,5,pal.g)}
     }else if(robe)continue;
-    else if(part===3){ // braço de trás (mais escuro)
+    else if(part===3){ // braço de trás (mais escuro, do lado de lá)
       fP(Math.round(rsx)-2,Math.round(sy)-1,5,5,pal.skS);fSeg(rsx,sy+1,rex,rey,4,pal.skS,pal.skD);fSeg(rex,rey,rgx,rgy,3,pal.skS,pal.skD);
       fGlove(rgx,rgy,rex,rey,pal.gS,pal.g,pal.gD,stage===2&&S.wide&&!S.L);
     }else{ // braço da frente
@@ -3543,7 +3543,7 @@ function ringLoop(now){
     const dn=x.an.pose==='down'||x.an.pose==='ko',tr=F.inRound&&F.zp===x&&F.zone!=='center'&&!x.robe&&!dn&&x.an.pose!=='clinch';
     x.lean=clamp((x.lean||0)+(tr?1:-1)*dt*mul*3,0,1);
     x.wobA=clamp((x.wobA||0)+(F.inRound&&x.wobbly>F.ft&&!dn&&!x.robe?1:-1)*dt*mul*4,0,1);
-    x.rope=null;if(tr){const L=x.pos.x<120,Fr=x.pos.y>88;x.rope=F.zone==='corner'?{c:L?'#d4452f':'#2d6db3',post:L&&Fr?'#d4452f':!L&&!Fr?'#2d6db3':'#e8e0d0'}:F.zs===2?{c:'#d4452f'}:F.zs===3?{c:'#2d6db3'}:null}
+    if(tr)x.rope=F.zone==='corner'?(x.pos.x<120?'L':'R'):F.zs===2?'L':F.zs===3?'R':F.zs===0?'F':'N';else if(!(x.lean>0))x.rope=null; // de que lado estão as cordas (L/R de lado, F de trás, N da frente)
   }
   refFollow();
   mv(F.ref,52);
@@ -3569,16 +3569,28 @@ function ringLoop(now){
   // people sorted by depth (those still outside, behind the back ropes, first)
   const A=proj(RING.x0,RING.y0),B=proj(RING.x1,RING.y0),D=proj(RING.x1,RING.y1),E=proj(RING.x0,RING.y1);
   const hF=30,hN=44;
-  const lo=x=>{if(!(x.lean>0))return[0,0];const u=unit(otherOf(x),x);return[u.dx*7*x.lean,u.dy*7*x.lean]}; // encostado: as costas chegam às cordas
-  const om=lo(F.me),oo=lo(F.op);
-  const pm=proj(F.me.pos.x+om[0],F.me.pos.y+om[1]),po=proj(F.op.pos.x+oo[0],F.op.pos.y+oo[1]),pr=proj(F.ref.x,F.ref.y);
+  // encostado (só desenho): vai para trás até as costas tocarem nas cordas verdadeiras do ringue (de lado: na linha das cordas; atrás/à frente: em profundidade)
+  const dep=x=>{const r=x.rope,l=x.lean||0;if(!r||!l)return 0;return (r==='F'||(r!=='N'&&x.pos.y<88)?-1:1)*(r==='F'||r==='N'?12:8)*l};
+  const pm=proj(F.me.pos.x,F.me.pos.y+dep(F.me)),po=proj(F.op.pos.x,F.op.pos.y+dep(F.op)),pr=proj(F.ref.x,F.ref.y);
+  const wall=(x,q)=>{const r=x.rope;if(!(x.lean>0)||(r!=='L'&&r!=='R'))return 0;
+    const rx=proj(r==='L'?RING.x0:RING.x1,x.pos.y+dep(x)).x,tx=rx+(r==='L'?1:-1)*ANIM.back*q.s;q.x+=(tx-q.x)*x.lean;return 1};
+  const wm=wall(F.me,pm),wo=wall(F.op,po);
   let fm=pm.x<=po.x?1:-1;if(Math.abs(pm.x-po.x)<3)fm=F.lastFace||1;F.lastFace=fm;
-  { // só no desenho: quando estão quase alinhados em profundidade, afasta-os de lado para se ver quem bate em quem
+  { // só no desenho: quando estão perto no ecrã, afasta-os de lado para se ver quem bate em quem; quem está nas cordas fica lá e afasta-se o outro
     const need=ANIM.sep*(pm.s+po.s)/2,gap=Math.abs(po.x-pm.x),on=!F.me.robe&&!F.op.robe&&!F.me.hidden&&!F.op.hidden&&F.me.an.pose!=='sit'&&F.op.an.pose!=='sit';
-    const tg=on&&gap<need?fm*(need-gap)/2:0;F.vsep=(F.vsep||0)+(tg-(F.vsep||0))*Math.min(1,dt*12);
-    if(Math.abs(F.vsep)>.2){let dm=-F.vsep,dq=F.vsep;const lim=(x,q,d)=>{const a=proj(RING.x0+10,x.pos.y).x,b=proj(RING.x1-10,x.pos.y).x;return q.x+d<a?a-q.x-d:q.x+d>b?b-q.x-d:0};
-      const k=lim(F.me,pm,dm)||lim(F.op,po,dq);pm.x+=dm+k;po.x+=dq+k}
+    const tg=on&&gap<need?fm*(need-gap):0;F.vsep=(F.vsep||0)+(tg-(F.vsep||0))*Math.min(1,dt*12);
+    if(Math.abs(F.vsep)>.2){const km=wm&&!wo?0:wo&&!wm?1:.5;let dm=-F.vsep*km,dq=F.vsep*(1-km);
+      const lim=(x,q,d)=>{const a=proj(RING.x0+12,x.pos.y).x,b=proj(RING.x1-12,x.pos.y).x;return q.x+d<a?a-q.x-d:q.x+d>b?b-q.x-d:0}; // dentro do ringue, longe das cordas
+      if(km===.5){const k=lim(F.me,pm,dm)||lim(F.op,po,dq);dm+=k;dq+=k}else if(km)dm+=lim(F.me,pm,dm);else dq+=lim(F.op,po,dq);
+      pm.x+=dm;po.x+=dq}
     F.me.vgap=F.op.vgap=Math.abs(po.x-pm.x)/((pm.s+po.s)/2);
+  }
+  { // só no desenho: o árbitro não fica por cima dos lutadores — desliza para o lado livre mais perto, dentro do ringue
+    const R=ANIM.refW*pr.s,B=ANIM.body,bl=[[pm,fm,F.me],[po,-fm,F.op]].filter(v=>!F.refLock&&!v[2].hidden).map(([q,fc])=>fc>0?[q.x-(B[0]*q.s+R),q.x+B[1]*q.s+R]:[q.x-(B[1]*q.s+R),q.x+B[0]*q.s+R]).sort((a,b)=>a[0]-b[0]);
+    const iv=[];for(const v of bl){const l=iv[iv.length-1];if(l&&v[0]<=l[1])l[1]=Math.max(l[1],v[1]);else iv.push(v.slice())}
+    const lo=proj(RING.x0+6,F.ref.y).x,hi=proj(RING.x1-6,F.ref.y).x;let tx=pr.x;
+    for(const v of iv)if(tx>v[0]&&tx<v[1]){const c=[v[0],v[1]].filter(x=>x>=lo&&x<=hi&&!iv.some(w=>w!==v&&x>w[0]&&x<w[1]));if(c.length)tx=c.reduce((a,b)=>Math.abs(b-pr.x)<Math.abs(a-pr.x)?b:a)}
+    F.vref=(F.vref||0)+((tx-pr.x)-(F.vref||0))*Math.min(1,dt*8);pr.x+=F.vref;
   }
   const mid=(pm.x+po.x)/2;
   const wf=(x,def)=>{if(!x.robe)return def;const dx=x.pos.tx-x.pos.x;return Math.abs(dx)>1.5?(dx>0?1:-1):def};
