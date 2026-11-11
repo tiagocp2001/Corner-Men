@@ -9,7 +9,7 @@
 | A | Guia — núcleo da luta (atributos, distância, golpes, defesa, contra-ataque) | Feita (v11) |
 | — | Tempo a correr sozinho + animações dos golpes, 1.ª versão | Feita (v12), à espera da opinião do Tiago |
 | 1 | Correções da luta: guarda com dois ombros (ortodoxo certo nos dois lados), sem cordas falsas, sem sobreposição, cerimónia final virada para o público | Feita (v13) |
-| 2 | **Luta legível:** menos texto (duas vozes, pop-ups no ringue, ordens em balão), barras com números, cabine mais pequena | Em discussão |
+| 2 | **Luta legível:** duas vozes e menos texto, uma linha de cada vez, pop-ups (normais e especiais, com opção de desligar), ordens em balão, atributos do momento com estado por palavras, barras a piscar, estratégia por extenso | Decidida — por implementar |
 | 3 | **Gestão divertida:** ajustes ao tempo, cartões de evento com escolhas, objetivos curtos, prémio da 1.ª vitória, álbum de momentos | Por decidir |
 | 4 | **Ginásio como mapa — funcionamento** (tocar no escritório, balneário, porta; desenhos simples) | Por decidir |
 | 5 | Guia — fase B: combinações e fintas, guarda canhota, estilos híbridos | Por decidir |
@@ -29,6 +29,8 @@
 - 2.7 **Decidido — desligar:** nas opções do menu de pausa, 3 níveis: todos / só especiais / desligados. Com os pop-ups desligados, o Zé do Micro fala um pouco mais (não muito).
 - 2.8 **Decidido — ordens em balão:** a ordem gritada aparece num balão por cima do nosso treinador (reaparece enquanto o atleta não ouve). **Sem pop-ups por cima do atleta** para as ordens (seria demasiado): fica a caixa atual ("A OUVIR... / NÃO TE OUVE! / OUVIU!"). O canto adversário também tem balões por cima do treinador dele, por agora só gritos de ambiente sem efeito (provisório; voltar a perguntar na fase 6 se passam a ordens a sério).
 - 2.9 **Decidido — atributos "do momento":** durante a luta cada atributo conta menos conforme o estado (temporário, só nessa luta). **Fôlego baixo:** Pés (muito), Velocidade, Força, Defesa, Técnica (um pouco). **Vida baixa (dor):** Queixo (vai cedendo com a dor acumulada e com cada queda na luta), Ring IQ (abanado não pensa; a Calma ajuda), Defesa, Pés, Força e Velocidade (um pouco), Técnica (um pouco). **Outros:** pernas bambas → Pés; Concentração baixa → Técnica nos últimos rounds. Resistência não desce (é o próprio fôlego). Resumo: o cansaço tira o corpo, a dor tira a cabeça. Números na fase 7.
+- 2.10 **Decidido — estado por palavras:** junto ao nome de cada pugilista no placard aparecem palavras curtas só quando algo desce muito ("SEM PERNAS", "MÃOS LENTAS", "ABANADO", "SEM GUARDA"); também no ecrã do canto, para ajudar a escolher a estratégia.
+- 2.11 **Decidido — barras:** vida e fôlego só com a barra (sem número); a barra pisca a vermelho quando cai de repente; a estratégia por extenso ("PRESSÃO", não "PRE").
 - 2.3 **Decidido — uma linha de cada vez:** só a frase atual, com a cara pequena de quem fala; as frases importantes ficam mais tempo no ecrã; o retrato grande sai e o espaço vai para o ringue.
 
 Detalhes das ideias das fases 2–4: `docs/pesquisa-bgs.md`.
