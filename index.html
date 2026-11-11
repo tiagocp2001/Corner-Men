@@ -3051,6 +3051,7 @@ const ANIM={wind:.17,hit:.42,       // frações da duração do golpe (o impact
   body:[16,22],                     // px que o lutador ocupa para trás e para a frente (para o árbitro não ficar por cima)
   refW:8,                           // meia largura do árbitro
   nearRear:[-3,3],                  // luva de trás quando fica do lado de cá (virado para a direita): mais baixa e recuada
+  front:{win:1,win1:1,celebrate:1,belt:1}, // poses de vitória desenhadas de frente para o público
   stance:'orto',                    // guarda por omissão (ortodoxa); um lutador pode ter x.stance='canh' (canhoto, para mais tarde)
   sh:{L:4,R:-7,kL:3,kR:10},          // ombros (vista 3/4): o da frente na borda da frente do tronco, o de trás na borda de trás; k = quanto rodam com o tronco
   bounce:{'Outboxer':[2.5,2],'In-fighter':[2.1,1],'Puncher':[1.4,0]}}; // saltitar em guarda: [saltos por segundo, altura em px]
@@ -3058,7 +3059,7 @@ const VK='hx cr ln tw hd hy lex ley lgx lgy rex rey rgx rgy f1x f1y f2x f2y h1 h
 // guarda (vista 3/4): mão da frente esticada para o adversário à altura do queixo; mão de trás encostada à cara, do outro lado do queixo
 const G0={hx:0,cr:1,ln:2,tw:0,hd:1,hy:0,lex:8,ley:4,lgx:14,lgy:-2,rex:5,rey:6,rgx:12,rgy:-4,f1x:6,f1y:0,f2x:-7,f2y:0,h1:0,h2:1};
 const mkPose=(o,b)=>{const s=Object.assign({},b||G0,o);return Float32Array.from(VK,k=>s[k]||0)};
-const ST0={hx:0,cr:-1,ln:0,tw:0,hd:0,hy:0,f1x:4,f1y:0,f2x:-4,f2y:0,h1:0,h2:0,lex:2,ley:7,lgx:3,lgy:13,rex:-4,rey:7,rgx:-4,rgy:13}; // de pé, braços caídos (cada um junto ao seu lado)
+const ST0={hx:0,cr:-1,ln:0,tw:0,hd:0,hy:0,f1x:4,f1y:0,f2x:-4,f2y:0,h1:0,h2:0,lex:2,ley:7,lgx:3,lgy:13,rex:-3,rey:7,rgx:-1,rgy:13}; // de pé, braços caídos (cada um junto ao seu lado)
 const UPL={lex:7,ley:-9,lgx:11,lgy:-21},UPR={rex:-6,rey:-9,rgx:-9,rgy:-20}; // braços no ar em V, cada um do seu ombro
 const POSE={
   guard:mkPose({}),
@@ -3171,10 +3172,42 @@ function fFloor(pose,pal,t){ // no tapete: 'down' (apoiado no cotovelo, a tentar
   }
   g_ol=false;
 }
+function fFront(pose,pal,t,f){ // vencedor virado para o público (3/4 de frente): os dois ombros à vista, um braço no ar e o outro caído ao lado, ou os dois em V
+  const lift=pose==='celebrate'||pose==='belt'?(Math.sin(t*(pose==='belt'?6:9))>0?(pose==='belt'?2:3):0):0,y0=-lift;
+  g_c.fillStyle='rgba(0,0,0,.28)';g_c.beginPath();g_c.ellipse(g_cx,g_gy,14-lift*2,4,0,0,Math.PI*2);g_c.fill();
+  const sk=pal.sk,skS=pal.skS,top=y0-46,hx=-5,hy=top-12;
+  const arms=pose==='win1'?[[11,top-9,12,top-19],[-12,top+10,-12,top+19]]:pose==='belt'?[[13,top-8,10,top-18],[-13,top-8,-10,top-18]]:[[14,top-9,16,top-19],[-14,top-9,-16,top-19]]; // [cotovelo, luva] da frente e de trás
+  for(let part=0;part<5;part++)for(let ol=1;ol>=0;ol--){g_ol=!!ol;
+    if(part===0){ // pernas de frente, ligeiramente abertas
+      fP(-7,y0-22,5,12,skS);fP(-7,y0-11,4,8,skS);fP(-8,y0-4,6,2,CUFF);fP(-8,y0-2,6,3,pal.btS);
+      fP(2,y0-22,5,12,sk);fP(3,y0-11,4,8,sk);fD(3,y0-20,1,9,skS);fP(2,y0-4,6,2,CUFF);fP(2,y0-2,7,3,pal.bt);fD(2,y0,7,1,pal.btS);
+    }else if(part===1){ // calções e tronco de frente
+      fP(-8,y0-31,16,10,pal.tr);fD(-8,y0-31,16,2,pal.band);fD(-1,y0-29,2,8,pal.stp);fD(-8,y0-29,2,8,pal.trS);
+      for(let j=0;j<5;j++){const w=20-j,y=top+j*3;fP(-w/2|0,y,w,j===4?y0-31-y:3,sk)}
+      fD(-10,top+1,2,10,skS);fD(-8,top+3,7,1,skS);fD(1,top+3,7,1,skS);fD(-6,top+1,4,2,pal.skL);fD(2,top+1,4,2,pal.skL);
+      fD(-1,top+6,1,8,skS);fD(-4,top+8,3,1,skS);fD(1,top+8,3,1,skS);fD(-4,top+11,3,1,skS);fD(1,top+11,3,1,skS);
+      fP(-2,top-3,5,4,sk);
+    }else if(part===2){ // ombros à vista, de cada lado da cabeça
+      fP(-12,top-1,5,5,skS);fP(7,top-1,5,5,sk);fD(8,top-1,3,1,pal.skL);
+    }else if(part===3){ // cabeça de frente
+      fP(hx,hy+1,10,8,sk);fP(hx+1,hy,8,10,sk);fP(hx-1,hy+4,1,3,skS);fP(hx+10,hy+4,1,3,skS);
+      const hs=pal.hair,hr=pal.hr;if(hs===2)fD(hx+1,hy,8,2,hr);else if(hs===3){fP(hx,hy-1,10,3,hr);fP(hx-1,hy+1,2,8,hr);fP(hx+9,hy+1,2,8,hr)}else if(hs===1){fP(hx,hy-2,10,4,hr);fD(hx+2,hy-2,6,1,pal.hrL)}else{fP(hx,hy-1,10,3,hr);fD(hx+2,hy-1,5,1,pal.hrL)}
+      fD(hx+2,hy+4,2,1,'#111');fD(hx+6,hy+4,2,1,'#111');fD(hx+4,hy+5,2,2,skS);
+      if(pose==='win1'||pose==='belt'||pose==='celebrate'||pose==='win'){fD(hx+3,hy+7,4,2,'#7a2a20');fD(hx+3,hy+7,4,1,'#e8e0d0')}else fD(hx+3,hy+8,4,1,'#7a2a20');
+    }else{ // braços: cada um do seu ombro
+      const[[ex,ey,gx,gy],[ex2,ey2,gx2,gy2]]=arms;
+      fSeg(-10,top+1,ex2,ey2,4,skS,pal.skD);fSeg(ex2,ey2,gx2,gy2,3,skS,pal.skD);fGlove(gx2,gy2,ex2,ey2,pal.gS,pal.g,pal.gD);
+      fSeg(9,top+1,ex,ey,4,sk,skS);fSeg(ex,ey,gx,gy,3,sk,skS);fGlove(gx,gy,ex,ey,pal.g,pal.gL,pal.gS);
+    }
+  }
+  g_ol=false;
+  if(pose==='belt'){const bx=-11,by=top-25;fD(bx-1,by-1,24,6,OLC);fD(bx,by,22,4,'#e8b13a');fD(bx,by+3,22,1,'#9c7420');fD(bx+6,by-3,10,10,OLC);fD(bx+7,by-2,8,8,'#f5d36a');fD(bx+9,by,4,4,'#d4452f')}
+}
 function drawFighter(c,cx,gy,face,lk,gl,f,now,t){
   const an=f.an,pose=an.pose,pal=fPal(f,lk,gl),I=VI,T=TG,D=DV;
   g_c=c;g_cx=cx;g_gy=gy;g_face=face;g_ol=false;
   if(pose==='down'||pose==='ko'){c.fillStyle='rgba(0,0,0,.28)';c.beginPath();c.ellipse(cx,gy,24,4,0,0,Math.PI*2);c.fill();fFloor(pose,pal,t);f.vt=0;return}
+  if(ANIM.front[pose]&&!f.robe){fFront(pose,pal,t,f);f.vt=0;return}   // vitória: virado para o público
   const st=f.style,tier=f.st>=70?1:f.st>30?2:3,robe=!!f.robe,AX=f.armX||0;
   const o=F&&F.me?(f===F.me?F.op:F.me):null;
   const cer=robe||pose==='win'||pose==='win1'||pose==='belt'||pose==='celebrate'||pose==='sad'||pose==='sit';
