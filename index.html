@@ -3050,13 +3050,14 @@ const ANIM={wind:.17,hit:.42,       // frações da duração do golpe (o impact
   back:13,                          // px do centro às costas de quem está encostado: as costas tocam nas cordas verdadeiras
   body:[16,22],                     // px que o lutador ocupa para trás e para a frente (para o árbitro não ficar por cima)
   refW:8,                           // meia largura do árbitro
+  sh:{L:4,R:-7,kL:3,kR:10},          // ombros (vista 3/4): o da frente na borda da frente do tronco, o de trás na borda de trás; k = quanto rodam com o tronco
   bounce:{'Outboxer':[2.5,2],'In-fighter':[2.1,1],'Puncher':[1.4,0]}}; // saltitar em guarda: [saltos por segundo, altura em px]
 const VK='hx cr ln tw hd hy lex ley lgx lgy rex rey rgx rgy f1x f1y f2x f2y h1 h2'.split(' '),VN=VK.length,VI=Object.fromEntries(VK.map((k,i)=>[k,i]));
 // guarda (vista 3/4): mão da frente esticada para o adversário à altura do queixo; mão de trás encostada à cara, do outro lado do queixo
 const G0={hx:0,cr:1,ln:2,tw:0,hd:1,hy:0,lex:8,ley:4,lgx:14,lgy:-2,rex:5,rey:6,rgx:12,rgy:-4,f1x:6,f1y:0,f2x:-7,f2y:0,h1:0,h2:1};
 const mkPose=(o,b)=>{const s=Object.assign({},b||G0,o);return Float32Array.from(VK,k=>s[k]||0)};
 const ST0={hx:0,cr:-1,ln:0,tw:0,hd:0,hy:0,f1x:4,f1y:0,f2x:-4,f2y:0,h1:0,h2:0,lex:1,ley:7,lgx:2,lgy:13,rex:0,rey:7,rgx:1,rgy:13}; // de pé, braços caídos
-const UPL={lex:2,ley:-9,lgx:3,lgy:-20},UPR={rex:-2,rey:-9,rgx:-3,rgy:-20};
+const UPL={lex:7,ley:-9,lgx:11,lgy:-21},UPR={rex:-6,rey:-9,rgx:-9,rgy:-20}; // braços no ar em V, cada um do seu ombro
 const POSE={
   guard:mkPose({}),
   gIn:mkPose({cr:2,ln:4,hd:2,lex:7,ley:3,lgx:14,lgy:-7,rex:5,rey:6,rgx:13,rgy:-2}),          // In-fighter: fechado e curvado
@@ -3076,23 +3077,23 @@ const POSE={
   upperTH:mkPose({hx:6,cr:-2,ln:3,tw:1,hy:-1,rex:6,rey:5,rgx:9,rgy:-9,lex:2,ley:7,lgx:5,lgy:-2,h1:1,h2:2}),
   overhandW:mkPose({hx:-2,cr:2,ln:-1,tw:-.8,rex:-5,rey:-2,rgx:-5,rgy:-9}),
   overhandH:mkPose({hx:5,cr:5,ln:8,tw:1,hd:2,hy:2,rex:6,rey:-11,rgx:15,rgy:-8,lex:2,ley:7,lgx:4,lgy:0,f1x:9,h2:2}),
-  hurt:mkPose({hx:-2,ln:-5,hd:-3,hy:-1,lex:4,ley:7,lgx:8,lgy:1,rex:2,rey:7,rgx:6,rgy:3}),            // reto na cara: cabeça para trás
-  hurtG:mkPose({hx:-2,cr:2,ln:-2,tw:.7,hd:-2,hy:2,lex:4,ley:7,lgx:8,lgy:2,rex:2,rey:7,rgx:6,rgy:3}), // gancho: cabeça virada de lado
-  hurtU:mkPose({hx:-1,cr:-2,ln:-3,hd:-2,hy:-4,lex:4,ley:7,lgx:7,lgy:3,rex:2,rey:7,rgx:5,rgy:4,h1:1}), // uppercut: queixo para cima
-  hurtO:mkPose({hx:-1,cr:5,ln:2,hd:0,hy:3,lex:4,ley:7,lgx:8,lgy:1,rex:2,rey:7,rgx:6,rgy:3}),         // overhand: cabeça para baixo
+  hurt:mkPose({hx:-2,ln:-5,hd:-3,hy:-1,lex:6,ley:7,lgx:11,lgy:5,rex:4,rey:6,rgx:9,rgy:-2}),            // reto na cara: cabeça para trás
+  hurtG:mkPose({hx:-2,cr:2,ln:-2,tw:.7,hd:-2,hy:2,lex:6,ley:7,lgx:11,lgy:5,rex:3,rey:6,rgx:7,rgy:-2}), // gancho: cabeça virada de lado
+  hurtU:mkPose({hx:-1,cr:-2,ln:-3,hd:-2,hy:-4,lex:6,ley:7,lgx:11,lgy:6,rex:4,rey:6,rgx:9,rgy:0,h1:1}), // uppercut: queixo para cima
+  hurtO:mkPose({hx:-1,cr:5,ln:2,hd:0,hy:3,lex:6,ley:7,lgx:11,lgy:5,rex:4,rey:6,rgx:10,rgy:-1}),         // overhand: cabeça para baixo
   hurtB:mkPose({hx:-2,cr:4,ln:6,hd:2,hy:3,lex:1,ley:7,lgx:5,lgy:9,rex:2,rey:7,rgx:6,rgy:10}),        // ao corpo: dobra-se
   block:mkPose({cr:2,ln:0,hd:0,hy:1,lex:6,ley:1,lgx:11,lgy:-10,rex:6,rey:6,rgx:14,rgy:-2}),
   blockB:mkPose({cr:3,ln:3,hd:1,hy:1,lex:3,ley:8,lgx:8,lgy:5,rex:5,rey:6,rgx:12,rgy:-4}),
-  duck:mkPose({cr:10,ln:7,hd:2,hy:2,lex:7,ley:4,lgx:13,lgy:-4,rex:5,rey:6,rgx:11,rgy:-3,f1x:8,f2x:-8}),
+  duck:mkPose({cr:10,ln:7,hd:2,hy:2,lex:7,ley:4,lgx:14,lgy:-5,rex:5,rey:7,rgx:11,rgy:5,f1x:8,f2x:-8}),
   slipIn:mkPose({cr:4,ln:6,tw:-.5,hd:3,hy:3}),
   slipOut:mkPose({hx:-1,cr:1,ln:-6,hd:-2}),
-  stagger:mkPose({cr:2,ln:-2,hd:-1,hy:1,lex:1,ley:7,lgx:5,lgy:8,rex:-1,rey:7,rgx:3,rgy:9,f1x:4,f2x:-5,h2:0}),
+  stagger:mkPose({cr:2,ln:-2,hd:-1,hy:1,lex:4,ley:9,lgx:11,lgy:12,rex:4,rey:6,rgx:9,rgy:-1,f1x:4,f2x:-5,h2:0}),
   clinch:mkPose({hx:4,cr:2,ln:5,tw:.3,hd:2,hy:1,lex:8,ley:2,lgx:16,lgy:0,rex:8,rey:4,rgx:15,rgy:4}),
   stand:mkPose({},ST0),
   win:mkPose({...UPL,...UPR},ST0),
-  win1:mkPose({...UPL},ST0),
+  win1:mkPose({lex:4,ley:-9,lgx:6,lgy:-22},ST0),                                         // o árbitro levanta-lhe o braço da frente
   sad:mkPose({cr:1,ln:2,hd:1,hy:2},ST0),
-  sit:mkPose({cr:9,ln:-1,lex:3,ley:7,lgx:8,lgy:11,rex:3,rey:7,rgx:7,rgy:12},ST0)
+  sit:mkPose({cr:9,ln:-1,lex:3,ley:7,lgx:8,lgy:11,rex:0,rey:8,rgx:1,rgy:13},ST0)
 };
 const GUARDS={'In-fighter':POSE.gIn,'Outboxer':POSE.gOut,'Puncher':POSE.gPun};
 // golpe → poses de preparação e de impacto, braço, ponto de controlo do arco do punho (em relação ao ombro) e se é reto
@@ -3223,7 +3224,7 @@ function drawFighter(c,cx,gy,face,lk,gl,f,now,t){
   if(ln>.05&&pose!=='clinch'&&pose!=='sit'){T[I.hx]-=4*ln;                                                         // costas nas cordas, guarda alta e fechada
     if(pose==='guard'){T[I.ln]-=3*ln;T[I.cr]+=1;T.set(POSE.block.subarray(I.lex,I.rgy+1),I.lex);if(Math.sin(t*5)>.7)T[I.hx]+=1}}
   if(wb>.3){const j=Math.round(Math.sin(t*9));T[I.ln]+=Math.sin(t*6.5)*2.5*wb;T[I.cr]+=2;T[I.f1x]=3+j;T[I.f2x]=-4+j;T[I.h2]=0;T[I.h1]=0;         // pernas bambas: tronco a balançar, joelhos a tremer
-    if(pose==='guard'){T[I.lex]=3;T[I.ley]=7;T[I.lgx]=10;T[I.lgy]=5;T[I.rex]=2;T[I.rey]=8;T[I.rgx]=6;T[I.rgy]=11}}
+    if(pose==='guard'){T[I.lex]=3;T[I.ley]=7;T[I.lgx]=10;T[I.lgy]=5;T[I.rex]=0;T[I.rey]=8;T[I.rgx]=2;T[I.rgy]=13}}
   if(st==='In-fighter'&&!cer)T[I.cr]+=2;
   if(S)T[I.cr]=Math.min(T[I.cr],7);
   // 2) transição suave para a pose-alvo (os golpes seguem a sua linha de tempo)
@@ -3249,14 +3250,15 @@ function drawFighter(c,cx,gy,face,lk,gl,f,now,t){
     if(a<-.75)D[I.cr]+=1}                                                                                                       // amortece a queda
   // 4) esqueleto
   const hipx=-1+D[I.hx],hipY=-25+D[I.cr],scx=hipx+D[I.ln],sy=hipY-17,tw=D[I.tw];
-  const lsx=scx+2-3*tw,rsx=scx-3+6*clamp(tw,-.4,1);
+  const lsx=scx+2-3*tw,rsx=scx-3+6*clamp(tw,-.4,1);                                       // referência das poses (cotovelos e luvas)
+  const SH=ANIM.sh,lsv=scx+SH.L-SH.kL*tw,rsv=scx+SH.R+SH.kR*clamp(tw,0,1);                // ombros desenhados: cada braço sai do seu ombro
   const lex=lsx+D[I.lex],ley=sy+D[I.ley],lgx=lsx+D[I.lgx],lgy=sy+D[I.lgy],rex=rsx+D[I.rex],rey=sy+D[I.rey],rgx=rsx+D[I.rgx],rgy=sy+D[I.rgy];
   const hx0=Math.round(scx+D[I.hd])-4,hy0=Math.round(sy+D[I.hy])-13;
   const a1x=D[I.f1x],a1y=-4-D[I.f1y]-D[I.h1],a2x=D[I.f2x],a2y=-4-D[I.f2y]-D[I.h2];
   c.fillStyle='rgba(0,0,0,.28)';c.beginPath();c.ellipse(cx,gy,15-lift*2,4-(lift>1?1:0),0,0,Math.PI*2);c.fill();
   if(pose==='sit'){fD(-10,-11,20,3,'#5a3d26');fD(-10,-11,20,1,'#7a5636');fD(-9,-8,2,8,'#2a1f17');fD(7,-8,2,8,'#2a1f17')}       // banco
   const hurt=pose==='hurt'||pose==='stagger'||pose==='hurtBody';
-  for(let part=0;part<6;part++)for(let ol=1;ol>=0;ol--){g_ol=!!ol; // pernas, tronco, braço de trás, cabeça, braço da frente
+  for(const part of [0,1,3,2,6,4,5])for(let ol=1;ol>=0;ol--){g_ol=!!ol; // pernas, ombro e braço de trás (atrás do tronco), tronco, antebraço de trás, cabeça, braço da frente
     if(part===0){ // perna de trás
       if(pose==='sit')fLeg(hipx-1,hipY,hipx+8,-4,0,0,pal.skS,pal.skD,pal.trS,pal.btS,pal.gD,hipx+8,hipY+1);
       else fLeg(hipx-2,hipY,a2x,a2y,D[I.h2],D[I.f2y],pal.skS,pal.skD,pal.trS,pal.btS,pal.gD);
@@ -3274,11 +3276,12 @@ function drawFighter(c,cx,gy,face,lk,gl,f,now,t){
       if(robe){const R=f.robe,rx=Math.round(scx)-9;fP(rx,sr-2,19,24,R);fP(rx-1,sr,3,16,R);fP(rx+17,sr,3,16,R);
         fD(rx+5,sr-2,9,3,'#e8b13a');fD(rx,sr+9,19,1,'#e8b13a');fD(rx,sr+19,19,1,'#e8b13a');fD(rx+9,sr+1,1,20,'rgba(0,0,0,.22)');fP(rx-1,sr+16,4,5,pal.g);fP(rx+16,sr+16,4,5,pal.g)}
     }else if(robe)continue;
-    else if(part===3){ // braço de trás (mais escuro, do lado de lá)
-      fP(Math.round(rsx)-2,Math.round(sy)-1,5,5,pal.skS);fSeg(rsx,sy+1,rex,rey,4,pal.skS,pal.skD);fSeg(rex,rey,rgx,rgy,3,pal.skS,pal.skD);
-      fGlove(rgx,rgy,rex,rey,pal.gS,pal.g,pal.gD,stage===2&&S.wide&&!S.L);
+    else if(part===3){ // braço de trás (mais escuro, do lado de lá): sai do ombro de trás, por detrás do tronco
+      fP(Math.round(rsv)-3,Math.round(sy)-2,6,5,pal.skS);fSeg(rsv,sy,rex,rey,4,pal.skS,pal.skD);
+    }else if(part===6){ // antebraço e luva de trás, à frente do peito
+      fSeg(rex,rey,rgx,rgy,3,pal.skS,pal.skD);fGlove(rgx,rgy,rex,rey,pal.gS,pal.g,pal.gD,stage===2&&S.wide&&!S.L);
     }else{ // braço da frente
-      fP(Math.round(lsx)-2,Math.round(sy)-1,5,5,pal.sk);fD(Math.round(lsx)-1,Math.round(sy)-1,3,1,pal.skL);fSeg(lsx,sy+1,lex,ley,4,pal.sk,pal.skS);fSeg(lex,ley,lgx,lgy,3,pal.sk,pal.skS);
+      fP(Math.round(lsv)-2,Math.round(sy)-1,5,5,pal.sk);fD(Math.round(lsv)-1,Math.round(sy)-1,3,1,pal.skL);fSeg(lsv,sy+1,lex,ley,4,pal.sk,pal.skS);fSeg(lex,ley,lgx,lgy,3,pal.sk,pal.skS);
       fGlove(lgx,lgy,lex,ley,pal.g,pal.gL,pal.gS,stage===2&&S.wide&&S.L);
     }
   }
