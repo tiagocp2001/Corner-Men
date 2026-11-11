@@ -20,6 +20,11 @@
 
 **Regra: legível primeiro, bonito depois.** O que impede de perceber o jogo resolve-se já (mesmo simples); o que é só beleza fica para a fase 8, para não se desenhar coisas que vão ser refeitas.
 
+### Fase 2 — Luta legível · decisões
+- 2.1 **Decidido — duas vozes:** o **Zé do Micro** (locutor: frases curtas sobre o que acontece) + um **comentador ex-pugilista** (fala 1–2 vezes por round, explica o porquê). Nome do comentador provisório; o Tiago pode mudar os nomes mais tarde.
+- 2.2 **Decidido — fala-se menos:** o importante passa sempre (quedas, counters, técnicas especiais, fígado/coração, fim de round, ordens ouvidas, mudanças importantes como "encostou-o ao canto"); o rotineiro (cada jab, bloqueio, esquiva) vê-se no ringue (animação e pop-ups), sem texto.
+- 2.3 **Decidido — uma linha de cada vez:** só a frase atual, com a cara pequena de quem fala; as frases importantes ficam mais tempo no ecrã; o retrato grande sai e o espaço vai para o ringue.
+
 Detalhes das ideias das fases 2–4: `docs/pesquisa-bgs.md`.
 
 
