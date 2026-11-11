@@ -3051,7 +3051,8 @@ const ANIM={wind:.17,hit:.42,       // frações da duração do golpe (o impact
   body:[16,22],                     // px que o lutador ocupa para trás e para a frente (para o árbitro não ficar por cima)
   refW:8,                           // meia largura do árbitro
   nearRear:[-3,3],                  // luva de trás quando fica do lado de cá (virado para a direita): mais baixa e recuada
-  front:{win:1,win1:1,celebrate:1,belt:1}, // poses de vitória desenhadas de frente para o público
+  front:{win:1,win1:1,celebrate:1,belt:1,sad:1},
+  wrist:{up:[14,-60],held:[9,-32]},  // onde o árbitro segura: pulso do braço no ar / da mão segura (px do lutador de frente) // poses de vitória desenhadas de frente para o público
   stance:'orto',                    // guarda por omissão (ortodoxa); um lutador pode ter x.stance='canh' (canhoto, para mais tarde)
   sh:{L:4,R:-7,kL:3,kR:10},          // ombros (vista 3/4): o da frente na borda da frente do tronco, o de trás na borda de trás; k = quanto rodam com o tronco
   bounce:{'Outboxer':[2.5,2],'In-fighter':[2.1,1],'Puncher':[1.4,0]}}; // saltitar em guarda: [saltos por segundo, altura em px]
@@ -3175,8 +3176,10 @@ function fFloor(pose,pal,t){ // no tapete: 'down' (apoiado no cotovelo, a tentar
 function fFront(pose,pal,t,f){ // vencedor virado para o público (3/4 de frente): os dois ombros à vista, um braço no ar e o outro caído ao lado, ou os dois em V
   const lift=pose==='celebrate'||pose==='belt'?(Math.sin(t*(pose==='belt'?6:9))>0?(pose==='belt'?2:3):0):0,y0=-lift;
   g_c.fillStyle='rgba(0,0,0,.28)';g_c.beginPath();g_c.ellipse(g_cx,g_gy,14-lift*2,4,0,0,Math.PI*2);g_c.fill();
-  const sk=pal.sk,skS=pal.skS,top=y0-46,hx=-5,hy=top-12;
-  const arms=pose==='win1'?[[11,top-9,12,top-19],[-12,top+10,-12,top+19]]:pose==='belt'?[[13,top-8,10,top-18],[-13,top-8,-10,top-18]]:[[14,top-9,16,top-19],[-14,top-9,-16,top-19]]; // [cotovelo, luva] da frente e de trás
+  const sad=pose==='sad',down=sad||pose==='stand'||pose==='held',sl=sad?1:0;                  // derrotado: ombros descaídos, cabeça baixa
+  const sk=pal.sk,skS=pal.skS,top=y0-46,hx=-5,hy=top-12+sl*2;
+  const hang=x=>[x*12/11,top+10+sl,x,top+19+sl];                                              // braço caído ao longo do lado, luva junto à anca
+  const arms=pose==='win1'?[[10,top-9,9,top-19],hang(-11)]:pose==='belt'?[[13,top-8,10,top-18],[-13,top-8,-10,top-18]]:pose==='held'?[[11,top+9,8,top+17],hang(-11)]:down?[hang(11),hang(-11)]:[[14,top-9,16,top-19],[-14,top-9,-16,top-19]]; // [cotovelo, luva] de cada lado
   for(let part=0;part<5;part++)for(let ol=1;ol>=0;ol--){g_ol=!!ol;
     if(part===0){ // pernas de frente, ligeiramente abertas
       fP(-7,y0-22,5,12,skS);fP(-7,y0-11,4,8,skS);fP(-8,y0-4,6,2,CUFF);fP(-8,y0-2,6,3,pal.btS);
@@ -3186,14 +3189,15 @@ function fFront(pose,pal,t,f){ // vencedor virado para o público (3/4 de frente
       for(let j=0;j<5;j++){const w=20-j,y=top+j*3;fP(-w/2|0,y,w,j===4?y0-31-y:3,sk)}
       fD(-10,top+1,2,10,skS);fD(-8,top+3,7,1,skS);fD(1,top+3,7,1,skS);fD(-6,top+1,4,2,pal.skL);fD(2,top+1,4,2,pal.skL);
       fD(-1,top+6,1,8,skS);fD(-4,top+8,3,1,skS);fD(1,top+8,3,1,skS);fD(-4,top+11,3,1,skS);fD(1,top+11,3,1,skS);
-      fP(-2,top-3,5,4,sk);
+      fP(-2,top-3,5,4+sl*2,sk);
     }else if(part===2){ // ombros à vista, de cada lado da cabeça
-      fP(-12,top-1,5,5,skS);fP(7,top-1,5,5,sk);fD(8,top-1,3,1,pal.skL);
+      fP(-12,top-1+sl,5,5,skS);fP(7,top-1+sl,5,5,sk);fD(8,top-1+sl,3,1,pal.skL);
     }else if(part===3){ // cabeça de frente
       fP(hx,hy+1,10,8,sk);fP(hx+1,hy,8,10,sk);fP(hx-1,hy+4,1,3,skS);fP(hx+10,hy+4,1,3,skS);
       const hs=pal.hair,hr=pal.hr;if(hs===2)fD(hx+1,hy,8,2,hr);else if(hs===3){fP(hx,hy-1,10,3,hr);fP(hx-1,hy+1,2,8,hr);fP(hx+9,hy+1,2,8,hr)}else if(hs===1){fP(hx,hy-2,10,4,hr);fD(hx+2,hy-2,6,1,pal.hrL)}else{fP(hx,hy-1,10,3,hr);fD(hx+2,hy-1,5,1,pal.hrL)}
-      fD(hx+2,hy+4,2,1,'#111');fD(hx+6,hy+4,2,1,'#111');fD(hx+4,hy+5,2,2,skS);
-      if(pose==='win1'||pose==='belt'||pose==='celebrate'||pose==='win'){fD(hx+3,hy+7,4,2,'#7a2a20');fD(hx+3,hy+7,4,1,'#e8e0d0')}else fD(hx+3,hy+8,4,1,'#7a2a20');
+      if(sad){fD(hx+2,hy+5,2,1,'#111');fD(hx+6,hy+5,2,1,'#111');fD(hx+2,hy+3,2,1,pal.hr);fD(hx+6,hy+3,2,1,pal.hr);fD(hx+4,hy+6,2,1,skS);fD(hx+3,hy+8,4,1,'#7a2a20')} // olhos no chão
+      else{fD(hx+2,hy+4,2,1,'#111');fD(hx+6,hy+4,2,1,'#111');fD(hx+4,hy+5,2,2,skS);
+      if(!down){fD(hx+3,hy+7,4,2,'#7a2a20');fD(hx+3,hy+7,4,1,'#e8e0d0')}else fD(hx+3,hy+8,4,1,'#7a2a20')}
     }else{ // braços: cada um do seu ombro
       const[[ex,ey,gx,gy],[ex2,ey2,gx2,gy2]]=arms;
       fSeg(-10,top+1,ex2,ey2,4,skS,pal.skD);fSeg(ex2,ey2,gx2,gy2,3,skS,pal.skD);fGlove(gx2,gy2,ex2,ey2,pal.gS,pal.g,pal.gD);
@@ -3207,7 +3211,9 @@ function drawFighter(c,cx,gy,face,lk,gl,f,now,t){
   const an=f.an,pose=an.pose,pal=fPal(f,lk,gl),I=VI,T=TG,D=DV;
   g_c=c;g_cx=cx;g_gy=gy;g_face=face;g_ol=false;
   if(pose==='down'||pose==='ko'){c.fillStyle='rgba(0,0,0,.28)';c.beginPath();c.ellipse(cx,gy,24,4,0,0,Math.PI*2);c.fill();fFloor(pose,pal,t);f.vt=0;return}
-  if(ANIM.front[pose]&&!f.robe){fFront(pose,pal,t,f);f.vt=0;return}   // vitória: virado para o público
+  { // cerimónia final: os dois virados para o público (vitória, derrota, à espera da decisão com o árbitro a segurar-lhes os pulsos)
+    const fp=ANIM.front[pose]?pose:F&&F.ended&&(pose==='guard'||pose==='stagger')?(F.ref.pose==='hold'?'held':'stand'):null;
+    if(fp&&!f.robe){fFront(fp,pal,t,f);f.vt=0;return}}
   const st=f.style,tier=f.st>=70?1:f.st>30?2:3,robe=!!f.robe,AX=f.armX||0;
   const o=F&&F.me?(f===F.me?F.op:F.me):null;
   const cer=robe||pose==='win'||pose==='win1'||pose==='belt'||pose==='celebrate'||pose==='sad'||pose==='sit';
@@ -3346,13 +3352,17 @@ function drawFighter(c,cx,gy,face,lk,gl,f,now,t){
   if(now<f.flash){const bd=pose==='hurtBody',px=bd?Math.round(scx)+8:hx0+11,py=bd?Math.round(sy)+9:hy0+5,r=now<f.flash-75?4:2;   // impacto: estrela onde o golpe entrou
     fD(px-1,py-1,3,3,'#fff');fD(px-r-1,py,2*r+3,1,'#fff');fD(px,py-r-1,1,2*r+3,'#fff');fD(px-r+1,py-r+1,1,1,'#f5d36a');fD(px+r-1,py-r+1,1,1,'#f5d36a');fD(px-r+1,py+r-1,1,1,'#f5d36a');fD(px+r-1,py+r-1,1,1,'#f5d36a')}
 }
-function drawRef(c,cx,gy,face,pose,t){
+function drawRef(c,cx,gy,face,pose,t,tg){
   const P=(dx,dy,w,h,col)=>{c.fillStyle=col;c.fillRect(Math.round(face===1?cx+dx:cx-dx-w),Math.round(gy+dy),w,h)};
   c.fillStyle='rgba(0,0,0,.25)';c.beginPath();c.ellipse(cx,gy,11,3,0,0,Math.PI*2);c.fill();
   P(-5,-17,4,15,'#222');P(1,-17,4,15,'#222');P(-6,-3,5,3,'#111');P(1,-3,5,3,'#111');
   P(-6,-37,12,20,'#dfe6ea');P(-1,-36,2,2,'#111');P(-6,-37,1,20,'#b9c3c8');
   P(-4,-47,8,9,'#c98f62');P(-4,-48,8,2,'#444');P(1,-44,1,1,'#111');
-  if(pose==='count'){const u=Math.sin(t*12)>0;P(5,u?-50:-38,3,u?14:8,'#dfe6ea');P(5,u?-52:-31,3,3,'#c98f62')}
+  if(tg&&tg.length){for(const [dx,dy] of tg){const sx=cx+(dx>0?5:-5),sy=gy-35,n=Math.ceil(Math.max(Math.abs(cx+dx-sx),Math.abs(gy+dy-sy)));   // braço do árbitro até ao pulso
+      for(let i=0;i<=n;i++){const x=Math.round(sx+(cx+dx-sx)*i/n)-1,y=Math.round(sy+(gy+dy-sy)*i/n)-1;c.fillStyle='#dfe6ea';c.fillRect(x,y,3,3)}
+      c.fillStyle='#c98f62';c.fillRect(Math.round(cx+dx)-2,Math.round(gy+dy)-2,4,4)}
+    if(pose==='raise')P(-8,-35,3,12,'#dfe6ea')}
+  else if(pose==='count'){const u=Math.sin(t*12)>0;P(5,u?-50:-38,3,u?14:8,'#dfe6ea');P(5,u?-52:-31,3,3,'#c98f62')}
   else if(pose==='raise'){P(5,-58,3,22,'#dfe6ea');P(5,-61,3,3,'#c98f62');P(-8,-35,3,12,'#dfe6ea')}
   else if(pose==='raise2'){P(5,-58,3,22,'#dfe6ea');P(5,-61,3,3,'#c98f62');P(-8,-58,3,22,'#dfe6ea');P(-8,-61,3,3,'#c98f62')}
   else if(pose==='hold'){P(5,-35,10,3,'#dfe6ea');P(14,-35,2,3,'#c98f62');P(-15,-35,10,3,'#dfe6ea');P(-16,-35,2,3,'#c98f62')}
@@ -3636,11 +3646,15 @@ function ringLoop(now){
     F.vref=(F.vref||0)+((tx-pr.x)-(F.vref||0))*Math.min(1,dt*8);pr.x+=F.vref;
   }
   const mid=(pm.x+po.x)/2;
+  const ry=x=>/^raise2?$/.test(F.ref.pose)&&x.an.pose==='win1'?20:0; // braço no ar: o vencedor desenha-se à frente do árbitro (o braço dele vê-se, a mão do árbitro fica no pulso)
+  let refTg=null; // cerimónia (só desenho): as mãos do árbitro vão aos pulsos dos lutadores — o braço levantado do vencedor ou a mão que ele segura
+  if(/^(raise|raise2|hold)$/.test(F.ref.pose)){refTg=[];for(const [x,q,d] of [[F.me,pm,fm],[F.op,po,-fm]]){if(x.hidden)continue;const sc=q.s*(x.hs||1),up=x.an.pose==='win1';
+    if(F.ref.pose==='hold'||up)refTg.push([(q.x+d*(up?ANIM.wrist.up[0]:ANIM.wrist.held[0])*sc-pr.x)/pr.s,(q.y+(up?ANIM.wrist.up[1]:ANIM.wrist.held[1])*sc-pr.y)/pr.s])}}
   const wf=(x,def)=>{if(!x.robe)return def;const dx=x.pos.tx-x.pos.x;return Math.abs(dx)>1.5?(dx>0?1:-1):def};
   const list=[
-    {y:pr.y,b:false,d:()=>sprite(c,0,pr.x,pr.y,pr.s,(g,ox,oy)=>drawRef(g,ox,oy,(F.ref.pose==='raise'||F.ref.pose==='present')?(F.ref.side||1):(pr.x<mid?1:-1),F.ref.pose,t))},
-    {y:pm.y,b:F.me.pos.y<RING.y0,h:F.me.hidden,d:()=>sprite(c,1,pm.x,pm.y,pm.s*(F.me.hs||1),(g,ox,oy)=>drawFighter(g,ox,oy,wf(F.me,fm),F.me.look,'#d4452f',F.me,now,t))},
-    {y:po.y,b:F.op.pos.y<RING.y0,h:F.op.hidden,d:()=>sprite(c,2,po.x,po.y,po.s*(F.op.hs||1),(g,ox,oy)=>drawFighter(g,ox,oy,wf(F.op,-fm),F.op.look,'#2d6db3',F.op,now,t+.5))}
+    {y:pr.y,b:false,d:()=>sprite(c,0,pr.x,pr.y,pr.s,(g,ox,oy)=>drawRef(g,ox,oy,(F.ref.pose==='raise'||F.ref.pose==='present')?(F.ref.side||1):(pr.x<mid?1:-1),F.ref.pose,t,refTg))},
+    {y:pm.y+ry(F.me),b:F.me.pos.y<RING.y0,h:F.me.hidden,d:()=>sprite(c,1,pm.x,pm.y,pm.s*(F.me.hs||1),(g,ox,oy)=>drawFighter(g,ox,oy,wf(F.me,fm),F.me.look,'#d4452f',F.me,now,t))},
+    {y:po.y+ry(F.op),b:F.op.pos.y<RING.y0,h:F.op.hidden,d:()=>sprite(c,2,po.x,po.y,po.s*(F.op.hs||1),(g,ox,oy)=>drawFighter(g,ox,oy,wf(F.op,-fm),F.op.look,'#2d6db3',F.op,now,t+.5))}
   ];
   (F.crew||[]).forEach((m,k)=>{if(m.hidden)return;const p=proj(m.x,m.y);const sc=Math.min(p.s,1.16)*.78;
     const dr=(px,py)=>sprite(c,3+k%6,px,py,sc,(g,ox,oy)=>drawCrew(g,ox,oy,m.face,m.lk,m.pose,t+k*.37));
