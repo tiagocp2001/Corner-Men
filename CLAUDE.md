@@ -105,6 +105,9 @@ O build de teste gera-se a partir do `index.html` por substituição de texto (o
 
 - **Quando ele diz "responde antes de fazeres" (ou "explica antes"), não implementar nada:** explicar o plano e fazer perguntas, e só avançar depois de ele confirmar.
 - Não avisar o Tiago de pequenas alterações de arrumação (documentação, notas, commits de rotina); só falar delas se houver uma razão importante.
+- **Fazer sempre perguntas antes de cada parte, mesmo sobre coisas já faladas.**
+- **Avisar o Tiago** quando uma decisão que ele está a tomar ficaria melhor mais tarde, entra em conflito com outra coisa (já decidida ou planeada) ou não vai funcionar.
+- **Legível primeiro, bonito depois:** resolver já o que impede de perceber o jogo; deixar o que é só beleza para a fase visual (fase 8 do plano).
 - Fazer perguntas quando há decisões de design em aberto, em vez de assumir. Ele gosta de conversar sobre o design, tema a tema.
 - **Ecrã fixo, sem scroll:** tudo tem de caber num ecrã de telemóvel vertical, com navegação por menus e separadores. Verificar com capturas a 390×720/760.
 - Pixel art coerente (fonte Press Start 2P, paleta quente; o vermelho é o teu canto e o azul o adversário). Atletas originais, **não** personagens do Hajime no Ippo.
@@ -137,4 +140,4 @@ O Tiago quer o jogo baseado num guia de boxe que escreveu. **As decisões, o pla
 11. Faltas e golpes ilegais.
 12. Como tudo isto cabe num ecrã fixo.
 
-Último ponto aberto: ver o **Plano geral** no topo de `docs/design.md` (neste momento: fase 1 — correções da luta).
+Último ponto aberto: ver o **Plano geral** no topo de `docs/design.md` (neste momento: fase 2 — luta legível).
