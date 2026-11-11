@@ -110,7 +110,7 @@ O build de teste gera-se a partir do `index.html` por substituição de texto (o
 - **Legível primeiro, bonito depois:** resolver já o que impede de perceber o jogo; deixar o que é só beleza para a fase visual (fase 8 do plano).
 - Fazer perguntas quando há decisões de design em aberto, em vez de assumir. Ele gosta de conversar sobre o design, tema a tema.
 - **Ecrã fixo, sem scroll:** tudo tem de caber num ecrã de telemóvel vertical, com navegação por menus e separadores. Verificar com capturas a 390×720/760.
-- Pixel art coerente (fonte Press Start 2P, paleta quente; o vermelho é o teu canto e o azul o adversário). Atletas originais, **não** personagens do Hajime no Ippo.
+- Pixel art coerente (fonte Press Start 2P, paleta quente; o vermelho é o teu canto e o azul o adversário). Atletas originais, **não** personagens do Hajime no Ippo. Nomes de técnicas podem coincidir com termos do boxe ou do anime quando o Tiago decide (ex.: "jolty counter"); avisar, mas a decisão é dele.
 - O teu canto fica **à frente à esquerda**; o adversário ao fundo à direita.
 - Depois de cada mudança: `node --check` ao script extraído, um teste headless sem erros de página e capturas de ecrã para confirmar o aspeto.
 - Explicar os resultados de forma clara em PT-PT, com números das simulações quando houver mudanças de regras.
