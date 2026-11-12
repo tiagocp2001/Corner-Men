@@ -109,6 +109,7 @@ O build de teste gera-se a partir do `index.html` por substituição de texto (o
 - Não avisar o Tiago de pequenas alterações de arrumação (documentação, notas, commits de rotina); só falar delas se houver uma razão importante.
 - **Fazer sempre perguntas antes de cada parte, mesmo sobre coisas já faladas.**
 - **Avisar o Tiago** quando uma decisão que ele está a tomar ficaria melhor mais tarde, entra em conflito com outra coisa (já decidida ou planeada) ou não vai funcionar.
+- **Decisões ainda abertas:** muitas decisões da fase 3 são direção, não definitivas. Quando uma decisão nova mexer numa anterior, **relembrar o Tiago** e ver com ele se é preciso alterar.
 - **Legível primeiro, bonito depois:** resolver já o que impede de perceber o jogo; deixar o que é só beleza para a fase visual (fase 8 do plano).
 - Fazer perguntas quando há decisões de design em aberto, em vez de assumir. Ele gosta de conversar sobre o design, tema a tema.
 - **Ecrã fixo, sem scroll:** tudo tem de caber num ecrã de telemóvel vertical, com navegação por menus e separadores. Verificar com capturas a 390×720/760.
