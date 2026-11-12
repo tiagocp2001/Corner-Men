@@ -1164,7 +1164,7 @@ function editPlan(a){
    do plano já foram vistos), S.rep (último relatório), a.wk (semana em curso do atleta), a.ovr (plano só desta semana), a.wcd (avisos em espera). ---- */
 const TIME=Object.assign({
   weekMs:45000,      // duração de uma semana em ×1
-  speeds:[1,2],      // velocidades do botão
+  speeds:[1,2,4],    // velocidades do botão (×4 para testar mais depressa)
   sessDays:[0,2,4],  // dias dos 3 treinos (0 = Seg)
   resume:true,       // depois de um cartão resolvido com um toque, o tempo volta a andar se estava a andar
   offerCard:true,    // uma proposta nova pára o tempo com um cartão
