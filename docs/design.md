@@ -55,6 +55,9 @@
 - **Acabar com o plano de treino semanal** (estar sempre a mudar planos não é divertido). O atleta **melhora sozinho com o tempo**, condicionado por fatores — p. ex. usa o **equipamento que o ginásio tem**, tem uma **rotina diária** (correr todos os dias).
 - **Treinos especiais como cartas** que se usam num atleta para melhorar certos atributos.
 - **Peso**: escolher um **foco de treino** (perder peso / atributos / talvez um terceiro, como itens ou pontos — por decidir), ligado à pesagem e às categorias.
+- **Categorias (decidido):** 8 categorias (Mosca, Galo, Pena, Ligeiro, Meio-médio, Médio, Meio-pesado, Pesado) e 4 lugares para atletas, que podem estar em qualquer categoria; **dois atletas do ginásio não podem estar na mesma categoria**.
+- **Peso do atleta (direção):** quando entra no ginásio tem um **intervalo de pesos** e pode lutar num conjunto de categorias: uma **ideal**, uma acima onde é mais difícil ganhar peso, uma abaixo onde é mais difícil perder. **Mudar de categoria** exige condições (p. ex. completar a categoria — ganhar tudo — ou perder muitas lutas seguidas).
+- **Carreira (direção):** no **amador** o objetivo é tirar a **licença de profissional**; pode haver um **torneio amador** — quanto melhor a classificação, mais alto o **ranking** com que começa como profissional a caminho dos títulos. **Arenas diferentes** conforme o tipo de luta, com públicos diferentes. (Liga-se à proteção de cabeça no amador, fase 8, e resolve o "acelerar o título Amador" adiado.)
 - Isto puxa a **mudança dos treinos (antes fase 6) para a fase 3**. Mexe em: golpe da semana nos Pads (1.6/1.7), cartões de cansaço, perda de condição sem treino; a velocidade de aprender (9.1) pode continuar a decidir quão depressa o atleta melhora sozinho.
 
 Detalhes das ideias das fases 2–4: `docs/pesquisa-bgs.md`.
