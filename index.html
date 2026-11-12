@@ -174,6 +174,16 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .skr .pp{display:flex;gap:1px;flex:none}.skr .pp b{width:6px;height:6px;background:#3a2d22;border:1px solid #5a4632}.skr .pp b.f{background:var(--gold);border-color:var(--gold)}
 .skr em,.sknote em{font-style:normal;margin-right:2px}.cfu{color:var(--gold)}.cfo{color:#ff7a66}
 .sknote{font-size:14.5px;line-height:1;color:var(--muted)}
+.tkc{min-height:0;gap:3px;padding:5px 8px;overflow:hidden}
+.tkl{display:block;width:100%;background:var(--panel2);border:1px solid var(--gold);padding:2px 6px;font-size:15.5px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tkl b{font-family:var(--f-display);font-size:9.5px;font-weight:400;color:var(--gold)} .tkl i{font-style:normal;color:var(--fg)} .tkl.none{border-color:var(--line);color:var(--muted)}
+.tkg{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0 6px} .tkc h3{margin:0;line-height:1}
+.tkb{display:flex;justify-content:space-between;align-items:center;gap:3px;background:none;border:0;border-bottom:1px solid var(--line);color:var(--fg);font-family:var(--f-body);font-size:15.5px;line-height:.86;padding:0;cursor:pointer;text-align:left;min-width:0}
+.tkb span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0} .tkb em{font-style:normal;flex:none;font-size:13px;color:var(--muted)}
+.tkb.kn{color:var(--gold)} .tkb.kn em{color:var(--gold)} .tkb.ln{color:#ffd76a} .tkb.ln em{color:#ffd76a} .tkb.lock{color:var(--muted);opacity:.55}
+.tkh{display:flex;justify-content:space-between;align-items:baseline} .tkh .meta{font-size:15px}
+.tslot{display:inline-flex;gap:2px;vertical-align:middle;margin-left:4px}.tslot i{width:9px;height:7px;background:#3a2d22;border:1px solid #5a4632}.tslot i.f{background:var(--gold);border-color:var(--gold)}
+.treq{font-size:16px;line-height:1.05} .treq .ok{color:var(--green)} .treq .no{color:#ff7a66}
 .pips{display:flex;gap:2px;margin:2px 0}.pips i{width:12px;height:5px;background:#3a2d22;border:1px solid #5a4632}.pips i.f{background:var(--gold);border-color:var(--gold)}.pips i.x{opacity:.25}
 .menu{display:flex;flex-direction:column;gap:8px;align-items:stretch;text-align:center;padding:6px 0}
 .menu .mtitle{font-family:var(--f-display);font-size:29.5px;color:var(--gold);letter-spacing:.06em;text-shadow:3px 3px 0 #8f2a1b;margin:6px 0 2px}
@@ -485,6 +495,20 @@ const TUNE=Object.assign({hitDiv:350,hvy:1.55,resK:.3,qk:.45,mk:.45,cleanMul:6,n
      de Força (entre wiOp[1] e wiOp[2]); wiPop popularidade pelo peso perfeito (fãs na 3B). catLoss derrotas seguidas que deixam mudar de categoria. */
   wNat:[.6,2.6],wHvy:[84,98],wTopA:1.5,wUpA:.035,wTopT:.8,wUpT:.025,wDn:.09,wFloor:.8,wTopR:2.5,wRest:.06,wSlow:.5,
   wPerf:.5,wUnder:.5,wUnderMin:1.5,wiSt:[8,6,25],wiK:[.03,.02,.1],wiOp:[.02,.04,.12],wiPop:1,catLoss:4,
+  /* 3A-3 técnicas e guardas (por afinar na fase 7). Aprender (sem barra): no fim de cada semana a chance é tL × progresso^tLe (até tLmax); o progresso
+     sobe por semana com techSpeed (tTec Técnica, tDisc/tConc personalidade, tIQ Ring IQ nas de contra-ataque, tCoachSty treinador do estilo natural,
+     tStyLv nível do atleta nesse estilo, tFoc foco, tAdv avançadas). Lugares: slots por escalão (3A-4: carreira), até slotMax, +1 com Ring IQ ≥ slotIQ.
+     tAff: a técnica rende até +20% no seu estilo (afinidade). Regra do fígado: sem a técnica tRare das vezes e tRareQ pior; com ela tFig vezes mais.
+     tUse: vontade de usar uma técnica que muda um golpe normal. Por técnica: pj power jab, fl flicker, sh shovel, pv pivot hook, lp leaping, sm smash,
+     ck corkscrew (heart* golpe ao coração), jt jolty, ca catch, elb cotovelo (marcas: hand, arm), loopE loop parry, sn snap back, rl rolling, ls L-step,
+     tu tie-up, fr framing, smo smother. Guardas: gPh* Philly shell, gPk* peek-a-boo, gLg* long guard, gCr* guarda cruzada. Marcas: eye* olho fechado, airK
+     fôlego que recupera SEM AR. Estilo/guarda do atleta na luta: aiP hipótese de repensar em cada troca, aiGap segundos de relógio entre mudanças. */
+  tAff:.2,tL:.05,tLe:1.5,tLmax:.9,tTec:.012,tDisc:.15,tConc:.1,tIQ:.008,tCoachSty:1.3,tStyLv:.06,tFoc:{attrs:1,tec:1.5,peso:.8},tAdv:.6,
+  slots:[2,3,4,5],slotMax:6,slotIQ:70,tRare:.35,tRareQ:.08,tFig:1.8,livNo:.4,livS2:.25,tUse:.35,tPopGap:6000,
+  pjD:1.35,pjS:1.12,flD:.7,flDp:.55,flH:.03,shDp:.5,shH:.03,pvEsc:.6,lpD:1.6,lpFl:1.8,lpH:-.05,lpExp:.08,smD:1.7,smFl:1.6,smS:1.3,smC:1.8,smH:-.06,
+  ckCut:.25,heartK:.05,heartT:1300,heartSt:10,jtK:.5,jtD:1.6,jtFl:1.6,jtMiss:1.4,caC:1.6,elbK:.07,elbNo:.004,elbHand:.6,handD:.18,armN:3,armD:.9,handTop:.002,
+  loopE:{gancho:.6,upper:.55,body:.65},snK:.5,snC:2,rlK:.22,rlNo:.02,rlD:.55,lsK:.3,lsNo:.03,lsOff:1500,lsH:.06,lsSt:2,tuK:.5,frK:.35,frNo:.03,smoK:.35,smoD:.6,smoH:.04,
+  gPhO:1.8,gPhL:.15,gPhC:1.35,gPhR:.05,gPkH:.05,gPkSt:.25,gPkR:6,gLgR:8,gLgP:.03,gCrD:.85,gCrC:.6,gCrRd:.08,eyeP:.3,eyeDp:.7,eyeH:.04,eyeDoc:.5,airK:.7,aiP:.08,aiGap:20,
   /* Fase 2 — atributos do momento (2.9), em mom(x): com o fôlego abaixo de moSt e a vida abaixo de moHp cada atributo conta menos (só nessa luta).
      m<Atr>St / m<Atr>Hp: parte que se perde sem fôlego / sem vida (os Pés usam pesSt, pesHp e wobP, de cima); mQxKd Queixo por queda nesta luta (até mQxMin);
      mIqCalm quanto a Calma protege o Ring IQ; mTecConc Técnica nos últimos rounds com Concentração baixa. Por afinar (fase 7).
@@ -650,7 +674,7 @@ const STY_ATTR={'Outboxer':{pes:1.35,velocidade:1.25,iq:1.2,defesa:1.1,forca:.8}
 const C_NAMES=['Sr. Armando','Mestre Quim','Dona Lurdes','Tio Zeca','Sr. Fernando','Mestre Jacinto','Dona Rosa','Sr. Américo','Mestre Bento','Tio Chico','Sr. Horácio','Dona Graça','Mestre Adelino','Sr. Valdemar','Professor Vasco','Dona Amélia','Mestre Silvino','Sr. Agostinho','Dona Fátima','Mestre Ezequiel'];
 const BOND=[['acabados de conhecer',0],['a conhecer-se',4],['entendem-se bem',10],['confiam um no outro',20],['unha com carne',36]]; // [palavras, semanas juntos]
 const FOCUS={peso:{n:'PERDER PESO',l:['Peso ▼▼','Atributos ▲'],d:'Perde peso todos os dias; os atributos sobem devagar.'},attrs:{n:'ATRIBUTOS',l:['Atributos ▲▲','Peso ▲'],d:'Treino normal: os atributos sobem ao ritmo normal e o peso sobe devagar.'},
-  tec:{n:'TÉCNICAS',l:['Golpes ▲▲','Atributos ▲'],d:'Golpes e defesas sobem mais depressa; os atributos menos.'}};
+  tec:{n:'TÉCNICAS',l:['Técnicas ▲▲','Atributos ▲'],d:'Golpes, defesas e técnicas sobem mais depressa; os atributos menos.'}};
 /* ---- golpes (tema 1): os 7 do Guia, cada um com nível 1-5 e experiência. num = número do Guia (1-6; o overhand não tem).
    cls = trajetória (reto / gancho / upper) para as defesas; body = vontade de o mandar ao corpo; fl = base da queda relâmpago (à cabeça).
    O alvo (cabeça/corpo) escolhe-o o atleta na luta. As variações (power jab, shovel hook…) são só texto do comentador. ---- */
@@ -724,6 +748,78 @@ const COMBOS=[
   {id:'1232',n:'1-2-3-2',seq:['jab','direto','ganchoF','direto'],req:{jab:3,direto:3,ganchoF:3}}
 ];
 function knownCombos(x){return COMBOS.filter(c=>Object.entries(c.req).every(([k,v])=>(x.skills[k]||0)>=v))}
+/* ---- técnicas (3A-3; design 1.10 e fase 3 "Técnicas", "Defesa", "Guardas") ----
+   TECH = catálogo: k 'atk' (ataque) | 'def' (defesa) | 'grd' (guarda); base = golpe ou família de defesa de origem; fig = técnica com a "regra do
+   fígado" (sem ela pode acontecer raramente e pior; com ela muito mais vezes e melhor); sty = estilo natural ('ctr' = contra-ataque, sem estilo até
+   aos híbridos da fase 5: a afinidade vem do Ring IQ); adv = avançada (aprende-se mais devagar); req = o que é preciso para a aprender
+   (sk nível de golpes, df nível de defesas, at atributos, t técnicas antes); pop = palavra do pop-up especial; d = efeito (texto da Ficha).
+   As técnicas não substituem os atributos: o que já contava continua a contar; a técnica aumenta a frequência e a eficácia.
+   No atleta: a.tech = {k:[ids que sabe], l: id a aprender | null, w semanas a tentar, p progresso, fg id a esquecer quando aprender}.
+   Lugares (techSlots) partilhados por ataque, defesa e guardas. As variações automáticas (jab ao corpo, lead right, gancho curto/largo,
+   uppercut longo) não são técnicas. Fintas e combinações ficam para a fase 5. ---- */
+const TECH={
+  powerjab:{n:'Power jab',k:'atk',base:'jab',sty:'Puncher',req:{sk:{jab:1},at:{forca:16}},pop:'POWER JAB!',d:'Jab com peso de direto: mais dano, um pouco mais lento.'},
+  flicker:{n:'Flicker jab',k:'atk',base:'jab',sty:'Outboxer',req:{sk:{jab:1},at:{velocidade:16}},pop:'FLICKER!',d:'Jab de mão baixa, a picar de longe: difícil de defender, mas fraco. Combina com a Philly shell.'},
+  jabback:{n:'Jab de recuo',k:'atk',base:'jab',fig:1,sty:'Outboxer',req:{sk:{jab:1},at:{pes:16}},pop:'JAB DE RECUO!',d:'A recuar, o jab trava quem pressiona e não o deixa encurtar.'},
+  crosscounter:{sh:'Cross-counter',n:'Cross-counter',k:'atk',base:'direto',fig:1,sty:'ctr',req:{sk:{direto:2},at:{iq:22}},pop:'CROSS!',d:'Contra o jab ou o direto, solta o direto por cima, ao mesmo tempo. Muita hipótese de queda relâmpago; sem timing, os dois acertam.'},
+  checkhook:{n:'Check hook',k:'atk',base:'ganchoF',fig:1,sty:'ctr',req:{sk:{ganchoF:1},at:{iq:22}},pop:'CHECK HOOK!',d:'Apanha quem entra com o gancho da frente e roda para fora: fica no centro do ringue.'},
+  shovel:{n:'Shovel hook',k:'atk',base:'ganchoF',sty:'In-fighter',req:{sk:{ganchoF:2},at:{forca:22}},pop:'SHOVEL HOOK!',d:'Meio gancho, meio uppercut: entra por baixo da guarda, ao corpo e ao queixo. Perto é shovel hook; a meia distância, hookercut.'},
+  pivothook:{n:'Pivot hook',k:'atk',base:'ganchoF',sty:'Outboxer',req:{sk:{ganchoF:2},at:{pes:24}},pop:'PIVOT HOOK!',d:'Acerta e roda sobre o pé: muda de ângulo e ajuda a sair das cordas a bater.'},
+  liver:{sh:'Fígado',n:'Gancho ao fígado',k:'atk',base:'ganchoF',fig:1,sty:'In-fighter',req:{sk:{ganchoF:2},at:{forca:22}},pop:'FÍGADO!',d:'Procura o fígado com o gancho da frente ao corpo: muito mais vezes e com mais efeito. Sem a técnica só acontece por acaso.'},
+  leaping:{sh:'Leaping upper',n:'Leaping uppercut',k:'atk',base:'upperF',adv:1,sty:'In-fighter',req:{sk:{upperF:2},df:{cabeca:3},at:{velocidade:30}},pop:'LEAPING!',d:'Sai de baixo, depois de pendular ou a entrar baixo: muito dano, mas tudo ou nada.'},
+  smash:{n:'Smash',k:'atk',base:'upperT',sty:'Puncher',req:{sk:{upperT:2},at:{forca:28}},pop:'SMASH!',d:'Mão de trás de baixo em diagonal até ao queixo: muito dano e quedas, mas lento, fácil de antecipar e gasta muito fôlego.'},
+  corkscrew:{n:'Corkscrew',k:'atk',base:'direto',sty:'Puncher',req:{sk:{direto:2,jab:2},at:{tecnica:26}},pop:'CORKSCREW!',d:'Roda o punho no fim do jab e do direto. À cara abre cortes; ao corpo, de vez em quando, o golpe ao coração paralisa-o um instante.'},
+  jolty:{sh:'Jolty counter',n:'Jolty counter',k:'atk',base:'direto',adv:1,sty:'ctr',req:{sk:{direto:3},t:['crosscounter'],at:{iq:45,pes:32,velocidade:32}},pop:'JOLTY COUNTER!',d:'Cross-counter com um passo para dentro do golpe dele: dano altíssimo e a maior hipótese de queda relâmpago. Se o timing falha, leva o golpe em cheio.'},
+  catch:{n:'Catch',k:'def',base:'bloqueio',sty:'Outboxer',req:{df:{bloqueio:1},at:{velocidade:15}},pop:'CATCH!',d:'Apanha o jab na palma da luva: sem dano e responde logo com 1 ou 2.'},
+  elbow:{sh:'Cotovelo',n:'Bloqueio de cotovelo',k:'def',base:'bloqueio',fig:1,sty:'Puncher',req:{df:{bloqueio:2},at:{defesa:20}},pop:'COTOVELO!',d:'Põe o cotovelo no caminho do golpe: quem bate pode ficar com a mão magoada. Custo: o braço vai ficando dorido.'},
+  loopparry:{n:'Loop parry',k:'def',base:'aparar',sty:'Outboxer',req:{df:{aparar:2},at:{tecnica:22}},pop:'LOOP PARRY!',d:'Apara também ganchos e uppercuts ao corpo, com a luva em arco.'},
+  snapback:{n:'Snap back',k:'def',base:'cabeca',sty:'ctr',req:{df:{cabeca:2},at:{iq:24}},pop:'SNAP BACK!',d:'Recua a cabeça e volta como uma mola: counter muito mais vezes, apanha-o esticado, não perde distância.'},
+  rolling:{sh:'Rolling',n:'Rolling with the punch',k:'def',base:'cabeca',fig:1,sty:'Puncher',req:{df:{cabeca:2},at:{defesa:22}},pop:'ROLLING!',d:'Quando o golpe entra, roda com ele: menos dano e menos hipótese de queda. Raro.'},
+  lstep:{n:'L-step',k:'def',base:'pes',fig:1,sty:'Outboxer',req:{df:{pes:2},at:{pes:22}},pop:'L-STEP!',d:'Recua e sai de lado: volta ao centro em vez de ir para as cordas e deixa-o mal posicionado. Gasta fôlego; falha com cansaço.'},
+  tieup:{n:'Tie-up',k:'def',base:'clinch',sty:'In-fighter',req:{df:{clinch:1},at:{forca:18}},pop:'TIE-UP!',d:'No clinch amarra um braço; a outra mão fica livre para golpes curtos.'},
+  framing:{n:'Framing',k:'def',base:'clinch',fig:1,sty:'Outboxer',req:{df:{clinch:1},at:{forca:16}},pop:'FRAMING!',d:'Afasta com o antebraço quem se cola e volta à meia distância.'},
+  smother:{n:'Smother',k:'def',base:'clinch',sty:'In-fighter',req:{df:{clinch:1},at:{defesa:16}},pop:'SMOTHER!',d:'Colado ao adversário, abafa os golpes: perdem força.'},
+  philly:{n:'Philly shell',k:'grd',base:'ombro',adv:1,sty:'ctr',req:{df:{ombro:2},at:{iq:30}},pop:'PHILLY SHELL',d:'Guarda de ombro (shoulder roll e parry com o ombro): counters melhores, ajuda o flicker jab. Custo: mais exposto à mão de trás à cabeça.'},
+  peek:{n:'Peek-a-boo',k:'grd',base:'bloqueio',sty:'In-fighter',req:{df:{bloqueio:2,cabeca:1},at:{resistencia:22}},pop:'PEEK-A-BOO',d:'Guarda alta e fechada com a cabeça sempre a mexer: mais difícil de acertar, boa para entrar perto. Custo: fôlego (o bónus vai-se com o cansaço).'},
+  longg:{n:'Long guard',k:'grd',base:'aparar',sty:'Outboxer',req:{df:{aparar:1},at:{pes:18}},pop:'LONG GUARD',d:'Braço da frente esticado: controla a distância, ajuda os Pés e trava quem entra. Custo: pior perto.'},
+  crossg:{sh:'G. cruzada',n:'Guarda cruzada',k:'grd',base:'bloqueio',sty:'Puncher',req:{df:{bloqueio:1},at:{forca:18}},pop:'GUARDA CRUZADA',d:'Braços cruzados à frente: aguenta golpes pesados e ao corpo. Custo: contra-ataca pouco e vê pior.'}
+};
+const TKEYS=Object.keys(TECH);
+const TK_G=[['ATAQUE','atk'],['DEFESA','def'],['GUARDAS','grd']];
+function hasT(x,id){return !!(x&&x.tk&&x.tk.has(id))}                     // na luta (x.tk = Set)
+function techK(a){if(!a.tech||!Array.isArray(a.tech.k))a.tech={k:[],l:null,w:0,p:0,fg:null};return a.tech}
+function knownT(a){return techK(a).k}
+function styOfT(id){const s=TECH[id].sty;return s==='ctr'?'contra-ataque':s}
+/* afinidade (0-1): nível no estilo natural da técnica (desce muito devagar quando muda de estilo); as de contra-ataque vão pelo Ring IQ */
+function techAff(x,id){const t=TECH[id];if(!t)return 0;if(t.sty==='ctr')return clamp(((x.attrs?x.attrs.iq:x.iq)-25)/60,0,1);return clamp(styleLv(x,t.sty)/5,0,1)}
+function tq(x,id){return 1+TUNE.tAff*techAff(x,id)}                    // a técnica funciona um pouco melhor no estilo dela
+function techLack(a,id){ // o que falta para poder aprender (texto curto) ou ''
+  const t=TECH[id],r=t.req||{},L=[];
+  for(const[k,v]of Object.entries(r.sk||{}))if((a.skills[k]||0)<v)L.push(`${pLow(k)} nv ${v}`);
+  for(const[k,v]of Object.entries(r.df||{}))if(((a.def||{})[k]||0)<v)L.push(`${DEFS[k].n.toLowerCase()} nv ${v}`);
+  for(const[k,v]of Object.entries(r.at||{}))if((a.attrs[k]||0)<v)L.push(`${attrLow(k)} ${v}`);
+  for(const k of r.t||[])if(!knownT(a).includes(k))L.push(`saber ${TECH[k].n}`);
+  return L.join(', ')}
+/* lugares na build: por escalão (3A-4 troca pelos níveis da carreira: careerLv), +1 campeão do mundo, +1 com Ring IQ muito alto */
+function careerLv(a){return a.tier||0}
+function techSlots(a){const S0=TUNE.slots,b=(S0[careerLv(a)]??S0[S0.length-1])+((a.titles||[]).some(t=>t.startsWith(TIERS[TIERS.length-1].n))?1:0);
+  return Math.min(TUNE.slotMax,b)+((a.attrs.iq||0)>=TUNE.slotIQ?1:0)}
+function techBoost(a){return 1} // gancho para as cartas (3A-5): multiplica a velocidade de aprender a técnica em curso
+/* velocidade de aprender a técnica (1 = normal): Técnica (mais nas básicas), Disciplina e Concentração, treinador do estilo natural (ou Ring IQ nas de
+   contra-ataque), nível do atleta nesse estilo, escalão e ligação do treinador, foco TÉCNICAS, cartas (techBoost); as avançadas mais devagar. */
+function techSpeed(a,id){
+  const t=TECH[id],c=coachOf(a);let k=TUNE.coachT[c?c.t:0]*(c?bondK(a):TUNE.noCoach);
+  k*=clamp(1+TUNE.tTec*((a.attrs.tecnica||0)-30)*(t.adv?.5:1),.8,1.35);
+  k*=1+TUNE.tDisc*(mv(a,'disc')-50)/50+TUNE.tConc*(mv(a,'conc')-50)/50;
+  if(t.sty==='ctr')k*=clamp(1+TUNE.tIQ*((a.attrs.iq||0)-30),.85,1.3);
+  else{if(c&&c.st===t.sty)k*=TUNE.tCoachSty;k*=1+TUNE.tStyLv*styleLv(a,t.sty)}
+  k*=TUNE.tFoc[a.focus||'attrs']??1;if(t.adv)k*=TUNE.tAdv;
+  return k*techBoost(a)}
+function techHaz(p){return clamp(TUNE.tL*Math.pow(Math.max(0,p),TUNE.tLe),0,TUNE.tLmax)} // chance de aprender no fim de uma semana (p = progresso)
+function techEta(a,id){let p=0,s=1,e=0,k=techSpeed(a,id);for(let w=1;w<=40;w++){p+=k;const h=techHaz(p);e+=w*s*h;s*=1-h;if(s<.002)break}return Math.max(1,Math.round(e+s*40))} // semanas esperadas
+function techHint(a){ // palavras do treinador sobre a técnica em curso
+  const T=techK(a);if(!T.l)return '';const k=techSpeed(a,T.l),h=techHaz(T.p+k);
+  if(T.w>=6||(T.w>=3&&k<.75))return 'está a custar-lhe';if(h>=.3)return 'está quase a apanhar';if(T.w>=2&&h>=.14)return 'está a ir bem';return 'ainda está a começar'}
 const STRAT={
   'Pressão':{agg:.64,dmg:1.12,def:-.05,cost:1.5,combo:.25},
   'Equilibrado':{agg:.5,dmg:1,def:0,cost:.6,combo:0},
@@ -749,7 +845,7 @@ function makeAthlete(cat,o={}){
   const bd=o.h?{h:o.h,r:o.r}:rollBody(cat);
   const a={h:bd.h,r:bd.r,id:'a'+Date.now()+RI(0,9999),name:o.name||pick(FIRST)+' '+pick(LAST),nick:o.nick||pick(NICKS),age:o.age||RI(16,21),cat,
     style:o.style||styleForBody(bodyType({cat,h:bd.h,r:bd.r})),ment:o.ment?Object.assign(Object.fromEntries(MENT.map(([k])=>[k,50])),o.ment):rollMental(),bw:RI(0,51),salary:o.salary||RI(30,45),look:o.look||look(),
-    attrs:{},cap:{},pot,fatigue:0,conf:55,injury:0,skills:newSkills(),xp:Object.fromEntries(PKEYS.map(k=>[k,0])),def:newDefs(),dxp:Object.fromEntries(DKEYS.map(k=>[k,0])),bel:{jab:1,bloqueio:1,pes:1},use:{},combos:[],recovery:0,coach:null,cw:0,focus:'attrs',
+    attrs:{},cap:{},pot,fatigue:0,conf:55,injury:0,skills:newSkills(),xp:Object.fromEntries(PKEYS.map(k=>[k,0])),def:newDefs(),dxp:Object.fromEntries(DKEYS.map(k=>[k,0])),bel:{jab:1,bloqueio:1,pes:1},use:{},combos:[],recovery:0,coach:null,cw:0,focus:'attrs',tech:{k:[],l:null,w:0,p:0,fg:null},
     rec:{w:0,l:0,d:0,ko:0},tier:0,rank:10,titles:[],fight:null,offers:[],gift:o.gift===undefined?rollGift(cat):o.gift,giftKnown:false,weeks:0,hint:null,base:{},refusals:0};
   for(const[k]of ATTRS){a.attrs[k]=k==='queixo'?rollChin():k==='iq'?RI(6,16)+(o.boost||0):RI(8,20)+(o.boost||0);a.cap[k]=k==='queixo'?a.attrs[k]+RI(3,8):clamp(pot+RI(-12,12),28,99)}
   if(o.attrs)Object.assign(a.attrs,o.attrs);
@@ -945,7 +1041,13 @@ function makeOpp(a,title){
   o.rec={w,l:n-w,ko:Math.round(w*R(.2,.6))};
   o.fk=n>=4&&Math.random()<clamp((o.attrs.tecnica-35)/60,0,.6)?RI(1,Math.max(1,Math.floor(n/4))):0;
   o.glass=n>=4&&o.attrs.queixo<40&&Math.random()<.6?RI(1,2):0;
+  oppTech(o,a.tier,title);
   return o;
+}
+function oppTech(o,tier,title){ // técnicas e guardas do adversário (3A-3): conforme o estilo e o nível (amador 0-1, regional 1-2, nacional 2-3, mundial 3-5)
+  const T=techK(o);let n=clamp(tier+RI(0,1)+(title?1:0)-(tier===0&&Math.random()<.5?1:0),0,5);
+  while(n>0){const can=TKEYS.filter(id=>!T.k.includes(id)&&!techLack(o,id)&&!(TECH[id].k==='grd'&&T.k.some(k=>TECH[k].k==='grd')));if(!can.length)break;
+    T.k.push(wpick(can,id=>TECH[id].sty===o.style?3:TECH[id].sty==='ctr'?1.2:.6));n--}
 }
 function oppSkills(r,st){const L=(min,div,b=0)=>r>min?clamp(1+Math.floor((r-min)/div)+b,1,5):0,pu=st==='Puncher'?1:0,inf=st==='In-fighter'?1:0;
   return{jab:clamp(1+Math.floor(r/25)+(st==='Outboxer'?1:0),1,5),direto:L(22,10),ganchoF:L(32-4*inf,10,inf),ganchoT:L(38-4*pu,12),upperF:L(30-4*inf,12),upperT:L(34,12,inf),overhand:L(40-8*pu,14,pu)}}
@@ -975,6 +1077,7 @@ function showScout(o,a,when){
     <p class="hint">${prec} (${n} luta${n===1?'':'s'} vista${n===1?'':'s'}). Barra azul: onde achamos que está. Linha dourada: ${a.nick}.</p>
     <div class="stats">${rows}</div>
     <p class="hint">Golpes que já lhe vimos: ${sc.skills.filter(k=>SKILLS[k]).map(k=>pName(k)).join(', ')||'nenhum registo'}.</p>
+    ${n>=5&&o.tech&&o.tech.k&&o.tech.k.length?`<p class="hint">Técnicas que já lhe vimos: ${o.tech.k.slice(0,2).map(k=>TECH[k].n).join(', ')}.</p>`:''}
     ${o.fk?`<p class="hint"><span class="warn">Mão perigosa:</span> já fez ${o.fk} queda${o.fk>1?'s':''} relâmpago a adversários que estavam inteiros.</p>`:''}
     ${o.gift&&(o.rec.w+o.rec.l)>=5?`<p class="hint"><span class="warn">Dom conhecido:</span> ${GIFTS[o.gift].n}. ${GIFTS[o.gift].d}</p>`:''}
     ${o.glass?`<p class="hint"><span class="good">Queixo frágil:</span> já foi ao chão ${o.glass} vez${o.glass>1?'es':''} sem estar ferido.</p>`:''}
@@ -1181,8 +1284,9 @@ function panelAth(){
   const a=cur();const t=TIERS[a.tier];
   const inF=S.sub!=='treino';
   const sub=`<div class="seg"><button data-sub="ficha" class="${inF?'on':''}">Ficha</button><button data-sub="treino" class="${!inF?'on':''}">Treino</button></div>`
-    +(inF?`<div class="seg sub2"><button data-sub="ficha" class="${!['golpes','estilos','lutas'].includes(S.sub)?'on':''}">ATRIBUTOS</button><button data-sub="golpes" class="${S.sub==='golpes'?'on':''}">GOLPES</button><button data-sub="estilos" class="${S.sub==='estilos'?'on':''}">ESTILOS</button><button data-sub="lutas" class="${S.sub==='lutas'?'on':''}">LUTAS</button></div>`:'');
+    +(inF?`<div class="seg sub2"><button data-sub="ficha" class="${!['golpes','tecnicas','estilos','lutas'].includes(S.sub)?'on':''}">ATRIBUTOS</button><button data-sub="golpes" class="${S.sub==='golpes'?'on':''}">GOLPES</button><button data-sub="tecnicas" class="${S.sub==='tecnicas'?'on':''}">TÉCNICAS</button><button data-sub="estilos" class="${S.sub==='estilos'?'on':''}">ESTILOS</button><button data-sub="lutas" class="${S.sub==='lutas'?'on':''}">LUTAS</button></div>`:'');
   if(S.sub==='lutas')return selector()+sub+panelHist(a);
+  if(S.sub==='tecnicas')return selector()+sub+panelTech(a);
   if(S.sub==='golpes'){
     const row=k=>{const lv=lvOf(a,k),nt=belNote(a,k);
       return `<button class="skr ${lv?'':'lock'}" data-sk="${k}"><span>${nt?`<em class="${nt==='confia demais'?'cfo':'cfu'}">${nt==='confia demais'?'▲':'▼'}</em>`:''}${k in DEFS?DEFS[k].n:pName(k)}</span><i class="pp">${[1,2,3,4,5].map(i=>`<b class="${i<=lv?'f':''}"></b>`).join('')}</i></button>`};
@@ -1202,7 +1306,7 @@ function panelAth(){
           <div class="pips">${[1,2,3,4,5].map(i=>`<i class="${i<=lv?'f':i<=cap?'':'x'}"></i>`).join('')}</div>
           <span class="meta" style="font-size:15px">${lv>=cap?'no máximo':tr?`${Math.floor(a.sxp[st]||0)}/${need} · sobe com ${coachOf(a).n}`:lv<1?'precisa de um treinador deste estilo':'desce muito devagar sem treinador'}</span></div>
           <span class="meta">${pr?'LUTA':''}${pr&&tr?' · ':''}${tr?'TREINA':''}</span></div>`}).join('')}</div>
-      <div class="meta" style="font-size:15px">In-fighter vence Outboxer, Outboxer vence Puncher, Puncher vence In-fighter. Luta no estilo do treinador (logo que tenha nível nele). O corpo decide o nível máximo.</div></div>`;
+      <div class="meta" style="font-size:15px">In-fighter vence Outboxer, Outboxer vence Puncher, Puncher vence In-fighter. Treina no estilo do treinador; na luta escolhe sozinho entre os que sabe (com mais Ring IQ escolhe melhor). O corpo decide o nível máximo.</div></div>`;
   }
   if(S.sub==='treino')return selector()+sub+panelTreino(a);
   return selector()+sub+`<div class="card ficha" style="overflow:auto;min-height:0">
@@ -1219,6 +1323,46 @@ function panelAth(){
     <div class="meta">Potencial <span class="stars">${potRange(a)}</span></div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:space-between">${a.giftKnown?(a.gift?`<div class="meta" title="${GIFTS[a.gift].d}"><b style="color:var(--gold)">Dom: ${GIFTS[a.gift].n}</b></div>`:'<div class="meta">Sem dom especial.</div>'):a.hint?`<div class="meta">Pista: ${GIFTS[a.hint].n.toLowerCase()}? Ainda por confirmar.</div>`:'<div></div>'}
     ${S.roster.length>1?`<button class="btn" data-dismiss="${a.id}" style="font-size:9px;padding:7px 8px 5px;flex:none">DISPENSAR</button>`:''}</div></div>`;
+}
+/* ---- Ficha → TÉCNICAS (3A-3): lugares, a técnica em curso (semanas e o que diz o treinador) e o catálogo (sabe / a aprender / pode / bloqueada) ---- */
+function panelTech(a){
+  const T=techK(a),n=techSlots(a),c=coachOf(a);
+  const lb=T.l?`<button class="tkl" data-tch="${T.l}" style="text-align:left;color:var(--muted);font-family:var(--f-body)"><b>${TECH[T.l].n.toUpperCase()}</b> · ${T.w?`${T.w}.ª semana`:'começa agora'} · ${c?c.n.split(' ').pop():'sozinho'}: <i>«${techHint(a)}»</i>${T.fg&&T.k.length>=n?` · esquece ${TECH[T.fg].sh||TECH[T.fg].n}`:''}</button>`
+    :`<div class="tkl none">Nenhuma técnica a aprender. Toca numa técnica para a escolher.</div>`;
+  const cell=id=>{const t=TECH[id],kn=T.k.includes(id),ln=T.l===id,lk=!kn&&!ln&&techLack(a,id),nat=t.sty===a.style;
+    return `<button class="tkb ${kn?'kn':ln?'ln':lk?'lock':''}" data-tch="${id}"><span>${t.sh||t.n}</span><em>${kn?'●':ln?'▶':lk?'×':nat?'◆':''}</em></button>`};
+  return `<div class="card tkc"><div class="tkh"><h3>LUGARES ${T.k.length}/${n}<span class="tslot">${Array.from({length:n},(_,i)=>`<i class="${i<T.k.length?'f':''}"></i>`).join('')}</span></h3><span class="meta">● sabe ▶ aprende ◆ estilo dele</span></div>
+    ${lb}${TK_G.map(([g,k])=>`<h3>${g}</h3><div class="tkg">${TKEYS.filter(id=>TECH[id].k===k).map(cell).join('')}</div>`).join('')}
+</div>`;
+}
+function techInfo(a,id){
+  const t=TECH[id],T=techK(a),kn=T.k.includes(id),ln=T.l===id,lack=techLack(a,id),r=t.req||{},n=techSlots(a),full=T.k.length>=n;
+  const rq=[...Object.entries(r.sk||{}).map(([k,v])=>[`${pName(k)} nv ${v}`,(a.skills[k]||0)>=v]),...Object.entries(r.df||{}).map(([k,v])=>[`${DEFS[k].n} nv ${v}`,((a.def||{})[k]||0)>=v]),
+    ...Object.entries(r.at||{}).map(([k,v])=>[`${ATTR_N[k]} ${v}`,(a.attrs[k]||0)>=v]),...(r.t||[]).map(k=>[`saber ${TECH[k].n}`,T.k.includes(k)])];
+  const kind={atk:'Técnica de ataque',def:'Técnica de defesa',grd:'Guarda'}[t.k],base=t.base in DEFS?DEFS[t.base].n.toLowerCase():pLow(t.base);
+  const aff=techAff(a,id),eta=techEta(a,id);
+  const st=kn?'<b class="good">Já sabe.</b>'+(t.k==='grd'?' Na luta escolhe sozinho quando a usa.':''):ln?`<b style="color:var(--gold)">A aprender há ${T.w} semana${T.w===1?'':'s'}</b> · ${coachOf(a)?coachOf(a).n:'sozinho'}: «${techHint(a)}».`:lack?`<span class="warn">Ainda não pode: falta ${lack}.</span>`:`Pode aprender. Para ${a.nick}, costuma levar ~${eta} semana${eta>1?'s':''}${t.adv?' (técnica avançada)':''}.`;
+  const m=modal(`<h2>${t.n.toUpperCase()}</h2>
+    <p class="meta" style="font-size:16px">${kind} · vem de ${base} · estilo natural: <b style="color:var(--fg);font-weight:400">${styOfT(id)}</b>${t.fig?' · <span style="color:var(--gold)">regra do fígado</span>':''}</p>
+    <p class="hint">${t.d}</p>
+    ${t.fig?'<p class="hint">Regra do fígado: sem a técnica pode acontecer raramente e pior; com ela, muito mais vezes e melhor.</p>':''}
+    <p class="hint">${t.sty==='ctr'?'Técnica de contra-ataque: rende e aprende-se melhor com muito Ring IQ.':aff>0?`${a.nick} tem ${t.sty} nível ${styleLv(a,t.sty)}: ${aff>=.6?'rende-lhe bem':'rende-lhe um pouco mais'}.`:`${a.nick} não tem nível em ${t.sty}: rende o normal.`}</p>
+    <div class="treq">${rq.map(([s,ok])=>`<span class="${ok?'ok':'no'}">${ok?'✓':'×'} ${s}</span>`).join(' · ')}</div>
+    <p class="hint">${st}</p>
+    <div class="row2"><button class="btn" id="tX">FECHAR</button>${kn?'':ln?'<button class="btn red" id="tStop">PARAR</button>':`<button class="btn gold" id="tGo" ${lack?'disabled':''}>${T.l?'TROCAR PARA ESTA':'APRENDER'}</button>`}</div>
+    ${!kn&&!ln&&T.l?`<p class="meta" style="font-size:15px">Agora aprende ${TECH[T.l].n}: perde as ${T.w} semana${T.w===1?'':'s'} que já levava.</p>`:''}`);
+  m.querySelector('#tX').onclick=closeModal;
+  const go=m.querySelector('#tGo');if(go)go.onclick=()=>{if(full)techForget(a,id);else{techStart(a,id,null);closeModal()}};
+  const sp=m.querySelector('#tStop');if(sp)sp.onclick=()=>{T.l=null;T.w=0;T.p=0;T.fg=null;note(`${a.nick} deixa de aprender ${t.n}.`);closeModal()};
+}
+function techStart(a,id,fg){const T=techK(a);T.l=id;T.w=0;T.p=0;T.fg=fg;note(`${a.nick} começa a aprender ${TECH[id].n}.`)}
+function techForget(a,id){ // lugares cheios: escolhe a técnica que esquece quando aprender a nova
+  const T=techK(a);
+  const m=modal(`<h2>SEM LUGAR NA BUILD</h2><p class="hint">${a.nick} já tem ${T.k.length} técnica${T.k.length>1?'s':''} (${techSlots(a)} lugares). Para aprender <b style="color:var(--gold)">${TECH[id].n}</b>, escolhe a que vai esquecer quando a aprender. Até lá continua a usá-la.</p>
+    <div class="rows">${T.k.map(k=>`<div class="r"><div><strong>${TECH[k].n.toUpperCase()}</strong><p>${{atk:'ataque',def:'defesa',grd:'guarda'}[TECH[k].k]} · ${styOfT(k)}</p></div><button class="btn red" data-fg="${k}">ESQUECER</button></div>`).join('')}</div>
+    <button class="btn" id="fgX">CANCELAR</button>`);
+  m.querySelector('#fgX').onclick=closeModal;
+  m.querySelectorAll('[data-fg]').forEach(b=>b.onclick=()=>{techStart(a,id,b.dataset.fg);closeModal()});
 }
 function panelTreino(a){ // Ficha → Treino: treinador, foco do treino, categoria e o que está a melhorar (em palavras)
   const c=coachOf(a),bl=bondLv(a),fo=a.focus||'attrs';
@@ -1336,7 +1480,7 @@ function info(title,body,btn='CONTINUAR'){
 }
 function help(){
   return info('COMO JOGAR',`<p class="hint">És o dono de um ginásio de bairro. O tempo corre sozinho: carrega em ▶ para andar, em ❚❚ para parar e em ×2 para ir mais depressa. Pára sozinho quando é preciso decidir alguma coisa.</p>
-  <p class="hint">Os lutadores treinam sozinhos todos os dias, com o equipamento do ginásio e com o seu treinador. Cada atleta tem um treinador e luta no estilo dele (Ginásio → Treinadores). Em Atletas → Treino escolhes o foco do treino.</p>
+  <p class="hint">Os lutadores treinam sozinhos todos os dias, com o equipamento do ginásio e com o seu treinador. Cada atleta tem um treinador e treina no estilo dele (Ginásio → Treinadores). Em Atletas → Treino escolhes o foco do treino; em Atletas → Ficha → TÉCNICAS, a técnica que está a aprender. Na luta, o estilo e a guarda escolhe-os o atleta.</p>
   <p class="hint">As lutas marcam-se com 6 a 8 semanas de antecedência. Cada atleta luta na sua categoria de peso (no máximo 4, nunca dois na mesma): vigia o peso em Atletas → Treino e, na semana antes da luta, escolhe como chega à pesagem. No dia, dá ordens no canto entre rounds.</p>
   <p class="hint">Mais equipamento treina mais coisas e traz mais sócios, que pagam mensalidades. Às vezes aparece um talento escondido.</p>`,'VAMOS A ISSO');
 }
@@ -1353,6 +1497,7 @@ document.addEventListener('click',e=>{
   if(d.shop){S.shopSub=d.shop;render();return}
   if(d.gsub){S.gsub=d.gsub;render();return}
   if(d.sk){skillInfo(cur(),d.sk);return}
+  if(d.tch){if(TECH[d.tch])techInfo(cur(),d.tch);return}
   if(d.focus){const a=cur();if(FOCUS[d.focus]&&a.focus!==d.focus){a.focus=d.focus;note(`${a.nick} muda o foco do treino: ${FOCUS[d.focus].n.toLowerCase()}.`)}render();return}
   if(d.coach){const c=S.coaches.find(x=>x.id===d.coach);if(c)coachInfo(c);return}
   if(d.catmv){const a=S.roster.find(x=>x.id===d.catmv);if(a)askCatChange(a);return}
@@ -1507,6 +1652,21 @@ function weekTrain(a){ // fim da semana: ligação ao treinador, outros estilos 
   if((a.age||0)>=TUNE.ageDec0){const d=TUNE.ageDec*(a.age-TUNE.ageDec0+1);for(const k of['forca','velocidade','resistencia','pes']){const fl=(a.base&&a.base[k])||0;if(a.attrs[k]>fl)a.attrs[k]=Math.max(fl,a.attrs[k]-d)}}
   return out;
 }
+/* ---- técnicas (3A-3): no fim de cada semana de treino há uma chance de aprender a técnica escolhida (sem barra). A recuperar ou lesionado não conta.
+   Quando aprende e não há lugar, esquece a que o jogador marcou (a.tech.fg). Devolve o cartão "técnica aprendida" (ou null). ---- */
+let techCards=[];
+function techWeek(a){
+  const T=techK(a);if(!T.l||!TECH[T.l])return null;
+  if(techLack(a,T.l)){T.l=null;T.w=0;T.p=0;return null} // deixou de cumprir (não deve acontecer): pára
+  T.w++;T.p+=techSpeed(a,T.l);
+  if(Math.random()>=techHaz(T.p))return null;
+  const id=T.l,t=TECH[id];let lost=null;
+  if(T.k.length>=techSlots(a)){lost=T.fg&&T.k.includes(T.fg)?T.fg:T.k[0];T.k=T.k.filter(k=>k!==lost)}
+  T.k.push(id);const w=T.w;T.l=null;T.w=0;T.p=0;T.fg=null;
+  note(`${a.nick} aprendeu a técnica ${t.n}${lost?` (esqueceu ${TECH[lost].n})`:''}.`);
+  return{a,title:`TÉCNICA APRENDIDA · ${a.nick.toUpperCase()}`,body:`<p class="hint">Ao fim de ${w} semana${w>1?'s':''}, ${a.nick} apanhou o <b style="color:var(--gold)">${t.n}</b>.${lost?` Para lhe dar lugar, esqueceu ${TECH[lost].n}.`:''}</p><p class="hint">${t.d}</p><p class="hint">Já pode usá-lo na próxima luta. Escolhe a próxima técnica em Atletas → Ficha → TÉCNICAS.</p>`,
+    opts:[{t:'VER TÉCNICAS',cls:'gold',stay:true,fn:()=>{const i=S.roster.indexOf(a);if(i>=0){S.tab='ath';S.sel=i;S.sub='tecnicas';render()}}},{t:'BOA!'}]};
+}
 /* ---- fecho da semana: uma só vez por semana, depois dos dias de treino. Devolve as propostas novas (para os cartões). ---- */
 function weekEnd(){
   while((S.wstep||0)<TIME.days)dayStep();
@@ -1516,6 +1676,7 @@ function weekEnd(){
     const k=a.wk;
     if(k.rev)reveals.push(k.rev);
     const bu=weekTrain(a);delete a.wk;
+    if(!k.rest){const tc=techWeek(a);if(tc){techCards.push(tc);k.up.push('técnica '+TECH[knownT(a).at(-1)].n)}}
     if(k.rest==='inj'){lines.push(`<b>${a.nick}</b> esteve a recuperar da lesão.`);short.push(`${a.nick}: lesionado`);evo.push({id:a.id,n:a.nick,it:['<i>lesionado</i>']});continue}
     if(k.rest==='rec'){a.recovery--;lines.push(`<b>${a.nick}</b> descansou depois da luta. ${a.recovery?`Faltam ${a.recovery} semana${a.recovery>1?'s':''} de recuperação.`:'Já pode voltar a treinar.'}`);short.push(`${a.nick}: ${a.recovery?'a recuperar da luta':'pronto para treinar'}`);evo.push({id:a.id,n:a.nick,it:[a.recovery?'<i>a recuperar da luta</i>':'<i>pronto para treinar</i>']});continue}
     const ds=ATTRS.map(([x])=>[x,a.attrs[x]-k.b[x]]).filter(([,d])=>d>=.1).sort((p,q)=>q[1]-p[1]);
@@ -1567,6 +1728,7 @@ function weekEnd(){
 }
 async function endWeek(quiet){
   const newOff=weekEnd();render();
+  {const tc=techCards;techCards=[];if(tc.length)await runCards(tc)} // técnicas aprendidas (3A-3)
   for(const a of [...S.roster])if(a.pendingRaise)await negotiate(a);
   for(const a of [...S.roster])if(a.fight&&a.fight.week===S.week+1&&!a.fight.prep&&S.roster.includes(a))await prepCard(a); // pesagem na próxima semana (3A-2)
   // talentos: com lugares livres, numa categoria livre; às vezes um para trocar com um atleta na mesma categoria
@@ -1591,6 +1753,7 @@ async function advanceWeek(){
   await clockDo(()=>endWeek(true));
 }
 window.__week=()=>advanceWeek();
+window.__fstate=()=>F?{pops:(F.pl||[]).slice(),log:F.log.map(e=>e.t),mk:[mkWords(F.me),mkWords(F.op)],sty:[F.me.style,F.op.style],grd:[F.me.guard,F.op.guard],tq:[F.me.tq,F.op.tq]}:null; // para os testes
 window.__clock=()=>S&&{week:S.week,wt:S.wt||0,step:S.wstep||0,run:!!S.run,spd:S.spd||1,busy};
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&S&&S.run){S.run=false;save();drawClock()}});
 /* ---- velocidade de aprender (tema 9.1, passo A4; 3A-1): golpes, defesas, atributos e estilos.
@@ -1939,14 +2102,39 @@ const LINES={
   hit_upperF:['Uppercut de esquerda de {a} por baixo da guarda!','{a} levanta o queixo de {d} com o uppercut da frente!'],
   hit_upperT:['Uppercut de direita de {a}! A cabeça de {d} vai para cima!','{a} entra por baixo com o uppercut de trás!','Uppercut seco de {a}!'],
   hit_overhand:['OVERHAND de {a} por cima da guarda!','{a} arrisca o overhand e acerta!','Direita em arco por cima! Overhand de {a}!'],
-  v_flicker:['Flicker jab de {a}, a picar de mão baixa.','{a} solta o flicker jab, quase sem se ver.'],
-  v_powerjab:['Power jab de {a}! Um jab com peso de direto.','Jab pesado de {a}, a cabeça de {d} vai para trás!'],
   v_leadright:['Lead right! {a} abre com a direita, sem jab.','{a} entra com a direita direta, sem avisar.'],
-  v_corkscrew:['Corkscrew de {a}! Roda o punho no fim do direto.','{a} enrosca o direto, à corkscrew. Entra em saca-rolhas!'],
-  v_shovel:['Shovel hook de {a} ao corpo, curto e por baixo!','{a} enterra um shovel hook nas costelas de {d}.'],
-  v_pivot:['Pivot hook de {a}: roda sobre o pé e acerta de lado!','{a} gira no pé da frente e o gancho chega de lado. Pivot hook!'],
-  v_hookercut:['Hookercut de {a}, meio gancho, meio uppercut!','{a} sobe em diagonal: nem gancho nem uppercut, hookercut!'],
-  v_leaping:['Leaping uppercut! {a} salta por baixo da guarda!','{a} dá um salto de meia distância e sobe com o uppercut!'],
+  t_powerjab:['Power jab de {a}! Um jab com peso de direto.','Jab pesado de {a}, a cabeça de {d} vai para trás!'],
+  t_flicker:['Flicker jab de {a}, a picar de mão baixa.','{a} solta o flicker jab, quase sem se ver.'],
+  t_shovel:['Shovel hook de {a}, curto e por baixo da guarda!','{a} enterra um shovel hook por baixo dos cotovelos de {d}.'],
+  t_hookercut:['Hookercut de {a}, meio gancho, meio uppercut!','{a} sobe em diagonal: nem gancho nem uppercut, hookercut!'],
+  t_pivothook:['Pivot hook de {a}: roda sobre o pé e acerta de lado!','{a} gira no pé da frente e o gancho chega de lado. Pivot hook!'],
+  t_leaping:['Leaping uppercut! {a} sai de baixo num salto e acerta!','{a} salta de baixo com o uppercut: leaping uppercut!'],
+  leapMiss:['{a} salta com o uppercut e só apanha ar. Ficou exposto!','O leaping uppercut de {a} falha e {d} tem tudo aberto.'],
+  t_smash:['SMASH de {a}! De baixo, em diagonal, até ao queixo!','{a} solta o smash e {d} sente-o até aos pés!'],
+  t_corkscrew:['Corkscrew de {a}! Roda o punho no fim do golpe.','{a} enrosca o golpe, à corkscrew. Entra em saca-rolhas!'],
+  heart:['Ao coração! {d} fica parado, sem se conseguir mexer!','Golpe ao coração de {a}! {d} congela um instante!'],
+  t_jolty:['JOLTY COUNTER! {a} entra para dentro do golpe e acerta primeiro!','Jolty counter de {a}! Passo em frente e direto por cima!'],
+  joltyMiss:['{d} entra para o jolty counter sem timing e leva em cheio!','O jolty counter de {d} sai cedo demais: leva o golpe todo.'],
+  t_jabback:['Jab de recuo de {a}! {d} não consegue fechar.','{a} recua a picar com o jab e trava {d}.'],
+  t_tieup:['{a} amarra-lhe um braço e bate com o outro. Tie-up!','No clinch, {a} prende o braço de {d} e solta golpes curtos.'],
+  d_elbow:['{a} bate no cotovelo de {d}! Aquilo doeu na mão.','Bloqueio de cotovelo de {d}: {a} sacode a mão.'],
+  hand:['{x} sacode a mão. Parece magoada.','A mão de {x} não está bem: já não fecha o punho como antes.'],
+  handTop:['{x} bateu no osso da cabeça e sacode a mão.','{x} martela a guarda e fica a sacudir a mão.'],
+  arm:['O braço de {x} já pesa de tanto bloquear.','{x} baixa um pouco o braço: está dorido de tanto aguentar.'],
+  loop:['Loop parry de {d}: desvia o golpe com a luva em arco.','{d} apara o {p} por fora, em arco. Loop parry!'],
+  snap:['Snap back de {d}! Recua a cabeça e volta como uma mola.','{d} deixa o {p} morrer no ar e volta logo. Snap back!'],
+  ctr_snap:['Snap back e {p}! {a} apanha-o esticado!','{a} recua como uma mola e responde com o {p}!'],
+  d_roll:['{d} roda com o golpe e tira-lhe metade da força.','Rolling with the punch: {d} vai com o golpe e aguenta.'],
+  d_lstep:['L-step de {y}! Recua, sai de lado e volta ao centro.','{y} sai em L e deixa {x} a olhar para as cordas.'],
+  d_frame:['{y} encosta o antebraço e afasta {x}. Framing!','{y} empurra {x} com o antebraço e volta à meia distância.'],
+  d_smother:['{d} cola-se e abafa os golpes de {a}.','Smother de {d}: os golpes de {a} perdem a força.'],
+  eye:['O olho de {x} está a fechar! Já não vê bem desse lado.','O inchaço tapa o olho de {x}.'],
+  sty_ch:['{x} muda para {s}.','{x} troca de estilo: agora é {s}.','{x} lê a luta e passa a {s}.'],
+  g_philly:['{x} baixa a mão da frente: Philly shell.','{x} fecha-se na Philly shell, ombro alto.'],
+  g_peek:['{x} fecha-se no peek-a-boo, luvas junto à cara.','Peek-a-boo de {x}: guarda fechada e a cabeça a mexer.'],
+  g_longg:['{x} estica o braço da frente: long guard.','{x} passa para a long guard e mede a distância.'],
+  g_crossg:['{x} fecha-se na guarda cruzada.','Guarda cruzada de {x}: braços à frente, a aguentar.'],
+  g_base:['{x} volta à guarda alta.','{x} desfaz a guarda e volta à guarda alta.'],
   v_shortH:['Gancho curto de {a}, colado ao adversário!','{a} roda o gancho curto, sem espaço nenhum.','Gancho curtinho de {a}. Daqui não se vê chegar.'],
   v_wideH:['Gancho largo de {a}, a meia distância!','{a} abre o braço e o gancho chega largo.','Gancho em arco de {a}, por fora da guarda.'],
   v_shortU:['Uppercut curto de {a}, de baixo para cima!','{a} encontra espaço para o uppercut curto.'],
@@ -2027,10 +2215,11 @@ function line(type,v){
   const s=l.replace(/\{(\w)\}/g,(m,k)=>v[k]??'');LT={ty:type,s};return s;
 }
 function fighter(src,mine){
-  initBody(src,src.tier!=null?2:3);const fst=(mine&&src.fstyle&&styleLv(src,src.fstyle)>0)?src.fstyle:src.style;
+  initBody(src,src.tier!=null?2:3);const fst=src.style; // o atleta começa no seu estilo e escolhe sozinho durante a luta (styleAI)
   const x={h:src.h,r:src.r,sty:src.sty,slv:Math.max(1,styleLv(src,fst)),armX:clamp(Math.round(((src.r-src.h)-2.5)/3),-1,2),hs:clamp((src.h||175)/178,.9,1.12),name:src.name,nick:src.nick,style:fst,ment:src.ment||{},look:src.look,mine,...src.attrs,skills:{...newSkills(),...pickKeys(src.skills,PKEYS)},def:{...newDefs(),...pickKeys(src.def,DKEYS)},src,cat:src.cat||'Leve',gift:src.gift||null,
     hp:100,st:mine?clamp(100-(src.fatigue||0)*.5,40,100):100,kd:0,cut:0,conf:mine?src.conf:confBase(src),strat:'Equilibrado',
     rs:newRS(),dx:newDX(),wobbly:0,tot:{thrown:0,landed:0,power:0,dmg:0},card:0,dmgTaken:0,ps:{},dfs:{},cts:{},liv:[0,0],bodyAcc:0,hunch:0,headL:0,bodyL:0,lowT:0,lastK:'jab',
+    tk:new Set(techK(src).k),guard:null,mk:{hand:{L:0,R:0},arm:{L:0,R:0},eye:null,air:0},tq:{},tpT:{},aiT:-1e9,styN:0,grdN:0,para:0,offT:0,
     pos:{x:mine?60:180,y:mine?132:44,tx:mine?60:180,ty:mine?132:44},an:{pose:'guard',t0:0,dur:1,arm:'L'},lastArm:'R',flash:0};
   initBel(x,src,mine);x.bel0={...x.bel};return x;
 }
@@ -2106,8 +2295,9 @@ function distBar(){const el=$('#fDist');if(!el||!F)return;const k=F.dist+F.inRou
    | 'at' (o atleta responde no canto: vê-se no quadro). Tudo fica em F.log (o registo da análise). */
 const LPRI={down:4,flash:4,ko:4,liverS:4,up:3,liverL:3,clean:3,ctr_cross:3,cc_both:3,ant_check:3,wobbly:3,ropes:3,cornered:3,end:3,
   heard:3,heardLate:3,lost:3,deaf:3,slow:2,start:2,tired:2,stagger:2,d_in:2,d_pivot:2,d_pivotC:2,d_clinch:2,d_out:2,tiredRopes:2,ant_jab:2,ant_back:2,
+  t_jolty:4,heart:3,t_smash:3,joltyMiss:3,t_leaping:3,hand:3,handTop:3,eye:3,sty_ch:3,d_lstep:3,d_elbow:3,arm:2,leapMiss:2,t_corkscrew:2,d_roll:2,d_frame:2,d_smother:2,loop:2,snap:2,
   tiring:1.5,wobblyR:1.5,combo:1,clinch:1,circle:1,wait:1,pressure:1,d_keep:1,d_mid:1,center:1,body:1,block:1,catch:1,parry:1,slip:1,pull:1,pend:1,roll:1,back:1,pivot:1,side:1,ctrMiss:1,antMiss:1};
-function lpri(ty){if(!ty)return null;if(LPRI[ty]!=null)return LPRI[ty];if(ty.startsWith('ctr_'))return 3;if(ty.startsWith('hit_'))return 1;if(ty.startsWith('v_'))return 1.5;return null}
+function lpri(ty){if(!ty)return null;if(LPRI[ty]!=null)return LPRI[ty];if(ty.startsWith('ctr_'))return 3;if(ty.startsWith('hit_'))return 1;if(ty.startsWith('v_'))return 1.5;if(ty.startsWith('t_')||ty.startsWith('g_'))return 2;return null}
 let LT=null; // última line(): {ty, s}
 function say(t,c,o={}){
   if(!F||!t)return;
@@ -2286,10 +2476,10 @@ function abTick(){ // chamado depois de cada troca
    Opção nas definições: todos / só especiais / desligados (localStorage 'cm-popups'). */
 const POPK='cm-popups';let POPS='all';try{const v=localStorage.getItem(POPK);if(['all','esp','off'].includes(v))POPS=v}catch(e){}
 function setPops(v){POPS=v;try{localStorage.setItem(POPK,v)}catch(e){}}
-const POPW={block:'BLOQUEIO',catch:'BLOQUEIO',parry:'APARA',slip:'ESQUIVA',slipIn:'ESQUIVA',slipOut:'ESQUIVA',pull:'ESQUIVA',pend:'BAIXA',roll:'OMBRO',back:'PÉS',side:'PÉS',pivot:'PIVÔ',clinch:'CLINCH'};
+const POPW={block:'BLOQUEIO',catch:'BLOQUEIO',parry:'APARA',slip:'ESQUIVA',slipIn:'ESQUIVA',slipOut:'ESQUIVA',pull:'ESQUIVA',pend:'BAIXA',roll:'OMBRO',back:'PÉS',side:'PÉS',pivot:'PIVÔ',clinch:'CLINCH',snap:'ESQUIVA'};
 function pop(x,t,sp){
   if(!F||!t||window.__SIM||POPS==='off'||(POPS==='esp'&&!sp))return;
-  const q=F.pq||(F.pq=[]);F.npop=F.npop||{n:0,s:0};F.npop[sp?'s':'n']++;
+  const q=F.pq||(F.pq=[]);F.npop=F.npop||{n:0,s:0};F.npop[sp?'s':'n']++;(F.pl||(F.pl=[])).push(t);if(F.pl.length>300)F.pl.shift();
   if(!sp&&q.filter(p=>!p.sp).length>=2)return; // a rotina não se acumula
   q.push({x,t,sp:!!sp});
   while(q.length>4){const i=q.findIndex(p=>!p.sp);q.splice(i>=0?i:0,1)}
@@ -2431,14 +2621,6 @@ async function ceremony(){
     await sleep(4800);
   }else{F.ref.pose='stand';act(win,'celebrate',99999);await sleep(win.mine?2400:1600)}
 }
-function opSwitch(){
-  const op=F.op,me=F.me,tier=F.a.tier;if(tier<2||!op.sty)return;
-  const cur=edge(op.style,me.style);if(!(op.card<me.card||cur<0))return;
-  if(Math.random()>[0,0,.4,.6][tier])return;
-  const opts=STYLES.filter(x=>x!==op.style&&styleLv(op,x)>=2&&edge(x,me.style)>cur).sort((p,q)=>edge(q,me.style)-edge(p,me.style)||styleLv(op,q)-styleLv(op,p));
-  if(!opts.length)return;op.style=opts[0];op.slv=styleLv(op,op.style);
-  say(`O canto de ${op.nick} mexe-se: ele muda para ${op.style}!`,'sys',{p:3});
-}
 /* ---- ordens do canto durante o round ----
    Gritas uma estratégia e o treinador continua a gritá-la até o atleta "ouvir". A cada momento o atleta vai percebendo
    a ordem a um ritmo que depende do estado em que está AGORA (cansaço, vida perdida, quedas neste round): fresco ouve
@@ -2537,6 +2719,7 @@ async function runFight(){
     if(F.round===1){const fm=F.me.form||0;if(fm>=.3)say(`${F.me.nick} entra em grande forma, muito solto.`,'sys',{p:1.5});else if(fm<=-.3)say(`${F.me.nick} parece pesado hoje...`,'sys',{p:1.5})}
     if(F.crew)setCrew('round');act(F.me,'guard',1);act(F.op,'guard',1);
     setT(F.me,98,88);setT(F.op,142,88);F.refLock=false;F.zone='center';F.zp=null;F.ctl=null;F.dw=null;F.dist='meio';
+    for(const x of[F.me,F.op])styleAI(x,true); // cada um escolhe o estilo e a guarda para este round (3A-3)
     for(const x of[F.me,F.op]){x.wobbly=x.wob2||0;x.wob2=0} // pernas bambas: o que sobra depois do intervalo
     await waitArrive(3000);F.ft=0;F.dT=0;if(!F.over){F.inRound=true;roundCtl()}hud();
     while(F.ft<60000&&!F.over){await exchange();if(F.over)break;await fsleep(R(450,950)/((fmods(F.me).vol+fmods(F.op).vol)/2))}
@@ -2547,7 +2730,7 @@ async function runFight(){
     toCorners();
     await waitArrive(2500);if(!F.over&&F.round<F.rounds){act(F.me,'sit',99999);act(F.op,'sit',99999);if(F.crew)setCrew('break')}
     await fsleep(400,false);
-    if(F.round<F.rounds){const c=await corner();if(c==='towel'){F.over={win:false,how:'toalha'};say(`Atiras a toalha. ${F.me.nick} está salvo, mas perde.`,'sys',{p:3});break}if(F.over)break;opSwitch();await preTalk(true)}
+    if(F.round<F.rounds){const c=await corner();if(c==='towel'){F.over={win:false,how:'toalha'};say(`Atiras a toalha. ${F.me.nick} está salvo, mas perde.`,'sys',{p:3});break}if(F.over)break;await preTalk(true)}
   }
   if(!F.over){
     const a=F.me.card,b=F.op.card;
@@ -2680,7 +2863,7 @@ function styleOptions(op){
 function preTalk(mid){
   return new Promise(res=>{
     const{me,op}=F;const a=F.a,o=a.fight.opp;
-    let disadv=edge(me.style,op.style)<0;let fsty=me.style;
+    let disadv=edge(me.style,op.style)<0; // o estilo escolhe-o o atleta sozinho, na luta (3A-3)
     F.usedQ=F.usedQ||[];
     let kind,question,opts,sit=null;
     if(!mid){
@@ -2699,14 +2882,12 @@ function preTalk(mid){
     say(mid?question:pick(INTROS)(me.nick),'sys');
     const draw=()=>{
       $('#fctl').innerHTML=(mid?`<h3>PALAVRA NO CANTO · PARA O ROUND ${F.round+1}${kind==='style'?' · TÁTICA DE ESTILO':''}</h3>`:`<h3>1 · ESTRATÉGIA · ${op.nick.toUpperCase()} É ${op.style.toUpperCase()}</h3>
-      ${STYLES.filter(st=>styleLv(a,st)>0).length>1?`<div class="cseg">${STYLES.filter(st=>styleLv(a,st)>0).map(st=>`<button class="btn ${fsty===st?'on':''}" data-fs="${st}">${st.toUpperCase()} ${styleLv(a,st)}${edge(st,op.style)>0?' ▲':edge(st,op.style)<0?' ▼':''}</button>`).join('')}</div>`:''}
       <div class="cseg">${Object.keys(STRAT).map(k=>`<button class="btn ${strat===k?'on':''}" data-s0="${k}">${k.toUpperCase()}</button>`).join('')}</div>
       <h3>2 · ${question.toUpperCase()}</h3>`)+`
       <div class="tks">${opts.map((x,i)=>`<button data-tk="${i}"><strong>${x.n.toUpperCase()}</strong><span>"${x.t}"</span></button>`).join('')}</div>`;
       $('#fctl').querySelectorAll('[data-s0]').forEach(b=>b.onclick=()=>{strat=b.dataset.s0;draw()});
-      $('#fctl').querySelectorAll('[data-fs]').forEach(b=>b.onclick=()=>{fsty=b.dataset.fs;draw()});
       $('#fctl').querySelectorAll('[data-tk]').forEach(b=>b.onclick=()=>{
-        const x=opts[+b.dataset.tk];me.strat=strat;if(!mid){me.style=fsty;me.slv=Math.max(1,styleLv(a,fsty));a.fstyle=fsty}disadv=edge(me.style,op.style)<0;
+        const x=opts[+b.dataset.tk];me.strat=strat;disadv=edge(me.style,op.style)<0;
         let lvl=x.lvl,why='';
         if(lvl>0&&x.need&&!attrOk(a,o,x.need)){lvl=lvl===1?.5:0;why='attr'}
         if(lvl>0&&Math.random()<TUNE.stubTalk*stubP(a)){lvl=lvl===1?.5:0;why='teimoso'}
@@ -2800,8 +2981,8 @@ function mom(x){
     hf:clamp((70-st)/50,0,1),hh:clamp((60-hp)/45,0,1)}; // ouvir o canto (hearFactors)
 }
 function E(x,k){const v=x[k]??(k==='queixo'?50:20);return v*mom(x)[k]}
-function stWords(x){ // palavras de estado (2.10): só quando algo desce muito
-  const m=mom(x),w=[];
+function stWords(x){ // palavras de estado (2.10): primeiro as marcas da luta (ficam até ao fim), depois o que desce muito e recupera
+  const m=mom(x),w=mkWords(x);
   if(m.pes<=TUNE.wPes)w.push('SEM PERNAS');
   if(m.velocidade<=TUNE.wVel)w.push('MÃOS LENTAS');
   if(m.queixo<=TUNE.wQx||m.iq<=TUNE.wIq||m.wob)w.push('ABANADO');
@@ -2817,8 +2998,77 @@ function stWhy(x,ws){ // uma frase curta para o canto
   if(has('SEM GUARDA'))return me?'Sem guarda: chega-se-lhe à cabeça.':'Abre a guarda: chega-lhe à cabeça.';
   return me?'Mãos lentas: acerta menos.':'Mãos lentas: acerta menos.';
 }
+/* ---- marcas da luta (3A-3): ficam até ao fim. x.mk = {hand:{L,R} vezes que magoou a mão, arm:{L,R} cotoveladas aguentadas, eye: lado do olho
+   fechado ('L'|'R'), air: sem ar depois do fígado ou do coração}. MÃO MAGOADA: os golpes dessa mão perdem força (mais com várias vezes) e usa-a menos.
+   BRAÇO DORIDO: golpes desse braço um pouco mais fracos. OLHO FECHADO: defende pior os golpes que vêm desse lado; o médico pode parar. SEM AR: o fôlego
+   recupera mais devagar (canto, clinch). ---- */
+function mkWords(x){const m=x&&x.mk,w=[];if(!m)return w;if(m.hand.L||m.hand.R)w.push('MÃO MAGOADA');if(m.arm.L>=TUNE.armN||m.arm.R>=TUNE.armN)w.push('BRAÇO DORIDO');if(m.eye)w.push('OLHO FECHADO');if(m.air)w.push('SEM AR');return w}
+function armK(x,arm){const m=x.mk;if(!m)return 1;return(1-TUNE.handD*Math.min(2,m.hand[arm]||0))*((m.arm[arm]||0)>=TUNE.armN?TUNE.armD:1)}
+function hurtHand(x,arm,why){const m=x.mk;if(!m)return;m.hand[arm]=(m.hand[arm]||0)+1;if(m.hand[arm]<=2)say(line(why==='top'?'handTop':'hand',{x:x.nick}),x.mine?'bad':'')}
+function elbowHit(att,def,arm){ // o golpe bate no cotovelo: quem bate pode magoar a mão; quem defende vai ficando com o braço dorido
+  if(hasT(def,'elbow')){tUse(def,'elbow',1);tPop(def,'elbow')}say(line('d_elbow',{a:att.nick,d:def.nick}));if(Math.random()<TUNE.elbHand)hurtHand(att,arm,'elbow');
+  const s=arm==='L'?'R':'L',m=def.mk;m.arm[s]=(m.arm[s]||0)+1;if(m.arm[s]===TUNE.armN)say(line('arm',{x:def.nick}),def.mine?'bad':'')}
+function eyeChk(x,side){if(x.mk&&!x.mk.eye&&x.cut>=2&&Math.random()<TUNE.eyeP){x.mk.eye=side;say(line('eye',{x:x.nick}),x.mine?'bad':'')}}
+/* ---- técnicas na luta (3A-3): x.tk = Set das técnicas que sabe; x.tq[id] = [usou, resultou] (análise); tPop = pop-up especial (um por técnica
+   a cada tPopGap ms de luta); figP = regra do fígado (com a técnica tFig × afinidade; sem ela tRare). ---- */
+function tUse(x,id,ok){if(!x.tq)return;const q=x.tq[id]||(x.tq[id]=[0,0]);q[0]++;if(ok)q[1]++}
+function tPop(x,id,w){const T=x.tpT||(x.tpT={}),c=fclock();if(T[id]!=null&&c-T[id]<TUNE.tPopGap)return false;T[id]=c;pop(x,w||TECH[id].pop,true);return true}
+function figP(x,id){return hasT(x,id)?TUNE.tFig*tq(x,id):TUNE.tRare}
+function techPick(x,o,k,tgt,i){ // técnica que muda este golpe (null = golpe normal)
+  if(!x.tk||!x.tk.size)return null;const d=F.dist,body=tgt==='body',C=[];
+  if(k==='jab'&&!body&&d!=='perto'){if(hasT(x,'flicker'))C.push('flicker');if(hasT(x,'powerjab'))C.push('powerjab')}
+  if((k==='jab'||k==='direto')&&hasT(x,'corkscrew')&&d!=='perto')C.push('corkscrew');
+  if((k==='ganchoF'||k==='ganchoT')&&d!=='longe'&&hasT(x,'shovel'))C.push('shovel');
+  if(k==='ganchoF'&&!body&&d!=='longe'&&hasT(x,'pivothook'))C.push('pivothook');
+  if((k==='upperT'||k==='ganchoT')&&!body&&d!=='longe'&&hasT(x,'smash'))C.push('smash');
+  if((k==='upperF'||k==='upperT')&&!body&&d==='meio'&&i===0&&hasT(x,'leaping'))C.push('leaping'); // a entrar da meia distância, baixo
+  if(!C.length)return null;const id=pick(C);
+  let p=TUNE.tUse*tq(x,id);if(id==='flicker'&&x.guard==='philly')p*=1.5;if(id==='leaping'&&x.guard==='peek')p*=1.5;if(id==='flicker'&&d==='longe')p*=1.3;
+  return Math.random()<p?id:null}
+function guardHit(d,k,body){ // a guarda de quem defende mexe na hipótese de lhe acertarem
+  const g=d.guard;if(!g)return 0;const q=tq(d,g);
+  if(g==='peek')return -TUNE.gPkH*q*clamp(d.st/100,0,1);                  // o bónus vai-se com o cansaço
+  if(g==='philly')return SKILLS[k].arm==='R'&&!body?TUNE.gPhR:-.01*q;      // exposto à mão de trás à cabeça
+  if(g==='longg')return F.dist==='perto'?TUNE.gLgP:F.dist==='longe'?-TUNE.gLgP*q:0;
+  return 0}
+function guardW(x,f){const g=x.guard;return g==='philly'?(f==='ombro'?TUNE.gPhO:1):g==='peek'?(f==='bloqueio'||f==='cabeca'?1.3:1):g==='longg'?(f==='aparar'?1.3:f==='pes'?1.2:1):g==='crossg'?(f==='bloqueio'?1.6:1):1}
+function defE(x,f,cls){if(f==='aparar'&&cls!=='reto'&&hasT(x,'loopparry'))return Math.max(DEFS.aparar.E[cls],TUNE.loopE[cls]||0);if(f==='bloqueio'&&cls==='body'&&x.guard==='crossg')return .9;return DEFS[f].E[cls]}
+/* ---- o atleta escolhe sozinho o estilo e a guarda (3A-3) ----
+   Entre os estilos em que tem nível (≥ 1) e as guardas que sabe (sem nenhuma, a guarda alta base), conforme o estilo do adversário (triângulo), a
+   distância, o seu estado e o Ring IQ: com muito Ring IQ escolhe bem e muda quando é preciso; com pouco teima no que está a fazer e erra mais.
+   Repensa no início de cada round e, de vez em quando, a meio (aiP; mais quando a distância muda; no mínimo aiGap segundos de relógio entre mudanças).
+   Vale para os dois lutadores. O jogador fica com as estratégias e as ordens do canto. */
+function styleVal(x,o,s,iq){const lv=styleLv(x,s);return .5*lv+1.6*edge(s,o.style)*(.35+.65*clamp((lv-1)/4,0,1))*(.3+.7*iq)+(DPREF[s]===F.dist?.2:0)+(x.st<35&&s==='Outboxer'?.2:0)}
+function guardVal(x,o,g){
+  if(!g)return .15;let v=.3*tq(x,g)+(TECH[g].sty===x.style?.25:0);
+  if(g==='peek')v+=(F.dist==='perto'||DPREF[x.style]==='perto'?.5:-.2)-(x.st<40?.6:0);
+  if(g==='longg')v+=(F.dist==='longe'||DPREF[x.style]==='longe'?.5:-.2)-(F.dist==='perto'?.5:0);
+  if(g==='crossg')v+=(o.style==='Puncher'?.35:0)+(x.hp<50?.35:0)+(F.dist!=='longe'?.1:0);
+  if(g==='philly')v+=(o.style==='Outboxer'?.3:o.style==='Puncher'?-.3:0)+.4*clamp((E(x,'iq')-30)/50,0,1);
+  return v}
+function aiPick(opts,val,cur,iq){const nz=(1-iq)*.4,st=.15+(1-iq)*.9;let best=cur,bv=-1e9;for(const s of opts){const v=val(s)+(s===cur?st:0)+R(-nz,nz);if(v>bv){bv=v;best=s}}return best}
+function styleAI(x,force,more){
+  if(!F||F.over)return;const o=otherOf(x);
+  const iq=clamp(E(x,'iq')/80,0,1);let ch=false; // com pouco Ring IQ repensa menos vezes (teima)
+  if(force?Math.random()>.35+.65*iq:(fclock()-(x.aiT||-1e9)<TUNE.aiGap*1000/3||Math.random()>TUNE.aiP*(more?4:1)*(.2+.8*iq)))return;
+  const sts=STYLES.filter(s=>styleLv(x,s)>=1);
+  if(sts.length>1){const s=aiPick(sts,s=>styleVal(x,o,s,iq),x.style,iq);
+    if(s!==x.style){x.style=s;x.slv=Math.max(1,styleLv(x,s));ch=true;x.styN++;pop(x,s.toUpperCase());say(line('sty_ch',{x:x.nick,s}),x.mine?'me':'')}}
+  const gs=[null,...[...(x.tk||[])].filter(k=>TECH[k].k==='grd')];
+  if(gs.length>1){const g=aiPick(gs,g=>guardVal(x,o,g),x.guard,iq);
+    if(g!==x.guard){x.guard=g;ch=true;x.grdN++;pop(x,g?TECH[g].pop:'GUARDA ALTA');say(line(g?'g_'+g:'g_base',{x:x.nick}),x.mine?'me':'')}}
+  if(ch||force)x.aiT=fclock();
+}
 function pesEff(x){return clamp(x.pes??20,1,100)*mom(x).pes} // Pés que contam agora (5.4): fôlego, dor e pernas bambas (mom)
-function ringPow(x){return pesEff(x)+TUNE.dIQ*clamp(E(x,'iq'),0,100)+TUNE.dStrat*((STRAT[x.strat]||STRAT.Equilibrado).agg-.5)*100}
+function ringPow(x,role){ // role: 'cl' quer encurtar, 'kp' quer afastar; a long guard ajuda a manter longe, o peek-a-boo a entrar
+  let g=0;if(role==='kp'&&x.guard==='longg')g=TUNE.gLgR*tq(x,'longg');if(role==='cl'&&x.guard==='peek')g=TUNE.gPkR*tq(x,'peek')*clamp(x.st/100,0,1);
+  return pesEff(x)+TUNE.dIQ*clamp(E(x,'iq'),0,100)+TUNE.dStrat*((STRAT[x.strat]||STRAT.Equilibrado).agg-.5)*100+g}
+function tryLstep(x){ // L-step (regra do fígado): recua e sai de lado, volta ao centro; deixa o outro mal posicionado; gasta fôlego, falha com cansaço
+  if(x.wobbly>F.ft)return false;const h=hasT(x,'lstep');
+  const p=(h?TUNE.lsK*tq(x,'lstep'):TUNE.lsNo)*clamp(pesEff(x)/Math.max(1,x.pes??20),0,1)*clamp(x.st/60,.2,1);
+  if(Math.random()>=p)return false;
+  const o=otherOf(x);x.st=clamp(x.st-TUNE.lsSt,0,100);F.zone='center';F.zp=null;F.ctl=x;o.offT=F.ft+TUNE.lsOff;x.dx.esc.pes++;
+  if(h){tUse(x,'lstep',1);tPop(x,'lstep')}say(line('d_lstep',{x:o.nick,y:x.nick}),x.mine?'me':'');return true}
 function newDX(){return{d:{longe:0,meio:0,perto:0},z:{centro:0,cordas:0,canto:0},ctl:0,xw:{longe:0,meio:0,perto:0},ant:[0,0],cc:[0,0,0],ang:[0,0],clo:[0,0],esc:{pes:0,clinch:0,bater:0},wob:[0,0]}}
 function distTick(){ // conta o tempo (segundos de relógio) de cada um em cada distância e sítio do ringue
   if(!F||!F.inRound)return;const dt=Math.max(0,F.ft-(F.dT||0));F.dT=F.ft;if(!dt)return;const s=dt*3/1000;
@@ -2834,35 +3084,40 @@ function zoneOut(prey){ // empurrado: centro → cordas → canto
 function zoneIn(){F.zone=F.zone==='corner'?'ropes':'center';if(F.zone==='center'){F.zp=null;F.ctl=null}}
 function antKey(x){const j=x.skills.jab>0,g=x.skills.ganchoF>0;if(F.dist==='longe')return j?'jab':null;return g&&(!j||Math.random()<.6)?'ganchoF':j?'jab':null}
 function antP(x,o,k){ // 4.2: apanhá-lo a entrar. Ring IQ, Velocidade, Pés, nível e crença no jab / gancho da frente
-  if(!k||x.hunch>F.ft)return 0;const lv=x.skills[k]||1;
+  if(!k||x.hunch>F.ft||x.para>F.ft)return 0;const lv=x.skills[k]||1;
   return TUNE.antK*(.5+clamp(E(x,'iq'),0,100)/100)*(.6+E(x,'velocidade')/125)*(.6+pesEff(x)/125)*(.7+.15*lv)*clamp(belOf(x,k)/Math.max(1,lv),.4,1.3)*mom(x).lowK;
 }
 async function ringStep(){
   const{me,op}=F;let di=DI[F.dist],ev=null,cl=null,kp=null;const pm=prefD(me),po=prefD(op);F.dw=null;
   if(pm===po){ // querem a mesma distância: vão para lá, com um pouco de vaivém; ninguém disputa
     if(di!==pm&&Math.random()<.75)di+=Math.sign(pm-di);else if(Math.random()<.15)di=clamp(di+(Math.random()<.5?1:-1),0,2);
-    if(F.zone==='center'){if(Math.random()<TUNE.zDrift){const a=ringPow(me),b=ringPow(op),w=Math.random()<a/(a+b)?me:op;cl=w;kp=otherOf(w);zoneOut(kp);ev='push'}}
+    if(F.zone==='center'){if(Math.random()<TUNE.zDrift){const a=ringPow(me),b=ringPow(op),w=Math.random()<a/(a+b)?me:op;cl=w;kp=otherOf(w);if(tryLstep(kp))ev='lstep';else{zoneOut(kp);ev='push'}}}
     else{const p=F.zp,q=otherOf(p);cl=q;kp=p;if(Math.random()<TUNE.zEsc*pesEff(p)/(pesEff(p)+pesEff(q))*(F.zone==='corner'?.7:1)){zoneIn();p.dx.esc.pes++;ev='esc'}}
   }else{
     cl=pm>po?me:op;kp=otherOf(cl); // cl quer mais perto; kp quer mais longe
-    let p=.5+(ringPow(cl)-ringPow(kp))/TUNE.dDiv;
+    let p=.5+(ringPow(cl,'cl')-ringPow(kp,'kp'))/TUNE.dDiv;
     if(F.zone!=='center')p+=(F.zp===kp?1:-1)*(F.zone==='corner'?TUNE.dCorn:TUNE.dRope);
     p=clamp(p,TUNE.dMin,1-TUNE.dMin);
     const win=Math.random()<p?cl:kp;F.dw=win;const tgt=prefD(win);
     if(win===cl){
-      const k=di<tgt?antKey(kp):null;
-      if(k&&Math.random()<antP(kp,cl,k)){ // antecipação: tenta apanhá-lo a entrar
-        kp.dx.ant[0]++;const back=k==='jab'&&(F.zp===kp||F.dist!=='longe');
-        const r=await punch(kp,cl,k,kp.strat,1.1,true,0,{tgt:'head',ant:1,ln:k==='jab'?(back?'ant_back':'ant_jab'):'ant_check',noCC:true});if(F.over)return;
-        if(r==='hit'||r==='clean'){kp.dx.ant[1]++;F.dw=kp;ev='ant'}
+      const k=di<tgt?antKey(kp):null,back=k==='jab'&&(F.zp===kp||F.dist!=='longe');
+      const tid=k==='ganchoF'?'checkhook':back?'jabback':null,th=tid&&hasT(kp,tid); // check hook e jab de recuo: regra do fígado (3A-3)
+      if(k&&Math.random()<antP(kp,cl,k)*(tid?figP(kp,tid):1)*(kp.guard==='longg'?1.25*tq(kp,'longg'):1)){ // antecipação: tenta apanhá-lo a entrar
+        kp.dx.ant[0]++;
+        const r=await punch(kp,cl,k,kp.strat,1.1,true,0,{tgt:'head',ant:1,ln:k==='jab'?(back?(th?'t_jabback':'ant_back'):'ant_jab'):'ant_check',noCC:true,aq:tid?(th?.04:-TUNE.tRareQ):0});if(F.over)return;
+        const ok=r==='hit'||r==='clean';if(th){tUse(kp,tid,ok);if(ok&&tid==='jabback')tPop(kp,tid)}
+        if(ok){kp.dx.ant[1]++;F.dw=kp;ev='ant';if(th&&tid==='checkhook'&&F.zp===kp&&F.zone!=='center'){zoneIn();kp.dx.esc.bater++}} // o check hook roda para fora: fica no centro
         else{di++;ev='in';if(Math.random()<.4&&lineOk('antMiss',10000))say(line('antMiss',{a:kp.nick,d:cl.nick}))}
       }else if(F.zone!=='center'&&F.zp===cl){zoneIn();if(di<tgt)di++} // o que quer perto estava encostado: sai a andar para a frente
-      else{const was=di;if(di<tgt)di++;if(Math.random()<TUNE.zPush){zoneOut(kp);ev='push'}else ev=di>was?'in':null}
+      else{const was=di;if(di<tgt)di++;if(Math.random()<TUNE.zPush){if(tryLstep(kp)){ev='lstep';di=Math.min(di,1)}else{zoneOut(kp);ev='push'}}else ev=di>was?'in':null}
     }else{
       if(di>tgt)di--;
-      if(F.zone!=='center'&&F.zp===kp){if(Math.random()<TUNE.zEsc*(F.zone==='corner'?.7:1)){const c=F.zone==='corner';zoneIn();kp.dx.esc.pes++;ev=c?'escC':'esc'}else ev='stuck'}
+      if(F.zone!=='center'&&F.zp===kp){if(Math.random()<TUNE.zEsc*(F.zone==='corner'?.7:1)){const c=F.zone==='corner';zoneIn();kp.dx.esc.pes++;ev=c?'escC':'esc'}else if(tryLstep(kp)){ev='lstep';di=Math.min(di,1)}else ev='stuck'}
       else ev='keep';
     }
+    if(di===2&&DI[F.dist]<2&&kp.def&&F.zone==='center'){ // framing (regra do fígado): afasta quem se cola e volta à meia distância
+      const h=hasT(kp,'framing'),pf=(h?TUNE.frK*tq(kp,'framing'):TUNE.frNo)*clamp(pesEff(kp)/Math.max(1,kp.pes??20),.3,1);
+      if(Math.random()<pf){di=1;ev='frame';if(h){tUse(kp,'framing',1);tPop(kp,'framing')}say(line('d_frame',{x:cl.nick,y:kp.nick}),kp.mine?'me':'')}}
   }
   if(F.zone==='corner'&&Math.random()<TUNE.cornPerto)di=2; // no canto é quase sempre perto
   else if(F.zone==='ropes'&&di===0&&Math.random()<.6)di=1; // nas cordas não há espaço para ficar longe
@@ -2911,8 +3166,9 @@ async function footwork(){
   await waitArrive(2400);await fsleep(R(150,400)+R(.5,1.5)*TUNE.fwT); // fwT: tempo a estudar-se/andar à volta (o ritmo de trocas por round fica como antes do A3)
 }
 async function exchange(){
-  const{me,op}=F;
+  const{me,op}=F,dP=F.dist;
   await footwork();if(F.over)return;
+  for(const x of[me,op])styleAI(x,false,F.dist!==dP); // o atleta repensa o estilo e a guarda de vez em quando (3A-3)
   const d0=F.dist,m0=me.tot.dmg,o0=op.tot.dmg;
   {const cl=x=>(x.def&&x.def.clinch)||0;const need=x=>cl(x)>0&&(x.st<=30||x.hp<35);const lv=Math.max(cl(me),cl(op));
    if(lv>0&&Math.random()<((need(me)||need(op))?.14+.02*lv:.04+.01*lv)*distFit('clinch',F.dist)){await clinch(need(me)&&need(op)?pick([me,op]):need(me)?me:need(op)?op:cl(me)>cl(op)?me:cl(op)>cl(me)?op:pick([me,op]));return}}
@@ -2920,7 +3176,7 @@ async function exchange(){
   if(Math.random()<TUNE.stubFight*stubP(me)*(me.calm?.4:1))myStrat='Pressão';
   const aM=STRAT[myStrat].agg*(me.style==='In-fighter'?1+TUNE.sagg:me.style==='Outboxer'?1-TUNE.sagg:1)*fmods(me).vol*finM(me,op);
   const aO=STRAT[op.strat].agg*(op.style==='In-fighter'?1+TUNE.sagg:op.style==='Outboxer'?1-TUNE.sagg:1)*fmods(op).vol*finM(op,me);
-  const hM=me.hunch>F.ft,hO=op.hunch>F.ft; // curvado depois de um gancho ao fígado: não ataca
+  const hM=me.hunch>F.ft||me.para>F.ft,hO=op.hunch>F.ft||op.para>F.ft; // curvado depois de um gancho ao fígado (ou parado pelo golpe ao coração): não ataca
   const att=hM!==hO?(hM?op:me):Math.random()<aM/(aM+aO)?me:op,def=att===me?op:me;F.sx[me.strat]=(F.sx[me.strat]||0)+1;
   const strat=att===me?myStrat:att.strat;
   const u=unit(def,att);
@@ -2935,7 +3191,7 @@ async function exchange(){
     let k,tgt;
     if(seq){const[sk,b]=seq[i].split('@');k=sk;tgt=b==='b'?'body':b==='h'?'head':chooseTarget(att,def,k)}else{k=choosePunch(att,i);tgt=chooseTarget(att,def,k)}
     thrown.push(k);
-    const res=await punch(att,def,k,strat,1,i===n-1,seq&&i>0?.06:0,{tgt,first:i===0&&!seq,ci:i});
+    const res=await punch(att,def,k,strat,1,i===n-1,seq&&i>0?.06:0,{tgt,first:i===0&&!seq,ci:i,tk:techPick(att,def,k,tgt,i)});
     if(F.over)return;
     if(res==='cc')break; // apanhado pelo cross-counter
     if(res==='hit'||res==='clean')landed++;
@@ -2944,7 +3200,8 @@ async function exchange(){
       if(fam==='pes'&&(sub==='pivot'||sub==='side')&&F.zp===def&&F.zone!=='center'&&Math.random()<.5){const c=F.zone==='corner';zoneIn();def.dx.esc.pes++;say(line(c?'d_pivotC':'d_pivot',{x:att.nick,y:def.nick}),def.mine?'me':'')} // sai das cordas com os pés
       else if(fam==='pes'&&sub==='back'&&F.dist!=='longe'&&Math.random()<.35)F.dist=DN[DI[F.dist]-1]; // recuar abre distância
       const ck=fam?ctrPick(def,sub,k):null;
-      if(ck&&Math.random()<ctrChance(def,att,fam,ck.k)){const r=await punch(def,att,ck.k,def.strat,TUNE.ctrDmg,true,0,{tgt:ck.tgt,ctr:fam,sub,ang:fam==='pes'});if(F.over)return;
+      const pc=ck?Math.min(.6,ctrChance(def,att,fam,ck.k,sub==='catch'?TUNE.ctrApa*TUNE.caC:undefined)*(sub==='snap'?TUNE.snC:1)):0; // catch e snap back: counters muito mais vezes
+      if(ck&&Math.random()<pc){const r=await punch(def,att,ck.k,def.strat,TUNE.ctrDmg,true,0,{tgt:ck.tgt,ctr:fam,sub,ang:fam==='pes'});if(F.over)return;
         if(fam==='pes'){def.dx.ang[0]++;if(r==='hit'||r==='clean')def.dx.ang[1]++}if(Math.random()<.5)break}
       else if(fam==='pes'&&Math.random()<TUNE.pesBrk)break; // os Pés evitam a combinação inteira
       else if(fam==='bloqueio'&&Math.random()<.35)break;
@@ -2965,9 +3222,14 @@ async function clinch(who){
   act(me,'clinch',1700);act(op,'clinch',1700);pop(who||me,'CLINCH');say(line('clinch',{a:who===me?op.nick:me.nick,d:(who||me).nick}));
   {const mx=(me.pos.x+op.pos.x)/2,my=(me.pos.y+op.pos.y)/2,sd=Math.sign((F.ref.x-mx)*(-u.dy)+(F.ref.y-my)*u.dx)||1;F.refLock=true;F.ref.tx=mx-u.dy*sd*17;F.ref.ty=my+u.dx*sd*17}
   await fsleep(1300);
+  for(const y of shuffle([me,op])){if(F.over||!hasT(y,'tieup')||Math.random()>=TUNE.tuK*tq(y,'tieup'))continue; // tie-up: amarra um braço e bate com a outra mão
+    const ks=['upperT','ganchoT','upperF','ganchoF'].filter(k=>y.skills[k]>0);if(!ks.length)continue;const o=otherOf(y);
+    for(let n=0;n<RI(1,2)&&!F.over;n++){const r=await punch(y,o,pick(ks),y.strat,.75,n===0,0,{tgt:Math.random()<.5?'body':'head',noCC:true,tie:1,ln:n===0?'t_tieup':undefined});tUse(y,'tieup',r==='hit'||r==='clean');if(r==='hit'||r==='clean')tPop(y,'tieup')}
+    act(me,'clinch',600);act(op,'clinch',600)}
+  if(F.over)return;
   setT(me,me.pos.x+u.dx*14,me.pos.y+u.dy*14);setT(op,op.pos.x-u.dx*14,op.pos.y-u.dy*14);
   act(me,'guard',1);act(op,'guard',1);F.refLock=false;
-  for(const x of[me,op])x.st=clamp(x.st+(x===who?4+2*((x.def&&x.def.clinch)||0):3),0,100);
+  for(const x of[me,op])x.st=clamp(x.st+(x===who?4+2*((x.def&&x.def.clinch)||0):3)*(x.mk&&x.mk.air?.5:1),0,100); // SEM AR: recupera menos
   if(who&&F.zp===who&&F.zone!=='center'&&Math.random()<.5){zoneIn();who.dx.esc.clinch++;say(line('d_clinch',{x:otherOf(who).nick,y:who.nick}))} // sai das cordas no clinch
   await fsleep(420);if(F.over)return;
   if(who&&(who.def.clinch||0)>0){const o=otherOf(who),ck=ctrPick(who,'clinch','clinch'); // 3.3: ao separar, sai a bater com gancho/uppercut curto
@@ -2981,7 +3243,7 @@ async function clinch(who){
 function choosePunch(x,i){
   const ks=PKEYS.filter(k=>x.skills[k]>0);
   if(i===0&&x.skills.jab>0&&Math.random()<(x.style==='Outboxer'?.75:x.style==='In-fighter'?.35:.5)*(F.dist==='longe'?1.2:F.dist==='perto'?.4:1))return 'jab'; // longe vive-se do jab; perto quase não
-  const W=PW[x.style]||PW.Puncher;return wpick(ks,k=>W[k]*bf(belOf(x,k))*distFit(k,curDist()));
+  const W=PW[x.style]||PW.Puncher,hd=x.mk&&x.mk.hand;return wpick(ks,k=>W[k]*bf(belOf(x,k))*distFit(k,curDist())*(hd&&hd[SKILLS[k].arm]?.7:1)); // mão magoada: usa-a menos
 }
 const PW={ // peso de cada golpe por estilo: o Outboxer vive do jab e do direto; o In-fighter dos ganchos e uppercuts; o Puncher das mãos de trás
   'Outboxer':{jab:2.2,direto:1.6,ganchoF:.9,ganchoT:.6,upperF:.5,upperT:.5,overhand:.3},
@@ -2993,33 +3255,38 @@ function chooseTarget(att,def,k){ // cabeça ou corpo: estilo, ordem do canto, e
   if(def.hp<40)p*=.5;                                   // magoado: procura a cabeça para acabar
   if(F&&F.rounds>1&&F.round<=F.rounds/2)p*=1.15;        // o corpo trabalha-se cedo
   if(def.st<35)p*=1.2;
+  if(k==='ganchoF'&&hasT(att,'liver'))p+=.15;           // técnica do fígado: procura-o
   return Math.random()<clamp(p,0,.8)?'body':'head';
 }
 function chooseDef(x,o,k,body){
   const cls=body?'body':SKILLS[k].cls,fams=DKEYS.filter(f=>(x.def[f]||0)>0);if(!fams.length)return null;
-  const need=x.st<=35||x.hp<40,read=Math.random()<clamp(TUNE.readB+(E(x,'iq')-30)/150,.25,.92),pref=DSTY[x.style]||{};
-  return wpick(fams,f=>{if(f==='clinch'&&!need)return .04;const E=read?DEFS[f].E[cls]:.55;
-    return E*E*(pref[f]||1)*bf(belOf(x,f))*(f==='clinch'?2.5:1)*((f==='cabeca'||f==='pes')&&x.st<40?.6:1)*(need&&f==='bloqueio'?1.3:1)*distFit(f,curDist())});
+  const need=x.st<=35||x.hp<40,read=Math.random()<clamp(TUNE.readB+(E(x,'iq')-30)/150-(x.guard==='crossg'?TUNE.gCrRd:0),.25,.92),pref=DSTY[x.style]||{}; // guarda cruzada: vê pior
+  return wpick(fams,f=>{if(f==='clinch'&&!need)return .04;const E=read?defE(x,f,cls):.55;
+    return E*E*(pref[f]||1)*bf(belOf(x,f))*(f==='clinch'?2.5:1)*((f==='cabeca'||f==='pes')&&x.st<40?.6:1)*(need&&f==='bloqueio'?1.3:1)*distFit(f,curDist())*guardW(x,f)});
 }
 function subDef(fam,k,body,x){ // a forma concreta da defesa (para o comentador, a animação e o counter)
   const c=SKILLS[k].cls;
+  if(fam==='cabeca'&&!body&&c==='reto'&&hasT(x,'snapback')&&Math.random()<TUNE.snK*tq(x,'snapback'))return 'snap'; // snap back: recua e volta como uma mola
   if(fam==='cabeca')return body?'pull':k==='jab'?(Math.random()<.5?'slipIn':'slipOut'):k==='direto'?(Math.random()<.6?'slip':'pull'):c==='gancho'?'pend':'pull';
   if(fam==='aparar')return 'parry';
-  if(fam==='bloqueio')return k==='jab'&&!body&&Math.random()<.5?'catch':'block';
+  if(fam==='bloqueio')return k==='jab'&&!body&&hasT(x,'catch')?'catch':'block'; // o catch é técnica (3A-3)
   if(fam==='ombro')return 'roll';
   if(fam==='pes')return x&&F.zp===x&&F.zone!=='center'?pick(['pivot','side']):pick(F.dist==='longe'?['back','back','back','pivot','side']:['back','back','pivot','side']); // encostado não há para onde recuar
   return 'clinch';
 }
 function defPow(x,fam,k,body){ // quanto a defesa escolhida tira à hipótese de acertar (negativo = defesa errada para este golpe)
-  let lf=.5+.15*(x.def[fam]||0);const cls=body?'body':SKILLS[k].cls;
+  let lf=.5+.15*(x.def[fam]||0);const cls=body?'body':SKILLS[k].cls,g=x.guard;
+  if(g==='philly'&&fam==='ombro')lf+=TUNE.gPhL*tq(x,g);                                  // Philly shell: shoulder roll e parry com o ombro
+  if(g==='peek'&&(fam==='bloqueio'||fam==='cabeca'))lf+=.1*tq(x,g)*clamp(x.st/100,0,1); // peek-a-boo: vai-se com o cansaço
+  if(g==='crossg'&&fam==='bloqueio')lf+=.1*tq(x,g);
   if(fam==='cabeca')lf*=mom(x).headK;                                                // piora com o cansaço
   if(fam==='pes')lf*=.6+pesEff(x)/100;                                               // usa os Pés que contam agora (fôlego, dor, pernas bambas)
   if(fam==='ombro')lf*=.6+clamp(E(x,'iq'),0,100)/100;                                 // precisa de timing
-  return TUNE.dfK*(DEFS[fam].E[cls]*lf-TUNE.dfE0);
+  return TUNE.dfK*(defE(x,fam,cls)*lf-TUNE.dfE0);
 }
 function ctrPick(x,sub,k){ // tabela 3.3 do Guia: o golpe de resposta (se não o souber, a alternativa; senão não há counter)
   const T={slipIn:[['direto'],['overhand']],slipOut:[['ganchoT','upperT'],null,'body'],slip:[['ganchoF'],['upperF']],pull:[['direto'],['jab']],
-    catch:[['jab','direto']],parry:[['jab','direto']],roll:[['direto'],['overhand']],
+    catch:[['jab','direto']],parry:[['jab','direto']],roll:[['direto'],['overhand']],snap:[['direto'],['jab']],
     pend:k==='ganchoF'?[['ganchoF','upperF']]:[['ganchoT','upperT']],
     block:k==='ganchoF'?[['ganchoT']]:k==='ganchoT'||k==='overhand'?[['ganchoF']]:null,
     pivot:[['ganchoF','direto'],['jab']],side:[['ganchoF','direto'],['jab']],  // Pés: ataque de ângulo, com ele virado
@@ -3031,18 +3298,17 @@ function ctrPick(x,sub,k){ // tabela 3.3 do Guia: o golpe de resposta (se não o
 function ctrChance(x,o,fam,ck,b0){ // cabeça e ombro abrem mais; aparar e pés médio; bloqueio e clinch pouco. Ring IQ, Técnica, nível, confiança
   const base=b0??({cabeca:TUNE.ctrCab,ombro:TUNE.ctrOmb,aparar:TUNE.ctrApa,pes:TUNE.ctrPes,bloqueio:TUNE.ctrBlq,clinch:TUNE.ctrCl}[fam]||0);
   return Math.min(TUNE.ctrMax,base*(.55+.15*(x.def[fam]||0))*(.6+clamp(E(x,'iq'),0,100)/100)*(.8+E(x,'tecnica')/250)*(.85+(x.conf??50)/330)*clamp(belOf(x,ck)/Math.max(1,x.skills[ck]||1),.4,1.3)
-    *(x.style!=='In-fighter'?1.15:1)*(o.style==='In-fighter'?1-TUNE.inCtr-(o.slv>=4?TUNE.inCl:0):1)*mom(x).lowK);
+    *(x.style!=='In-fighter'?1.15:1)*(o.style==='In-fighter'?1-TUNE.inCtr-(o.slv>=4?TUNE.inCl:0):1)*mom(x).lowK
+    *(x.guard==='philly'?(fam==='ombro'?TUNE.gPhC:1.1)*tq(x,'philly'):x.guard==='crossg'?TUNE.gCrC:1)); // guardas: Philly shell contra-ataca melhor, a cruzada pior
 }
 function livP(att,def,lv,ctr){ // gancho ao fígado: golpe forte, adversário cansado, trabalho ao corpo antes, curta distância; o Queixo ajuda pouco
   return TUNE.livK*(.6+att.forca/100)*(1+(lv-1)*.15)*fmods(att).dmg*(def.st<30?1.8:def.st<60?1.3:1)*(1+Math.min(1.5,(def.bodyAcc||0)/40))*(1+TUNE.livClose*closeRange())*(1+.15*(50-E(def,'queixo'))/50)*(ctr?1.5:1);
 }
-function varLine(att,k,body,clean,dmg,first,v){ // variações do Guia: só texto (tema 1.4), conforme o golpe, o estilo, o alvo e a distância
+function varLine(att,k,body,clean,dmg,first,v){ // variações automáticas do Guia: só texto (tema 1.4), conforme o golpe, o alvo e a distância
   const c=[],d=curDist();
-  if(k==='jab'&&!body&&d!=='perto'){if(att.style==='Outboxer'&&dmg<4)c.push('flicker');if(dmg>6)c.push('powerjab')}
-  if(k==='direto'&&!body){if(first&&d!=='perto')c.push('leadright');if(clean)c.push('corkscrew')}
-  if(k==='ganchoF'){if(body){if(d!=='longe')c.push('shovel')}else if(att.style!=='Outboxer'&&d!=='longe')c.push('pivot')}
+  if(k==='direto'&&!body&&first&&d!=='perto')c.push('leadright');             // variações automáticas (as técnicas do 3A-3 têm as suas frases t_*)
   if((k==='ganchoF'||k==='ganchoT')&&!body){if(d==='perto')c.push('shortH');else if(d==='meio')c.push('wideH')}
-  if((k==='upperF'||k==='upperT')&&!body){if(d!=='longe')c.push('hookercut');if(d==='perto')c.push('shortU');else if(att.style==='In-fighter')c.push('leaping')}
+  if((k==='upperF'||k==='upperT')&&!body&&d==='perto')c.push('shortU');
   if((k==='overhand'||k==='ganchoT')&&!body&&att.style==='Puncher'&&dmg>6&&d!=='longe')c.push('bolo');
   const ok=c.filter(x=>lineOk('v_'+x,25000)); // a mesma variação não volta logo a seguir
   return ok.length?line('v_'+pick(ok),v):null;
@@ -3050,86 +3316,118 @@ function varLine(att,k,body,clean,dmg,first,v){ // variações do Guia: só text
 /* ---- cross-counter (4.3): contra o jab ou o direto à cabeça, o direto por cima sem defender primeiro. Tenta mais com Ring IQ e crença no direto;
    o timing depende de Ring IQ, Técnica, Velocidade e do nível do direto. Se resulta: o golpe dele não entra e o direto entra com muita hipótese de
    queda relâmpago. Se falha o timing: os dois acertam. ---- */
-function ccTry(x,o,k){if(!(x.skills.direto>0)||x.hunch>F.ft||x.wobbly>F.ft)return 0;
-  return TUNE.ccK*(.4+clamp(E(x,'iq'),0,100)/80)*bf(belOf(x,'direto'))*(k==='jab'?1:.8)*(F.dist==='perto'?.4:F.dist==='longe'?.7:1)*mom(x).ccK}
-function ccOk(x,o){return clamp(TUNE.ccOk+(E(x,'iq')-E(o,'iq'))/200+(E(x,'tecnica')-50)/250+(E(x,'velocidade')-E(o,'velocidade'))/200+.05*((x.skills.direto||1)-2),.15,.85)}
+function ccTry(x,o,k){if(!(x.skills.direto>0)||x.hunch>F.ft||x.para>F.ft||x.wobbly>F.ft)return 0; // regra do fígado (3A-3): sem a técnica, raramente e pior
+  return figP(x,'crosscounter')*TUNE.ccK*(.4+clamp(E(x,'iq'),0,100)/80)*bf(belOf(x,'direto'))*(k==='jab'?1:.8)*(F.dist==='perto'?.4:F.dist==='longe'?.7:1)*mom(x).ccK}
+function ccOk(x,o){return clamp(TUNE.ccOk+(E(x,'iq')-E(o,'iq'))/200+(E(x,'tecnica')-50)/250+(E(x,'velocidade')-E(o,'velocidade'))/200+.05*((x.skills.direto||1)-2)+(hasT(x,'crosscounter')?.05:-TUNE.tRareQ),.1,.88)}
 async function crossCounter(att,def,k,strat,bonus,talk,flow,o){
-  def.dx.cc[0]++;
-  if(Math.random()<ccOk(def,att)){def.dx.cc[1]++;
+  def.dx.cc[0]++;const h=hasT(def,'crosscounter'),jt=hasT(def,'jolty')&&Math.random()<TUNE.jtK*tq(def,'jolty'); // jolty counter: passo para dentro do golpe
+  if(Math.random()<ccOk(def,att)*(jt?.9:1)){def.dx.cc[1]++;if(h)tUse(def,'crosscounter',1);if(jt)tUse(def,'jolty',1);
     const sk=SKILLS[k];act(att,sk.anim,sk.dur,{arm:sk.arm});att.rs.thrown++;att.tot.thrown++;(att.ps[k]||(att.ps[k]=[0,0,0]))[0]++;att.lastK=k;belUpd(att,k,false,.5);
-    await punch(def,att,'direto',def.strat,TUNE.ctrDmg,true,0,{tgt:'head',ctr:'cross',noCC:true,noDef:true,force:true,ln:'ctr_cross'});
+    await punch(def,att,'direto',def.strat,TUNE.ctrDmg*(jt?TUNE.jtD:1),true,0,{tgt:'head',ctr:'cross',noCC:true,noDef:true,force:true,ln:jt?'t_jolty':'ctr_cross',jolty:jt});
     return F.over?'over':'cc';
   }
-  def.dx.cc[2]++; // sem timing: os dois acertam
-  const r=await punch(att,def,k,strat,bonus,talk,flow,{...o,noCC:true,noDef:true,force:true});if(F.over)return r;
+  def.dx.cc[2]++;if(h)tUse(def,'crosscounter',0);if(jt)tUse(def,'jolty',0); // sem timing: os dois acertam (no jolty falhado, leva o golpe em cheio)
+  const r=await punch(att,def,k,strat,bonus*(jt?TUNE.jtMiss:1),talk,flow,{...o,noCC:true,noDef:true,force:true,ln:jt?'joltyMiss':o.ln});if(F.over||jt)return r;
   await punch(def,att,'direto',def.strat,1,true,0,{tgt:'head',noCC:true,noDef:true,force:true,ln:'cc_both'});
   return r;
 }
 async function punch(att,def,k,strat,bonus,talk,flow=0,o={}){
   const lv=att.skills[k]||1,sk=SKILLS[k],body=o.tgt==='body',ctr=o.ctr||null;
+  let tk=o.tk||null; // técnica que muda este golpe (3A-3)
+  if(!tk&&o.sub==='pend'&&(k==='upperF'||k==='upperT')&&hasT(att,'leaping')&&Math.random()<.5*tq(att,'leaping'))tk='leaping'; // leaping uppercut: sai de baixo depois de pendular
   if(!ctr&&!o.noCC&&!body&&(k==='jab'||k==='direto')&&Math.random()<ccTry(def,att,k))return await crossCounter(att,def,k,strat,bonus,talk,flow,o);let e=edge(att.style,def.style);e*=e>0?sf(att):sf(def);const fx=x=>Math.max(x.baseFix||0,x.roundFix||0);if(att.mine&&e<0)e*=1-fx(att);if(def.mine&&e>0)e*=1-fx(def);const ar=att.rb||{},dr=def.rb||{};
-  const fam=o.noDef?null:chooseDef(def,att,k,body),sub=fam?subDef(fam,k,body,def):null;F.ld={fam,sub};
+  const para=def.para>F.ft; // golpe ao coração: não defende
+  const fam=o.noDef||para?null:chooseDef(def,att,k,body),sub=fam?subDef(fam,k,body,def):null;F.ld={fam,sub};
   let dp=fam?defPow(def,fam,k,body):0;if(ctr)dp*=.5; // apanhado aberto: defende pior o counter
   if(o.ant)dp*=.6;                                     // apanhado a entrar
   const dist=F.dist,trap=def===F.zp&&F.zone!=='center'?F.zone:null; // encostado: defende pior
   if(trap&&dp>0)dp*=trap==='corner'?TUNE.cornD:TUNE.ropeD;
+  const arm=sk.arm,side=arm==='L'?'R':'L',eyeS=!!(def.mk&&def.mk.eye===side); // olho fechado: vê pior os golpes que vêm desse lado
+  if(dp>0){if(tk==='flicker')dp*=TUNE.flDp;if(tk==='shovel')dp*=TUNE.shDp;if(eyeS)dp*=TUNE.eyeDp}
+  const smo=dist==='perto'&&!ctr&&hasT(def,'smother')&&Math.random()<TUNE.smoK*tq(def,'smother'); // smother: colado, abafa os golpes
   const MA=mom(att),MD=mom(def);
   let hit=.5+(E(att,'tecnica')+E(att,'velocidade')-E(def,'defesa')-E(def,'velocidade'))/TUNE.hitDiv+sk.h+lv*.025+e*.05*TUNE.edge+phys(att,def,k,body)-STRAT[def.strat].def-(def.style==='In-fighter'?TUNE.sdA:def.style==='Outboxer'?TUNE.sdD:TUNE.sdC)*sf(def)/.74+MA.hitA+MD.hitD+(att.conf-50)/500+(att.hitB||0)+(att.tacB||0)+(ar.hit||0)-(dr.def||0)+flow+concF(att,def)+(att.form||0)*.04
-    -dp+(ctr?TUNE.ctrHit:0)+(def.hunch>F.ft?TUNE.livHit:0)+TUNE.dHit*(distFit(k,dist)-1)+(trap==='corner'?TUNE.cornH:trap?TUNE.ropeH:0)+(o.ant?TUNE.antHit:0)+(o.ang?TUNE.ctrAng:0)+(body?0:Math.min(TUNE.bodyGMax,(def.bodyAcc||0)*TUNE.bodyG)); // trabalho ao corpo baixa a guarda
+    -dp+(ctr?TUNE.ctrHit:0)+(def.hunch>F.ft?TUNE.livHit:0)+TUNE.dHit*(distFit(k,dist)-1)+(trap==='corner'?TUNE.cornH:trap?TUNE.ropeH:0)+(o.ant?TUNE.antHit:0)+(o.ang?TUNE.ctrAng:0)+(body?0:Math.min(TUNE.bodyGMax,(def.bodyAcc||0)*TUNE.bodyG)) // trabalho ao corpo baixa a guarda
+    +(tk==='flicker'?TUNE.flH:tk==='shovel'?TUNE.shH:tk==='leaping'?TUNE.lpH:tk==='smash'?TUNE.smH:0)+(o.tie?.12:0)+(o.aq||0)+guardHit(def,k,body) // técnicas e guardas (3A-3)
+    +(att.offT>F.ft?-TUNE.lsH:0)+(def.offT>F.ft?TUNE.lsH*.5:0)+(eyeS?TUNE.eyeH:0)-(smo?TUNE.smoH:0)+(para?.15:0);
   hit=clamp(hit,.12,.9);att.lastK=k;if(att.st<=30)att.lowT++;
-  att.st=clamp(att.st-(TUNE.pc+STRAT[strat].cost*TUNE.scm)*(att.style==='Puncher'?1-.15*sf(att):1)*(1.5-att.resistencia/100*TUNE.resK-(1-TUNE.resK)*.35)*(att.calm===true?.85:att.calm?.93:1)*(1+TUNE.calmSt*(50-mv(att,'calma'))/50)*(ar.stam||1)*fmods(att).cost*(1-(att.form||0)*.1)*(sk.cost||1)*DCOST[dist],0,100);
-  if(fam){const c=DEFS[fam].st*(1.3-def.resistencia/100);if(c>0)def.st=clamp(def.st-c,0,100);(def.dfs[fam]||(def.dfs[fam]=[0,0]))[0]++}
+  att.st=clamp(att.st-(TUNE.pc+STRAT[strat].cost*TUNE.scm)*(att.style==='Puncher'?1-.15*sf(att):1)*(1.5-att.resistencia/100*TUNE.resK-(1-TUNE.resK)*.35)*(att.calm===true?.85:att.calm?.93:1)*(1+TUNE.calmSt*(50-mv(att,'calma'))/50)*(ar.stam||1)*fmods(att).cost*(1-(att.form||0)*.1)*(sk.cost||1)*DCOST[dist]*(tk==='smash'?TUNE.smC:1),0,100);
+  if(fam){const c=DEFS[fam].st*(1.3-def.resistencia/100);if(c>0)def.st=clamp(def.st-c,0,100);(def.dfs[fam]||(def.dfs[fam]=[0,0]))[0]++;
+    if(def.guard==='peek'&&(fam==='bloqueio'||fam==='cabeca'))def.st=clamp(def.st-TUNE.gPkSt,0,100)} // o peek-a-boo gasta fôlego
   att.rs.thrown++;att.tot.thrown++;const PS=att.ps[k]||(att.ps[k]=[0,0,0]);PS[0]++;
   const CT=ctr&&DEFS[ctr]?(att.cts[ctr]||(att.cts[ctr]=[0,0])):null;if(CT)CT[0]++; // o cross-counter conta à parte (x.dx.cc)
-  const arm=sk.arm;att.lastArm=arm;
+  att.lastArm=arm;
   const v={a:att.nick,d:def.nick,p:pLow(k)};
-  const dur=sk.dur*MA.durK;
-  act(att,sk.anim,dur,{arm,body});
+  const dur=sk.dur*MA.durK*(tk==='powerjab'?TUNE.pjS:tk==='smash'?TUNE.smS:1);
+  act(att,tk==='smash'?'uppercut':sk.anim,dur,{arm,body});
   await fsleep(dur*.45);if(F.over){act(att,'guard',1);return 'over'}
   const u=unit(att,def);
   const ok=o.force||Math.random()<hit;belUpd(att,k,ok,hit);if(fam)belUpd(def,fam,!ok,1-hit); // confiança: ajusta-se durante a luta
+  if(tk&&tk!=='leaping')tUse(att,tk,ok);
+  if(def.guard){const g=def.tq[def.guard]||(def.tq[def.guard]=[0,0]);g[0]++;if(!ok)g[1]++} // guarda: golpes que lhe vieram / que defendeu
+  const tkD=tk==='powerjab'?TUNE.pjD:tk==='flicker'?TUNE.flD:tk==='leaping'?TUNE.lpD:tk==='smash'?TUNE.smD:1;
   const raw=()=>(3+E(att,'forca')*TUNE.forK+lv*.9)*sk.d*(att.style==='Puncher'?1+TUNE.punD*sf(att)*(def.style==='Outboxer'?.4:1):1)*MA.dmgK*R(.75,1.25)*(1+e*.1*TUNE.edge)*STRAT[strat].dmg*bonus*(1+(ar.dmg||0))*fmods(att).dmg*(fmods(def).chin<1&&!body?1-.15*TUNE.giftK:1)*(body?1:1+TUNE.qxD*(50-E(def,'queixo'))/50)*TUNE.dmg
-    *DMUL[dist]*(1+TUNE.dDmg*(distFit(k,dist)-1))*(trap==='corner'&&o.ci>0?TUNE.cornC:1); // distância; no canto as combinações fazem mais estragos
+    *DMUL[dist]*(1+TUNE.dDmg*(distFit(k,dist)-1))*(trap==='corner'&&o.ci>0?TUNE.cornC:1) // distância; no canto as combinações fazem mais estragos
+    *armK(att,arm)*tkD*(smo?TUNE.smoD:1)*(def.guard==='crossg'&&(sk.cls!=='reto'||body)?1-(1-TUNE.gCrD)*tq(def,'crossg'):1); // marcas, técnica, smother, guarda cruzada
   let res;
+  if(tk==='leaping')tUse(att,tk,ok);
   if(ok){
     let dmg=raw();if(fam==='ombro')dmg*=TUNE.ombR; // o ombro falhou: apanhado em cheio
     const clean=!body&&Math.random()<.05+TUNE.cleanP+lv*.012+(sk.cls!=='reto'?.03:0)+(ctr?.04:0)+(ctr==='cross'?.1:0)+(fam==='ombro'?.02:0);dmg*=clean?TUNE.cleanMul:TUNE.normMul;
+    let roll=false;if(!body&&!para&&!o.force){const h=hasT(def,'rolling');if(Math.random()<(h?TUNE.rlK*tq(def,'rolling'):TUNE.rlNo)){roll=true;dmg*=TUNE.rlD;if(h)tUse(def,'rolling',1)}} // rolling with the punch (regra do fígado)
     if(body){dmg*=.75;def.st=clamp(def.st-(k==='ganchoF'?6:5)*TUNE.bdm,0,100)}
     const chin=1.3-def.resistencia/100;
     dmg*=(1.15-def.resistencia/250*TUNE.resK-(1-TUNE.resK)*.14);dmg*=TUNE.dk/(TUNE.dk+def.resistencia*TUNE.dr);dmg*=topF(def);
     if(body)def.bodyAcc=(def.bodyAcc||0)+dmg;
     def.hp-=dmg;def.dmgTaken+=dmg;def.st=clamp(def.st-dmg*(clean?.8:.55)*chin*TUNE.hd,0,100);att.rs.landed++;att.tot.landed++;PS[1]++;PS[2]+=dmg;if(CT)CT[1]++;if(body)att.bodyL++;else att.headL++;att.rs.dmg+=dmg;att.tot.dmg+=dmg;if(k!=='jab'){att.rs.power++;att.tot.power++}
-    if(!body&&dmg>8&&Math.random()<.18+(ar.cut||0))def.cut++;
+    if(!body&&dmg>8&&Math.random()<.18+(ar.cut||0)+(tk==='corkscrew'?TUNE.ckCut:0)){def.cut++;eyeChk(def,side)} // o corkscrew abre mais cortes; com cortes o olho pode fechar
+    else if(!body&&tk==='corkscrew'&&dmg>4&&Math.random()<TUNE.ckCut*.4){def.cut++;eyeChk(def,side)}
+    if(!body&&sk.cls!=='reto'&&Math.random()<TUNE.handTop)hurtHand(att,arm,'top'); // muito raro: bate no osso da cabeça
     res=clean?'clean':'hit';SFX.play(clean?'clean':body?'body':k==='jab'?'jab':'power');
     act(def,body?'hurtBody':'hurt',300);def.flash=performance.now()+150;
     setT(def,def.pos.x+u.dx*(clean?9:5),def.pos.y+u.dy*(clean?9:5));
-    const cls=att.mine?'me':'';
-    const txt=o.ln?line(o.ln,v):ctr?line('ctr_'+o.sub,v):(Math.random()<TUNE.varP&&(talk||dmg>7||body)&&varLine(att,k,body,clean,dmg,o.first,v))||(body?line('body',v):talk||dmg>7?line(k==='jab'&&dist==='perto'?'hit_jabC':'hit_'+k,v):null);
-    if(ctr==='cross')pop(att,'CROSS!',true);else if(ctr)pop(att,'COUNTER!',true);else if(o.ln==='ant_check')pop(att,'CHECK HOOK!',true);else if(clean)pop(att,'LIMPO!');
-    if(clean||def.hp<=0){F.react={by:att.mine?'me':'op',until:performance.now()+1800};F.zoom={until:performance.now()+1300*spd(),cx:(att.pos.x+def.pos.x)/2,cy:(att.pos.y+def.pos.y)/2};F.crowd=performance.now()+1500;F.flashes=performance.now()+1200;if(ctr)say(txt,cls);say(line('clean',v),'sys')}
+    const cls=att.mine?'me':'',tln=tk&&tk!=='tieup'?'t_'+(tk==='shovel'&&dist==='meio'?'hookercut':tk):null;
+    const txt=o.ln?line(o.ln,v):ctr?line('ctr_'+o.sub,v):tln&&LINES[tln]&&lineOk(tln,8000)?line(tln,v):(Math.random()<TUNE.varP&&(talk||dmg>7||body)&&varLine(att,k,body,clean,dmg,o.first,v))||(body?line('body',v):talk||dmg>7?line(k==='jab'&&dist==='perto'?'hit_jabC':'hit_'+k,v):null);
+    if(o.jolty)pop(att,'JOLTY COUNTER!',true);else if(ctr==='cross')pop(att,'CROSS!',true);else if(ctr)pop(att,'COUNTER!',true);else if(o.ln==='ant_check')pop(att,'CHECK HOOK!',true);
+    else if(tk&&tk!=='tieup'&&tPop(att,tk,tk==='shovel'&&dist==='meio'?'HOOKERCUT!':undefined)){}else if(clean)pop(att,'LIMPO!');
+    if(roll){if(!hasT(def,'rolling')||!tPop(def,'rolling'))pop(def,'ROLA');if(lineOk('d_roll',10000))say(line('d_roll',v),def.mine?'me':'')}
+    if(clean||def.hp<=0){F.react={by:att.mine?'me':'op',until:performance.now()+1800};F.zoom={until:performance.now()+1300*spd(),cx:(att.pos.x+def.pos.x)/2,cy:(att.pos.y+def.pos.y)/2};F.crowd=performance.now()+1500;F.flashes=performance.now()+1200;if(ctr||tln)say(txt,cls);say(line('clean',v),'sys')}
     else if(txt)say(txt,cls);
     await fsleep(dur*.55+(clean?200:60));
     if(def.hp<=0){await knockdown(def,att);return res}
-    if(!F.over&&body&&k==='ganchoF'&&Math.random()<livP(att,def,lv,ctr)){ // gancho ao fígado: leve (curvado, sem ar) ou forte e raro (queda atrasada)
-      pop(att,'FÍGADO!',true);
-      if(Math.random()<TUNE.livS){att.liv[1]++;say(line('liverS',v),'sys');act(def,'hurtBody',900);await fsleep(700);await knockdown(def,att,'liver');return res}
+    if(tk==='pivothook'&&!F.over){if(F.zp===att&&F.zone!=='center'&&Math.random()<TUNE.pvEsc){zoneIn();att.dx.esc.bater++}else if(F.zone==='center')F.ctl=att} // muda de ângulo: sai das cordas a bater
+    if(!F.over&&body&&tk==='corkscrew'&&Math.random()<TUNE.heartK*tq(att,'corkscrew')){ // golpe ao coração: paralisa-o um instante (mais curto e mais raro do que o fígado)
+      att.heart=(att.heart||0)+1;def.para=F.ft+TUNE.heartT;def.st=clamp(def.st-TUNE.heartSt,0,100);def.mk.air=1;pop(att,'CORAÇÃO!',true);say(line('heart',v),'sys');act(def,'hurtBody',TUNE.heartT);F.crowd=performance.now()+1200;await fsleep(300);return res}
+    if(!F.over&&body&&k==='ganchoF'&&Math.random()<livP(att,def,lv,ctr)*(hasT(att,'liver')?TUNE.tFig*tq(att,'liver'):TUNE.livNo)){ // gancho ao fígado (regra do fígado): leve (curvado, sem ar) ou forte e raro (queda atrasada)
+      pop(att,'FÍGADO!',true);def.mk.air=1;if(hasT(att,'liver'))tUse(att,'liver',1);
+      if(Math.random()<(hasT(att,'liver')?TUNE.livS2:TUNE.livS)){att.liv[1]++;say(line('liverS',v),'sys');act(def,'hurtBody',900);await fsleep(700);await knockdown(def,att,'liver');return res}
       att.liv[0]++;def.st=clamp(def.st-TUNE.livSt,0,100);def.hunch=F.ft+TUNE.livT;act(def,'hurtBody',1800);F.crowd=performance.now()+1200;say(line('liverL',v),'sys');await fsleep(500);return res;
     }
-    if(!F.over&&!body&&clean){ // queda relâmpago (à cabeça); o counter apanha-o aberto
+    if(!F.over&&!body&&clean&&!roll){ // queda relâmpago (à cabeça); o counter apanha-o aberto
       let pf=sk.fl*(.5+E(att,'tecnica')/60*TUNE.resK+(1-TUNE.resK)*.58)*(1+(lv-1)*.25)*(.8+E(att,'forca')/150)*(bonus>1?2:1)*clamp(1.4-def.resistencia/100*TUNE.resK-(1-TUNE.resK)*.35,.5,1.4)*(def.st<=30?1.5:def.st<70?1.15:1)*(def.hp<50?1.3:1)*fmods(att).flash*fmods(def).chin*chinK(def);
       pf*=topF(def);if(att.style==='Puncher')pf*=1+TUNE.punF*sf(att)*(def.style==='Outboxer'?.4:1);if(ctr)pf*=ctr==='cross'?TUNE.ccFl:TUNE.ctrFl;
-      if(Math.random()<Math.min(ctr==='cross'?.3:.18,pf*TUNE.flash)){await knockdown(def,att,'flash');return res}
+      pf*=(tk==='leaping'?TUNE.lpFl:tk==='smash'?TUNE.smFl:1)*(o.jolty?TUNE.jtFl:1);
+      if(Math.random()<Math.min(o.jolty?.4:ctr==='cross'?.3:tk==='smash'||tk==='leaping'?.24:.18,pf*TUNE.flash)){await knockdown(def,att,'flash');return res}
     }
     if(def.hp<25&&Math.random()<.5){act(def,'stagger',800);say(line('stagger',v));await fsleep(750)}
   }else{
-    res='def';
-    if(fam){def.dfs[fam][1]++;if(sub!=='clinch')pop(def,POPW[sub]);
-      if(fam==='bloqueio'){const c=raw()*TUNE.normMul*TUNE.blkD*topF(def);def.hp=Math.max(1,def.hp-c);def.dmgTaken+=c;def.st=clamp(def.st-1.2*(1.3-def.resistencia/100),0,100)} // a guarda absorve, mas passa algum
+    res='def';let tpd=false;
+    if(tk==='leaping'){att.offT=F.ft+TUNE.lsOff;if(lineOk('leapMiss',8000))say(line('leapMiss',v),att.mine?'bad':'')} // tudo ou nada: falhou e ficou exposto
+    if(fam){def.dfs[fam][1]++;
+      if(fam==='bloqueio'){
+        if(sub==='catch'){tUse(def,'catch',1);tpd=tPop(def,'catch')} // apanha o jab na luva: sem dano
+        else{const c=raw()*TUNE.normMul*TUNE.blkD*topF(def);def.hp=Math.max(1,def.hp-c);def.dmgTaken+=c;def.st=clamp(def.st-1.2*(1.3-def.resistencia/100),0,100); // a guarda absorve, mas passa algum
+          if(k!=='jab'&&Math.random()<(hasT(def,'elbow')?TUNE.elbK*tq(def,'elbow'):TUNE.elbNo)){elbowHit(att,def,arm);tpd=hasT(def,'elbow')} // bloqueio de cotovelo (regra do fígado)
+          else if(k!=='jab'&&Math.random()<TUNE.handTop*.5)hurtHand(att,arm,'top')}} // muito raro: martelar a guarda fechada
+      if(fam==='aparar'&&(sk.cls!=='reto'||body)&&hasT(def,'loopparry')){tUse(def,'loopparry',1);tpd=tPop(def,'loopparry');if(talk&&lineOk('loop',9000))say(line('loop',v),def.mine?'me':'')}
+      if(sub==='snap'){tUse(def,'snapback',1);tpd=tPop(def,'snapback')}
+      if(sub!=='clinch'&&!tpd)pop(def,POPW[sub]);
     }
     if(sub==='block'||sub==='catch'||sub==='parry'||sub==='roll')act(def,'block',dur*(sub==='parry'?.9:1.3));
     else if(sub==='pend')act(def,'duck',dur*1.2);
     else if(sub==='slipIn'||sub==='slipOut'||sub==='slip')act(def,'slip',dur*1.2,{side:sub==='slipIn'?1:sub==='slipOut'?-1:Math.random()<.5?1:-1});
     else if(sub==='pull'){act(def,'slip',dur*1.1,{side:-1});setT(def,def.pos.x+u.dx*5,def.pos.y+u.dy*5)}
+    else if(sub==='snap')act(def,'slip',dur*.9,{side:-1}); // volta como uma mola: não perde distância
     else if(sub==='back'){act(def,'guard',1);setT(def,def.pos.x+u.dx*12,def.pos.y+u.dy*12)}
     else if(sub==='pivot'||sub==='side'){const s=Math.random()<.5?1:-1;act(def,'guard',1);setT(def,def.pos.x-u.dy*s*14+u.dx*4,def.pos.y+u.dx*s*14+u.dy*4)}
     SFX.play(fam==='bloqueio'||fam==='aparar'||fam==='ombro'?'block':'whiff');
@@ -3137,7 +3435,8 @@ async function punch(att,def,k,strat,bonus,talk,flow=0,o={}){
     else if(talk&&sub&&sub!=='clinch'&&Math.random()<.55)say(line(sub==='slipIn'||sub==='slipOut'?'slip':sub,v),def.mine?'me':'');
     await fsleep(dur*.55+60);
   }
-  act(att,'guard',1);if(def.an.pose!=='stagger'&&!(def.hunch>F.ft))act(def,'guard',1);
+  if(smo&&ok){if(!tPop(def,'smother'))pop(def,'SMOTHER');tUse(def,'smother',1);if(lineOk('d_smother',12000))say(line('d_smother',v),def.mine?'me':'')}
+  act(att,'guard',1);if(def.an.pose!=='stagger'&&!(def.hunch>F.ft)&&!(def.para>F.ft))act(def,'guard',1);
   await fsleep(110);
   hud();
   return res;
@@ -3175,14 +3474,15 @@ function corner(){
   return new Promise(res=>{
     const{me,op}=F;
     const b0={st:me.st,hp:me.hp};
-    for(const x of[me,op]){x.st=clamp(x.st+TUNE.cr+(x.form||0)*4,0,100);x.hp=clamp(x.hp+TUNE.hprec+x.resistencia*.06+(x.form||0)*3,0,100)}
+    for(const x of[me,op]){ /* SEM AR: recupera menos fôlego */ x.st=clamp(x.st+(TUNE.cr+(x.form||0)*4)*(x.mk&&x.mk.air?TUNE.airK:1),0,100);x.hp=clamp(x.hp+TUNE.hprec+x.resistencia*.06+(x.form||0)*3,0,100)}
     say(`Intervalo: ${me.nick} recupera +${Math.round(me.st-b0.st)} de fôlego e +${Math.round(me.hp-b0.hp)} de vida.`,'sys');
     const ch=F.cornerHeard;F.cornerHeard=null; // ordem gritada no round que ele só ouviu agora, no canto (já está em me.strat)
     hud();
-    if(me.cut>=4){F.over={win:false,how:'médico'};say(`O médico vê os cortes de ${me.nick} e pára a luta.`,'sys',{p:3});res('doc');return}
-    if(op.cut>=4){F.over={win:true,how:'médico'};say(`O médico pára a luta: ${op.nick} tem demasiados cortes!`,'sys',{p:3});res('doc');return}
+    const doc=x=>x.cut>=4||(x.mk&&x.mk.eye&&x.cut>=3&&Math.random()<TUNE.eyeDoc); // olho fechado: o médico pode parar
+    if(doc(me)){F.over={win:false,how:'médico'};say(`O médico vê os cortes de ${me.nick} e pára a luta.`,'sys',{p:3});res('doc');return}
+    if(doc(op)){F.over={win:true,how:'médico'};say(`O médico pára a luta: ${op.nick} tem demasiados cortes!`,'sys',{p:3});res('doc');return}
     if(ch)say(line('lost',{x:me.nick,s:ch.s}),'half');
-    let strat=me.strat,act_=me.cut?'corte':'folego',csty=me.style;const cst=STYLES.filter(st=>st===me.style||styleLv(F.a,st)>=2);
+    let strat=me.strat,act_=me.cut?'corte':'folego';
     const s0=me.strat; // estratégia com que acabaria o round (inclui a ordem ouvida no canto)
     const m=me.rs,o=op.rs;
     const pct=r=>r.thrown?Math.round(r.landed/r.thrown*100)+'%':'-';
@@ -3197,18 +3497,15 @@ function corner(){
       <div class="stw">${[[me,'me'],[op,'op']].map(([x,k])=>{const ws=stWords(x);return `<div class="${k}"><b>${x.nick.toUpperCase()}</b><span>${ws.length?ws.map(w=>`<i>${w}</i>`).join(''):'<i class="okw">INTEIRO</i>'}</span><small>${stWhy(x,ws)}</small></div>`}).join('')}</div>
       <h3>ESTRATÉGIA DO R${F.round+1} · ELE EM ${op.strat.toUpperCase()}</h3><div class="cseg">${Object.keys(STRAT).map(k=>`<button class="btn ${strat===k?'on':''}" data-s="${k}">${k.toUpperCase()}</button>`).join('')}</div>
       <p class="meta" style="font-size:16px">${ch?`<span class="chd">Ouviu no canto o que gritavas: ${ch.s}.</span> `:''}${STRAT_D[strat]}</p>
-      ${cst.length>1?`<div class="cseg">${cst.map(st=>`<button class="btn ${csty===st?'on':''}" data-cs="${st}">${st.toUpperCase()} ${styleLv(F.a,st)}${edge(st,op.style)>0?' ▲':edge(st,op.style)<0?' ▼':''}</button>`).join('')}</div>`:''}
       <div class="cseg2"><button class="btn ${act_==='corte'?'on':''}" data-c="corte" ${me.cut?'':'disabled'}>TRATAR CORTE</button><button class="btn ${act_==='folego'?'on':''}" data-c="folego">RECUPERAR FÔLEGO</button></div>
       <div class="cseg2"><button class="btn" id="towel">ATIRAR A TOALHA</button><button class="btn red" id="goR">ROUND ${F.round+1}</button></div>`;
       $('#fctl').querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{strat=b.dataset.s;draw()});
       $('#fctl').querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>{act_=b.dataset.c;draw()});
-      $('#fctl').querySelectorAll('[data-cs]').forEach(b=>b.onclick=()=>{csty=b.dataset.cs;draw()});
       F.prev=act_==='folego'?{st:18}:{hp:4,cut:-1};hud();
       $('#towel').onclick=()=>res('towel');
       $('#goR').onclick=()=>{
         me.strat=strat;
         if(strat!==s0){F.ordLog.push({r:F.round,s:strat,from:s0,t:180,cs:1});say(`No canto: ${strat} para o round ${F.round+1}. ${me.nick} acena.`,'ok',{who:'tu'})}
-        if(csty!==me.style){me.style=csty;me.slv=Math.max(1,styleLv(F.a,csty));say(`${me.nick} muda para ${csty}.`,'sys')}
         F.prev=null;
         if(act_==='corte'){me.cut=Math.max(0,me.cut-1);me.hp=clamp(me.hp+4,0,100);say('Tratas o corte com vaselina e gelo.','sys',{who:'tu'})}
         else{me.st=clamp(me.st+18,0,100);say('Mandas respirar fundo. Recupera o fôlego.','sys',{who:'tu'})}
@@ -3271,7 +3568,11 @@ function finishFight(){
     html=`<p class="hint">Sem prémio. Custos da luta -${TIERS[a.tier].cost} €. Confiança -${lc}. Ranking #${old} → #${a.rank}.<span class="warn">${inj}</span></p>`;
     lineTxt=`${a.nick} perdeu com ${f.opp.nick} (${r.how}).`;note(lineTxt);
   }
-  const rec=clamp(1+Math.round(F.me.dmgTaken/70)+(F.me.kd)+(r.how==='KO'&&!r.win?1:0),1,5);
+  let rec=clamp(1+Math.round(F.me.dmgTaken/70)+(F.me.kd)+(r.how==='KO'&&!r.win?1:0),1,5);
+  {const mk=F.me.mk,hd=Math.max(mk.hand.L,mk.hand.R); // marcas da luta (3A-3): mão muito magoada → talvez lesão; olho fechado → mais uma semana
+   if(hd>=2&&Math.random()<.5){const w=RI(1,2);a.injury=Math.max(a.injury||0,w);html+=`<p class="hint"><span class="warn">A mão ficou muito magoada: ${w} semana${w>1?'s':''} lesionado.</span></p>`}
+   else if(hd)html+=`<p class="hint">Saiu com a mão magoada, mas não é nada de grave.</p>`;
+   if(mk.eye){rec=Math.min(5,rec+1);html+='<p class="hint"><span class="warn">O olho fechado precisa de tempo: mais uma semana de recuperação.</span></p>'}}
   html+=afterFight(a,r);
   a.recovery=rec;a.fatigue=clamp(a.fatigue+25,0,100);a.fight=null;
   if(catMoves(a).length){html+=`<p class="hint"><b style="color:var(--gold)">${a.nick} ${catWhy(a)}: pode mudar de categoria (Atletas → Treino).</b></p>`;note(`${a.nick} pode mudar de categoria.`)}
@@ -3351,7 +3652,7 @@ function anReasons(win,draw){
    if(e>0){add('style',1,5+8*clamp((me.slv-1)/4,0,1),`O teu estilo (${ms}) tem vantagem sobre o dele (${os}).`)}
    else if(e<0){const fix=clamp(me.baseFix||0,0,1),sc=(5+8*clamp((op.slv-1)/4,0,1));const st=F.talks.find(t=>t.kind==='style');
      const beat=STYLES.find(x=>edge(x,os)>0),has=styleLv(a,beat)>0;
-     const tip=has?`|Tens ${beat} nível ${styleLv(a,beat)}: escolhe-o antes da luta.`:`|Contra um ${os}, o ${beat} leva vantagem (treinador na Loja).`;
+     const tip=has?`|Tem ${beat} nível ${styleLv(a,beat)}, mas não mudou: na luta escolhe sozinho e o Ring IQ ajuda a escolher bem.`:`|Contra um ${os}, o ${beat} leva vantagem (um treinador desse estilo).`;
      if(fix>=1)add('style',1,4,`O estilo dele (${os}) tinha vantagem sobre o teu (${ms}), mas a tática certa no canto anulou-a.`);
      else add('style',-1,sc*(1-fix),`O estilo dele (${os}) tem vantagem sobre o teu (${ms})${fix>0?'; a tática no canto só a reduziu a metade':st&&st.lab==='ERRADA'?' e a tática no canto não resultou':''}.${tip}`)}}
   // 3) alcance (+10 cm ≈ 0 no amador → +6 no topo, com jab e direto)
@@ -3424,6 +3725,10 @@ function anReasons(win,draw){
    const lv=x=>x.liv[0]+x.liv[1],lm=lv(me),lo=lv(op);if(lm!==lo&&Math.max(lm,lo)>=1){const s=Math.sign(lm-lo),X=s>0?me:op,n=lv(X),f=X.liv[1];
      add('liver',s,X.liv[0]*2.5+f*4,s>0?`O gancho ao fígado entrou ${n===1?'uma vez':n+' vezes'}${f?` (${f} com queda)`:''}: ${n===1?'ficou sem ar':'perdia o ar de cada vez'}.`
        :`Levaste ${n===1?'um gancho':n+' ganchos'} ao fígado${f?` (${f} com queda)`:''}: ${n===1?'ficaste sem ar':'perdias o ar de cada vez'}.|Bloqueio (Bola medicinal) e Resistência protegem o corpo.`)}
+   {const best=x=>Object.entries(x.tq||{}).filter(([k,v])=>TECH[k]&&TECH[k].k!=='grd').sort((p,q)=>q[1][1]-p[1][1])[0],bm=best(me),bo=best(op); // técnicas (3A-3)
+    if(bm&&bm[1][1]>=3)add('tech',1,bm[1][1]*1.1,`A técnica ${TECH[bm[0]].n} resultou ${bm[1][1]} vezes.`);
+    if(bo&&bo[1][1]>=3)add('tech',-1,bo[1][1]*1.1,`A técnica dele (${TECH[bo[0]].n}) resultou ${bo[1][1]} vezes.|Em Ficha → TÉCNICAS escolhes o que o teu atleta aprende.`);
+    const mm=mkWords(me),mo=mkWords(op);if(mm.includes('MÃO MAGOADA'))add('mark',-1,3,'Ficaste com a mão magoada: os golpes dessa mão perderam força.');if(mo.includes('MÃO MAGOADA'))add('mark',1,3,'Ele magoou a mão: os golpes dessa mão perderam força.')}
    const cf=confNotes(me).filter(x=>x.s<0)[0];if(cf)add('conf',-1,cf.sc,`${cf.t} ${cf.g==='over'?'Confiava demais.':'Não confia.'}|${cf.tip}`);
   }
   {const st=R.find(x=>x.g==='stam'),at=R.find(x=>x.g==='attr');if(st&&at&&at.k==='resistencia'&&at.s===st.s)R.splice(R.indexOf(at),1)}
@@ -3435,6 +3740,8 @@ function anReasons(win,draw){
 }
 function dzOf(x){const r=o=>Object.fromEntries(Object.entries(o).map(([k,v])=>[k,Math.round(v)]));const D=x.dx; // distância e ringue (A3), para a análise do A4
   return{d:r(D.d),z:r(D.z),ctl:Math.round(D.ctl),xw:{...D.xw},ant:D.ant.slice(),cc:D.cc.slice(),ang:D.ang.slice(),clo:D.clo.slice(),esc:{...D.esc},wob:[D.wob[0],Math.round(D.wob[1])],pf:DPREF[x.style]||'meio'}}
+function tqOf(x){return Object.fromEntries(Object.entries(x.tq||{}).filter(([k,v])=>TECH[k]&&v[0]).map(([k,v])=>[k,v.slice(0,2)]))} // técnicas: [usou, resultou] (guardas: golpes que lhe vieram, defendidos)
+function tqTxt(q){return Object.entries(q||{}).sort((p,r)=>r[1][1]-p[1][1]).slice(0,4).map(([k,v])=>`${TECH[k].n.toLowerCase()} ${TECH[k].k==='grd'?Math.round(100*v[1]/Math.max(1,v[0]))+'% defendido':`${v[1]}/${v[0]}`}`).join(', ')}
 function buildAnalysis(){
   const{me,op}=F,r=F.over,a=F.a;
   if(F.rr.length<Math.min(F.round,F.rounds)){const x=rrOf(null);x.p=1;F.rr.push(x)}
@@ -3454,7 +3761,7 @@ function buildAnalysis(){
     rr:F.rr.map(x=>[x.s?x.s[0]:null,x.s?x.s[1]:null,x.dn[0],x.dn[1],x.st[0],x.st[1],x.l[0],x.l[1],x.p?1:0]),
     ps:[ps(me),ps(op)],hb:[[me.headL,me.bodyL],[op.headL,op.bodyL]],df:[df(me),df(op)],ct:[ct(me),ct(op)],lv:[me.liv.slice(),op.liv.slice()],
     kdl:F.kdl.slice(0,6).map(kdTxt),ord:F.ordLog.slice(-8).map(ordTxt),ordN:F.ordLog.length,talk:F.talks.map(t=>({t:`${t.r===1?'Antes do R1':'Antes do R'+t.r}: ${t.n}`,c:t.lab==='CERTA'?'ok':t.lab==='MEIA CERTA'?'half':t.lab==='ERRADA'?'bad':''})),
-    sx:Object.entries(F.sx).sort((p,q)=>q[1]-p[1]).map(([k,v])=>`${k} ${Math.round(100*v/tot)}%`).join(' · '),why,plus,at:F.at0||null,dz:[dzOf(me),dzOf(op)],cf:confNotes(me).slice(0,3).map(x=>({s:x.s,t:x.t})),wi:(a.fight&&a.fight.wi)||null};
+    sx:Object.entries(F.sx).sort((p,q)=>q[1]-p[1]).map(([k,v])=>`${k} ${Math.round(100*v/tot)}%`).join(' · '),why,plus,at:F.at0||null,dz:[dzOf(me),dzOf(op)],tq:[tqOf(me),tqOf(op)],mk:[mkWords(me),mkWords(op)],sc:[me.styN||0,op.styN||0,me.grdN||0,op.grdN||0],cf:confNotes(me).slice(0,3).map(x=>({s:x.s,t:x.t})),wi:(a.fight&&a.fight.wi)||null};
 }
 /* ---- histórico de lutas ----
    a.hist: uma entrada pequena por luta (mais antiga primeiro): {w semana, o alcunha do adversário, ac academia, os estilo dele,
@@ -3540,6 +3847,8 @@ function showAnalysis(an,back,tab){
       ${dks.map(k=>`<span>${DEFS[k].sh||DEFS[k].n}</span>${v2(dd(an.df[0],k),dd(an.df[1],k))}`).join('')}
       <span>Counters entraram/tentou</span>${v2(`${ctn(an.ct[0])[0]}/${ctn(an.ct[0])[1]}`,`${ctn(an.ct[1])[0]}/${ctn(an.ct[1])[1]}`)}</div>
       <p class="meta">${ctl(an.ct[0])?`Os teus counters: ${ctl(an.ct[0])}. `:''}${ctl(an.ct[1])?`Os dele: ${ctl(an.ct[1])}. `:''}${lv[0][0]+lv[0][1]+lv[1][0]+lv[1][1]?`Fígado: tu ${lt(lv[0])}, ele ${lt(lv[1])}.`:ctl(an.ct[0])||ctl(an.ct[1])?'':'Counter = golpe logo a seguir a uma defesa que resultou.'}</p>
+      ${an.tq&&(Object.keys(an.tq[0]).length||Object.keys(an.tq[1]).length)?`<p class="meta">Técnicas (resultou/usou): ${tqTxt(an.tq[0])?'tu '+tqTxt(an.tq[0]):'tu nenhuma'}${tqTxt(an.tq[1])?' · ele '+tqTxt(an.tq[1]):''}.</p>`:''}
+      ${an.mk&&(an.mk[0].length||an.mk[1].length)?`<p class="meta">Marcas: ${an.mk[0].length?'tu '+an.mk[0].join(', ').toLowerCase():''}${an.mk[0].length&&an.mk[1].length?' · ':''}${an.mk[1].length?'ele '+an.mk[1].join(', ').toLowerCase():''}.</p>`:''}
       ${an.cf&&an.cf.length?`<h3>CONFIANÇA</h3><div class="olist">${an.cf.slice(0,2).map(x=>`<div class="${x.s>0?'ok':'bad'}">${x.t}</div>`).join('')}</div>`:''}`;
   }else if(tab==='ringue'){
     const z=an.dz;
@@ -4308,7 +4617,8 @@ async function start(){
   for(const a of S.roster){migrateHist(a);migrateStyles(a);initBody(a,2);if(a.fight){migrateStyles(a.fight.opp);initBody(a.fight.opp,clamp(a.tier+1,1,5))}for(const o of a.offers||[]){migrateStyles(o.opp);initBody(o.opp,clamp(a.tier+1,1,5))}}
   for(const a of S.roster){normSkills(a);a.combos=a.combos||knownCombos(a).map(c=>c.id);a.recovery=a.recovery||0;a.ment=a.ment||rollMental();for(const[k]of ATTRS){if(a.attrs[k]==null)a.attrs[k]=k==='queixo'?50:10;if(a.cap[k]==null)a.cap[k]=a.attrs[k]+5}if(a.gift===undefined){a.gift=null;a.giftKnown=true}a.weeks=a.weeks||0}
   if(!Array.isArray(S.coaches)){S.coaches=startCoaches();for(const a of S.roster){a.coach=null;autoCoach(a)}} // treinadores (3A-1)
-  for(const a of S.roster){if(!FOCUS[a.focus])a.focus='attrs';a.cw=a.cw||0;if(a.coach&&!coachOf(a))a.coach=null;for(const k of['plan','padF','ovr','wcd','tlog','lastT','peak'])delete a[k]}
+  for(const a of S.roster){const T=techK(a);T.k=T.k.filter(k=>TECH[k]);if(T.l&&!TECH[T.l])T.l=null;if(T.fg&&!T.k.includes(T.fg))T.fg=null; // técnicas (3A-3)
+    if(!FOCUS[a.focus])a.focus='attrs';a.cw=a.cw||0;if(a.coach&&!coachOf(a))a.coach=null;for(const k of['plan','padF','ovr','wcd','tlog','lastT','peak'])delete a[k]}
   for(const a of S.roster){if(!CATS.includes(a.cat)){const OLD={Ligeiro:'Leve',Superpena:'Pena'};let c=OLD[a.cat]||'Leve'; // saves de teste com as 4 categorias antigas
     if(S.roster.some(x=>x!==a&&x.cat===c))c=CATS.find(k=>!S.roster.some(x=>x.cat===k))||c;a.cat=c;a.icat=null;a.nw=null}initWeight(a)}
   if(S.sub==='plano')S.sub='treino';S.gsub=S.gsub||'res';delete S.wchk;
