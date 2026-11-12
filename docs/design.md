@@ -50,6 +50,13 @@
 - **COMPARAR:** 8 atributos no início da luta (`an.at`, 16 números) em FÍSICO / TÉCNICO, números e barras curtas, até 3 maiores diferenças (≥ 5) com ◆; `TUNE.cmpNums=false` troca por só barras (diferença por palavras). Lutas antigas sem dados: aviso.
 - **Letras:** Silkscreen (títulos, nomes, botões, números, placard, pop-ups, palavras de estado) e VT323 (frases, análise, dicas, ajuda, textos). A Press Start 2P e a Pixelify Sans saíram; tamanhos revistos em todos os ecrãs (sem transbordo a 390×720/760).
 
+### Fase 3 — Gestão divertida · direção do Tiago (ideias, por decidir)
+- O jogo deve ser **quase "idle" fora da luta**: o tempo corre e o ginásio funciona sozinho; a parte ativa são as lutas e as decisões que aparecem.
+- **Acabar com o plano de treino semanal** (estar sempre a mudar planos não é divertido). O atleta **melhora sozinho com o tempo**, condicionado por fatores — p. ex. usa o **equipamento que o ginásio tem**, tem uma **rotina diária** (correr todos os dias).
+- **Treinos especiais como cartas** que se usam num atleta para melhorar certos atributos.
+- **Peso**: escolher um **foco de treino** (perder peso / atributos / talvez um terceiro, como itens ou pontos — por decidir), ligado à pesagem e às categorias.
+- Isto puxa a **mudança dos treinos (antes fase 6) para a fase 3**. Mexe em: golpe da semana nos Pads (1.6/1.7), cartões de cansaço, perda de condição sem treino; a velocidade de aprender (9.1) pode continuar a decidir quão depressa o atleta melhora sozinho.
+
 Detalhes das ideias das fases 2–4: `docs/pesquisa-bgs.md`.
 
 
