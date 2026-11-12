@@ -9,8 +9,8 @@
 | A | Guia — núcleo da luta (atributos, distância, golpes, defesa, contra-ataque) | Feita (v11) |
 | — | Tempo a correr sozinho + animações dos golpes, 1.ª versão | Feita (v12), à espera da opinião do Tiago |
 | 1 | Correções da luta: guarda com dois ombros (ortodoxo certo nos dois lados), sem cordas falsas, sem sobreposição, cerimónia final virada para o público | Feita (v13) |
-| 2 | **Luta legível:** duas vozes e menos texto, uma linha de cada vez, pop-ups (normais e especiais, com opção de desligar), ordens em balão, atributos do momento com estado por palavras, barras a piscar, estratégia por extenso | Feita (v14) — à espera da opinião do Tiago |
-| 3 | **Gestão divertida:** ajustes ao tempo, cartões de evento com escolhas, objetivos curtos, prémio da 1.ª vitória, álbum de momentos | Por decidir |
+| 2 | **Luta legível:** duas vozes e menos texto, uma linha de cada vez, pop-ups (normais e especiais, com opção de desligar), ordens em balão, atributos do momento com estado por palavras, barras a piscar, estratégia por extenso | Feita (v14), aprovada |
+| 3 | **Gestão divertida:** ajustes ao tempo, cartões de evento com escolhas, objetivos curtos, prémio da 1.ª vitória, álbum de momentos | Em discussão |
 | 4 | **Ginásio como mapa — funcionamento** (tocar no escritório, balneário, porta; desenhos simples) | Por decidir |
 | 5 | Guia — fase B: combinações e fintas, guarda canhota, estilos híbridos | Por decidir |
 | 6 | Guia — fase C: treinos novos, plano de combate e pesagem, faltas, taças sazonais | Por decidir |

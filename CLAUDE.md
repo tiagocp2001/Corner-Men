@@ -142,4 +142,4 @@ O Tiago quer o jogo baseado num guia de boxe que escreveu. **As decisões, o pla
 11. Faltas e golpes ilegais.
 12. Como tudo isto cabe num ecrã fixo.
 
-Último ponto aberto: ver o **Plano geral** no topo de `docs/design.md` (fase 2 — luta legível — implementada, por publicar e à espera da opinião do Tiago; a seguir, fase 3).
+Último ponto aberto: ver o **Plano geral** no topo de `docs/design.md` (neste momento: fase 3 — gestão divertida).
