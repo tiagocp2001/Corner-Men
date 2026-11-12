@@ -58,6 +58,10 @@
 - **Categorias (decidido):** 8 categorias (Mosca, Galo, Pena, Ligeiro, Meio-médio, Médio, Meio-pesado, Pesado) e 4 lugares para atletas, que podem estar em qualquer categoria; **dois atletas do ginásio não podem estar na mesma categoria**.
 - **Peso do atleta (direção):** quando entra no ginásio tem um **intervalo de pesos** e pode lutar num conjunto de categorias: uma **ideal**, uma acima onde é mais difícil ganhar peso, uma abaixo onde é mais difícil perder. **Mudar de categoria** exige condições (p. ex. completar a categoria — ganhar tudo — ou perder muitas lutas seguidas).
 - **Carreira (direção):** no **amador** o objetivo é tirar a **licença de profissional**; pode haver um **torneio amador** — quanto melhor a classificação, mais alto o **ranking** com que começa como profissional a caminho dos títulos. **Arenas diferentes** conforme o tipo de luta, com públicos diferentes. (Liga-se à proteção de cabeça no amador, fase 8, e resolve o "acelerar o título Amador" adiado.)
+- **Fãs / carisma (ideia):** cada atleta tem fãs ou carisma; quanto mais, mais público nas lutas e mais dinheiro.
+- **Treinador por atleta (ideia):** cada atleta tem um treinador, cada treinador melhor a treinar certas coisas; pode haver vários treinadores e pôr um a acompanhar um atleta para subir mais depressa certos atributos.
+- **Negócios parceiros (ideia, inspirada no Boxing Gym Story):** negócios que funcionam como patrocinadores e também ajudam — recuperação dos atletas, dietas, outras coisas.
+- O Tiago quer que eu **sugira** ideias que façam sentido e encaixem.
 - Isto puxa a **mudança dos treinos (antes fase 6) para a fase 3**. Mexe em: golpe da semana nos Pads (1.6/1.7), cartões de cansaço, perda de condição sem treino; a velocidade de aprender (9.1) pode continuar a decidir quão depressa o atleta melhora sozinho.
 
 Detalhes das ideias das fases 2–4: `docs/pesquisa-bgs.md`.
