@@ -10,7 +10,8 @@
 | — | Tempo a correr sozinho + animações dos golpes, 1.ª versão | Feita (v12), à espera da opinião do Tiago |
 | 1 | Correções da luta: guarda com dois ombros (ortodoxo certo nos dois lados), sem cordas falsas, sem sobreposição, cerimónia final virada para o público | Feita (v13) |
 | 2 | **Luta legível:** duas vozes e menos texto, uma linha de cada vez, pop-ups (normais e especiais, com opção de desligar), ordens em balão, atributos do momento com estado por palavras, barras a piscar, estratégia por extenso | Feita (v14), aprovada |
-| 3 | **Gestão divertida:** ajustes ao tempo, cartões de evento com escolhas, objetivos curtos, prémio da 1.ª vitória, álbum de momentos | Em discussão |
+| 3A | **Atletas e carreira:** atleta melhora sozinho (sem plano semanal) + treinador de cada atleta; peso e 8 categorias; carreira (amador e licença, torneio amador, ranking, títulos, arenas, mundo de pugilistas); cartas de treino; técnicas (como se aprendem, quantas) | Em discussão |
+| 3B | **Negócio do ginásio:** fãs e carisma, rivalidades, revista de boxe; negócios parceiros; ajustes ao tempo; eventos, objetivos curtos, prémio da 1.ª vitória, álbum de momentos | Por decidir |
 | 4 | **Ginásio como mapa — funcionamento** (tocar no escritório, balneário, porta; desenhos simples) | Por decidir |
 | 5 | Guia — fase B: combinações e fintas, guarda canhota, estilos híbridos | Por decidir |
 | 6 | Guia — fase C: treinos novos, plano de combate e pesagem, faltas, taças sazonais | Por decidir |
@@ -62,6 +63,9 @@
 - **Treinador por atleta (ideia):** cada atleta tem um treinador, cada treinador melhor a treinar certas coisas; pode haver vários treinadores e pôr um a acompanhar um atleta para subir mais depressa certos atributos.
 - **Negócios parceiros (ideia, inspirada no Boxing Gym Story):** negócios que funcionam como patrocinadores e também ajudam — recuperação dos atletas, dietas, outras coisas.
 - O Tiago quer que eu **sugira** ideias que façam sentido e encaixem.
+- **Aceites (sugestões):** fãs crescem com a forma de lutar (KO espetacular, reviravolta > vitória aborrecida); treinador com personalidade que combina melhor com certos atletas (liga a "ouvir o canto"); negócios parceiros (clínica de fisioterapia, nutricionista, loja de desporto, café do bairro, ginásio de musculação…); **rivalidades** (desforras enchem a arena, o Abílio fala nelas). **Ideia do Tiago:** uma **revista de boxe** com anúncios, notícias, rankings.
+- **Pergunta do Tiago:** criar ao início um **mundo de pugilistas** em todas as categorias e escalões, cada um com o seu ranking, que envelhecem, se reformam e são substituídos por novos — a decidir na parte da carreira.
+- **Divisão (decidido):** **Fase 3A — atletas e carreira** (como o atleta melhora sozinho + treinador de cada atleta; peso e categorias; carreira — amador, licença, ranking, títulos, arenas, mundo de pugilistas; cartas de treino; técnicas). **Fase 3B — negócio do ginásio** (fãs e carisma, rivalidades, revista de boxe; negócios parceiros; ajustes ao tempo; eventos, objetivos, prémio da 1.ª vitória, álbum).
 - Isto puxa a **mudança dos treinos (antes fase 6) para a fase 3**. Mexe em: golpe da semana nos Pads (1.6/1.7), cartões de cansaço, perda de condição sem treino; a velocidade de aprender (9.1) pode continuar a decidir quão depressa o atleta melhora sozinho.
 
 Detalhes das ideias das fases 2–4: `docs/pesquisa-bgs.md`.
