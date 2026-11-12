@@ -35,6 +35,7 @@
 - 2.13 **Decidido (imagens de teste):** o espaço livre por cima/baixo do ringue fica como está (decide-se melhor na fase 8); frases normais ~2 s e importantes ~4 s no ecrã (a experimentar); palavras de estado: mostrar todas por agora (arrumar na fase 8); separadores da análise em **duas linhas**; no canto, as palavras de estado numa caixa própria.
 - 2.14 **Decidido — mesa de comentadores:** os dois comentadores aparecem no ecrã, o Zé do Micro de um lado e o Abílio do outro, e cada balão sai do lado de quem fala.
 - 2.15 **Decidido — pop-ups ao mesmo tempo:** aparecem **por ordem** (o primeiro, depois o segundo, sem se sobreporem no tempo) e cada um aparece **mais para o lado do pugilista a que pertence** (para fora, não por cima do outro). O pop-up especial está **demasiado grande** nas imagens de teste: mais pequeno (continua a destacar-se pela moldura e pelo brilho).
+- 2.16 **Decidido — imagens de teste aprovadas** (`screens/fase2-teste/`: mesa de comentadores, pop-ups por ordem, especial mais pequeno só com uma palavra, COMPARAR com separadores em duas linhas). **Letra:** Silkscreen para os números e textos pequenos; Press Start 2P só nos títulos grandes (falta confirmar o texto corrido — a Silkscreen só tem maiúsculas).
 - 2.3 **Decidido — uma linha de cada vez:** só a frase atual, com a cara pequena de quem fala; as frases importantes ficam mais tempo no ecrã; o retrato grande sai e o espaço vai para o ringue.
 
 Detalhes das ideias das fases 2–4: `docs/pesquisa-bgs.md`.
