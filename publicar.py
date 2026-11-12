@@ -11,7 +11,7 @@ A fonte do jogo é o próprio index.html do repositório.
 """
 import re, sys, datetime
 
-KEY_ESPERADA = 'corner-men-v7'  # mudar só de propósito: apaga o progresso de todos os jogadores
+KEY_ESPERADA = 'corner-men-v8'  # mudar só de propósito: apaga o progresso de todos os jogadores
 
 html = open('index.html', encoding='utf8').read()
 sw = open('sw.js', encoding='utf8').read()

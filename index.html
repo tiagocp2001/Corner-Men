@@ -306,6 +306,53 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .sg{font-family:var(--f-display);font-size:8px;color:var(--muted);letter-spacing:.06em;line-height:1.2}
 .card.ficha .pers{font-size:15.5px;line-height:.95} .card.ficha .pers b{color:var(--gold);font-weight:400}
 .card.ficha .meta{line-height:1}
+/* 3A-1: treino sem plano e treinadores */
+.stag{display:inline-block;font-family:var(--f-display);font-size:8px;letter-spacing:.06em;padding:2px 4px 1px;border:1px solid;line-height:1;vertical-align:middle}
+.stag.sp{color:#ef7a5f;border-color:#d4452f} .stag.si{color:var(--gold);border-color:#9c7420} .stag.so{color:#8fbbe6;border-color:var(--blue)}
+.cst{color:var(--gold);font-size:11px;letter-spacing:-1px;font-style:normal;white-space:nowrap} .cst i{font-style:normal;color:#5a4632}
+.bpip{display:inline-flex;gap:2px;vertical-align:middle;margin-right:4px} .bpip i{width:11px;height:6px;background:#120e0b;border:1px solid #5a4632} .bpip i.f{background:var(--gold);border-color:var(--gold)}
+.chh{display:flex;justify-content:space-between;align-items:baseline;gap:6px;flex:none} .chh .meta{font-size:16px}
+.crows{gap:4px;min-height:0;overflow:hidden}
+.r.cr{grid-template-columns:26px 1fr auto;gap:7px;padding:3px 6px}
+.r.cr canvas{width:26px;height:26px;image-rendering:pixelated;border:1px solid var(--line);background:#3a2d22}
+.cinfo{background:none;border:0;padding:0;text-align:left;color:var(--fg);cursor:pointer;min-width:0;font:inherit}
+.r .cl,.tco .cl{display:flex;gap:5px;align-items:center;font-family:var(--f-display);font-size:8px;color:var(--muted);letter-spacing:.05em;margin:2px 0 1px;white-space:nowrap}
+.r.cr p{font-size:15px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .r .cl strong{display:inline;font-size:9px;color:var(--fg)} .r.cr p b{font-weight:400;color:var(--fg)}
+.r.cr .btn{font-size:8px;padding:5px 4px 3px;min-width:68px}
+.r.cr .cinfo{overflow:hidden}
+.hire{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;flex:none}
+.hb{background:var(--panel2);border:2px solid var(--gold);color:var(--fg);padding:4px 4px 3px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:1px;min-width:0;font-family:var(--f-body)}
+.hb b{font-family:var(--f-display);font-size:8px;font-weight:400;letter-spacing:.05em}
+.hb span{font-size:14px;line-height:.95;color:var(--fg)}
+.hb:disabled{border-color:var(--line);opacity:.5;cursor:default} .hb:disabled span{color:var(--muted);font-family:var(--f-display);font-size:7px;letter-spacing:.04em;line-height:1.2}
+.evo{background:var(--panel);border:2px solid var(--line);border-left:3px solid var(--gold);padding:4px 8px;display:flex;flex-direction:column;gap:2px;flex:none}
+.evo .eh{display:flex;justify-content:space-between} .evo small{font-family:var(--f-display);font-size:8px;color:var(--muted);letter-spacing:.08em}
+.evo .er{display:grid;grid-template-columns:64px 1fr;gap:6px;align-items:baseline;font-size:16.5px;line-height:1}
+.evo .er small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.evo .er span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted)} .evo i{font-style:normal} .gd{color:var(--gold)}
+.trc{gap:4px;padding:6px 9px;min-height:0;overflow:hidden}
+.tco{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center}
+.tco>div:first-child:last-child,.tco>div:first-child{min-width:0}
+.tco canvas{width:40px;height:40px;image-rendering:pixelated;border:2px solid var(--line);background:#3a2d22}
+.tco .cn{font-family:var(--f-display);font-size:10px;display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.tco .meta{font-size:16px;line-height:1.05} .tco .bl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .tco .ctier{font-family:var(--f-display);font-size:8px;letter-spacing:.05em} .tco .bw{font-weight:400;color:var(--fg)}
+.tco .btn{font-size:8.5px;padding:8px 6px 6px}
+.fh{display:flex;justify-content:space-between;align-items:baseline} .fh .meta{font-size:15px}
+.foc{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.foc button{background:var(--panel2);border:2px solid var(--line);color:var(--muted);padding:4px 5px 3px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:1px;font-family:var(--f-body);font-size:15.5px;line-height:1;min-width:0}
+.foc button b{font-family:var(--f-display);font-size:8px;font-weight:400;letter-spacing:.05em;color:var(--fg);white-space:nowrap}
+.foc button.on{border-color:var(--gold);color:var(--fg)} .foc button.on b{color:var(--gold)}
+.trc>.meta{font-size:15.5px;line-height:1} .fcat b{font-weight:400;color:var(--fg)}
+.imp{display:flex;flex-direction:column;gap:1px}
+.imp p{display:grid;grid-template-columns:20px 1fr;font-size:16px;line-height:.98} .imp em{font-style:normal;color:var(--green);font-size:12px;letter-spacing:-2px}
+.imp p.lo{color:var(--muted)} .imp p.lo em{color:var(--muted)} .imp i{font-style:normal;color:var(--muted)}
+.ccmp{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center} .ccmp>em{font-style:normal;color:var(--gold)}
+.ccb{border:2px solid var(--line);background:var(--panel2);padding:5px 7px;display:flex;flex-direction:column;gap:3px;align-items:flex-start;min-width:0}
+.ccb.nw{border-color:var(--gold)} .ccb small{font-family:var(--f-display);font-size:7.5px;color:var(--muted);letter-spacing:.08em}
+.ccb b{font-family:var(--f-display);font-size:9px;font-weight:400} .ccb span{font-size:15.5px;color:var(--muted);line-height:1}
+.ccl{display:flex;flex-direction:column;gap:5px} .ccl p{display:grid;grid-template-columns:16px 1fr;font-size:17.5px;line-height:1.05} .ccl em{font-style:normal;color:var(--gold);font-size:13px}
+.toast.wk .wm{font-size:14.5px}
+
 .card.hist{gap:5px;padding:7px 8px;overflow:hidden}
 .hhd{display:flex;align-items:center;justify-content:space-between;gap:6px;flex:none}
 .hhd h3{margin:0}
@@ -397,14 +444,14 @@ const fmt=n=>Math.round(n).toLocaleString('pt-PT');
 /* ================= DATA ================= */
 const CATS=['Pena','Superpena','Ligeiro','Pesado'];
 const CAT_KG={Pena:'57 kg',Superpena:'59 kg',Ligeiro:'61 kg',Pesado:'+91 kg'};
-const TUNE=Object.assign({hitDiv:350,hvy:1.55,resK:.3,qk:.45,mk:.45,cleanMul:6,normMul:.45,cleanP:.02,forK:.04,judge:.8,giftK:.35,train:.2,decay:.3,decayFloor:.88,formK:1,dmg:.88,edge:.25,sagg:0,hprec:6,flash:.4,sdA:-.02,sdD:.1,sdC:.02,tdA:.03,tdB:.08,pc:.8,scm:.5,hd:.5,bdm:.5,cr:20,dk:30,dr:.55,topD:.13,punD:.12,punF:.4,inCtr:.3,inCl:.2,sfB:.42,sfK:.116,rch:.03,fitP:.015,fitN:.006,hearB:6,hearSt:24,hearHp:30,hearKd:.35,hearJit:.25,hearDeaf:.8,hearSlow:12,hearCalm:.8,hearStub:1.3,qxK:.35,qxD:.1,qxG:.15,qxKO:3,qxAge:28,qxYear:1.5,iqFight:10,hearIQ:.25,discG:.25,discF:.3,discQ:.08,stubT:40,stubTalk:.45,stubFight:.35,calmL:8,calmSt:.06,corG:.15,concK:.03,finK:.3,confDrift:.06,mentSd:18,mentOut:15,
+const TUNE=Object.assign({hitDiv:350,hvy:1.55,resK:.3,qk:.45,mk:.45,cleanMul:6,normMul:.45,cleanP:.02,forK:.04,judge:.8,giftK:.35,train:.2,formK:1,dmg:.88,edge:.25,sagg:0,hprec:6,flash:.4,sdA:-.02,sdD:.1,sdC:.02,tdA:.03,tdB:.08,pc:.8,scm:.5,hd:.5,bdm:.5,cr:20,dk:30,dr:.55,topD:.13,punD:.12,punF:.4,inCtr:.3,inCl:.2,sfB:.42,sfK:.116,rch:.03,fitP:.015,fitN:.006,hearB:6,hearSt:24,hearHp:30,hearKd:.35,hearJit:.25,hearDeaf:.8,hearSlow:12,hearCalm:.8,hearStub:1.3,qxK:.35,qxD:.1,qxG:.15,qxKO:3,qxAge:28,qxYear:1.5,iqFight:10,hearIQ:.25,discG:.25,discF:.3,discQ:.08,stubT:40,stubTalk:.45,stubFight:.35,calmL:8,calmSt:.06,corG:.15,concK:.03,finK:.3,confDrift:.06,mentSd:18,mentOut:15,
   /* A2 golpes e defesas: dfK/dfE0 peso da defesa escolhida no acerto (centrado para dar, em média, o mesmo que o bónus antigo por nível de defesa); readB lê o golpe que vem (+Ring IQ); blkD dano que passa num bloqueio; ombR dano extra se o ombro falha;
      pesBrk o Pés corta a combinação; ctr* hipótese base de counter por família, ctrMax teto, ctrHit/ctrDmg/ctrFl bónus do counter;
      liv* gancho ao fígado (K base, S parte forte, St fôlego perdido no leve, T tempo curvado em ms de luta, Hit acerto contra ele curvado, Close a curta distância);
-     bodyG/bodyGMax guarda que baixa com o trabalho ao corpo; clJ juízes contra quem agarra; padXP/lnkXP/learnXP treino; bel* confiança em cada habilidade. */
+     bodyG/bodyGMax guarda que baixa com o trabalho ao corpo; clJ juízes contra quem agarra; learnXP aprender um golpe/defesa; bel* confiança em cada habilidade. */
   dfK:.2,dfE0:.32,readB:.55,blkD:.15,ombR:1.15,pesBrk:.75,ctrCab:.22,ctrOmb:.24,ctrApa:.15,ctrPes:.12,ctrBlq:.05,ctrCl:.04,ctrMax:.45,ctrHit:.12,ctrDmg:1.2,ctrFl:1.8,
   livK:.035,livS:.15,livSt:20,livT:2500,livHit:.15,livClose:.5,bodyG:.002,bodyGMax:.06,clJ:1.5,varP:.25,
-  padXP:4.6,lnkXP:1.5,learnXP:12,bel0:.3,belUp:.25,belC:.8,belF:.3,belS:.25,belR:.08,belNote:1,
+  learnXP:12,bel0:.3,belUp:.25,belC:.8,belF:.3,belS:.25,belR:.08,belNote:1,
   /* A3 distância e ringue (tema 5, 4.2, 4.3): dIQ peso do Ring IQ na disputa da distância (os Pés pesam 1); dDiv escala; dMin nunca é garantido;
      dStrat peso da estratégia (0: por decidir, 5.1); dRope/dCorn encostado às cordas/canto a distância tende a fechar; cornPerto no canto é quase sempre perto;
      dHit/dDmg golpe bom/mau para a distância (DIST_FIT) no acerto e no dano; zPush empurrar para as cordas/canto; zEsc sair; zDrift empurrar quando ninguém disputa;
@@ -413,10 +460,17 @@ const TUNE=Object.assign({hitDiv:350,hvy:1.55,resK:.3,qk:.45,mk:.45,cleanMul:6,n
      ctlJ vantagem nos juízes de quem controla o ringue (só pesa em rounds equilibrados). */
   dIQ:.5,dDiv:90,dMin:.12,dStrat:0,dRope:.1,dCorn:.25,cornPerto:.85,dHit:.12,dDmg:.8,zPush:.45,zEsc:.55,zDrift:.2,ropeD:.85,cornD:.7,ropeH:.02,cornH:.04,cornC:1.2,
   wobT:9000,wobP:.45,antK:.16,antHit:.08,ccK:.05,ccOk:.5,ccHit:.15,ccFl:2.5,ctrAng:.08,ctrClS:.12,ctlJ:.05,fwT:700,pesSt:.45,pesHp:.35,
-  /* A4 velocidade de aprender (9.1): qualidade da sessão q (atleta: discQ Disciplina, concQ Concentração, confQ confiança do dia; treinador: staffQ por
-     especialista de estilo); por habilidade (learnK): lCoach adjunto, lStaff cada especialista, lSpec especialista do estilo do golpe/defesa,
-     lTec Técnica num golpe/defesa novo (lTec0 neutro), lFat fadiga da semana. padXP experiência dos Pads por sessão; learnXP para aprender. */
-  confQ:.0045,concQ:.05,staffQ:.02,lCoach:.25,lStaff:.05,lSpec:.3,lTec:.008,lTec0:40,lTecMin:.83,lTecMax:1.25,lFat:.3,
+  /* A4 velocidade de aprender (9.1): qualidade do treino q (atleta: discQ Disciplina, concQ Concentração, confQ confiança do dia);
+     por habilidade (learnK): lSpec golpe/defesa do estilo do treinador, lTec Técnica num golpe/defesa novo (lTec0 neutro). learnXP para aprender. */
+  confQ:.0045,concQ:.05,lSpec:.3,lTec:.008,lTec0:40,lTecMin:.83,lTecMax:1.25,
+  /* 3A-1 treino sem plano (o atleta treina sozinho todos os dias): tDay ganho base de um atributo por dia; eqW0 saturação do peso da rotina e do
+     equipamento (1-e^(-peso/eqW0)); eqMore cada aparelho repetido; coachT ritmo por escalão do treinador (Bairro, Clube, Regional, Nacional, Lenda);
+     noCoach sem treinador; bond0/bond1 ligação ao treinador (acabados de conhecer → unha com carne); focA/focS foco do treino nos atributos e nos
+     golpes/defesas (attrs = Atributos, tec = Técnicas, peso = Perder peso); skDay experiência de golpes e defesas por dia; skCoach peso extra dos
+     golpes/defesas do estilo do treinador; skNew peso de um golpe/defesa novo que já pode aprender (o treinador ensina-o); skUse peso dos golpes usados nas lutas; styWk experiência de estilo por semana com o treinador; styDec desgaste
+     por semana nos outros estilos (perde um nível quando o desgaste chega à experiência desse nível, SXP; nunca abaixo do nível 1); age* ritmo por idade (até 20, 24, 28, 31, depois); ageDec0/ageDec perda física por semana com a idade. Por afinar (fase 7). */
+  tDay:.03,eqW0:3,eqMore:.15,coachT:[1,1.15,1.3,1.45,1.6],noCoach:.6,bond0:.85,bond1:1.1,focA:{attrs:1,tec:.6,peso:.5},focS:{attrs:1,tec:1.6,peso:.8},
+  skDay:.2,skCoach:2,skNew:1.5,skUse:.1,styWk:.6,styDec:.12,ageK:[1.15,1,.85,.6,.35],ageDec0:31,ageDec:.03,
   /* Fase 2 — atributos do momento (2.9), em mom(x): com o fôlego abaixo de moSt e a vida abaixo de moHp cada atributo conta menos (só nessa luta).
      m<Atr>St / m<Atr>Hp: parte que se perde sem fôlego / sem vida (os Pés usam pesSt, pesHp e wobP, de cima); mQxKd Queixo por queda nesta luta (até mQxMin);
      mIqCalm quanto a Calma protege o Ring IQ; mTecConc Técnica nos últimos rounds com Concentração baixa. Por afinar (fase 7).
@@ -448,7 +502,6 @@ function edge(a,b){
 /* ---- body (height/reach) and style levels ---- */
 const H_BASE={Pena:170,Superpena:172,Ligeiro:175,Pesado:190};
 const STY0=()=>({'In-fighter':0,'Outboxer':0,'Puncher':0});
-const STY_COACH={'In-fighter':'cIn','Outboxer':'cOut','Puncher':'cPun'};
 function rollBody(cat){const h=(H_BASE[cat]||175)+RI(-7,7);return{h,r:h+RI(-3,8)}}
 function bodyRel(x){const b=H_BASE[x.cat]||175;return((x.h||b)-b)+(((x.r||b+2.5)-(x.h||b))-2.5)*.8}
 function bodyType(x){const v=bodyRel(x);return v<=-3.5?'Compacto':v>=3.5?'Longo':'Médio'}
@@ -491,7 +544,6 @@ const ATTRS=[['forca','Força'],['velocidade','Velocidade'],['resistencia','Resi
 const ATTR_G=[['FÍSICO',['forca','velocidade','resistencia','queixo']],['TÉCNICO',['tecnica','defesa','pes','iq']]];
 const ATTR_N=Object.fromEntries(ATTRS);
 const SHORT={forca:'For',velocidade:'Vel',resistencia:'Res',queixo:'Qxo',tecnica:'Téc',defesa:'Def',pes:'Pés',iq:'IQ'};
-const DECAY_K=['forca','velocidade','resistencia']; // perdem condição sem treino (o Queixo não: só desce com a idade e com KOs)
 function attrLow(k){return k==='iq'?'Ring IQ':ATTR_N[k].toLowerCase()}
 function gs(){return(Math.random()+Math.random()+Math.random()-1.5)*2} // ~normal(0,1)
 function rollChin(){return clamp(Math.round(50+gs()*13),22,85)}
@@ -529,51 +581,59 @@ const TIERS=[
   {n:'Nacional',rounds:6,base:50,purse:[4000,8000],share:.33,cost:400,spons:200},
   {n:'Mundial',rounds:8,base:68,purse:[20000,40000],share:.25,cost:1500,spons:600}
 ];
-const ECON={fee:15,rentBase:30,rentPerUpg:20,maint:3,coach:60};
+const ECON={fee:15,rentBase:30,rentPerUpg:20,maint:3};
 function weeklyCosts(){
-  const sal=S.roster.reduce((t,a)=>t+a.salary,0),staff=(S.up.treinador?ECON.coach:0)+UPG.filter(u=>u.coach&&S.up[u.id]).length*40;
-  const rent=ECON.rentBase+ECON.rentPerUpg*UPG.filter(u=>S.up[u.id]&&u.id!=='treinador'&&!u.coach).length;
+  const sal=S.roster.reduce((t,a)=>t+a.salary,0),staff=coachPay(); // treinadores: só recebem quando acompanham um atleta
+  const rent=ECON.rentBase+ECON.rentPerUpg*UPG.filter(u=>S.up[u.id]).length;
   const maint=ECON.maint*eqUnits();
   return{sal,staff,rent,maint,total:sal+staff+rent+maint};
 }
 function sponsors(){let v=Math.max(0,Math.round(S.pop-20));for(const a of S.roster)if(a.titles.length)v+=[15,50,150,450][Math.min(3,a.titles.length-1)];return v}
-const TR={
-  saco:{n:'Saco',eq:'saco',g:{forca:3,resistencia:.8},f:12,d:'Força'},
-  sparring:{n:'Sparring',eq:'sparring',g:{defesa:2.4,tecnica:1.2,velocidade:.6,iq:.9},f:14,d:'Defesa, técnica, Ring IQ'},
-  corrida:{n:'Corrida',eq:null,g:{resistencia:3},f:11,d:'Resistência'},
-  shadow:{n:'Shadow boxing',eq:null,g:{tecnica:1.6,velocidade:1.2,pes:1},f:7,d:'Técnica, pés'},
-  corda:{n:'Corda',eq:'corda',g:{resistencia:2,velocidade:1.4,pes:1.8},f:11,d:'Resistência, pés'},
-  pads:{n:'Pads',eq:'pads',g:{tecnica:3,velocidade:.6},f:11,d:'Técnica, golpe da semana',xp:true},
-  pesos:{n:'Musculação',eq:'pesos',g:{forca:3.6},f:14,d:'Força'},
-  pera:{n:'Pera',eq:'pera',g:{velocidade:2.8,tecnica:1},f:8,d:'Velocidade'},
-  esquiva:{n:'Corda de esquiva',eq:'esquiva',g:{defesa:3,velocidade:.8},f:9,d:'Defesa, mov. de cabeça'},
-  pneu:{n:'Pneu e marreta',eq:'pneu',g:{forca:2.4,resistencia:2.2},f:16,d:'Força, resist.'},
-  bola:{n:'Bola medicinal',eq:'bola',g:{resistencia:2.2,defesa:1,queixo:.8},f:12,d:'Aguentar golpes'},
-  estIn:{n:'Estilo In-fighter',eq:null,up:'cIn',sty:'In-fighter',g:{},f:12,d:'Aprende o estilo In-fighter'},
-  estOut:{n:'Estilo Outboxer',eq:null,up:'cOut',sty:'Outboxer',g:{},f:11,d:'Aprende o estilo Outboxer'},
-  estPun:{n:'Estilo Puncher',eq:null,up:'cPun',sty:'Puncher',g:{},f:12,d:'Aprende o estilo Puncher'},
-  descanso:{n:'Descanso',eq:null,g:{},f:-22,d:'Baixa a fadiga'}
+/* ---- treino sem plano (3A-1): o atleta treina sozinho todos os dias. ROUTINE = a rotina de todos (corrida e shadow boxing);
+   EQ_G = o que cada aparelho do ginásio treina (peso por atributo; sem o aparelho esses atributos sobem mais devagar);
+   EQ_SK = golpes e defesas que cada aparelho puxa ('*' = todos os golpes que sabe). ---- */
+const ROUTINE={resistencia:3,tecnica:.6,velocidade:.5,pes:.6,defesa:.3,iq:.2};
+const EQ_G={
+  saco:{forca:3,resistencia:.8},
+  sparring:{defesa:2.4,tecnica:1.2,velocidade:.6,iq:.9},
+  corda:{resistencia:2,velocidade:1.4,pes:1.8},
+  pads:{tecnica:3,velocidade:.6},
+  pesos:{forca:3.6},
+  pera:{velocidade:2.8,tecnica:1},
+  esquiva:{defesa:3,velocidade:.8},
+  pneu:{forca:2.4,resistencia:2.2},
+  bola:{resistencia:2.2,defesa:1,queixo:.8}
 };
+const EQ_SK={saco:{direto:1,ganchoT:1,overhand:1},pera:{jab:1.5},pads:{'*':.6,aparar:1},sparring:{bloqueio:.5,aparar:.5,cabeca:.5,ombro:.6,pes:.5,clinch:.6},
+  esquiva:{cabeca:2},corda:{pes:1},bola:{bloqueio:1}};
+const ROUT_SK={'*':.3,cabeca:.2,pes:.2};
 const EQ={
-  saco:{n:'Saco de pancada',max:3,cost:[0,400,600]},
-  sparring:{n:'Zona de sparring',max:2,cost:[0,900]},
-  corda:{n:'Corda de saltar',max:3,cost:[150,200,250]},
-  pera:{n:'Pera de velocidade',max:2,cost:[450,500]},
-  pads:{n:'Pads',max:2,cost:[600,700]},
-  pesos:{n:'Banco e pesos',max:2,cost:[1000,1200]},
-  esquiva:{n:'Corda de esquiva',max:1,cost:[350]},
-  pneu:{n:'Pneu e marreta',max:1,cost:[450]},
-  bola:{n:'Bola medicinal',max:2,cost:[300,350]}
+  saco:{n:'Saco de pancada',max:3,cost:[0,400,600],d:'Força · direto, gancho de trás, overhand'},
+  sparring:{n:'Zona de sparring',max:2,cost:[0,900],d:'Defesa, Técnica, Ring IQ · todas as defesas e confiança'},
+  corda:{n:'Corda de saltar',max:3,cost:[150,200,250],d:'Resistência, Pés, Velocidade · defesa de pés'},
+  pera:{n:'Pera de velocidade',max:2,cost:[450,500],d:'Velocidade, Técnica · jab'},
+  pads:{n:'Pads',max:2,cost:[600,700],d:'Técnica · todos os golpes e aparar'},
+  pesos:{n:'Banco e pesos',max:2,cost:[1000,1200],d:'Força'},
+  esquiva:{n:'Corda de esquiva',max:1,cost:[350],d:'Defesa · movimento de cabeça'},
+  pneu:{n:'Pneu e marreta',max:1,cost:[450],d:'Força, Resistência'},
+  bola:{n:'Bola medicinal',max:2,cost:[300,350],d:'Resistência, Defesa, um pouco de Queixo · bloqueio'}
 };
 const UPG=[
   {id:'pintura',n:'Pintar e arranjar',cost:1500,d:'+6 popularidade, +4 lugares. Os sócios deixam de se queixar. Renda +20 €/semana.'},
   {id:'balneario',n:'Balneários novos',cost:2500,d:'+6 lugares para sócios, +2 popularidade. Renda +20 €/semana.'},
-  {id:'treinador',n:'Treinador assistente',cost:2000,d:'+20% nos treinos, segura os pads, ensina os ganchos (3 e 4). Salário 60 €/semana.'},
-  {id:'cIn',n:'Treinador de In-fighter',cost:1500,coach:true,d:'Ensina o estilo In-fighter: pressão, trabalho de corpo, entrar por baixo. Novo treino no plano. Salário 40 €/semana.'},
-  {id:'cOut',n:'Treinador de Outboxer',cost:1500,coach:true,d:'Ensina o estilo Outboxer: jab, distância e pés. Novo treino no plano. Salário 40 €/semana.'},
-  {id:'cPun',n:'Treinador de Puncher',cost:1500,coach:true,d:'Ensina o estilo Puncher: pés plantados, escolher o momento e bater pesado. Novo treino no plano. Salário 40 €/semana.'},
   {id:'ringue',n:'Ringue a sério',cost:6000,d:'+6 popularidade, +3 lugares. O sparring rende mais. Renda +20 €/semana.'}
 ];
+/* ---- treinadores (3A-1, modelo C + por estilo): cada atleta tem UM treinador principal; o ginásio tem até CMAX. Treinador no save:
+   {id, n (nome), st (estilo), t (escalão 0-4), sal (€/semana, só quando acompanha um atleta), lk (aspeto)}; no atleta: a.coach (id) e a.cw
+   (semanas juntos = ligação). CT = escalões (custo para contratar, salário, fama precisa: por agora a popularidade). STY_ATTR = o que cada estilo
+   de treinador puxa mais (e menos) nos atributos; STY_TEACH (WEEK) = os golpes e defesas que ensina mais. ---- */
+const CT=[{n:'Bairro',sal:40,cost:0,fame:0},{n:'Clube',sal:70,cost:600,fame:10},{n:'Regional',sal:120,cost:2000,fame:30},{n:'Nacional',sal:250,cost:6000,fame:55},{n:'Lenda',sal:600,cost:20000,fame:80}];
+const CMAX=5;
+const STY_ATTR={'Outboxer':{pes:1.35,velocidade:1.25,iq:1.2,defesa:1.1,forca:.8},'In-fighter':{resistencia:1.25,forca:1.15,defesa:1.15,tecnica:1.1,pes:.85},'Puncher':{forca:1.35,velocidade:1.2,tecnica:1.1,pes:.85}};
+const C_NAMES=['Sr. Armando','Mestre Quim','Dona Lurdes','Tio Zeca','Sr. Fernando','Mestre Jacinto','Dona Rosa','Sr. Américo','Mestre Bento','Tio Chico','Sr. Horácio','Dona Graça','Mestre Adelino','Sr. Valdemar','Professor Vasco','Dona Amélia','Mestre Silvino','Sr. Agostinho','Dona Fátima','Mestre Ezequiel'];
+const BOND=[['acabados de conhecer',0],['a conhecer-se',4],['entendem-se bem',10],['confiam um no outro',20],['unha com carne',36]]; // [palavras, semanas juntos]
+const FOCUS={peso:{n:'PERDER PESO',l:['Peso ▼▼','Atributos ▲'],d:'Perde peso; os atributos sobem devagar.'},attrs:{n:'ATRIBUTOS',l:['Atributos ▲▲','Peso igual'],d:'Treino normal: os atributos sobem ao ritmo normal.'},
+  tec:{n:'TÉCNICAS',l:['Golpes ▲▲','Atributos ▲'],d:'Golpes e defesas sobem mais depressa; os atributos menos.'}};
 /* ---- golpes (tema 1): os 7 do Guia, cada um com nível 1-5 e experiência. num = número do Guia (1-6; o overhand não tem).
    cls = trajetória (reto / gancho / upper) para as defesas; body = vontade de o mandar ao corpo; fl = base da queda relâmpago (à cabeça).
    O alvo (cabeça/corpo) escolhe-o o atleta na luta. As variações (power jab, shovel hook…) são só texto do comentador. ---- */
@@ -607,14 +667,14 @@ const DKEYS=Object.keys(DEFS);
 const DSTY={'Outboxer':{pes:1.6,aparar:1.5},'In-fighter':{cabeca:1.6,bloqueio:1.4},'Puncher':{bloqueio:1.6}}; // preferência de defesa por estilo
 function skNo(k){return{bloqueio:'no bloqueio',aparar:'a aparar',cabeca:'no movimento de cabeça',ombro:'na defesa de ombro',pes:'no trabalho de pés',clinch:'no clinch'}[k]||'no '+pLow(k)}
 function skName(k){return k in DEFS?DEFS[k].n:pName(k)}
-/* o que é preciso para aprender cada golpe/defesa (os golpes aprendem-se nos Pads, com o golpe da semana) */
-const LEARN={direto:{tecnica:20},ganchoF:{forca:28,up:'treinador'},ganchoT:{forca:30,up:'treinador'},upperF:{forca:22,tecnica:25},upperT:{forca:25,tecnica:25},overhand:{forca:30,sk:{direto:2}},
+/* o que é preciso para aprender cada golpe/defesa (aprendem-se sozinhos no treino diário quando o atleta cumpre isto; coach = precisa de um treinador) */
+const LEARN={direto:{tecnica:20},ganchoF:{forca:28,coach:1},ganchoT:{forca:30,coach:1},upperF:{forca:22,tecnica:25},upperT:{forca:25,tecnica:25},overhand:{forca:30,sk:{direto:2}},
   aparar:{tecnica:18,velocidade:15},cabeca:{velocidade:20},ombro:{defesa:25,iq:25},pes:{pes:15},clinch:{resistencia:20}};
-function learnLack(a,k){const L=LEARN[k];if(!L)return '';if(L.up&&!S.up[L.up])return 'precisa de treinador';
-  for(const[at,v]of Object.entries(L)){if(at==='up'||at==='sk')continue;if((a.attrs[at]||0)<v)return `${attrLow(at)} ${v}`}
+function learnLack(a,k){const L=LEARN[k];if(!L)return '';if(L.coach&&!coachOf(a))return 'precisa de treinador';
+  for(const[at,v]of Object.entries(L)){if(at==='coach'||at==='sk')continue;if((a.attrs[at]||0)<v)return `${attrLow(at)} ${v}`}
   if(L.sk)for(const[s,v]of Object.entries(L.sk))if((a.skills[s]||0)<v)return `${pLow(s)} nv ${v}`;return ''}
-const DEF_TR={bloqueio:'Sparring e Bola medicinal',aparar:'Pads e Sparring',cabeca:'Corda de esquiva, Shadow e Sparring',ombro:'Sparring',pes:'Corda, Shadow e Sparring',clinch:'Sparring'};
-const SK_TR={jab:'Pera e Shadow',direto:'Saco e Shadow',ganchoF:'Shadow',ganchoT:'Saco e Shadow',upperF:'Shadow',upperT:'Shadow',overhand:'Saco e Shadow'};
+const DEF_TR={bloqueio:'Bola medicinal e Zona de sparring',aparar:'Pads e Zona de sparring',cabeca:'Corda de esquiva e Zona de sparring',ombro:'Zona de sparring',pes:'Corda de saltar e Zona de sparring',clinch:'Zona de sparring'};
+const SK_TR={jab:'Pera e Pads',direto:'Saco e Pads',ganchoF:'Pads',ganchoT:'Saco e Pads',upperF:'Pads',upperT:'Pads',overhand:'Saco e Pads'};
 /* ---- confiança em cada habilidade (tema 3.2): a.bel[k] = nível em que o atleta acredita (golpes e defesas). O nível real decide se resulta;
    a crença decide quantas vezes a usa. Cada sucesso sobe a crença, cada falhanço desce (em sparring e nas lutas); o equilíbrio é o nível real,
    puxado pela Confiança (mental) e pela confiança do dia; Ring IQ alto corrige mais depressa. ---- */
@@ -663,7 +723,7 @@ const DAYS=['SEGUNDA','TERÇA','QUARTA','QUINTA','SEXTA','SÁBADO'];
 
 /* ================= STATE ================= */
 let S=null;
-const KEY='corner-men-v7';
+const KEY='corner-men-v8';
 function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
 function load(){try{const t=localStorage.getItem(KEY);return t?JSON.parse(t):null}catch(e){return null}}
 function look(){return{skin:pick(SKINS),hair:pick(HAIRS),trunk:pick(TRUNKS)}}
@@ -672,13 +732,13 @@ function makeAthlete(cat,o={}){
   const bd=o.h?{h:o.h,r:o.r}:rollBody(cat);
   const a={h:bd.h,r:bd.r,id:'a'+Date.now()+RI(0,9999),name:o.name||pick(FIRST)+' '+pick(LAST),nick:o.nick||pick(NICKS),age:o.age||RI(16,21),cat,
     style:o.style||styleForBody(bodyType({cat,h:bd.h,r:bd.r})),ment:o.ment?Object.assign(Object.fromEntries(MENT.map(([k])=>[k,50])),o.ment):rollMental(),bw:RI(0,51),salary:o.salary||RI(30,45),look:o.look||look(),
-    attrs:{},cap:{},pot,fatigue:0,conf:55,injury:0,skills:newSkills(),xp:Object.fromEntries(PKEYS.map(k=>[k,0])),def:newDefs(),dxp:Object.fromEntries(DKEYS.map(k=>[k,0])),bel:{jab:1,bloqueio:1,pes:1},padF:null,use:{},combos:[],recovery:0,
-    rec:{w:0,l:0,d:0,ko:0},tier:0,rank:10,titles:[],fight:null,offers:[],plan:['saco','corrida','sparring'],gift:o.gift===undefined?rollGift(cat):o.gift,giftKnown:false,weeks:0,hint:null,base:{},peak:{},lastT:{},tlog:[],refusals:0};
+    attrs:{},cap:{},pot,fatigue:0,conf:55,injury:0,skills:newSkills(),xp:Object.fromEntries(PKEYS.map(k=>[k,0])),def:newDefs(),dxp:Object.fromEntries(DKEYS.map(k=>[k,0])),bel:{jab:1,bloqueio:1,pes:1},use:{},combos:[],recovery:0,coach:null,cw:0,focus:'attrs',
+    rec:{w:0,l:0,d:0,ko:0},tier:0,rank:10,titles:[],fight:null,offers:[],gift:o.gift===undefined?rollGift(cat):o.gift,giftKnown:false,weeks:0,hint:null,base:{},refusals:0};
   for(const[k]of ATTRS){a.attrs[k]=k==='queixo'?rollChin():k==='iq'?RI(6,16)+(o.boost||0):RI(8,20)+(o.boost||0);a.cap[k]=k==='queixo'?a.attrs[k]+RI(3,8):clamp(pot+RI(-12,12),28,99)}
   if(o.attrs)Object.assign(a.attrs,o.attrs);
   if(o.attrs&&o.attrs.queixo!=null)a.cap.queixo=a.attrs.queixo+5;
   a.conf=Math.round(confBase(a));
-  for(const[k]of ATTRS){a.base[k]=a.attrs[k];a.peak[k]=a.attrs[k];a.lastT[k]=0}
+  for(const[k]of ATTRS)a.base[k]=a.attrs[k];
   initBody(a,o.slv==null?RI(1,2):o.slv);
   return a;
 }
@@ -689,23 +749,49 @@ function normSkills(a){ // garante todas as chaves (e converte ids antigos, se h
   a.skills=Object.fromEntries(PKEYS.map(k=>[k,s[k]||0]));if(!a.skills.jab)a.skills.jab=1;a.def=Object.fromEntries(DKEYS.map(k=>[k,d[k]||0]));if(!a.def.bloqueio)a.def.bloqueio=1;
   a.xp=Object.fromEntries(PKEYS.map(k=>[k,(a.xp&&a.xp[k])||0]));a.dxp=Object.fromEntries(DKEYS.map(k=>[k,(a.dxp&&a.dxp[k])||0]));
   a.bel=a.bel||{};for(const k of[...PKEYS,...DKEYS]){if(!lvOf(a,k))delete a.bel[k];else if(!Number.isFinite(a.bel[k]))a.bel[k]=lvOf(a,k)}
-  if(a.padF&&!SKILLS[a.padF])a.padF=null;a.use=a.use||{};
+  a.use=a.use||{};
 }
 function rating(a){const s=ATTRS.reduce((t,[k])=>t+a.attrs[k],0)/ATTRS.length;return s+Object.values(a.skills).reduce((t,v)=>t+(v||0),0)*1.5}
 function stars(pot){return clamp(Math.round(pot/18),1,5)}
 function starStr(n){return '★'.repeat(n)+'☆'.repeat(5-n)}
-function potRange(a){const s=stars(a.pot),m=S.up.treinador?0:1;const lo=clamp(s-m,1,5),hi=clamp(s+m,1,5);return lo===hi?starStr(lo):starStr(lo)+' a '+starStr(hi)}
+function potRange(a){const s=stars(a.pot),m=goodCoach()?0:1;const lo=clamp(s-m,1,5),hi=clamp(s+m,1,5);return lo===hi?starStr(lo):starStr(lo)+' a '+starStr(hi)}
 function newGame(){
   const TK=ATTRS.map(([k])=>k).filter(k=>k!=='queixo'),st0=TK.map(()=>RI(9,16));{let sum=st0.reduce((t,v)=>t+v,0);while(sum<86){st0[RI(0,6)]++;sum++}while(sum>86){const i=RI(0,6);if(st0[i]>8){st0[i]--;sum--}}}
   const cat0='Pena',bd0=rollBody(cat0);let sty0=styleForBody(bodyType({cat:cat0,...bd0}));while(styleFit({cat:cat0,...bd0},sty0)<0)sty0=styleForBody(bodyType({cat:cat0,...bd0}));
   const rui=makeAthlete(cat0,{h:bd0.h,r:bd0.r,style:sty0,age:RI(17,20),salary:35,pot:RI(64,76),slv:2,look:{...look(),trunk:'#d4452f'},attrs:{...Object.fromEntries(TK.map((k,i)=>[k,st0[i]])),queixo:clamp(rollChin(),42,70)}});
   S={week:1,money:500,pop:5,members:4,up:{},eq:{saco:1,sparring:1,corda:0,pera:0,pads:0,pesos:0,esquiva:0,pneu:0,bola:0},
-    roster:[rui],sel:0,tab:'gym',sub:'ficha',shopSub:'eq',
+    roster:[rui],sel:0,tab:'gym',sub:'ficha',shopSub:'eq',gsub:'res',coaches:startCoaches(),
     rivals:[{n:'Academia Tubarão',lvl:0},{n:'Boxe Clube Ribeira',lvl:0},{n:'Punhos de Aço',lvl:1},{n:'Ginásio Estrela do Norte',lvl:0},{n:'Clube Leões da Margem',lvl:2}],
     log:[],seen:false};
+  assignCoach(rui,S.coaches.find(c=>c.st===rui.style),true);
   addOffer(rui,true);
   note(`Abriste as portas do ${S.gymName||'teu ginásio'}. O ${rui.nick} é o teu único lutador.`);
 }
+/* ---- treinadores ---- */
+function makeCoach(st,t,n){const used=new Set((S&&S.coaches||[]).map(c=>c.n));const free=C_NAMES.filter(x=>!used.has(x));
+  return{id:'c'+Date.now().toString(36)+RI(0,99999),n:n||pick(free.length?free:C_NAMES),st,t,sal:CT[t].sal,lk:{skin:pick(SKINS),hair:pick(['#ccc','#e6e6e6','#9a9a9a',...HAIRS]),trunk:pick(['#2d4a6b','#3c3c3c','#6b3a2a','#3d5a40','#7a6a3a'])}}}
+function startCoaches(){return[makeCoach('Puncher',0,'Sr. Armando'),makeCoach('In-fighter',0,'Mestre Quim'),makeCoach('Outboxer',0,'Dona Lurdes')]}
+function coachOf(a){return a&&a.coach&&S&&S.coaches?S.coaches.find(c=>c.id===a.coach)||null:null}
+function athOf(c){return S.roster.find(a=>a.coach===c.id)||null}
+function coachPay(){return(S.coaches||[]).reduce((t,c)=>t+(athOf(c)?c.sal:0),0)}
+function goodCoach(){return(S.coaches||[]).some(c=>c.t>=1)} // um treinador de Clube para cima substitui o antigo treinador assistente (fichas e pistas de talento)
+function gymFame(){return S.pop} // fama do ginásio: por agora a popularidade (3B)
+function bondLv(a){let l=0;BOND.forEach(([,w],i)=>{if((a.cw||0)>=w)l=i});return l}       // 0-4
+function bondK(a){return TUNE.bond0+(TUNE.bond1-TUNE.bond0)*bondLv(a)/4}
+function coachSty(a){const c=coachOf(a);return c?c.st:null}
+function assignCoach(a,c,quiet){ // muda o treinador do atleta (perde a ligação); o estilo principal passa a ser o do treinador
+  if(!a)return;const old=coachOf(a);if(c){const o=athOf(c);if(o&&o!==a){o.coach=null;o.cw=0}}
+  a.coach=c?c.id:null;a.cw=0;
+  if(c&&!quiet)note(`${a.nick} passa a treinar com ${c.n} (${c.st}).${old?` ${old.n} fica livre.`:''}`);
+  styleFollow(a,quiet);
+}
+function styleFollow(a,quiet){ // luta no estilo do treinador logo que tenha algum nível nele (até lá, continua no antigo)
+  const st=coachSty(a);if(!st||a.style===st||styleLv(a,st)<1)return false;
+  a.style=st;a.fstyle=st;if(!quiet){note(`${a.nick} já luta como ${st}.`)}return true}
+function freeCoaches(){return S.coaches.filter(c=>!athOf(c))}
+function autoCoach(a){ // atleta novo: o treinador livre do seu estilo, ou outro livre
+  const f=freeCoaches();const c=f.find(x=>x.st===a.style)||f.sort((p,q)=>q.t-p.t)[0];
+  if(c){assignCoach(a,c,true);note(`${c.n} (${c.st}) fica a treinar o ${a.nick}.`)}else note(`${a.nick} não tem treinador: contrata um ou troca no Ginásio.`)}
 const LOGOS=[
  {n:'Luva',px:['....KKKK....','...KRRRRK...','..KRRRRRRK..','.KRRRRRRRRK.','.KRRRRRRRRK.','.KRRRRRRRWK.','.KRRRRRRWK..','..KRRRRRK...','..KWWWWWK...','..KWKWKWK...','..KWWWWWK...','...KKKKK....']},
  {n:'Cinturão',px:['............','............','....KKKK....','...KGGGGK...','KKKGYYYYGKKK','RRKGYRRYGKRR','RRKGYRRYGKRR','KKKGYYYYGKKK','...KGGGGK...','....KKKK....','............','............']},
@@ -751,7 +837,6 @@ function level(){return S.pop>=70?3:S.pop>=30?2:1}
 function eqUnits(){return Object.values(S.eq).reduce((t,v)=>t+v,0)}
 function capacity(){return 4+eqUnits()*2+(S.up.pintura?4:0)+(S.up.balneario?6:0)+(S.up.ringue?3:0)+(level()-1)*3}
 function weeksTo(a){return a.fight?a.fight.week-S.week:null}
-function trainOK(a,id){const t=TR[id];if(t.up&&!S.up[t.up])return false;return !t.eq||(S.eq[t.eq]||0)>0}
 
 /* ================= OFFERS ================= */
 function makeOpp(a,title){
@@ -784,7 +869,7 @@ function scoutOf(o){
     const seen=n<=2?1:n<=5?2:4;sc.skills=Object.keys(o.skills).filter(k=>o.skills[k]>0).sort((p,q)=>o.skills[q]-o.skills[p]).slice(0,seen);
     o.scout=sc;
   }
-  const u=Math.max(2,o.scout.u-(S.up.treinador?2:0));
+  const u=Math.max(2,o.scout.u-(goodCoach()?2:0));
   return{...o.scout,u};
 }
 function scoutRating(o){const sc=scoutOf(o);return ATTRS.reduce((t,[k])=>t+(sc.attrs[k][0]+sc.attrs[k][1])/2,0)/ATTRS.length+Object.values(o.skills).reduce((t,v)=>t+(v||0),0)*1.5}
@@ -892,7 +977,7 @@ function render(){
   if(S.tab==='ath')P.innerHTML=panelAth();
   if(S.tab==='fights')P.innerHTML=panelFights();
   if(S.tab==='shop')P.innerHTML=panelShop();
-  const pc=$('#portrait');if(pc)drawPortrait(pc,cur().look);
+  const pc=$('#portrait');if(pc)drawPortrait(pc,cur().look);paintCP(P);
   drawClock();
   save();
 }
@@ -914,17 +999,94 @@ function selector(){
     return `<button ${x?`data-sel="${i}"`:'disabled'} class="${x&&i===S.sel?'on':''}" style="position:relative">${x&&S.tab==='fights'&&x.offers.length>0?`<i class="rdot" title="tem propostas"></i>`:''}<b>${c.toUpperCase()}</b>${x?nameTag(x):'vazio'}</button>`}).join('')}</div>`;
 }
 function panelGym(){
+  const gs=`<div class="seg"><button data-gsub="res" class="${S.gsub!=='coach'?'on':''}">Ginásio</button><button data-gsub="coach" class="${S.gsub==='coach'?'on':''}">Treinadores</button></div>`;
+  if(S.gsub==='coach')return gs+panelCoaches();
   const fees=S.members*ECON.fee+sponsors(),WC=weeklyCosts(),sal=WC.total;
   const fights=S.roster.filter(a=>a.fight).map(a=>{const w=weeksTo(a);return `<div class="r"><div><strong>${a.nick} vs ${a.fight.opp.nick}</strong><p>${w===0?'Esta semana!':`Daqui a ${w} semana${w>1?'s':''}`} · ${a.fight.rounds} rounds · ${fmt(a.fight.purse)} €</p></div></div>`}).join('');
-  return `<div class="kv"><div><small>ENTRADAS/SEM</small><b class="good">+${fmt(fees)} €</b></div><div><small>DESPESAS/SEM</small><b class="warn">-${fmt(sal)} €</b></div><div><small>SALDO/SEM</small><b class="${fees-sal>=0?'good':'warn'}">${fees-sal>=0?'+':''}${fmt(fees-sal)} €</b></div></div>
+  const ev=S.evo&&S.evo.rows&&S.evo.rows.filter(r=>S.roster.some(a=>a.id===r.id));
+  return gs+`<div class="kv"><div><small>ENTRADAS/SEM</small><b class="good">+${fmt(fees)} €</b></div><div><small>DESPESAS/SEM</small><b class="warn">-${fmt(sal)} €</b></div><div><small>SALDO/SEM</small><b class="${fees-sal>=0?'good':'warn'}">${fees-sal>=0?'+':''}${fmt(fees-sal)} €</b></div></div>
   ${fights?`<h3>LUTAS MARCADAS</h3><div class="rows">${fights}</div>`:`<div class="empty">Nenhuma luta marcada. Vê as propostas em Lutas.</div>`}
+  ${ev&&ev.length?`<div class="evo"><div class="eh"><small>ESTA SEMANA</small><small>S${S.evo.w}</small></div>${ev.map(r=>`<div class="er"><small>${r.n}</small><span>${r.it.length?r.it.join(' · '):'<i>semana sem mudanças</i>'}</span></div>`).join('')}</div>`:''}
   <h3>DIÁRIO</h3><div class="log">${S.log.map(l=>`<span><b>S${l.w}</b> ${l.t}</span>`).join('')}</div>
   <div class="row2" style="grid-template-columns:1fr 1fr 1fr;gap:5px"><button class="btn" id="repBtn" ${S.rep?'':'disabled'}>RELATÓRIO</button><button class="btn" id="helpBtn">COMO JOGAR</button><button class="btn" id="menuBtn">MENU</button></div>`;
 }
+/* ---- treinadores (separador Treinadores do Ginásio) ---- */
+function styTag(st){return `<span class="stag ${st==='Outboxer'?'so':st==='In-fighter'?'si':'sp'}">${st.toUpperCase()}</span>`}
+function cStars(t){return `<span class="cst">${'★'.repeat(t+1)}<i>${'★'.repeat(4-t)}</i></span>`}
+function bondPips(a){const l=bondLv(a);return `<span class="bpip">${[0,1,2,3,4].map(i=>`<i class="${i<=l?'f':''}"></i>`).join('')}</span>`}
+function panelCoaches(){
+  return `<div class="chh"><h3>A TUA EQUIPA · ${S.coaches.length} TREINADOR${S.coaches.length===1?'':'ES'}</h3><span class="meta">salários ${fmt(coachPay())} €/sem</span></div>
+  <div class="rows crows">${S.coaches.map(c=>{const a=athOf(c);return `<div class="r cr"><canvas width="32" height="32" data-cp="${c.id}"></canvas><button class="cinfo" data-coach="${c.id}"><span class="cl"><strong>${c.n.toUpperCase()}</strong>${styTag(c.st)}</span><p>${CT[c.t].n} ${cStars(c.t)} · ${a?`treina o <b>${a.nick}</b> · ${c.sal} €`:'<span class="good">livre (sem salário)</span>'}</p></button>${a?`<button class="btn" data-cswap="${a.id}">TROCAR</button>`:`<button class="btn gold" data-cgive="${c.id}">DAR UM<br>ATLETA</button>`}</div>`}).join('')}</div>
+  <h3>CONTRATAR · TREINAM MAIS DEPRESSA</h3>
+  <div class="hire">${CT.map((t,ti)=>ti?`<button class="hb" data-hire="${ti}" ${gymFame()>=t.fame?'':'disabled'}><b>${t.n.toUpperCase()}</b>${cStars(ti)}<span>${gymFame()>=t.fame?`${fmt(t.cost)} €<br>+${t.sal} €/sem`:'precisa de mais fama'}</span></button>`:'').join('')}</div>
+  ${S.coaches.length<4?'<div class="meta">Cada atleta tem um treinador e luta no estilo dele.</div>':''}`;
+}
+function coachSkills(st){return STY_TEACH[st].map(k=>k in DEFS?DEFS[k].n.toLowerCase():pLow(k))}
+function coachMore(st){return Object.entries(STY_ATTR[st]).filter(([,v])=>v>1).sort((p,q)=>q[1]-p[1]).map(([k])=>ATTR_N[k])}
+function andList(l){return l.length<2?l.join(''):l.slice(0,-1).join(', ')+' e '+l.at(-1)}
+function coachInfo(c){
+  const a=athOf(c);
+  const m=modal(`<h2>${c.n.toUpperCase()}</h2><div class="tco"><canvas width="32" height="32" data-cp="${c.id}"></canvas><div><div class="cl">${styTag(c.st)} ${CT[c.t].n.toUpperCase()} ${cStars(c.t)}</div><div class="meta">${a?`Treina o ${a.nick} há ${a.cw} semana${a.cw===1?'':'s'} · ${c.sal} €/sem`:`Livre: sem salário (${c.sal} €/sem quando treina um atleta)`}</div></div></div>
+    <p class="hint">Treina mais: <b style="color:var(--fg);font-weight:400">${andList(coachMore(c.st))}</b>. Golpes e defesas: ${andList(coachSkills(c.st))}. Sobe o nível do estilo ${c.st}.</p>
+    <p class="hint">Escalão ${CT[c.t].n}: ${['ensina ao ritmo base','ensina mais depressa','ensina bem mais depressa','ensina muito depressa','ensina como ninguém'][c.t]}.</p>
+    <div class="row2"><button class="btn red" id="cDis" ${a?'disabled':''}>${a?'TREINA UM ATLETA':'DISPENSAR'}</button><button class="btn gold" id="cOk">FECHAR</button></div>`);
+  paintCP(m);m.querySelector('#cOk').onclick=closeModal;
+  m.querySelector('#cDis').onclick=()=>{if(athOf(c))return;const q=modal(`<h2>DISPENSAR ${c.n.toUpperCase()}?</h2><p class="hint">${c.t?`Perdes o que pagaste para o contratar (${fmt(CT[c.t].cost)} €). `:''}Não tens de lhe pagar nada: está livre.</p><div class="row2"><button class="btn" id="dNo">CANCELAR</button><button class="btn red" id="dYes">DISPENSAR</button></div>`);
+    q.querySelector('#dNo').onclick=closeModal;q.querySelector('#dYes').onclick=()=>{S.coaches=S.coaches.filter(x=>x!==c);note(`${c.n} saiu do ginásio.`);closeModal()}};
+}
+function pickCoachFor(a){ // escolher o treinador de um atleta: só os livres
+  const cur_=coachOf(a),L=S.coaches.filter(c=>c!==cur_);
+  const m=modal(`<h2>TREINADOR DO ${a.nick.toUpperCase()}</h2><p class="hint">${cur_?`Agora: ${cur_.n} (${cur_.st}). `:''}Escolhe um treinador livre.</p>
+    <div class="rows">${L.map(c=>{const o=athOf(c);return `<div class="r cr"><canvas width="32" height="32" data-cp="${c.id}"></canvas><div><strong>${c.n.toUpperCase()}</strong><span class="cl">${styTag(c.st)} ${CT[c.t].n.toUpperCase()} ${cStars(c.t)}</span><p>${o?`treina o ${o.nick}`:'<span class="good">livre</span>'}</p></div><button class="btn ${o?'':'gold'}" data-pc="${c.id}" ${o?'disabled':''}>ESCOLHER</button></div>`}).join('')||'<div class="empty">Não há outros treinadores.</div>'}</div>
+    ${L.some(c=>!athOf(c))?'':'<p class="hint">Não há treinadores livres: contrata um no Ginásio → Treinadores.</p>'}
+    <button class="btn" id="pcX">CANCELAR</button>`);
+  paintCP(m);m.querySelector('#pcX').onclick=closeModal;
+  m.querySelectorAll('[data-pc]').forEach(b=>b.onclick=()=>confirmCoach(a,S.coaches.find(c=>c.id===b.dataset.pc)));
+}
+function pickAthFor(c){ // dar um treinador livre a um atleta
+  const m=modal(`<h2>${c.n.toUpperCase()} · TREINAR QUEM?</h2><p class="hint">${c.n} é ${c.st}: o atleta passa a treinar e a lutar nesse estilo.</p>
+    <div class="rows">${S.roster.map(a=>{const o=coachOf(a);return `<div class="r"><div><strong>${a.nick.toUpperCase()} · ${a.cat.toUpperCase()}</strong><p>${a.style} · ${o?`treina com ${o.n} (${a.cw} sem.)`:'<span class="warn">sem treinador</span>'}</p></div><button class="btn gold" data-pa="${a.id}">ESCOLHER</button></div>`}).join('')}</div>
+    <button class="btn" id="paX">CANCELAR</button>`);
+  m.querySelector('#paX').onclick=closeModal;
+  m.querySelectorAll('[data-pa]').forEach(b=>b.onclick=()=>confirmCoach(S.roster.find(a=>a.id===b.dataset.pa),c));
+}
+function confirmCoach(a,c){ // cartão de confirmação: perde a ligação, muda o estilo, o que treina mais, salários
+  if(!a||!c)return;const o=coachOf(a),st=c.st,lv=styleLv(a,st),ol=styleLv(a,a.style);
+  const bx=(lab,x,txt)=>`<div class="ccb ${lab==='NOVO'?'nw':''}"><small>${lab}</small>${x?`<b>${x.n.toUpperCase()}</b>${styTag(x.st)}`:'<b>NENHUM</b>'}<span>${txt}</span></div>`;
+  const L=[];
+  L.push(['×',o&&a.cw?`<span class="warn">Perdem a ligação de ${a.cw} semana${a.cw===1?'':'s'}.</span> Nas primeiras semanas o treino rende menos.`:'Nas primeiras semanas o treino rende menos: ainda se estão a conhecer.']);
+  if(st===a.style)L.push(['⇄',`O estilo continua ${st} (nível ${lv}).`]);
+  else L.push(['⇄',`O estilo passa a ${st} (${lv<1?'começa do nível 0':'já tem nível '+lv}).${lv<1?` Continua a lutar como ${a.style} até ter algum nível.`:''} O ${a.style} fica no nível ${ol} e desce muito devagar.`]);
+  const A0=o?STY_ATTR[o.st]:{},A1=STY_ATTR[st],ks=ATTRS.map(([k])=>k).filter(k=>k!=='queixo');
+  const more=ks.filter(k=>(A1[k]||1)>(A0[k]||1)+.04).sort((p,q)=>((A1[q]||1)-(A0[q]||1))-((A1[p]||1)-(A0[p]||1))).slice(0,3).map(k=>ATTR_N[k]);
+  const less=ks.filter(k=>(A1[k]||1)<(A0[k]||1)-.04).sort((p,q)=>((A1[p]||1)-(A0[p]||1))-((A1[q]||1)-(A0[q]||1))).slice(0,2).map(k=>ATTR_N[k]);
+  const sp=o?(c.t>o.t?' Ensina mais depressa.':c.t<o.t?' Ensina mais devagar.':''):'';
+  L.push(['▲',more.length||less.length?`Passa a treinar mais ${andList(more)}${less.length?`; menos ${andList(less)}`:''}.${sp}`:`Treina as mesmas coisas.${sp||' Ao mesmo ritmo.'}`]);
+  L.push(['€',`${c.n} passa a receber ${c.sal} €/sem.${o?` ${o.n} fica livre, sem salário.`:''}`]);
+  const m=modal(`<h2>${o?'TROCAR O TREINADOR':'TREINADOR'} DO ${a.nick.toUpperCase()}?</h2>
+    <div class="ccmp">${bx('AGORA',o,o?`ligação: ${BOND[bondLv(a)][0]}`:'sem treinador')}<em>▶</em>${bx('NOVO',c,`ligação: ${BOND[0][0]}`)}</div>
+    <div class="ccl">${L.map(([i,t])=>`<p><em>${i}</em><span>${t}</span></p>`).join('')}</div>
+    <div class="row2"><button class="btn" id="ccX">CANCELAR</button><button class="btn red" id="ccOk">${o?'TROCAR':'CONFIRMAR'}</button></div>`);
+  m.querySelector('#ccX').onclick=closeModal;
+  m.querySelector('#ccOk').onclick=()=>{assignCoach(a,c);closeModal()};
+}
+function hireCard(t){ // contratar: 3 à escolha (um de cada estilo), renovam-se todas as estações (13 semanas)
+  const T=CT[t];S.cand=S.cand||{};let cd=S.cand[t];
+  if(!cd||S.week-cd.w>=13||!cd.l.length){cd=S.cand[t]={w:S.week,l:shuffle([...STYLES]).map(st=>makeCoach(st,t))}}
+  const full=S.coaches.length>=CMAX;
+  const m=modal(`<h2>CONTRATAR · ${T.n.toUpperCase()} ${cStars(t)}</h2><p class="hint">${T.n}: ${['','ensina mais depressa','ensina bem mais depressa','ensina muito depressa','ensina como ninguém'][t]} do que um treinador de Bairro. Custa ${fmt(T.cost)} € e ${T.sal} €/sem quando treina um atleta.</p>
+    <div class="rows">${cd.l.map(c=>`<div class="r cr"><canvas width="32" height="32" data-cp="${c.id}"></canvas><div><strong>${c.n.toUpperCase()}</strong><span class="cl">${styTag(c.st)}</span><p>Mais ${andList(coachMore(c.st).slice(0,2))}</p></div><button class="btn ${S.money>=T.cost&&!full?'gold':''}" data-hc="${c.id}" ${S.money>=T.cost&&!full?'':'disabled'}>${fmt(T.cost)} €</button></div>`).join('')}</div>
+    ${full?`<p class="hint warn">A equipa está cheia (${CMAX} treinadores): dispensa um treinador livre primeiro.</p>`:S.money<T.cost?'<p class="hint">Não tens dinheiro suficiente.</p>':''}
+    <button class="btn" id="hX">FECHAR</button>`);
+  paintCP(m);m.querySelector('#hX').onclick=closeModal;
+  m.querySelectorAll('[data-hc]').forEach(b=>b.onclick=()=>{const c=cd.l.find(x=>x.id===b.dataset.hc);if(!c||S.money<T.cost||S.coaches.length>=CMAX)return;
+    S.money-=T.cost;S.coaches.push(c);cd.l=cd.l.filter(x=>x!==c);SFX.play('buy');note(`Contrataste ${c.n}, treinador ${c.st} (${T.n}).`);closeModal()});
+}
+function paintCP(root){(root||document).querySelectorAll('canvas[data-cp]').forEach(cv=>{const c=[...(S.coaches||[]),...Object.values(S.cand||{}).flatMap(x=>x.l)].find(x=>x.id===cv.dataset.cp);if(c)drawPortrait(cv,c.lk)})}
 function panelAth(){
   const a=cur();const t=TIERS[a.tier];
-  const inF=S.sub!=='plano';
-  const sub=`<div class="seg"><button data-sub="ficha" class="${inF?'on':''}">Ficha</button><button data-sub="plano" class="${!inF?'on':''}">Plano</button></div>`
+  const inF=S.sub!=='treino';
+  const sub=`<div class="seg"><button data-sub="ficha" class="${inF?'on':''}">Ficha</button><button data-sub="treino" class="${!inF?'on':''}">Treino</button></div>`
     +(inF?`<div class="seg sub2"><button data-sub="ficha" class="${!['golpes','estilos','lutas'].includes(S.sub)?'on':''}">ATRIBUTOS</button><button data-sub="golpes" class="${S.sub==='golpes'?'on':''}">GOLPES</button><button data-sub="estilos" class="${S.sub==='estilos'?'on':''}">ESTILOS</button><button data-sub="lutas" class="${S.sub==='lutas'?'on':''}">LUTAS</button></div>`:'');
   if(S.sub==='lutas')return selector()+sub+panelHist(a);
   if(S.sub==='golpes'){
@@ -939,26 +1101,16 @@ function panelAth(){
       <div class="meta" style="font-size:15px">Toca num golpe ou defesa para ver como se treina.</div></div>`;
   }
   if(S.sub==='estilos'){
+    const cs=coachSty(a);
     return selector()+sub+`<div class="card" style="min-height:0;gap:5px;padding:7px 8px"><h3>ESTILOS · CORPO ${bodyType(a).toUpperCase()} (${cm(a.h)}, alcance ${cm(a.r)})</h3>
-      <div class="stys">${STYLES.map(st=>{const lv=styleLv(a,st),cap=styleCap(a,st),fit=styleFit(a,st),pr=a.style===st,coach=S.up[STY_COACH[st]];const need=SXP(lv);
-        return `<div class="sty ${pr?'on':''}"><div><b>${st}</b> <span class="meta">nv ${lv}/${cap}${fit>0?' · combina com o corpo':fit<0?' · não combina':''}</span>
+      <div class="stys">${STYLES.map(st=>{const lv=styleLv(a,st),cap=styleCap(a,st),fit=styleFit(a,st),pr=a.style===st,tr=cs===st;const need=SXP(lv);
+        return `<div class="sty ${pr||tr?'on':''}"><div><b>${st}</b> <span class="meta">nv ${lv}/${cap}${fit>0?' · combina com o corpo':fit<0?' · não combina':''}</span>
           <div class="pips">${[1,2,3,4,5].map(i=>`<i class="${i<=lv?'f':i<=cap?'':'x'}"></i>`).join('')}</div>
-          <span class="meta" style="font-size:15px">${lv>=cap?'no máximo':lv<1?(coach?'treino de estilo no plano para aprender':'precisa do treinador deste estilo (loja)'):`${Math.floor((a.sxp[st]||0))}/${need} · ${coach?'treino de estilo ou sparring':'sobe devagar com sparring'}`}</span></div>
-          ${pr?'<span class="meta">PRINCIPAL</span>':lv>0?`<button class="btn" data-mainsty="${st}" style="font-size:9px;padding:6px">PRINCIPAL</button>`:''}</div>`}).join('')}</div>
-      <div class="meta" style="font-size:15px">In-fighter vence Outboxer, Outboxer vence Puncher, Puncher vence In-fighter. O corpo decide o nível máximo de cada estilo.</div></div>`;
+          <span class="meta" style="font-size:15px">${lv>=cap?'no máximo':tr?`${Math.floor(a.sxp[st]||0)}/${need} · sobe com ${coachOf(a).n}`:lv<1?'precisa de um treinador deste estilo':'desce muito devagar sem treinador'}</span></div>
+          <span class="meta">${pr?'LUTA':''}${pr&&tr?' · ':''}${tr?'TREINA':''}</span></div>`}).join('')}</div>
+      <div class="meta" style="font-size:15px">In-fighter vence Outboxer, Outboxer vence Puncher, Puncher vence In-fighter. Luta no estilo do treinador (logo que tenha nível nele). O corpo decide o nível máximo.</div></div>`;
   }
-  if(S.sub==='plano'){
-    const f=projFat(a,weekPlan(a));
-    const w=weeksTo(a),ov=a.ovr&&a.ovr.w===S.week;
-    return selector()+sub+miniStats(a)+`<button class="slot planbox" data-editplan="1"><span><strong>PLANO · ${!canTrain(a)?'a descansar':'<span style="color:var(--green)">todas as semanas</span>'}</strong><span class="pl">${a.plan.map(p=>TR[p].n).join(' · ')}</span></span><em class="ed">EDITAR<br>PLANO</em></button>
-      <div class="card plancard"><div class="meta">Fadiga agora: <b>${Math.round(a.fatigue)}</b> · no fim da semana: <b class="${f>70?'warn':''}">≈${Math.round(f)}</b></div>
-      ${!canTrain(a)?'':f>70?'<div class="warn">Acima de 70 há risco de lesão. Troca um treino por descanso.</div>':ov?`<div class="meta">Só esta semana: <b style="color:var(--gold);font-weight:400">${weekPlan(a).map(p=>TR[p].n).join(' · ')}</b>. Para a semana volta o plano normal.</div>`:'<div class="meta">O plano repete-se todas as semanas até o mudares. Só te chamo se houver motivo.</div>'}
-      ${a.plan.includes('pads')&&trainOK(a,'pads')?`<div class="meta">Pads · golpe da semana: <b style="color:var(--gold);font-weight:400">${a.padF?pName(a.padF)+' ('+padTxt(a,a.padF)+')':'livre'}</b></div>`:''}
-      ${a.injury>0?`<div class="warn">Lesionado: ${a.injury} semana${a.injury>1?'s':''} só a recuperar.</div>`:''}
-      ${a.recovery>0?`<div class="warn">A recuperar da luta: ${a.recovery} semana${a.recovery>1?'s':''} sem treinar.</div>`:''}
-      ${a.fight?`<div class="meta">Luta ${w===0?'esta semana':w===1?'daqui a 1 semana':`daqui a ${w} semanas`}: ${w<=1?'convém aliviar para chegar fresco.':'tempo para construir.'}</div>`:''}
-      ${a.fight&&w<=3?(()=>{const fo=formOf(a);return `<div class="meta">Forma prevista: <b class="${fo.cls}">${fo.label}</b>${fo.reasons.length?' · '+fo.reasons.slice(0,3).join(' · '):''}</div>`})():''}</div>`;
-  }
+  if(S.sub==='treino')return selector()+sub+panelTreino(a);
   return selector()+sub+`<div class="card ficha" style="overflow:auto;min-height:0">
     <div class="who"><canvas width="32" height="32" id="portrait"></canvas><div style="min-width:0">
       <div class="nm">${a.name.split(' ')[0]} <em>"${a.nick}"</em> ${a.name.split(' ').slice(1).join(' ')}</div>
@@ -968,11 +1120,39 @@ function panelAth(){
       ${a.fight||!(a.injury>0||a.recovery>0)?fightLine(a):''}${a.injury>0||a.recovery>0?`<div class="meta">${a.injury>0?`<span class="warn">lesionado ${a.injury} sem.</span>`:''}${a.injury>0&&a.recovery>0?' · ':''}${a.recovery>0?`<span class="warn">recupera ${a.recovery} sem.</span>`:''}</div>`:''}</div></div>
     ${(()=>{const p=persona(a);return `<div class="meta pers"><b>${p.n}</b>${p.w.length?' · '+p.w.slice(0,p.n.length>14?2:3).join(', '):''}</div>`})()}
     <div class="stats2">${ATTR_G.map(([g,ks])=>`<div class="stats"><small class="sg">${g}</small>${ks.map(k=>`<div class="stat"><span>${ATTR_N[k]}</span><div class="bar"><i style="width:${clamp(a.attrs[k],0,100)}%"></i></div><span class="num">${Math.floor(a.attrs[k])}</span></div>`).join('')}</div>`).join('')}</div>
-    <div class="row2"><div class="stat" style="grid-template-columns:52px 1fr"><span>Fadiga</span><div class="bar ${a.fatigue>60?'red':'gold'}"><i style="width:${a.fatigue}%"></i></div></div>
-      <div class="stat" style="grid-template-columns:70px 1fr"><span>Confiança</span><div class="bar blue"><i style="width:${a.conf}%"></i></div></div></div>
+    <div class="row2"><div class="stat" style="grid-template-columns:70px 1fr"><span>Confiança</span><div class="bar blue"><i style="width:${a.conf}%"></i></div></div>
+      <div class="meta" style="align-self:center">${a.recovery>0?'<span class="warn">a recuperar da luta</span>':a.injury>0?'<span class="warn">lesionado</span>':''}</div></div>
     <div class="meta">Potencial <span class="stars">${potRange(a)}</span></div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:space-between">${a.giftKnown?(a.gift?`<div class="meta" title="${GIFTS[a.gift].d}"><b style="color:var(--gold)">Dom: ${GIFTS[a.gift].n}</b></div>`:'<div class="meta">Sem dom especial.</div>'):a.hint?`<div class="meta">Pista: ${GIFTS[a.hint].n.toLowerCase()}? Ainda por confirmar.</div>`:'<div></div>'}
     ${S.roster.length>1?`<button class="btn" data-dismiss="${a.id}" style="font-size:9px;padding:7px 8px 5px;flex:none">DISPENSAR</button>`:''}</div></div>`;
+}
+function panelTreino(a){ // Ficha → Treino: treinador, foco do treino, categoria e o que está a melhorar (em palavras)
+  const c=coachOf(a),bl=bondLv(a),fo=a.focus||'attrs';
+  return `<div class="card trc"><h3>TREINADOR PRINCIPAL</h3>
+    ${c?`<div class="tco"><canvas width="32" height="32" data-cp="${c.id}"></canvas><div style="min-width:0"><div class="cn">${c.n.toUpperCase()} ${styTag(c.st)}</div>
+      <div class="meta"><span class="ctier">${CT[c.t].n.toUpperCase()}</span> ${cStars(c.t)} · ${a.cw} semana${a.cw===1?'':'s'} juntos</div>
+      <div class="meta bl" title="Ligação ao treinador">${bondPips(a)}<b class="bw">${BOND[bl][0]}</b></div></div><button class="btn" data-cswap="${a.id}">TROCAR</button></div>`
+     :`<div class="tco"><div style="min-width:0"><div class="cn">SEM TREINADOR</div><div class="meta warn">Treina devagar e não aprende os ganchos.</div></div><button class="btn gold" data-cswap="${a.id}">ESCOLHER</button></div>`}
+    <div class="fh"><h3>FOCO DO TREINO</h3><span class="meta">muda quando quiseres</span></div>
+    <div class="foc">${['peso','attrs','tec'].map(k=>`<button data-focus="${k}" class="${fo===k?'on':''}" title="${FOCUS[k].d}"><b>${fo===k?'● ':''}${FOCUS[k].n}</b><span>${FOCUS[k].l[0]}</span><span>${FOCUS[k].l[1]}</span></button>`).join('')}</div>
+    <div class="fh"><h3>A MELHORAR AGORA</h3><span class="meta fcat"><b>${a.cat}</b> · até ${CAT_KG[a.cat]}</span></div><div class="imp">${improving(a)}</div></div>`;
+}
+function improving(a){ // o que está a subir, por palavras (sem números), a partir do mesmo modelo do treino diário
+  const out=[],c=coachOf(a),ln=(ic,t,cls)=>out.push(`<p class="${cls||''}"><em>${ic}</em><span>${t}</span></p>`);
+  if(a.injury>0)ln('×',`<span class="warn">Lesionado: ${a.injury} semana${a.injury>1?'s':''} sem treinar.</span>`);
+  else if(a.recovery>0)ln('×',`<span class="warn">A recuperar da luta: ${a.recovery} semana${a.recovery>1?'s':''} sem treinar.</span>`);
+  const w=attrW(),ks=ATTRS.map(([k])=>k).filter(k=>k!=='queixo'),r=Object.fromEntries(ks.map(k=>[k,attrRate(a,k,w)])),mx=Math.max(...Object.values(r))||1;
+  const hi=ks.filter(k=>r[k]>=mx*.66),mid=ks.filter(k=>r[k]<mx*.66&&r[k]>=mx*.36),lo=ks.filter(k=>r[k]<mx*.36);
+  const why=g=>c&&g.every(k=>(STY_ATTR[c.st][k]||1)>1)?' <i>(o forte dele)</i>':g.length===1&&g[0]==='resistencia'?' <i>(corrida diária)</i>':g.every(k=>a.cap[k]-a.attrs[k]<4)?' <i>(perto do limite)</i>':'';
+  const nm=g=>andList(g.map(k=>ATTR_N[k]));
+  if(hi.length)ln('▲▲',`${nm(hi)} a subir bem${why(hi)}`,'hi');
+  if(mid.length)ln('▲',`${nm(mid)} a subir${why(mid)}`,'md');
+  if(lo.length)ln('·',`${nm(lo)} devagar`,'lo');
+  const st=coachSty(a);
+  if(st){const lv=styleLv(a,st),cap=styleCap(a,st);ln('▲',lv>=cap?`Estilo ${st}: nível ${lv}, no máximo para o corpo dele`:lv<1?`Estilo ${st}: a aprender (luta como ${a.style} até lá)`:`Estilo ${st}: nível ${lv}, a caminho do ${lv+1}`,'md')}
+  const sw=skW(a),top=Object.entries(sw).sort((p,q)=>q[1]-p[1]).slice(0,3).map(([k])=>k in DEFS?DEFS[k].n.toLowerCase():pLow(k));
+  if(top.length&&canTrain(a))ln('▲',`Mais treinados: ${andList(top)}`,'md');
+  return out.join('');
 }
 function panelFights(){
   const a=cur();
@@ -990,10 +1170,10 @@ function panelFights(){
   return h;
 }
 function panelShop(){
-  const sub=`<div class="seg"><button data-shop="eq" class="${S.shopSub==='eq'?'on':''}">Equipamento</button><button data-shop="up" class="${S.shopSub==='up'?'on':''}">Instalações e staff</button></div>`;
+  const sub=`<div class="seg"><button data-shop="eq" class="${S.shopSub==='eq'?'on':''}">Equipamento</button><button data-shop="up" class="${S.shopSub==='up'?'on':''}">Instalações</button></div>`;
   if(S.shopSub==='eq'){
-    return sub+`<div class="meta">Cada peça nova desbloqueia treinos e traz mais sócios (+2 lugares).</div><div class="scrolly"><div class="rows">${Object.entries(EQ).map(([id,e])=>{const have=S.eq[id]||0,max=have>=e.max,c=max?0:e.cost[have];
-      return `<div class="r"><div><strong>${e.n} · ${have}/${e.max}</strong><p>${have?'Mais um para mais sócios a treinar.':'Desbloqueia: '+Object.values(TR).filter(t=>t.eq===id).map(t=>t.n).join(', ')}</p></div>
+    return sub+`<div class="meta">Os atletas treinam sozinhos com o que o ginásio tem. Cada peça traz mais sócios (+2 lugares).</div><div class="scrolly"><div class="rows">${Object.entries(EQ).map(([id,e])=>{const have=S.eq[id]||0,max=have>=e.max,c=max?0:e.cost[have];
+      return `<div class="r"><div><strong>${e.n} · ${have}/${e.max}</strong><p>${e.d}</p></div>
       ${max?'<span class="meta">MÁXIMO</span>':`<button class="btn ${S.money>=c?'gold':''}" data-eq="${id}" ${S.money<c?'disabled':''}>${fmt(c)} €</button>`}</div>`}).join('')}</div></div>`;
   }
   return sub+`<div class="scrolly"><div class="rows">${UPG.map(u=>`<div class="r"><div><strong>${u.n}</strong><p>${u.d}</p></div>
@@ -1002,9 +1182,8 @@ function panelShop(){
 }
 function lockReason(a,k){ // porque ainda não sabe (ou como se aprende)
   const lack=learnLack(a,k);if(lack)return lack;
-  if(k in SKILLS){if(!S.eq.pads)return 'precisa de pads';return (a.xp[k]||0)>0?'a aprender nos pads':'escolhe-o nos pads'}
   if(k==='clinch')return 'resistência 20';
-  return (a.dxp[k]||0)>0?'a aprender':'aprende-se com '+DEF_TR[k].toLowerCase().replace(/ e /,' ou ');
+  return ((k in SKILLS?a.xp:a.dxp)[k]||0)>0?'a aprender no treino':'aprende-o sozinho no treino';
 }
 function skillInfo(a,k){ // detalhe de um golpe ou defesa (toque na Ficha)
   const isD=k in DEFS,lv=lvOf(a,k),xp=(isD?a.dxp:a.xp)[k]||0,nt=belNote(a,k);
@@ -1017,19 +1196,15 @@ function skillInfo(a,k){ // detalhe de um golpe ou defesa (toque na Ficha)
     :{jab:'Mão da frente, reto. Rápido e seguro: marca pontos e mede a distância.',direto:'Mão de trás, reto. O golpe de poder mais usado.',ganchoF:'Mão da frente, em arco. Ao corpo é o gancho ao fígado.',
     ganchoT:'Mão de trás, em arco. Muito pesado, mas mais lento.',upperF:'Mão da frente, de baixo para cima. Entra por baixo da guarda.',upperT:'Mão de trás, de baixo para cima. Perigoso a curta distância.',
     overhand:'Mão de trás em arco por cima da guarda. Arriscado e cansativo, mas derruba.'}[k];
-  const pe=!isD&&lv<5&&S.eq.pads&&!learnLack(a,k)?(()=>{const n=padSess(a,k);return ` Ao ritmo de ${a.nick}: ${lv?'nível '+(lv+1):'aprende-o'} em ~${n} sess${n>1?'ões':'ão'} de Pads.`})():'';
-  const how=isD?`Treina-se com ${DEF_TR[k]}.`:`Aprende-se e sobe nos Pads (escolhe-o como golpe da semana).${pe} Também sobe um pouco com ${SK_TR[k]} e com o Sparring, se o usar nas lutas.`;
+  const tst=STYLES.filter(st=>STY_TEACH[st].includes(k));
+  const how=`Melhora sozinho no treino diário: mais depressa com ${isD?DEF_TR[k]:SK_TR[k]}${tst.length?`, com um treinador ${tst.join(' ou ')}`:''} e se o usar nas lutas.`;
   const st=lv?`Nível ${lv}${lv<5?` · ${Math.floor(xp)}/${lv*8} para o nível ${lv+1}`:' (máximo)'}`:`Ainda não sabe: ${lockReason(a,k)}.${xp?` Progresso ${Math.floor(xp)}/${TUNE.learnXP}.`:''}`;
   const cf=!lv?'':nt==='ainda não confia'?'Ainda não confia neste '+(isD?'recurso':'golpe')+': usa-o menos do que podia. O Sparring e as lutas dão-lhe confiança.':nt==='confia demais'?'Confia demais: usa-o mais do que devia. As lutas acabam por o pôr no sítio.':'Confia no que sabe fazer.';
   return info((isD?DEFS[k].n:pName(k)).toUpperCase(),`<p class="hint"><b style="color:var(--gold)">${st}</b></p><p class="hint">${what}</p><p class="hint">${how}</p>${cf?`<p class="hint">${cf}</p>`:''}`,'FECHAR');
 }
 function formOf(a){
   const RS=[];let sc=0;const add=(v,t)=>{sc+=v;if(Math.abs(v)>=.08)RS.push([v,t])};
-  if(a.fatigue>50)add(-(a.fatigue-50)/50,'chega cansado');else if(a.fatigue<20)add(.15,'chega fresco');
-  const L=(a.tlog||[]).slice(-4);const avg=L.length?L.reduce((t,x)=>t+x.n,0)/L.length:2;
-  if(L.length>=3&&avg>=2)add(.25,'treinou com regularidade');else if(avg<1)add(-.35,'treinou pouco nas últimas semanas');
-  const last=L.at(-1);if(last&&last.rest&&last.n>0)add(.15,'aliviou na última semana');
-  const lostN=DECAY_K.filter(k=>a.peak&&a.attrs[k]<a.peak[k]-1.5).length;if(lostN)add(-.15*lostN,'perdeu condição física');
+  if(a.fatigue>50)add(-(a.fatigue-50)/50,'ainda cansado da última luta');else if(a.fatigue<20)add(.15,'chega fresco');
   add((a.conf-55)/150,a.conf>=55?'confiante':'com pouca confiança');
   if(a.recovery>0)add(-.4,'ainda não recuperou da última luta');
   sc=clamp(sc,-1,1);
@@ -1060,9 +1235,9 @@ function info(title,body,btn='CONTINUAR'){
 }
 function help(){
   return info('COMO JOGAR',`<p class="hint">És o dono de um ginásio de bairro. O tempo corre sozinho: carrega em ▶ para andar, em ❚❚ para parar e em ×2 para ir mais depressa. Pára sozinho quando é preciso decidir alguma coisa.</p>
-  <p class="hint">Cada lutador tem um plano de 3 treinos por semana (em Atletas, Plano) que se repete até o mudares.</p>
-  <p class="hint">As lutas marcam-se com 6 a 8 semanas de antecedência. Treina, gere a fadiga e, no dia, dá ordens no canto entre rounds.</p>
-  <p class="hint">Mais equipamento desbloqueia treinos e traz mais sócios, que pagam mensalidades. Às vezes aparece um talento escondido.</p>`,'VAMOS A ISSO');
+  <p class="hint">Os lutadores treinam sozinhos todos os dias, com o equipamento do ginásio e com o seu treinador. Cada atleta tem um treinador e luta no estilo dele (Ginásio → Treinadores). Em Atletas → Treino escolhes o foco do treino.</p>
+  <p class="hint">As lutas marcam-se com 6 a 8 semanas de antecedência. No dia, dá ordens no canto entre rounds.</p>
+  <p class="hint">Mais equipamento treina mais coisas e traz mais sócios, que pagam mensalidades. Às vezes aparece um talento escondido.</p>`,'VAMOS A ISSO');
 }
 
 /* ================= INPUT ================= */
@@ -1075,9 +1250,13 @@ document.addEventListener('click',e=>{
   if(d.sel!==undefined){S.sel=+d.sel;histPg=0;render();return}
   if(d.sub){S.sub=d.sub;render();return}
   if(d.shop){S.shopSub=d.shop;render();return}
-  if(d.editplan){editPlan(cur());return}
+  if(d.gsub){S.gsub=d.gsub;render();return}
   if(d.sk){skillInfo(cur(),d.sk);return}
-  if(d.mainsty){const a=cur();if(styleLv(a,d.mainsty)>0){a.style=d.mainsty;a.fstyle=d.mainsty;note(`${a.nick} passa a lutar como ${d.mainsty}.`)}render();return}
+  if(d.focus){const a=cur();if(FOCUS[d.focus]&&a.focus!==d.focus){a.focus=d.focus;note(`${a.nick} muda o foco do treino: ${FOCUS[d.focus].n.toLowerCase()}.`)}render();return}
+  if(d.coach){const c=S.coaches.find(x=>x.id===d.coach);if(c)coachInfo(c);return}
+  if(d.cswap){const a=S.roster.find(x=>x.id===d.cswap);if(a)pickCoachFor(a);return}
+  if(d.cgive){const c=S.coaches.find(x=>x.id===d.cgive);if(c)pickAthFor(c);return}
+  if(d.hire){hireCard(+d.hire);return}
   if(d.acc){const a=cur(),o=a.offers.find(x=>x.id===d.acc);if(!o)return;
     a.fight={opp:o.opp,purse:o.purse,week:S.week+o.inWeeks,title:o.title,rounds:o.rounds};a.offers=a.offers.filter(x=>x!==o);
     note(`Luta marcada: ${a.nick} vs ${o.opp.nick}, semana ${a.fight.week}.`);render();return}
@@ -1100,83 +1279,24 @@ document.addEventListener('click',e=>{
   if(t.id==='resetBtn'){const m=modal(`<h2>COMEÇAR DE NOVO?</h2><p class="hint">Perdes todo o progresso deste ginásio.</p><div class="row2"><button class="btn" id="rNo">CANCELAR</button><button class="btn red" id="rYes">APAGAR TUDO</button></div>`);
     m.querySelector('#rNo').onclick=closeModal;m.querySelector('#rYes').onclick=async()=>{ENT=[];occ={};newGame();closeModal();await setupGym();render()};return}
 });
-function projFat(a,plan){const n=wkDone(a);let f=n?a.fatigue:Math.max(0,a.fatigue-15);for(const p of plan.slice(n)){/* a meio da semana: só os treinos que faltam */const t=TR[trainOK(a,p)?p:'corrida'];f=clamp(f+(t.f>0?t.f*fatMul(a):t.f),0,100)}return Math.round(f)}
-function losing(a,k){
-  if(!DECAY_K.includes(k)||!a.lastT||a.lastT[k]===undefined)return null;
-  const d=S.week-a.lastT[k];if(d<3)return null;
-  const base=(a.base&&a.base[k])||0,peak=(a.peak&&a.peak[k])||a.attrs[k];
-  const floor=Math.max(base,peak*TUNE.decayFloor),lost=Math.max(0,peak-a.attrs[k]);
-  if(a.attrs[k]<=floor+.05)return null;
-  return {lvl:d>=4?'red':'warn',lost};
-}
-function lossMark(a,k){const l=losing(a,k);if(!l)return '';
-  return l.lvl==='red'?` <span class="lossr" title="perde condição no fim desta semana se não treinar${l.lost>.05?' (já perdeu '+l.lost.toFixed(1)+')':''}">↓</span>`
-  :` <span class="lossw" title="começa a perder condição se continuar sem treino">↓</span>`}
-function fatBox(a,plan){const now=Math.round(a.fatigue),end=projFat(a,plan);const col=v=>v>70?'red':v>45?'gold':'green';
-  return `<div class="fatbox"><div class="fl"><small>FADIGA AGORA</small><b>${now}</b><div class="bar ${col(now)}"><i style="width:${now}%"></i></div></div><div class="fl"><small>FIM DA SEMANA</small><b class="${end>70?'warn':''}">≈${end}</b><div class="bar ${col(end)}"><i style="width:${end}%"></i></div></div><p>${end>70?'Acima de 70: risco de lesão.':end>45?'Cansado: treina menos bem e chega pior às lutas.':'Bom nível de fadiga.'}</p></div>`}
-function miniStats(a){
-  const min=Math.min(...ATTRS.filter(([k])=>k!=='queixo').map(([k])=>a.attrs[k]));
-  return `<div class="mini">${ATTRS.map(([k])=>`<div class="${a.attrs[k]===min&&k!=='queixo'?'low':''}"><small>${SHORT[k].toUpperCase()}${lossMark(a,k)}</small><b>${Math.floor(a.attrs[k])}</b><div class="bar ${a.attrs[k]===min&&k!=='queixo'?'red':''}"><i style="width:${clamp(a.attrs[k],0,100)}%"></i></div></div>`).join('')}</div>`;
-}
-function padTxt(a,k,plan){const lv=a.skills[k]||0,nt=belNote(a,k),n=padSess(a,k,plan);if(!lv)return `novo: aprende em ~${n} sess${n>1?'ões':'ão'}`;
-  return lv>=5?'nível 5 (máximo)':`nível ${lv} · nv ${lv+1} em ~${n} sess.${nt?' · '+nt:''}`}
-function trainTargets(a,t){return Object.keys(t.g).map(k=>`${SHORT[k]} ${Math.floor(a.attrs[k])}`).join(' · ')}
-function editPlan(a){
-  const draft=[...a.plan];let pf=a.padF||null;
-  const draw=()=>{
-    const ch=draft.some((p,i)=>p!==a.plan[i]);
-    const s=modal(`<h2>PLANO DE ${a.nick.toUpperCase()}</h2><p class="hint">${a.ovr&&a.ovr.w===S.week?`Só esta semana: ${weekPlan(a).map(p=>TR[p].n).join(' · ')} (um plano novo anula). Toca`:'Repete-se todas as semanas · toca'} num treino para o mudar</p>${miniStats(a)}${fatBox(a,draft)}
-      <div class="slots">${draft.map((p,i)=>{const tr=TR[p],ok=trainOK(a,p);
-        return `<button class="slot" data-ps="${i}"><span class="n">${i+1}</span><span><strong>${tr.n}${p!==a.plan[i]?' <span style="color:var(--gold)">· novo</span>':''}${i<wkDone(a)?' <span style="color:var(--muted)">· feito</span>':''}</strong><span class="meta">${ok?(Object.keys(tr.g).length?'Treina '+trainTargets(a,tr):tr.d):'Sem equipamento: fica a correr'}</span></span><em>MUDAR</em></button>`}).join('')}</div>
-      ${draft.some(p=>p==='pads'&&trainOK(a,p))?`<button class="slot padf" id="pFoc"><span class="n">◎</span><span><strong>PADS · GOLPE DA SEMANA</strong><span class="meta">${pf?`${pName(pf)} · ${padTxt(a,pf,draft)}`:'Livre: um pouco em todos os golpes que sabe'}</span></span><em>MUDAR</em></button>`:''}
-      <div class="row2"><button class="btn" id="pX">CANCELAR</button><button class="btn gold" id="pOk">CONFIRMAR PLANO</button></div>`);
-    s.querySelectorAll('[data-ps]').forEach(b=>b.onclick=()=>pickSlot(+b.dataset.ps));
-    if(s.querySelector('#pFoc'))s.querySelector('#pFoc').onclick=pickFocus;
-    s.querySelector('#pX').onclick=closeModal;
-    s.querySelector('#pOk').onclick=()=>{const chg=draft.some((p,i)=>p!==a.plan[i]);a.plan=[...draft];a.padF=pf;if(chg)delete a.ovr;
-      if(chg){const e=ENT.find(x=>x.id===a.id);if(e){release(e);e.state='idle'}}closeModal()};
-  };
-  const pickFocus=()=>{ // golpe da semana nos Pads (tema 1.6): pode ser um que ainda não sabe, se os atributos deixarem
-    const s=modal(`<h2>PADS · ${a.nick.toUpperCase()}</h2><p class="hint">O golpe da semana leva quase toda a experiência dos Pads.${(()=>{const w=learnWhy(a);return w.g.length||w.b.length?` ${w.g.length?`<span class="good">Acelera:</span> ${w.g.join(', ')}.`:''}${w.b.length?` <span class="warn">Atrasa:</span> ${w.b.join(', ')}.`:''}`:' Aprende a um ritmo normal.'})()}</p>
-      <div class="pick pick2"><button data-pf="" class="${pf?'':'on'}"><strong>LIVRE</strong><span>Um pouco em todos os que sabe</span></button>${PKEYS.map(k=>{const lack=a.skills[k]>0?'':learnLack(a,k);
-        return `<button data-pf="${k}" class="${pf===k?'on':''}" ${lack?'disabled':''}><strong>${pName(k).toUpperCase()}</strong><span>${lack?'precisa de '+lack.replace('precisa de ',''):padTxt(a,k,draft)}</span></button>`}).join('')}</div>
-      <button class="btn" id="mX">VOLTAR AO PLANO</button>`);
-    s.querySelector('#mX').onclick=draw;
-    s.querySelectorAll('[data-pf]').forEach(b=>b.onclick=()=>{pf=b.dataset.pf||null;draw()});
-  };
-  const pickSlot=i=>{
-    const s=modal(`<h2>TREINO ${i+1} · ${a.nick.toUpperCase()}</h2><p class="hint">a vermelho o ponto mais fraco · <span class="lossw">↓</span> vai começar a perder · <span class="lossr">↓</span> perde esta semana sem treino</p>${miniStats(a)}${fatBox(a,draft)}
-    <div class="pick">${Object.entries(TR).filter(([id,t])=>!t.up||S.up[t.up]).map(([id,t])=>{const ok=trainOK(a,id);
-      return `<button data-t="${id}" class="${draft[i]===id?'on':''}" ${ok?'':'disabled'}><strong>${t.n}</strong>${ok?(t.sty?`<em>nv ${styleLv(a,t.sty)}/${styleCap(a,t.sty)}</em>`:Object.keys(t.g).length?`<em>${trainTargets(a,t)}</em>`:'<em>recupera</em>'):`<span>compra ${EQ[t.eq].n.toLowerCase()}</span>`}<span>${t.f<0?'fadiga '+t.f:'fadiga +'+t.f}${ok?(()=>{const pl=[...draft];pl[i]=id;const e=projFat(a,pl);return ` · <b class="${e>70?'warn':''}" style="font-weight:400">fim ≈${e}</b>`})():''}</span></button>`}).join('')}</div>
-    <button class="btn" id="mX">VOLTAR AO PLANO</button>`);
-    s.querySelector('#mX').onclick=draw;
-    s.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>{draft[i]=b.dataset.t;draw()});
-  };
-  draw();
-}
-
 /* ================= WEEK ================= */
 /* ---- relógio (experiência): o tempo corre sozinho. Uma semana dura TIME.weekMs à velocidade ×1 (window.__TIME sobrepõe, para testes).
-   Os 3 treinos do plano resolvem-se ao longo da semana (TIME.sessDays: Seg, Qua, Sex) em sessionStep; o fecho da semana (condição física,
-   anos, contas, sócios, propostas...) acontece uma só vez em weekEnd. O tempo pára sozinho quando é preciso o jogador (dia de luta, cartões)
-   e nunca anda com uma janela ou uma luta abertas. O plano é uma ordem permanente: só aparece um cartão quando há motivo (planAlerts).
-   No save: S.wt (0..1, parte da semana já passada), S.wstep (treinos já feitos esta semana), S.run, S.spd, S.wchk (semana em que os avisos
-   do plano já foram vistos), S.rep (último relatório), a.wk (semana em curso do atleta), a.ovr (plano só desta semana), a.wcd (avisos em espera). ---- */
+   Treino sem plano (3A-1): os atletas treinam sozinhos TODOS os dias (dayStep, um passo por dia, S.wstep 0..7); o fecho da semana (ligação ao
+   treinador, estilos, idade, contas, sócios, propostas...) acontece uma só vez em weekEnd. O tempo pára sozinho quando é preciso o jogador
+   (dia de luta, cartões) e nunca anda com uma janela ou uma luta abertas. dayStep devolve cartões (por agora nenhum; gancho para as técnicas
+   do 3A-3). No save: S.wt (0..1, parte da semana já passada), S.wstep (dias já treinados esta semana), S.run, S.spd, S.rep (último relatório),
+   S.evo (o que melhorou na última semana, caixa ESTA SEMANA), a.wk (semana em curso do atleta). ---- */
 const TIME=Object.assign({
   weekMs:45000,      // duração de uma semana em ×1
   speeds:[1,2,4],    // velocidades do botão (×4 para testar mais depressa)
-  sessDays:[0,2,4],  // dias dos 3 treinos (0 = Seg)
+  days:7,            // dias de treino por semana (todos)
   resume:true,       // depois de um cartão resolvido com um toque, o tempo volta a andar se estava a andar
   offerCard:true,    // uma proposta nova pára o tempo com um cartão
-  warnCd:4,          // semanas sem repetir um aviso do plano depois de "MANTER"
-  easeCd:2,          // semanas sem repetir depois de aceitar a sugestão ou de ir mudar o plano
   toastMs:4200,noticeMs:9000
 },window.__TIME||{});
 const WDAYS=['SEG','TER','QUA','QUI','SEX','SÁB','DOM'];
 let clkLast=0,stay=false;
-const sessAt=i=>(TIME.sessDays[i]+.5)/7;
-function weekPlan(a){return a.ovr&&a.ovr.w===S.week?a.ovr.p:a.plan}          // o plano desta semana (pode estar aliviado só esta semana)
-function wkDone(a){return a.wk&&a.wk.w===S.week?(S.wstep||0):0}               // treinos desta semana que já passaram
+const sessAt=i=>(i+.5)/TIME.days;
 function toast(html,cls,ms){
   const el=$('#toasts');if(!el)return;const d=document.createElement('div');d.className='toast '+(cls||'');d.innerHTML=html;el.appendChild(d);
   while(el.children.length>5)el.firstChild.remove();
@@ -1184,7 +1304,7 @@ function toast(html,cls,ms){
 }
 function drawClock(){
   const el=$('#days');if(!el||!S)return;
-  if(el.children.length!==7)el.innerHTML=WDAYS.map((d,i)=>`<i class="${TIME.sessDays.includes(i)?'tr':''}"><u></u><span>${d}</span></i>`).join('');
+  if(el.children.length!==7)el.innerHTML=WDAYS.map(d=>`<i><u></u><span>${d}</span></i>`).join('');
   const t=clamp(S.wt||0,0,1)*7;el.classList.toggle('off',!S.run);
   for(let i=0;i<7;i++){const c=el.children[i];c.firstChild.style.width=clamp(t-i,0,1)*100+'%';c.classList.toggle('dn',t>=i+1);c.classList.toggle('now',t>=i&&t<i+1)}
 }
@@ -1197,10 +1317,9 @@ function clockTick(){
 }
 function clockAdvance(d){
   if(anyFightNow()){S.run=false;render();return}
-  if(S.wchk!==S.week&&!(S.wt>0)){S.wchk=S.week;const c=S.roster.flatMap(planAlerts);if(c.length){clockDo(()=>runCards(c));return}} // avisos do plano: uma vez, no início da semana
   S.wt=(S.wt||0)+d;
   let cards=[],did=false;
-  while((S.wstep||0)<3&&S.wt>=sessAt(S.wstep||0)&&!cards.length){cards=sessionStep();did=true}
+  while((S.wstep||0)<TIME.days&&S.wt>=sessAt(S.wstep||0)&&!cards.length){cards=dayStep();did=true}
   if(cards.length){clockDo(()=>runCards(cards));return}
   if(S.wt>=1){clockDo(()=>endWeek());return}
   if(did)render();
@@ -1219,117 +1338,96 @@ function card(c){ // cartão curto com escolhas de um toque: {title, body, opts:
   });
 }
 async function runCards(cards){for(const c of cards){if(c.a&&!S.roster.includes(c.a))continue;await card(c);if(stay)break}}
-function openPlan(a){const i=S.roster.indexOf(a);if(i<0)return;S.tab='ath';S.sel=i;S.sub='plano';render();editPlan(a)}
-function setCd(a,k,n){a.wcd=a.wcd||{};a.wcd[k]=S.week+n}
-function easePlan(a,lim){ // troca os treinos mais pesados por descanso até a fadiga prevista caber no limite
-  const p=[...weekPlan(a)],out=[],fOf=id=>TR[trainOK(a,id)?id:'corrida'].f;
-  while(projFat(a,p)>lim){let bi=-1;p.forEach((id,i)=>{if(id!=='descanso'&&(bi<0||fOf(id)>fOf(p[bi])))bi=i});if(bi<0)break;out.push(TR[p[bi]].n);p[bi]='descanso'}
-  return{p,out};
-}
-/* avisos do plano: só quando há motivo (fadiga alta, luta na próxima semana, condição física a descer). Quem escolhe MANTER não volta a
-   ser avisado do mesmo durante TIME.warnCd semanas. */
-function planAlerts(a){
-  const out=[];if(!canTrain(a))return out;
-  const pl=weekPlan(a),end=projFat(a,pl),w=weeksTo(a),A=a.nick.toUpperCase();
-  const mk=(key,title,txt,act)=>{if(a.wcd&&a.wcd[key]>S.week)return;
-    out.push({a,title,body:`<p class="hint">${txt}</p>`,opts:[
-      ...(act?[{t:act.t,cls:'gold',fn:()=>{a.ovr={w:S.week,p:act.p};setCd(a,key,TIME.easeCd)}}]:[]),
-      {t:'MUDAR O PLANO',stay:true,fn:()=>{setCd(a,key,TIME.easeCd);openPlan(a)}},
-      {t:'MANTER',fn:()=>setCd(a,key,TIME.warnCd)}]})};
-  if(end>70){const e=easePlan(a,70);
-    mk('fat',`${A} ESTÁ MUITO CANSADO`,`Fadiga ${Math.round(a.fatigue)} agora e ≈${end} no fim da semana com este plano. Acima de 70 há risco de lesão.`,
-      e.out.length?{t:`ALIVIAR ESTA SEMANA<small>${e.out.join(' e ')} → Descanso, só esta semana</small>`,p:e.p}:null)}
-  else if(a.fight&&w===1&&end>45){const e=easePlan(a,45);
-    mk('fight',`${A} LUTA NA PRÓXIMA SEMANA`,`Luta com ${a.fight.opp.nick} daqui a 1 semana e, com este plano, chega cansado (fadiga ≈${end}).`,
-      e.out.length?{t:`ALIVIAR ESTA SEMANA<small>${e.out.join(' e ')} → Descanso, só esta semana</small>`,p:e.p}:null)}
-  const trained=new Set(pl.filter(p=>trainOK(a,p)).flatMap(p=>Object.keys(TR[p].g)));
-  if(pl.some(p=>!trainOK(a,p)))trained.add('resistencia');
-  const lost=DECAY_K.filter(k=>{const l=losing(a,k);return l&&l.lvl==='red'&&!trained.has(k)});
-  if(lost.length){
-    const val=id=>lost.reduce((t,k)=>t+(TR[id].g[k]||0),0),nid=Object.keys(TR).filter(id=>trainOK(a,id)&&val(id)>0).sort((x,y)=>val(y)-val(x))[0];
-    let act=null;
-    if(nid){const tot=id=>Object.values(TR[trainOK(a,id)?id:'corrida'].g).reduce((t,v)=>t+v,0);let si=-1;pl.forEach((id,i)=>{if(si<0||tot(id)<=tot(pl[si]))si=i});
-      if(si>=0){const p=[...pl];p[si]=nid;if(projFat(a,p)<=70)act={t:`TREINAR ESTA SEMANA<small>${TR[pl[si]].n} → ${TR[nid].n}, só esta semana</small>`,p}}}
-    mk('dec:'+lost.join(),`${A} VAI PERDER CONDIÇÃO`,`Há 4 semanas sem treinar ${lost.map(k=>ATTRS.find(x=>x[0]===k)[1]).join(' e ')}: desce no fim desta semana se não treinar.`,act)}
-  return out;
-}
-function padCard(a,k,isNew){
-  const n=pName(k);
-  return{a,title:isNew?`${a.nick.toUpperCase()} APRENDEU: ${n.toUpperCase()}`:`${n.toUpperCase()} NO NÍVEL 5`,
-    body:`<p class="hint">${isNew?`O golpe da semana nos Pads deu resultado. Queres ensinar-lhe outro golpe ou continuar a melhorar este?`:`${a.nick} já não tem mais nada a aprender neste golpe. Escolhe outro golpe da semana para os Pads.`}</p>`,
-    opts:[{t:'ESCOLHER OUTRO GOLPE',cls:'gold',stay:true,fn:()=>openPlan(a)},isNew?{t:`CONTINUAR COM ${n.toUpperCase()}`}:{t:'PADS LIVRES<small>um pouco em todos os golpes que sabe</small>',fn:()=>{a.padF=null}}]};
-}
-function injuryCard(a){
-  return{a,title:`${a.nick.toUpperCase()} LESIONOU-SE`,body:`<p class="hint">Excesso de treino com a fadiga alta. Fica ${a.injury} semana${a.injury>1?'s':''} só a recuperar.${a.fight?` <span class="warn">Tem luta marcada com ${a.fight.opp.nick}: se não recuperar a tempo, é cancelada.</span>`:''}</p>`,
-    opts:[{t:'CONTINUAR',cls:'gold'}]};
-}
 function offerCard(a,o){
   return{a,title:`${o.title?'LUTA PELO TÍTULO':'NOVA PROPOSTA'} · ${a.nick.toUpperCase()}`,
     body:`<p class="hint">${o.title?`${a.nick} é desafiante oficial ao título ${TIERS[a.tier].n}. `:''}Contra <b style="color:var(--fg)">${o.opp.nick}</b> · daqui a ${o.inWeeks} semanas · ${o.rounds} rounds · ${fmt(o.purse)} €.</p>`,
     opts:[{t:'VER PROPOSTAS',cls:'gold',stay:true,fn:()=>{const i=S.roster.indexOf(a);if(i>=0){S.tab='fights';S.sel=i;render()}}},{t:'DEPOIS'}]};
 }
-/* ---- um treino do plano (o n.º S.wstep desta semana) para todos os atletas; devolve os cartões que precisam do jogador ---- */
+/* ---- treino diário (3A-1): um dia (o n.º S.wstep desta semana) para todos os atletas; devolve os cartões que precisam do jogador ---- */
 function beginWeek(a){
-  a.wk={w:S.week,b:{...a.attrs},up:[],nT:0};
+  a.wk={w:S.week,b:{...a.attrs},up:[],bl:bondLv(a),sl:coachSty(a)?styleLv(a,coachSty(a)):0,st:a.style};
   a.weeks=(a.weeks||0)+1;if(a.weeks>=3){const m=revealGift(a,'nos treinos');if(m){a.wk.rev=m;toast(`<b>${m}</b>`)}}
-  a.fatigue=Math.max(0,a.fatigue-15);
-  a.tlog=a.tlog||[];
+  a.fatigue=Math.max(0,a.fatigue-15); // só há fadiga depois das lutas: vai-se embora com o descanso
   if(a.injury>0){a.wk.rest='inj';a.fatigue=Math.max(0,a.fatigue-20)}
   else if(a.recovery>0){a.wk.rest='rec';a.fatigue=Math.max(0,a.fatigue-20)}
 }
-function sessionStep(){
-  const i=S.wstep||0,cards=[];if(i>=3)return cards;
+function dayStep(){
+  const i=S.wstep||0,cards=[];if(i>=TIME.days)return cards;
   for(const a of S.roster){
     if(!a.wk||a.wk.w!==S.week)beginWeek(a);
-    const k=a.wk;if(k.rest||k.inj)continue;
-    const p=weekPlan(a)[i],id=trainOK(a,p)?p:'corrida',t=TR[id];
-    if(id==='descanso'){k.rested=true;a.fatigue=Math.max(0,a.fatigue+t.f);a.conf=clamp(a.conf+3,0,100);toast(`<b>${a.nick}</b> · Descanso`);continue}
-    k.nT++;
-    if(a.fatigue>70&&Math.random()<(a.fatigue-65)/90){k.inj=true;a.injury=RI(1,3);note(`${a.nick} lesionou-se no treino.`);cards.push(injuryCard(a));continue}
-    const b0={...a.attrs},n0=k.up.length,pf=a.padF,l0=pf?a.skills[pf]||0:0;
-    const q=clamp(sessQ(a)+R(-.1,.1),.3,1.15); // qualidade da sessão (9.1): atleta (Disciplina, Concentração, confiança) e equipa técnica
-    const m=(id==='sparring'&&S.up.ringue)?1.25:1;
-    for(const[x,b]of Object.entries(t.g))gain(a,x,b,q,m);
-    if(t.sty)addStyleXP(a,t.sty,Math.round(4*q),k.up,true);
-    if(id==='sparring')addStyleXP(a,a.style,Math.max(1,Math.round(1.4*q*m)),k.up,false);
-    trainSkills(a,id,q*m,k.up);
-    a.fatigue=clamp(a.fatigue+(t.f>0?t.f*fatMul(a):t.f),0,100);
+    const k=a.wk;if(k.rest)continue;
+    const n0=k.up.length;
+    trainDay(a,k.up);
     k.up.push(...checkUnlocks(a).map(g=>'aprendeu '+g));
-    const g=ATTRS.filter(([x])=>a.attrs[x]-b0[x]>=.05).map(([x])=>'+'+SHORT[x]);
-    toast(`<b>${a.nick}</b> · ${t.n} ✓ ${g.join(' ')}${k.up.length>n0?` · <span class="good">${k.up.slice(n0).join(', ')}</span>`:''}`);
-    if(id==='pads'&&pf&&(a.skills[pf]||0)>l0&&(l0===0||a.skills[pf]>=5))cards.push(padCard(a,pf,l0===0));
+    if(styleFollow(a))k.up.push('luta como '+a.style);
+    if(k.up.length>n0)toast(`<b>${a.nick}</b> · <span class="good">${k.up.slice(n0).join(', ')}</span>`);
   }
   S.wstep=i+1;return cards;
 }
-/* ---- fecho da semana: uma só vez por semana, depois dos 3 treinos. Devolve as propostas novas (para os cartões). ---- */
+/* ---- o modelo do treino diário. Cada atributo sobe por dia:
+   tDay × peso (rotina + equipamento, a saturar: 1-e^(-peso/eqW0)) × estilo do treinador (STY_ATTR) × treinador (escalão × ligação, ou noCoach)
+   × foco (focA) × idade (ageK) × Disciplina (discMul) × qualidade do dia (Disciplina, Concentração, confiança: sessQ, com acaso) × falta até ao teto
+   (potencial, como antes). Golpes e defesas: skDay pontos por dia, repartidos ao acaso pelos pesos de skW (estilo do treinador, equipamento,
+   uso nas lutas; os que ainda não sabe e já pode aprender pesam skNew), × treinador × foco (focS) × learnK. ---- */
+function attrW(){ // peso de cada atributo: rotina de todos + equipamento do ginásio
+  const w=Object.fromEntries(ATTRS.map(([k])=>[k,ROUTINE[k]||0]));
+  for(const[id,g]of Object.entries(EQ_G)){const n=S.eq[id]||0;if(!n)continue;const m=1+TUNE.eqMore*(n-1);for(const[k,v]of Object.entries(g))w[k]+=v*m}
+  return w}
+function ageK(a){const g=a.age||20,K=TUNE.ageK;return g<=20?K[0]:g<=24?K[1]:g<=28?K[2]:g<=31?K[3]:K[4]}
+function coachK(a){const c=coachOf(a);return c?TUNE.coachT[c.t]*bondK(a):TUNE.noCoach}
+function sessQ(a){return clamp(.58+TUNE.confQ*(a.conf??50)+TUNE.discQ*(mv(a,'disc')-50)/50+TUNE.concQ*(mv(a,'conc')-50)/50,.35,1.1)}
+function attrRate(a,k,w,q){ // ganho de um dia no atributo k (sem o acaso)
+  const c=coachOf(a),sm=c?(STY_ATTR[c.st][k]||1):1,eff=1-Math.exp(-((w||attrW())[k]||0)/TUNE.eqW0);
+  return TUNE.tDay*eff*sm*coachK(a)*(TUNE.focA[a.focus||'attrs']??1)*ageK(a)*discMul(a)*(.3+.9*(q??sessQ(a)))*clamp((a.cap[k]-a.attrs[k])/20,.06,1)}
+function skW(a){ // peso de cada golpe/defesa no treino diário
+  const st=coachSty(a),T=st?STY_TEACH[st]:[],u=a.use||{},w={};
+  for(const k of[...PKEYS,...DKEYS]){const known=lvOf(a,k)>0;if(lvOf(a,k)>=5||(!known&&learnLack(a,k)))continue;
+    let v=1+(T.includes(k)?TUNE.skCoach:0)+Math.min(2,(u[k]||0)*TUNE.skUse);
+    const add=(g,f)=>{if(g[k]!=null)v+=g[k]*f;else if(g['*']!=null&&k in SKILLS)v+=g['*']*f};
+    add(ROUT_SK,1);for(const[id,g]of Object.entries(EQ_SK))if(S.eq[id])add(g,1);
+    w[k]=known?v:v*TUNE.skNew}
+  return w}
+function trainDay(a,up){
+  const q=clamp(sessQ(a)+R(-.1,.1),.3,1.15),w=attrW();
+  for(const[k]of ATTRS){const g=attrRate(a,k,w,q);if(g>0)a.attrs[k]=clamp(a.attrs[k]+g,0,a.cap[k]+2)}
+  const sw=skW(a),ks=Object.keys(sw);
+  if(ks.length){const pool=TUNE.skDay*(.3+.9*q)*coachK(a)*(TUNE.focS[a.focus||'attrs']??1);for(let n=0;n<4;n++)addXP(a,wpick(ks,k=>sw[k]),pool/4,up)}
+  if(S.eq.sparring){const kn=[...PKEYS,...DKEYS].filter(k=>lvOf(a,k)>0),u=a.use||{};const k=wpick(kn,k=>1+(u[k]||0)/3);belUpd(a,k,Math.random()<.5,.5)} // sparring: a confiança vai ao sítio
+  const st=coachSty(a);if(st)addStyleXP(a,st,TUNE.styWk/TIME.days*coachK(a)*(.3+.9*q),up,true);
+}
+function weekTrain(a){ // fim da semana: ligação ao treinador, outros estilos a descer devagar, idade
+  const c=coachOf(a),out=[];
+  if(c){a.cw=(a.cw||0)+1;if(bondLv(a)>a.wk.bl){out.push('ligação ▲');note(`O ${a.nick} e ${c.n} ${['','já se conhecem','já se entendem bem','já confiam um no outro','são unha com carne'][bondLv(a)]}. O treino rende mais.`)}}
+  for(const st of STYLES){if(st===coachSty(a)||styleLv(a,st)<1)continue; // o estilo antigo desce muito devagar (nunca abaixo do nível 1)
+    a.sdec=a.sdec||{};if(a.sty[st]<=1){a.sdec[st]=0;continue}a.sdec[st]=(a.sdec[st]||0)+TUNE.styDec;
+    if(a.sdec[st]>=SXP(a.sty[st]-1)){a.sty[st]--;a.sdec[st]=0;a.sxp[st]=0;note(`O ${st} do ${a.nick} desceu para o nível ${a.sty[st]}.`)}}
+  if((a.age||0)>=TUNE.ageDec0){const d=TUNE.ageDec*(a.age-TUNE.ageDec0+1);for(const k of['forca','velocidade','resistencia','pes']){const fl=(a.base&&a.base[k])||0;if(a.attrs[k]>fl)a.attrs[k]=Math.max(fl,a.attrs[k]-d)}}
+  return out;
+}
+/* ---- fecho da semana: uma só vez por semana, depois dos dias de treino. Devolve as propostas novas (para os cartões). ---- */
 function weekEnd(){
-  while((S.wstep||0)<3)sessionStep();
-  const lines=[],short=[],reveals=[];
+  while((S.wstep||0)<TIME.days)dayStep();
+  const lines=[],short=[],reveals=[],evo=[];
   for(const a of S.roster){
     if(!a.wk||a.wk.w!==S.week)beginWeek(a);
-    const k=a.wk;delete a.wk;if(a.ovr&&a.ovr.w<=S.week)delete a.ovr;
-    if(a.wcd)for(const x of Object.keys(a.wcd))if(a.wcd[x]<=S.week)delete a.wcd[x];
+    const k=a.wk;
     if(k.rev)reveals.push(k.rev);
-    if(k.rest==='inj'){a.tlog.push({n:0,rest:true});lines.push(`<b>${a.nick}</b> esteve a recuperar da lesão.`);short.push(`${a.nick}: lesionado`);continue}
-    if(k.rest==='rec'){a.tlog.push({n:0,rest:true});a.recovery--;lines.push(`<b>${a.nick}</b> descansou depois da luta. ${a.recovery?`Faltam ${a.recovery} semana${a.recovery>1?'s':''} de recuperação.`:'Já pode voltar a treinar.'}`);short.push(`${a.nick}: ${a.recovery?'a recuperar da luta':'pronto para treinar'}`);continue}
-    a.tlog.push({n:k.nT,rest:!!k.rested});
-    const parts=ATTRS.map(([x])=>{const d=a.attrs[x]-k.b[x];return d>=.1?`${SHORT[x]} +${d.toFixed(1)}`:''}).filter(Boolean).concat(k.up);
-    if(k.inj){lines.push(`<b>${a.nick}</b> <span class="warn">lesionou-se por excesso de treino (${a.injury} sem.).</span> ${parts.join(', ')}`);short.push(`${a.nick}: <span class="warn">lesionou-se</span>`)}
-    else{lines.push(`<b>${a.nick}</b>: ${parts.join(', ')||'semana leve'} · fadiga ${Math.round(a.fatigue)}`);short.push(`${a.nick}: ${parts.join(', ')||'semana leve'}`)}
+    const bu=weekTrain(a);delete a.wk;
+    if(k.rest==='inj'){lines.push(`<b>${a.nick}</b> esteve a recuperar da lesão.`);short.push(`${a.nick}: lesionado`);evo.push({id:a.id,n:a.nick,it:['<i>lesionado</i>']});continue}
+    if(k.rest==='rec'){a.recovery--;lines.push(`<b>${a.nick}</b> descansou depois da luta. ${a.recovery?`Faltam ${a.recovery} semana${a.recovery>1?'s':''} de recuperação.`:'Já pode voltar a treinar.'}`);short.push(`${a.nick}: ${a.recovery?'a recuperar da luta':'pronto para treinar'}`);evo.push({id:a.id,n:a.nick,it:[a.recovery?'<i>a recuperar da luta</i>':'<i>pronto para treinar</i>']});continue}
+    const ds=ATTRS.map(([x])=>[x,a.attrs[x]-k.b[x]]).filter(([,d])=>d>=.1).sort((p,q)=>q[1]-p[1]);
+    const parts=ds.map(([x,d])=>`${SHORT[x]} +${d.toFixed(1)}`).concat(k.up);
+    lines.push(`<b>${a.nick}</b>${coachOf(a)?` (com ${coachOf(a).n})`:''}: ${parts.join(', ')||'semana sem mudanças'}`);
+    short.push(`${a.nick}: ${ds.slice(0,2).map(([x])=>ATTR_N[x]+' ▲').join(' · ')||'—'}`);
+    evo.push({id:a.id,n:a.nick,it:[...ds.slice(0,3).map(([x])=>`<span class="good">${ATTR_N[x]} ▲</span>`),...k.up.slice(0,2).map(t=>`<span class="gd">${t}</span>`),...bu]});
   }
+  S.evo={w:S.week,rows:evo};
   for(const a of S.roster){
-    a.tlog=(a.tlog||[]).slice(-6);a.base=a.base||{...a.attrs};a.peak=a.peak||{...a.attrs};a.lastT=a.lastT||{};
-    const lost=[];
-    for(const k of DECAY_K){
-      if(a.lastT[k]===undefined)a.lastT[k]=S.week;
-      if(S.week-a.lastT[k]>3){const floor=Math.max(a.base[k],a.peak[k]*TUNE.decayFloor);if(a.attrs[k]>floor){const d=Math.min(TUNE.decay,a.attrs[k]-floor);a.attrs[k]-=d;if(d>.05)lost.push(SHORT[k])}}
-    }
-    if(lost.length){lines.push(`<b>${a.nick}</b> <span class="warn">está a perder condição física (${lost.join(', ')}) por falta de treino.</span>`);short.push(`<span class="warn">${a.nick} perde ${lost.join(', ')}</span>`)}
     a.conf=clamp(a.conf+(confBase(a)-a.conf)*TUNE.confDrift,0,100);
     if(a.bw==null)a.bw=RI(0,51);
     if(S.week%52===a.bw){a.age++;const qd=a.age>=TUNE.qxAge?TUNE.qxYear*(a.age-TUNE.qxAge+1):0;
       if(qd){a.attrs.queixo=Math.max(5,a.attrs.queixo-qd);a.cap.queixo=Math.max(5,(a.cap.queixo||a.attrs.queixo)-qd)}
-      lines.push(`<b>${a.nick}</b> fez ${a.age} anos.${qd?' <span class="warn">Já não aguenta os golpes como antes.</span>':''}`);note(`${a.nick} fez ${a.age} anos.`);short.push(`${a.nick} fez ${a.age} anos`)}
+      lines.push(`<b>${a.nick}</b> fez ${a.age} anos.${qd?' <span class="warn">Já não aguenta os golpes como antes.</span>':''}`);note(`${a.nick} fez ${a.age} anos.`)}
   }
   const fees=S.members*ECON.fee,spons=sponsors(),WC=weeklyCosts(),net=fees+spons-WC.total;
   S.money=Math.max(0,S.money+net);
@@ -1355,13 +1453,13 @@ function weekEnd(){
   SFX.play(net>=0?'coin':'week');
   // relatório completo: fica guardado para ver quando se quiser (Ginásio → RELATÓRIO)
   S.rep={w:S.week-1,html:`<div class="rep">
-    <div class="r"><div><strong>TREINOS</strong>${lines.map(l=>`<p>${l}</p>`).join('')}</div></div>
-    <div class="r"><div><strong>CONTAS · SALDO ${net>=0?'+':''}${fmt(net)} €</strong><p>Mensalidades <span class="good">+${fees} €</span>${spons?` · Patrocínios <span class="good">+${spons} €</span>`:''}</p><p>Salários <span class="warn">-${WC.sal} €</span>${WC.staff?` · Staff <span class="warn">-${WC.staff} €</span>`:''} · Renda <span class="warn">-${WC.rent} €</span> · Manutenção <span class="warn">-${WC.maint} €</span></p><p>Sócios ${dm>=0?'+':''}${dm} (agora ${S.members}/${capacity()})${extra?' · '+extra:''}</p></div></div>
+    <div class="r"><div><strong>TREINO</strong>${lines.map(l=>`<p>${l}</p>`).join('')}</div></div>
+    <div class="r"><div><strong>CONTAS · SALDO ${net>=0?'+':''}${fmt(net)} €</strong><p>Mensalidades <span class="good">+${fees} €</span>${spons?` · Patrocínios <span class="good">+${spons} €</span>`:''}</p><p>Salários <span class="warn">-${WC.sal} €</span>${WC.staff?` · Treinadores <span class="warn">-${WC.staff} €</span>`:''} · Renda <span class="warn">-${WC.rent} €</span> · Manutenção <span class="warn">-${WC.maint} €</span></p><p>Sócios ${dm>=0?'+':''}${dm} (agora ${S.members}/${capacity()})${extra?' · '+extra:''}</p></div></div>
     ${news.length?`<div class="r"><div><strong>NOVIDADES</strong>${news.map(l=>`<p>${l}</p>`).join('')}</div></div>`:''}
   </div>`};
-  // aviso curto (1 a 3 linhas) que não pára o tempo
+  // aviso curto que não pára o tempo: o que melhorou, depois as contas e as novidades
   const l3=[...news,extra].filter(Boolean);
-  toast(`<div><b>SEMANA ${S.week-1}</b> · <span class="${net>=0?'good':'warn'}">${net>=0?'+':''}${fmt(net)} €</span>${dm?` · sócios ${dm>0?'+':''}${dm}`:''}</div><div>${short.join(' · ')}</div>${l3.length?`<div style="color:var(--gold)">${l3.join(' ')}</div>`:''}`,'wk',TIME.noticeMs);
+  toast(`<div><b>Semana ${S.week-1}</b> · ${short.join(' · ')||'sem atletas'}</div><div class="wm"><span class="${net>=0?'good':'warn'}">${net>=0?'+':''}${fmt(net)} €</span>${dm?` · sócios ${dm>0?'+':''}${dm}`:''}${l3.length?` · <span style="color:var(--gold)">${l3.join(' ')}</span>`:''}</div>`,'wk',TIME.noticeMs);
   return newOff;
 }
 async function endWeek(quiet){
@@ -1389,63 +1487,26 @@ async function advanceWeek(){
 window.__week=()=>advanceWeek();
 window.__clock=()=>S&&{week:S.week,wt:S.wt||0,step:S.wstep||0,run:!!S.run,spd:S.spd||1,busy};
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&S&&S.run){S.run=false;save();drawClock()}});
-/* ---- golpes e defesas no treino (tema 1.6 e 3): os Pads dão muita experiência ao golpe da semana (a.padF; pode ser um golpe que ainda não sabe,
-   se os atributos deixarem: aprende-o em algumas sessões); sem golpe escolhido, espalha pelos que sabe. Os outros treinos dão um pouco aos golpes
-   ligados (Guia); o Sparring aos mais usados nas lutas (a.use), a várias defesas e mexe na confiança (sucessos e falhanços). ---- */
-const T_SK={saco:['direto','ganchoT','overhand'],pera:['jab'],shadow:PKEYS};
-const T_DF={esquiva:{cabeca:5},shadow:{cabeca:1,pes:1},corda:{pes:1.5},pads:{aparar:1},bola:{bloqueio:1}};
-/* ---- velocidade de aprender (tema 9.1, passo A4): vale para golpes, defesas, atributos e estilos.
-   Treinador: o adjunto (S.up.treinador) e cada especialista de estilo; o especialista ensina mais depressa os golpes e defesas do seu estilo (STY_TEACH).
-   Atleta: Disciplina, Concentração e confiança do dia (qualidade da sessão, sessQ: entra nos atributos, estilos, golpes e defesas), Técnica num
-   golpe ou defesa novos e fadiga da semana (learnK). Nos Pads, "aprende em ~N sessões" é a estimativa deste atleta (padSess). ---- */
-const SPEC={cIn:'In-fighter',cOut:'Outboxer',cPun:'Puncher'};
+/* ---- velocidade de aprender (tema 9.1, passo A4; 3A-1): golpes, defesas, atributos e estilos.
+   Treinador: o escalão e a ligação (coachK) e o estilo: ensina mais depressa os golpes e defesas do seu estilo (STY_TEACH, lSpec).
+   Atleta: Disciplina, Concentração e confiança do dia (qualidade do treino, sessQ) e Técnica num golpe ou defesa novos (learnK). ---- */
 const STY_TEACH={'In-fighter':['ganchoF','ganchoT','upperF','upperT','cabeca','bloqueio','clinch'],'Outboxer':['jab','direto','pes','aparar'],'Puncher':['direto','ganchoT','overhand','bloqueio','ombro']};
-function nSpec(){return Object.keys(SPEC).filter(u=>S.up[u]).length}
-function specOf(k){return Object.keys(SPEC).filter(u=>S.up[u]&&STY_TEACH[SPEC[u]].includes(k)).map(u=>SPEC[u])}
-function sessQ(a){return clamp(.58+TUNE.confQ*(a.conf??50)+(S.up.treinador?.05:0)+TUNE.discQ*(mv(a,'disc')-50)/50+TUNE.concQ*(mv(a,'conc')-50)/50+TUNE.staffQ*nSpec(),.35,1.1)}
 function tecK(a){return clamp(1+TUNE.lTec*((a.attrs.tecnica||0)-TUNE.lTec0),TUNE.lTecMin,TUNE.lTecMax)}
-function learnK(a,k,fat){ // por habilidade: equipa técnica, Técnica (só num golpe/defesa novos), fadiga
-  return(1+(S.up.treinador?TUNE.lCoach:0)+TUNE.lStaff*nSpec()+(specOf(k).length?TUNE.lSpec:0))*(lvOf(a,k)>0?1:tecK(a))*(1-TUNE.lFat*clamp(fat??a.fatigue??0,0,100)/100)}
-function padSess(a,k,plan){ // sessões de Pads (com este golpe como golpe da semana) até aprender / subir de nível
-  const lv=a.skills[k]||0,need=(lv?lv*8:TUNE.learnXP)-(a.xp[k]||0),f=plan?(Math.max(0,a.fatigue-15)+projFat(a,plan))/2:a.fatigue;
-  return Math.max(1,Math.ceil(need/(TUNE.padXP*sessQ(a)*learnK(a,k,f))))}
-function learnWhy(a,k){ // em palavras: o que acelera e o que atrasa (sem números)
-  const g=[],b=[],d=mv(a,'disc'),c=mv(a,'conc'),neu=!(lvOf(a,k)>0);
-  if(S.up.treinador)g.push('treinador assistente');
-  for(const st of k?specOf(k):Object.values(SPEC).filter((s,i)=>S.up[Object.keys(SPEC)[i]]))g.push(`treinador de ${st}${k?'':' (golpes do estilo)'}`);
-  if(d>=65)g.push('disciplinado');else if(d<=35)b.push('pouco disciplinado');
-  if(c>=65)g.push('concentrado');else if(c<=35)b.push('distraído');
-  if(neu&&k){const t=tecK(a);if(t>=1.12)g.push('boa técnica');else if(t<=.9)b.push('pouca técnica')}
-  if(a.fatigue>=50)b.push('cansado');if(a.conf>=75)g.push('confiante');else if(a.conf<=35)b.push('em baixo');
-  return{g,b}}
+function learnK(a,k){ // por habilidade: golpe/defesa do estilo do treinador, Técnica (só num golpe/defesa novos)
+  const st=coachSty(a);return(1+(st&&STY_TEACH[st].includes(k)?TUNE.lSpec:0))*(lvOf(a,k)>0?1:tecK(a))}
 function addXP(a,k,pts,up){
   if(pts<=0)return;const isD=k in DEFS,lv=isD?a.def:a.skills,xp=isD?a.dxp:a.xp;a.bel=a.bel||{};
-  pts=Math.round(pts*learnK(a,k)*10)/10; // velocidade de aprender desta habilidade (9.1)
+  pts=pts*learnK(a,k); // velocidade de aprender desta habilidade (9.1)
   if(!(lv[k]>0)){if(learnLack(a,k))return;xp[k]=(xp[k]||0)+pts;
     if(xp[k]>=TUNE.learnXP){xp[k]=0;lv[k]=1;a.bel[k]=TUNE.bel0;up.push('aprendeu '+skName(k));note(`${a.nick} aprendeu: ${skName(k)}.`)}return}
   xp[k]=(xp[k]||0)+pts;
   while(lv[k]<5&&xp[k]>=lv[k]*8){xp[k]-=lv[k]*8;lv[k]++;a.bel[k]=Math.round((belOf(a,k)+TUNE.belUp)*100)/100;up.push(`${skName(k)} nv ${lv[k]}`)}
   if(lv[k]>=5)xp[k]=0;
 }
-function trainSkills(a,id,q,up){
-  const known=PKEYS.filter(k=>a.skills[k]>0),u=a.use||{};
-  if(id==='pads'){const f=a.padF;let pts=TUNE.padXP*q;
-    if(f&&SKILLS[f]&&(a.skills[f]>0||!learnLack(a,f)))addXP(a,f,pts,up);else{pts=Math.round(pts);while(pts-->0)addXP(a,pick(known),1,up)}}
-  if(T_SK[id]){const ks=T_SK[id].filter(k=>a.skills[k]>0);let pts=Math.round(TUNE.lnkXP*q*(id==='shadow'?1.4:1));while(ks.length&&pts-->0)addXP(a,pick(ks),1,up)}
-  if(id==='sparring'){
-    let pts=Math.round(TUNE.lnkXP*q);while(pts-->0)addXP(a,wpick(known,k=>1+(u[k]||0)),1,up);
-    const dc=DKEYS.filter(k=>a.def[k]>0||!learnLack(a,k));pts=Math.round(4*q);while(dc.length&&pts-->0)addXP(a,wpick(dc,k=>a.def[k]>0?1+(u[k]||0)/4:.6),1,up);
-    // confiança: o sparring é um ensaio — sucessos e falhanços contra um parceiro do mesmo nível
-    const ks=[...known,...DKEYS.filter(k=>a.def[k]>0)];for(let i=0;i<8;i++){const k=wpick(ks,k=>1+(u[k]||0)/3);belUpd(a,k,Math.random()<.5,.5)}
-  }
-  if(T_DF[id])for(const[k,v]of Object.entries(T_DF[id]))addXP(a,k,Math.round(v*q),up);
-}
-function gain(a,k,base,q,mult=1){
-  let g=TUNE.train*base*(.3+.9*q)*(1-a.fatigue/160)*mult;
-  g*=discMul(a);if(S.up.treinador)g*=1.2;
+function gain(a,k,base,q,mult=1){ // ganho fora do treino diário (lutas: Ring IQ)
+  let g=TUNE.train*base*(.3+.9*q)*mult*discMul(a);
   g*=clamp((a.cap[k]-a.attrs[k])/20,.06,1);
   a.attrs[k]=clamp(a.attrs[k]+g,0,a.cap[k]+2);
-  if(g>.02){a.lastT=a.lastT||{};a.lastT[k]=S.week;a.peak=a.peak||{};a.peak[k]=Math.max(a.peak[k]||0,a.attrs[k])}
 }
 function dismissCost(a){const pen=1+(a.fight?3:0)+a.titles.length*2+(a.rec.w>=5?1:0);return{money:a.salary*2,pop:pen}}
 function doDismiss(a){const c=dismissCost(a);S.money=Math.max(0,S.money-c.money);S.pop=Math.max(0,S.pop-c.pop);
@@ -1480,7 +1541,7 @@ function talent(cat){
     const used=S.roster.map(x=>x.nick);const a=makeAthlete(cat,{boost:RI(0,6),nick:pick(NICKS.filter(n=>!used.includes(n)))});
     const vis=ATTRS.filter(([k])=>k!=='queixo').map(([k,n])=>[n,a.attrs[k]]).sort((x,y)=>y[1]-x[1]);const pz=persona(a);
     const desc=v=>v>=22?'alta':v>=15?'média':'fraca';
-    const hr=S.up.treinador?[.8,.04]:[.55,.12];
+    const hr=goodCoach()?[.8,.04]:[.55,.12];
     a.hint=a.gift?(Math.random()<hr[0]?a.gift:null):(Math.random()<hr[1]?pick(Object.keys(GIFTS)):null);
     const curA=S.roster.find(x=>x.cat===cat);
     const cmp=curA?`<div class="r" style="grid-template-columns:1fr"><div><strong>ATUAL NO PESO ${cat.toUpperCase()}: ${curA.nick}</strong>
@@ -1497,7 +1558,7 @@ function talent(cat){
       <div class="row2"><button class="btn" id="ig">IGNORAR</button><button class="btn gold" id="tk">${curA?'TROCAR':'TRAZER'}</button></div>`);
     drawPortrait(s.querySelector('#tp'),a.look);
     s.querySelector('#ig').onclick=()=>{note(`Deixaste ir um talento (${a.nick}).`);closeModal();res()};
-    s.querySelector('#tk').onclick=()=>{if(curA)doDismiss(curA);S.roster.push(a);S.sel=S.roster.length-1;addOffer(a,true);note(`${a.name} "${a.nick}" juntou-se ao ginásio (${cat}).`);closeModal();res()};
+    s.querySelector('#tk').onclick=()=>{if(curA)doDismiss(curA);S.roster.push(a);S.sel=S.roster.length-1;addOffer(a,true);note(`${a.name} "${a.nick}" juntou-se ao ginásio (${cat}).`);autoCoach(a);closeModal();res()};
   });
 }
 
@@ -1507,6 +1568,7 @@ const COACH={skin:'#9a6440',hair:'#ccc',trunk:'#222',shirt:'#2d4a6b'};
 const OWNER={skin:'#c98f62',hair:'#3b2416',trunk:'#2a2a30',shirt:'#d4452f',hs:4,cap:'#8f2a1b'};
 const COACH_SAY=['MAOS!','BOA!','MAIS!','RESPIRA','QUEIXO','JAB!','RITMO!','ISSO!','FORCA!','GUARDA'];
 const BAGH={};let GYMBELL=0;
+function padsCoach(){const L=S.coaches||[];return L.find(c=>athOf(c))||L[0]||null} // quem segura os pads
 function gymOK(){return !F&&!$('#modalRoot').innerHTML&&!document.hidden}
 function gedge(key,v,snd,chance=1){if(v&&!BAGH[key]&&gymOK()&&Math.random()<chance)SFX.play(snd);BAGH[key]=v}
 function spots(){
@@ -1537,7 +1599,7 @@ function syncEnt(){
   const n=Math.min(S.members,14);
   for(let i=0;i<n;i++){const e=entFor('m'+i,'m',memberLooks[i]);want.add(e.id)}
   {const e=entFor('owner','c',OWNER);want.add(e.id)}
-  if(S.up.treinador){const e=entFor('pro','c',{...COACH,hs:1});want.add(e.id)}
+  for(const c of S.coaches||[]){const e=entFor(c.id,'c',{...c.lk,shirt:c.lk.trunk,trunk:'#222',hs:1});e.coach=c;want.add(e.id)} // os treinadores do ginásio
   for(const a of S.roster){const e=entFor(a.id,'a',{...a.look,hs:(a.id.charCodeAt(3)||0)%3,shirt:a.look.skin,glove:'#d4452f'});e.ath=a;want.add(e.id)}
   ENT=ENT.filter(e=>{if(!want.has(e.id)){release(e);return false}return true});
 }
@@ -1555,10 +1617,9 @@ function athleteAct(e){
   const side=()=>{const idle=IDLE.filter(s=>!occ[s.key]);if(idle.length)goTo(e,pick(idle),R(3000,5000))};
   if(a.injury>0||a.recovery>0){const b=IDLE.filter(s=>(s.pose==='sit'||s.pose==='stretch')&&!occ[s.key]);if(b.length)goTo(e,pick(b),R(5000,8000));return}
   if(Math.random()<.25){side();return}
-  const p=pick(a.plan);const id=trainOK(a,p)?p:'corrida';
+  const opts=['corrida','shadow',...Object.keys(EQ).filter(k=>S.eq[k])],id=pick(opts); // treina sozinho com o que o ginásio tem
   let sp=null;
-  if(id==='descanso')sp=IDLE.find(s=>s.key==='bench0');
-  else if(id==='corrida')sp={key:'run_'+a.id,type:'corrida',x:R(20,170),y:132,pose:'run',run:true};
+  if(id==='corrida')sp={key:'run_'+a.id,type:'corrida',x:R(20,170),y:132,pose:'run',run:true};
   else sp=S_.find(s=>s.type===id&&!occ[s.key])||S_.find(s=>s.type===id&&!ENT.some(o=>o.kind==='a'&&o.id===occ[s.key]));
   if(!sp){side();return}
   const h=occ[sp.key];if(h&&h!==e.id){const o=ENT.find(x=>x.id===h);if(o){release(o);o.state='idle'}}
@@ -1717,7 +1778,7 @@ function drawGym(now){
   }
   const list=ENT.slice().sort((a,b)=>a.y-b.y);
   for(const e of list){
-    if(e.id==='pro'&&occ['pads0'])continue;
+    if(occ['pads0']&&padsCoach()&&e.id===padsCoach().id)continue;
     let pose='stand';
     if(e.state==='walk')pose='walk';
     else if(e.state==='do'&&e.spot)pose=e.spot.pose||'stand';
@@ -1726,13 +1787,13 @@ function drawGym(now){
     if(e.state==='do'&&e.spot){
       const s=e.spot;
       if(s.type==='corda'){const up=Math.sin(e.t*14)>0;gedge('rope'+s.key,!up,'rope');x.fillStyle='#e8d9b8';if(up)x.fillRect(e.x-4,e.y,9,1);else{x.fillRect(e.x-5,e.y-19,11,1);x.fillRect(e.x-5,e.y-19,1,9);x.fillRect(e.x+5,e.y-19,1,9)}}
-      if(s.holder)fig(x,e.x+12,e.y,(s.i===0&&S.up.treinador)?COACH:memberLooks[(s.i+9)%16],-1,'pad',e.t);
+      if(s.holder)fig(x,e.x+12,e.y,(s.i===0&&padsCoach())?{...padsCoach().lk,shirt:padsCoach().lk.trunk,trunk:'#222'}:memberLooks[(s.i+9)%16],-1,'pad',e.t);
       if(s.partner)fig(x,e.x+16,e.y,memberLooks[(s.i+11)%16],-1,'ball',e.t+1.6);
       if(s.type==='sparring')fig(x,e.x+22,e.y,memberLooks[(s.i+5)%16],-1,'spar',e.t+.35);
     }
     if(e.kind==='a'){const by=Math.round(Math.sin(e.t*4));x.fillStyle='#e8b13a';x.fillRect(Math.round(e.x)-2,Math.round(e.y)-22+by,5,1);x.fillRect(Math.round(e.x)-1,Math.round(e.y)-21+by,3,1);x.fillRect(Math.round(e.x),Math.round(e.y)-20+by,1,1)}
   }
-  for(const e of ENT){if(e.kind!=='c'||!e.say||performance.now()>e.sayUntil||(e.id==='pro'&&occ['pads0']))continue;
+  for(const e of ENT){if(e.kind!=='c'||!e.say||performance.now()>e.sayUntil||(occ['pads0']&&padsCoach()&&e.id===padsCoach().id))continue;
     const w=e.say.length*4+3,bx=clamp(Math.round(e.x-w/2),1,239-w),by=Math.round(e.y)-27;x.fillStyle='#1b140c';x.fillRect(bx-1,by-1,w+2,9);x.fillStyle='#f1e5d0';x.fillRect(bx,by,w,7);x.fillRect(Math.round(e.x),by+7,2,2);pxText(x,e.say,bx+2,by+1,'#1b140c')}
   for(const lx of[40,120,200]){const g=x.createRadialGradient(lx,10,2,lx,90,80);g.addColorStop(0,'rgba(255,236,190,.16)');g.addColorStop(1,'rgba(255,236,190,0)');x.fillStyle=g;x.beginPath();x.moveTo(lx-4,10);x.lineTo(lx+4,10);x.lineTo(lx+46,136);x.lineTo(lx-46,136);x.fill()}
   {x.fillStyle='rgba(200,225,255,.06)';x.beginPath();x.moveTo(166,28);x.lineTo(192,28);x.lineTo(160,136);x.lineTo(118,136);x.fill();
@@ -3060,6 +3121,9 @@ function afterFight(a,r){ // experiência da luta: Ring IQ, mentais (devagar) e 
    for(const k of[...PKEYS,...DKEYS]){if(!lvOf(a,k)||x.bel[k]==null)continue;const d=x.bel[k]-belOf(a,k);if(!big||Math.abs(d)>Math.abs(big.d))big={k,d};a.bel[k]=x.bel[k]}
    a.use=a.use||{};for(const k of PKEYS){const n=(x.ps[k]&&x.ps[k][0])||0;a.use[k]=Math.round(((a.use[k]||0)*.5+n)*10)/10;if(!a.use[k])delete a.use[k]}
    for(const k of DKEYS){const n=(x.dfs[k]&&x.dfs[k][0])||0;a.use[k]=Math.round(((a.use[k]||0)*.5+n)*10)/10;if(!a.use[k])delete a.use[k]}
+   const lu=[];for(const k of PKEYS){const n=(x.ps[k]&&x.ps[k][0])||0;if(n)addXP(a,k,Math.min(2,n/40),lu)} // o que se usa na luta também melhora
+   for(const k of DKEYS){const n=(x.dfs[k]&&x.dfs[k][0])||0;if(n)addXP(a,k,Math.min(1.5,n/15),lu)}
+   addStyleXP(a,x.style,rds/3,lu,false);if(lu.length)out.push(`Aprendeu na luta: ${lu.join(', ')}.`);
    if(big&&Math.abs(big.d)>=.3){const nm=skNo(big.k);out.push(big.d>0?`Ganhou confiança ${nm}: resultou na luta.`:`Perdeu confiança ${nm}: falhou demasiadas vezes.`)}}
   if(a.attrs.iq-b>=.1)out.push(`Ganhou experiência no ringue: Ring IQ +${(a.attrs.iq-b).toFixed(1)}.`);
   if(hard)out.push(`Uma vitória sofrida: ${a.nick} sai dela com mais coração.`);
@@ -3114,8 +3178,8 @@ function finishFight(){
    estratégia por troca (F.sx) e ordens (F.ordLog). buildAnalysis() junta tudo num resumo compacto, guardado no histórico (a.hist, só nas 3 lutas mais recentes),
    com 1-3 razões ordenadas por impacto estimado (pontos percentuais de vitória, pelos alvos de equilíbrio do CLAUDE.md,
    ou pelo tamanho da diferença medida). Só entra uma razão se os números a confirmarem. */
-const ATR_TR={forca:'Saco ou Musculação',velocidade:'Pera ou Shadow boxing',resistencia:'Corrida ou Corda',queixo:'Bola medicinal, mas sobe pouco',defesa:'Sparring ou Corda de esquiva',tecnica:'Pads ou Shadow boxing',pes:'Corda ou Shadow boxing',iq:'Sparring e lutas'};
-function trTip(k,n){return k==='queixo'?'O Queixo quase não se treina: protege-o com Defesa e evita trocas abertas.':k==='iq'?'O Ring IQ cresce com lutas e com Sparring.':`Treina ${n} (${ATR_TR[k]}).`}
+const ATR_TR={forca:'Saco, Banco e pesos, Pneu; treinador Puncher',velocidade:'Pera, Corda; treinador Outboxer ou Puncher',resistencia:'corrida diária, Corda, Pneu; treinador In-fighter',queixo:'Bola medicinal, mas sobe pouco',defesa:'Zona de sparring, Corda de esquiva; treinador Outboxer ou In-fighter',tecnica:'Pads, Pera; treinador In-fighter ou Puncher',pes:'Corda; treinador Outboxer',iq:'lutas, Zona de sparring; treinador Outboxer'};
+function trTip(k,n){return k==='queixo'?'O Queixo quase não se treina: protege-o com Defesa e evita trocas abertas.':k==='iq'?'O Ring IQ cresce com lutas, com a Zona de sparring e com um treinador Outboxer.':`${n} sobe com: ${ATR_TR[k]}.`}
 const PK=PKEYS;
 const DEFN={bloqueio:'de bloquear',aparar:'de aparar',cabeca:'do movimento de cabeça',ombro:'do ombro',pes:'dos pés',clinch:'do clinch'};
 const PN={jab:'1 Jab',direto:'2 Direto',ganchoF:'3 Gancho fr.',ganchoT:'4 Gancho tr.',upperF:'5 Upper. fr.',upperT:'6 Upper. tr.',overhand:'Overhand'};
@@ -3221,7 +3285,7 @@ function anReasons(win,draw){
    else if(bad>=2&&bad>ok)add('talk',-1,1.5*bad,`${bad} instruções no canto não resultaram.|Vê os atributos do teu atleta antes de escolher.`)}
   // 11) forma no dia
   {const f=F.form0;if(f&&Math.abs(f.sc)>=.3){const r=(f.reasons.find(x=>x[0]===(f.sc>0?'+':'−'))||'').slice(2);
-    add('form',Math.sign(f.sc),Math.abs(f.sc)*8,f.sc>0?`Chegou em grande forma${r?` (${r})`:''}.`:`Chegou fora de forma${r?` (${r})`:''}.|Na semana da luta, alivia o plano.`)}}
+    add('form',Math.sign(f.sc),Math.abs(f.sc)*8,f.sc>0?`Chegou em grande forma${r?` (${r})`:''}.`:`Chegou fora de forma${r?` (${r})`:''}.|Evita marcar lutas logo a seguir a outra: chega cansado.`)}}
   // 12) distância e ringue (tema 5): batalha da distância, encostado às cordas/canto, antecipação, cross-counter, fígado, confiança
   {const pw=x=>{x=Math.abs(x);return x<5?'ligeiramente':x<12?'claramente':'muito'},D=[me.dx,op.dx],T=DN.reduce((t,d)=>t+D[0].d[d],0)||1;
    const DW={longe:'longe',meio:'a meia distância',perto:'perto'},pc=v=>Math.round(100*v)+'%',sm=stMin(0),so=stMin(1);
@@ -4126,15 +4190,18 @@ async function start(){
   try{document.fonts&&document.fonts.ready.then(()=>{ARENA=null})}catch(e){}
   {let old=[];try{for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(/^corner-men-v\d+$/.test(k)&&k!==KEY)old.push(k)}}catch(e){}
    if(old.length){try{old.forEach(k=>localStorage.removeItem(k))}catch(e){}
-     await info('NOVA VERSÃO',`<p class="hint">O Corner Men tem regras novas: atletas com 8 atributos (agora também Queixo, Pés e Ring IQ) e uma personalidade própria.</p><p class="hint">Por isso o jogo recomeça do zero. O teu ginásio antigo não passa para esta versão.</p>`,'COMEÇAR')}}
+     await info('NOVA VERSÃO',`<p class="hint">O Corner Men tem regras novas: já não há plano de treino. Os atletas treinam sozinhos todos os dias e cada um tem o seu treinador, que lhe ensina o estilo dele.</p><p class="hint">Por isso o jogo recomeça do zero. O teu ginásio antigo não passa para esta versão.</p>`,'COMEÇAR')}}
   const choice=await menu('start');
   S=choice==='new'?null:load();
   let fresh=false;if(!S||!S.roster){newGame();fresh=true}
   S.gymName=S.gymName||'Ginásio Esperança';S.logo=S.logo||0;
   for(const a of S.roster){migrateHist(a);migrateStyles(a);initBody(a,2);if(a.fight){migrateStyles(a.fight.opp);initBody(a.fight.opp,clamp(a.tier+1,1,5))}for(const o of a.offers||[]){migrateStyles(o.opp);initBody(o.opp,clamp(a.tier+1,1,5))}}
   for(const a of S.roster){normSkills(a);a.combos=a.combos||knownCombos(a).map(c=>c.id);a.recovery=a.recovery||0;a.ment=a.ment||rollMental();for(const[k]of ATTRS){if(a.attrs[k]==null)a.attrs[k]=k==='queixo'?50:10;if(a.cap[k]==null)a.cap[k]=a.attrs[k]+5}if(a.gift===undefined){a.gift=null;a.giftKnown=true}a.weeks=a.weeks||0}
+  if(!Array.isArray(S.coaches)){S.coaches=startCoaches();for(const a of S.roster){a.coach=null;autoCoach(a)}} // treinadores (3A-1)
+  for(const a of S.roster){if(!FOCUS[a.focus])a.focus='attrs';a.cw=a.cw||0;if(a.coach&&!coachOf(a))a.coach=null;for(const k of['plan','padF','ovr','wcd','tlog','lastT','peak'])delete a[k]}
+  if(S.sub==='plano')S.sub='treino';S.gsub=S.gsub||'res';delete S.wchk;
   S.tab=S.tab||'gym';
-  S.run=false;S.spd=TIME.speeds.includes(S.spd)?S.spd:1;S.wt=clamp(+S.wt||0,0,1);S.wstep=clamp(S.wstep|0,0,3);for(const a of S.roster)delete a.revWeek; // relógio: começa sempre parado
+  S.run=false;S.spd=TIME.speeds.includes(S.spd)?S.spd:1;S.wt=clamp(+S.wt||0,0,1);S.wstep=clamp(S.wstep|0,0,TIME.days);for(const a of S.roster)delete a.revWeek; // relógio: começa sempre parado
   render();requestAnimationFrame(world);clkLast=performance.now();setInterval(clockTick,100);
   if(fresh){await setupGym();render()}
   if(!S.seen){S.seen=true;save();await help()}
