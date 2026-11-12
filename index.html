@@ -330,7 +330,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .evo .er{display:grid;grid-template-columns:64px 1fr;gap:6px;align-items:baseline;font-size:16.5px;line-height:1}
 .evo .er small{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .evo .er span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted)} .evo i{font-style:normal} .gd{color:var(--gold)}
-.trc{gap:4px;padding:6px 9px;min-height:0;overflow:hidden}
+.trc{gap:2px;padding:6px 9px;min-height:0;overflow:hidden}
 .tco{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center}
 .tco>div:first-child:last-child,.tco>div:first-child{min-width:0}
 .tco canvas{width:40px;height:40px;image-rendering:pixelated;border:2px solid var(--line);background:#3a2d22}
@@ -342,9 +342,11 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .foc button{background:var(--panel2);border:2px solid var(--line);color:var(--muted);padding:4px 5px 3px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:1px;font-family:var(--f-body);font-size:15.5px;line-height:1;min-width:0}
 .foc button b{font-family:var(--f-display);font-size:8px;font-weight:400;letter-spacing:.05em;color:var(--fg);white-space:nowrap}
 .foc button.on{border-color:var(--gold);color:var(--fg)} .foc button.on b{color:var(--gold)}
+.wln{white-space:nowrap;display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:16px;line-height:1}.wln i{font-style:normal;color:var(--muted)}.wln b{font-weight:400}.wln .warn{font-size:inherit;color:var(--red)}.wln .good{color:var(--green)}.wln .btn{flex:none;font-size:9px;padding:5px 7px 4px}
+.kv.wi b{font-size:15px}
 .trc>.meta{font-size:15.5px;line-height:1} .fcat b{font-weight:400;color:var(--fg)}
 .imp{display:flex;flex-direction:column;gap:1px}
-.imp p{display:grid;grid-template-columns:20px 1fr;font-size:16px;line-height:.98} .imp em{font-style:normal;color:var(--green);font-size:12px;letter-spacing:-2px}
+.imp p{display:grid;grid-template-columns:20px 1fr;font-size:16px;line-height:.98} .imp p span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .imp em{font-style:normal;color:var(--green);font-size:12px;letter-spacing:-2px}
 .imp p.lo{color:var(--muted)} .imp p.lo em{color:var(--muted)} .imp i{font-style:normal;color:var(--muted)}
 .ccmp{display:grid;grid-template-columns:1fr auto 1fr;gap:6px;align-items:center} .ccmp>em{font-style:normal;color:var(--gold)}
 .ccb{border:2px solid var(--line);background:var(--panel2);padding:5px 7px;display:flex;flex-direction:column;gap:3px;align-items:flex-start;min-width:0}
@@ -442,8 +444,12 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const fmt=n=>Math.round(n).toLocaleString('pt-PT');
 
 /* ================= DATA ================= */
-const CATS=['Pena','Superpena','Ligeiro','Pesado'];
-const CAT_KG={Pena:'57 kg',Superpena:'59 kg',Ligeiro:'61 kg',Pesado:'+91 kg'};
+/* ---- categorias de peso (3A-2): 8 com os limites do boxe real (kg); Pesado sem limite. No máximo 4 atletas (SLOTS), nunca dois na mesma categoria. ---- */
+const CATS=['Mosca','Galo','Pena','Leve','Meio-médio','Médio','Meio-pesado','Pesado'];
+const CAT_LIM={Mosca:50.8,Galo:53.5,Pena:57.2,Leve:61.2,'Meio-médio':66.7,'Médio':72.6,'Meio-pesado':79.4,Pesado:null};
+const SLOTS=4;
+const kgs=v=>v==null?'—':(Math.round(v*10)/10).toFixed(1).replace('.',',');
+const CAT_KG=Object.fromEntries(CATS.map(c=>[c,CAT_LIM[c]?kgs(CAT_LIM[c])+' kg':'sem limite']));
 const TUNE=Object.assign({hitDiv:350,hvy:1.55,resK:.3,qk:.45,mk:.45,cleanMul:6,normMul:.45,cleanP:.02,forK:.04,judge:.8,giftK:.35,train:.2,formK:1,dmg:.88,edge:.25,sagg:0,hprec:6,flash:.4,sdA:-.02,sdD:.1,sdC:.02,tdA:.03,tdB:.08,pc:.8,scm:.5,hd:.5,bdm:.5,cr:20,dk:30,dr:.55,topD:.13,punD:.12,punF:.4,inCtr:.3,inCl:.2,sfB:.42,sfK:.116,rch:.03,fitP:.015,fitN:.006,hearB:6,hearSt:24,hearHp:30,hearKd:.35,hearJit:.25,hearDeaf:.8,hearSlow:12,hearCalm:.8,hearStub:1.3,qxK:.35,qxD:.1,qxG:.15,qxKO:3,qxAge:28,qxYear:1.5,iqFight:10,hearIQ:.25,discG:.25,discF:.3,discQ:.08,stubT:40,stubTalk:.45,stubFight:.35,calmL:8,calmSt:.06,corG:.15,concK:.03,finK:.3,confDrift:.06,mentSd:18,mentOut:15,
   /* A2 golpes e defesas: dfK/dfE0 peso da defesa escolhida no acerto (centrado para dar, em média, o mesmo que o bónus antigo por nível de defesa); readB lê o golpe que vem (+Ring IQ); blkD dano que passa num bloqueio; ombR dano extra se o ombro falha;
      pesBrk o Pés corta a combinação; ctr* hipótese base de counter por família, ctrMax teto, ctrHit/ctrDmg/ctrFl bónus do counter;
@@ -471,13 +477,24 @@ const TUNE=Object.assign({hitDiv:350,hvy:1.55,resK:.3,qk:.45,mk:.45,cleanMul:6,n
      por semana nos outros estilos (perde um nível quando o desgaste chega à experiência desse nível, SXP; nunca abaixo do nível 1); age* ritmo por idade (até 20, 24, 28, 31, depois); ageDec0/ageDec perda física por semana com a idade. Por afinar (fase 7). */
   tDay:.03,eqW0:3,eqMore:.15,coachT:[1,1.15,1.3,1.45,1.6],noCoach:.6,bond0:.85,bond1:1.1,focA:{attrs:1,tec:.6,peso:.5},focS:{attrs:1,tec:1.6,peso:.8},
   skDay:.2,skCoach:2,skNew:1.5,skUse:.1,styWk:.6,styDec:.12,ageK:[1.15,1,.85,.6,.35],ageDec0:31,ageDec:.03,
+  /* 3A-2 peso e categorias (por afinar na fase 7): wNat peso natural acima do limite da categoria ideal (kg, ao acaso; wHvy num Pesado);
+     peso por dia fora das lutas: ATRIBUTOS sobe até ao natural + wTopA (wUpA kg/dia), TÉCNICAS até + wTopT (wUpT), PERDER PESO desce wDn kg/dia até
+     ao chão (limite da categoria abaixo da ideal - wFloor), a recuperar/lesionado sobe até + wTopR (wRest); a descer sem PERDER PESO vai a wSlow.
+     Pesagem: perfeito = até wPerf abaixo do limite; abaixo do peso = mais longe do limite do que wUnder × a distância à categoria de baixo (mín. wUnderMin);
+     acima: fôlego inicial -(wiSt[0]+wiSt[1]×kg a mais, até wiSt[2]) e Força e Resistência -(wiK[0]+wiK[1]×kg, até wiK[2]); abaixo: o adversário +wiOp[0]×kg
+     de Força (entre wiOp[1] e wiOp[2]); wiPop popularidade pelo peso perfeito (fãs na 3B). catLoss derrotas seguidas que deixam mudar de categoria. */
+  wNat:[.6,2.6],wHvy:[84,98],wTopA:1.5,wUpA:.035,wTopT:.8,wUpT:.025,wDn:.09,wFloor:.8,wTopR:2.5,wRest:.06,wSlow:.5,
+  wPerf:.5,wUnder:.5,wUnderMin:1.5,wiSt:[8,6,25],wiK:[.03,.02,.1],wiOp:[.02,.04,.12],wiPop:1,catLoss:4,
   /* Fase 2 — atributos do momento (2.9), em mom(x): com o fôlego abaixo de moSt e a vida abaixo de moHp cada atributo conta menos (só nessa luta).
      m<Atr>St / m<Atr>Hp: parte que se perde sem fôlego / sem vida (os Pés usam pesSt, pesHp e wobP, de cima); mQxKd Queixo por queda nesta luta (até mQxMin);
      mIqCalm quanto a Calma protege o Ring IQ; mTecConc Técnica nos últimos rounds com Concentração baixa. Por afinar (fase 7).
      w*: limites das palavras de estado ("SEM PERNAS", "MÃOS LENTAS", "ABANADO", "SEM GUARDA"). cmpNums: separador COMPARAR com números (false = só barras). */
   moSt:50,moHp:50,mVelSt:.12,mVelHp:.08,mForSt:.12,mForHp:.08,mDefSt:.08,mDefHp:.12,mTecSt:.06,mTecHp:.06,mQxHp:.2,mQxKd:.08,mQxMin:.6,mIqHp:.3,mIqCalm:.5,mTecConc:.12,
   wPes:.78,wVel:.93,wQx:.88,wIq:.89,wDef:.93,cmpNums:true},window.__TUNE||{});
-const CATMOD={Pena:{vol:1.25,dmg:.85,flash:.6,cost:.9},Superpena:{vol:1.15,dmg:.92,flash:.8,cost:.95},Ligeiro:{vol:1,dmg:1,flash:1,cost:1},Pesado:{vol:.75,dmg:1.3,flash:1.8,cost:1.25}};
+/* carácter de cada categoria na luta (3A-2, interpolado das 4 antigas; por afinar na fase 7): vol golpes, dmg dano, flash quedas relâmpago, cost fôlego.
+   Mais leve = mais rápido e menos KOs; mais pesado = mais potência e KOs, mais lento. Leve = antigo Ligeiro (referência 1). */
+const CATMOD={Mosca:{vol:1.35,dmg:.78,flash:.45,cost:.85},Galo:{vol:1.3,dmg:.82,flash:.52,cost:.88},Pena:{vol:1.25,dmg:.85,flash:.6,cost:.9},Leve:{vol:1,dmg:1,flash:1,cost:1},
+  'Meio-médio':{vol:.95,dmg:1.08,flash:1.15,cost:1.05},'Médio':{vol:.9,dmg:1.18,flash:1.3,cost:1.1},'Meio-pesado':{vol:.82,dmg:1.32,flash:1.5,cost:1.17},Pesado:{vol:.75,dmg:1.3,flash:1.8,cost:1.25}};
 CATMOD.Pesado.dmg=TUNE.hvy;
 const GIFTS={
   mao:{n:'Mão pesada',d:'Bate muito mais forte do que é normal na categoria.',hint:['Bate com uma força que não parece deste peso...','O saco abanou como se fosse um pesado a bater.']},
@@ -485,8 +502,8 @@ const GIFTS={
   motor:{n:'Motor inesgotável',d:'Quase não se cansa, mesmo nos rounds finais.',hint:['Não parou de saltar durante uma hora...','Correu atrás de ti três ruas sem perder o fôlego.']},
   queixo:{n:'Queixo de ferro',d:'Aguenta golpes fortes e quase nunca cai com um só golpe.',hint:['Levou um murro em cheio e nem pestanejou...','Parece feito de granito.']}
 };
-function rollGift(cat){if(Math.random()>=1/15)return null;return pick(cat==='Pesado'?['rapidas','motor','queixo']:cat==='Ligeiro'?Object.keys(GIFTS):['mao','motor','queixo'])}
-function fmods(x){const m={...(CATMOD[x.cat]||CATMOD.Ligeiro),chin:1};const g=x.gift;
+function rollGift(cat){if(Math.random()>=1/15)return null;const i=CATS.indexOf(cat);return pick(i>=6?['rapidas','motor','queixo']:i>=3?Object.keys(GIFTS):['mao','motor','queixo'])}
+function fmods(x){const m={...(CATMOD[x.cat]||CATMOD.Leve),chin:1};const g=x.gift;
   const gk=TUNE.giftK;if(g==='mao'){m.dmg*=1+.22*gk;m.flash*=1+.6*gk}
   if(g==='rapidas'){m.vol*=1+.45*gk}
   if(g==='motor'){m.cost*=1-TUNE.mk*gk}
@@ -500,7 +517,7 @@ function edge(a,b){
   if(a===b)return 0;return -1;
 }
 /* ---- body (height/reach) and style levels ---- */
-const H_BASE={Pena:170,Superpena:172,Ligeiro:175,Pesado:190};
+const H_BASE={Mosca:163,Galo:166,Pena:170,Leve:175,'Meio-médio':178,'Médio':181,'Meio-pesado':185,Pesado:190};
 const STY0=()=>({'In-fighter':0,'Outboxer':0,'Puncher':0});
 function rollBody(cat){const h=(H_BASE[cat]||175)+RI(-7,7);return{h,r:h+RI(-3,8)}}
 function bodyRel(x){const b=H_BASE[x.cat]||175;return((x.h||b)-b)+(((x.r||b+2.5)-(x.h||b))-2.5)*.8}
@@ -632,7 +649,7 @@ const CMAX=5;
 const STY_ATTR={'Outboxer':{pes:1.35,velocidade:1.25,iq:1.2,defesa:1.1,forca:.8},'In-fighter':{resistencia:1.25,forca:1.15,defesa:1.15,tecnica:1.1,pes:.85},'Puncher':{forca:1.35,velocidade:1.2,tecnica:1.1,pes:.85}};
 const C_NAMES=['Sr. Armando','Mestre Quim','Dona Lurdes','Tio Zeca','Sr. Fernando','Mestre Jacinto','Dona Rosa','Sr. Américo','Mestre Bento','Tio Chico','Sr. Horácio','Dona Graça','Mestre Adelino','Sr. Valdemar','Professor Vasco','Dona Amélia','Mestre Silvino','Sr. Agostinho','Dona Fátima','Mestre Ezequiel'];
 const BOND=[['acabados de conhecer',0],['a conhecer-se',4],['entendem-se bem',10],['confiam um no outro',20],['unha com carne',36]]; // [palavras, semanas juntos]
-const FOCUS={peso:{n:'PERDER PESO',l:['Peso ▼▼','Atributos ▲'],d:'Perde peso; os atributos sobem devagar.'},attrs:{n:'ATRIBUTOS',l:['Atributos ▲▲','Peso igual'],d:'Treino normal: os atributos sobem ao ritmo normal.'},
+const FOCUS={peso:{n:'PERDER PESO',l:['Peso ▼▼','Atributos ▲'],d:'Perde peso todos os dias; os atributos sobem devagar.'},attrs:{n:'ATRIBUTOS',l:['Atributos ▲▲','Peso ▲'],d:'Treino normal: os atributos sobem ao ritmo normal e o peso sobe devagar.'},
   tec:{n:'TÉCNICAS',l:['Golpes ▲▲','Atributos ▲'],d:'Golpes e defesas sobem mais depressa; os atributos menos.'}};
 /* ---- golpes (tema 1): os 7 do Guia, cada um com nível 1-5 e experiência. num = número do Guia (1-6; o overhand não tem).
    cls = trajetória (reto / gancho / upper) para as defesas; body = vontade de o mandar ao corpo; fl = base da queda relâmpago (à cabeça).
@@ -739,7 +756,7 @@ function makeAthlete(cat,o={}){
   if(o.attrs&&o.attrs.queixo!=null)a.cap.queixo=a.attrs.queixo+5;
   a.conf=Math.round(confBase(a));
   for(const[k]of ATTRS)a.base[k]=a.attrs[k];
-  initBody(a,o.slv==null?RI(1,2):o.slv);
+  initBody(a,o.slv==null?RI(1,2):o.slv);initWeight(a);
   return a;
 }
 function newSkills(){const s=Object.fromEntries(PKEYS.map(k=>[k,0]));s.jab=1;return s}
@@ -792,6 +809,81 @@ function freeCoaches(){return S.coaches.filter(c=>!athOf(c))}
 function autoCoach(a){ // atleta novo: o treinador livre do seu estilo, ou outro livre
   const f=freeCoaches();const c=f.find(x=>x.st===a.style)||f.sort((p,q)=>q.t-p.t)[0];
   if(c){assignCoach(a,c,true);note(`${c.n} (${c.st}) fica a treinar o ${a.nick}.`)}else note(`${a.nick} não tem treinador: contrata um ou troca no Ginásio.`)}
+/* ---- peso e categorias (3A-2) ----
+   Cada atleta tem uma categoria ideal (a.icat, a de entrada), um peso natural (a.nw: o peso a que o corpo volta, um pouco acima do limite da ideal)
+   e o peso de agora (a.kg). Pode lutar na ideal, na de cima (custa ganhar peso) e na de baixo (custa perder). O peso muda todos os dias (weightDay):
+   sobe devagar fora das lutas, desce com o foco PERDER PESO. Na semana antes da luta escolhe-se a preparação (prepCard, PREP) e no dia há pesagem
+   (weighIn): perfeito → popularidade (fãs na 3B: fanBonus); acima do limite → luta mais fraco; abaixo do peso → o adversário bate mais. Pesado sem limite.
+   Mudar de categoria (catMoves): só para uma vizinha dentro das suas, livre no ginásio, e se completou a categoria (catDone, gancho do 3A-4)
+   ou perdeu TUNE.catLoss lutas seguidas (a.lst). */
+const r2=v=>Math.round(v*100)/100;
+function catIdx(c){return CATS.indexOf(c)}
+function natCats(a){const i=catIdx(a.icat||a.cat);return CATS.filter((c,j)=>Math.abs(j-i)<=1)}
+function rangeTxt(a){const n=natCats(a),lo=n[0],hi=n.at(-1);return `${lo} a ${hi}`}
+function initWeight(a){
+  if(!a.icat)a.icat=a.cat;const L=CAT_LIM[a.icat];
+  if(a.nw==null)a.nw=r2(L!=null?L+R(TUNE.wNat[0],TUNE.wNat[1]):R(TUNE.wHvy[0],TUNE.wHvy[1]));
+  if(a.kg==null)a.kg=r2(a.nw+R(0,1.2));
+  if(a.lst==null)a.lst=0;
+}
+function wFloor(a){const i=catIdx(a.icat||a.cat),b=i>0?CAT_LIM[CATS[i-1]]:null;return b!=null?b-TUNE.wFloor:a.nw-4}
+function weightDay(a){ // um dia: o peso anda para o alvo do foco (não mexe na semana da pesagem: aí manda a preparação)
+  initWeight(a);if(a.fight&&a.fight.week-S.week<=1)return;
+  let t,r;
+  if(a.injury>0||a.recovery>0){t=a.nw+TUNE.wTopR;r=TUNE.wRest}
+  else if(a.focus==='peso'){t=wFloor(a);r=TUNE.wDn}
+  else if(a.focus==='tec'){t=a.nw+TUNE.wTopT;r=TUNE.wUpT}
+  else{t=a.nw+TUNE.wTopA;r=TUNE.wUpA}
+  const d=t-a.kg,v=d<0&&a.focus!=='peso'?r*TUNE.wSlow:r;
+  a.kg=r2(a.kg+clamp(d,-v,v)+R(-.03,.03));
+}
+function wiVerdict(cat,kg){ // resultado da pesagem
+  const L=CAT_LIM[cat];if(L==null)return{r:'livre'};
+  if(kg>L+.04)return{r:'acima',d:kg-L};
+  if(kg>=L-TUNE.wPerf)return{r:'perfeito'};
+  const i=catIdx(cat),gap=i>0?L-CAT_LIM[CATS[i-1]]:3,U=Math.max(TUNE.wUnderMin,gap*TUNE.wUnder);
+  return kg<=L-U?{r:'abaixo',d:L-kg}:{r:'ok'};
+}
+const WI_TXT={perfeito:['peso perfeito','good'],ok:['dentro do peso',''],acima:['acima do limite','warn'],abaixo:['abaixo do peso','warn'],livre:['sem limite','']};
+function wStatus(a){const L=CAT_LIM[a.cat],v=wiVerdict(a.cat,a.kg);
+  if(v.r==='acima')return[`${kgs(v.d)} acima`,'warn'];if(v.r==='livre')return['sem limite',''];return WI_TXT[v.r]}
+function fanBonus(a,n){S.pop=Math.min(100,S.pop+n)} // 3B: passa a dar fãs ao atleta; por agora popularidade do ginásio
+/* preparação da última semana (pesagem, modelo do Boxing Gym Story): kg no peso, conf no ânimo (a confiança do dia), cost em euros (exemplo, fase 7) */
+const PREP=[{id:'correr',n:'CORRER',kg:-.8,conf:4,cost:0},{id:'descansar',n:'DESCANSAR',kg:.5,conf:6,cost:30},
+  {id:'perder',n:'PERDER PESO',kg:-2.2,conf:-5,cost:120,d:'dieta e sauna'},{id:'comer',n:'COMER MUITO',kg:2,conf:2,cost:200}];
+function prepCard(a){
+  const f=a.fight,L=CAT_LIM[a.cat],opts=PREP.filter(p=>L!=null||p.id==='correr'||p.id==='descansar');
+  return card({a,title:`PESAGEM · ${a.nick.toUpperCase()}`,body:`<p class="hint">A luta com <b style="color:var(--fg)">${f.opp.nick}</b> é na próxima semana; a pesagem é no próprio dia. ${L!=null?`${a.nick} pesa <b style="color:var(--fg)">${kgs(a.kg)} kg</b> · limite ${a.cat} <b style="color:var(--fg)">${kgs(L)} kg</b>.`:'Pesado: não há limite de peso.'} Como passa a última semana?</p>`,
+    opts:opts.map(p=>{const kg=r2(a.kg+p.kg),v=wiVerdict(a.cat,kg),W=WI_TXT[v.r];
+      return{t:`${p.n}${p.d?` (${p.d})`:''}<small>${p.cost?fmt(p.cost)+' €':'grátis'} · ${p.kg>0?'+':'−'}${kgs(Math.abs(p.kg))} kg → ${kgs(kg)}${L!=null?` <em class="${W[1]}" style="font-style:normal">${v.r==='acima'?'acima':W[0]}</em>`:''} · ânimo ${p.conf>0?'▲':'▼'}</small>`,
+        cls:'prep',dis:S.money<p.cost,fn:()=>{S.money-=p.cost;a.kg=kg;a.conf=clamp(a.conf+p.conf,0,100);f.prep=p.id;note(`${a.nick} prepara a pesagem: ${p.n.toLowerCase()} (${kgs(kg)} kg).`)}}})});
+}
+async function weighIn(a){ // dia da luta: pesagem dos dois; o efeito fica em a.fight.wi e aplica-se em startFight
+  const f=a.fight;if(f.wi)return;const L=CAT_LIM[a.cat],v=wiVerdict(a.cat,a.kg),o=f.opp;
+  const wi={c:a.cat,l:L,k:a.kg,o:r2(L!=null?L-R(0,.45):R(86,104)),r:v.r};let eff='';
+  if(v.r==='acima'){wi.st=Math.round(Math.min(TUNE.wiSt[2],TUNE.wiSt[0]+TUNE.wiSt[1]*v.d));wi.p=r2(Math.min(TUNE.wiK[2],TUNE.wiK[0]+TUNE.wiK[1]*v.d));
+    eff=`<span class="warn">${kgs(v.d)} kg acima do limite.</span> A luta faz-se, mas ${a.nick} sobe ao ringue fraco: começa com menos fôlego, menos força e menos resistência.`}
+  else if(v.r==='abaixo'){wi.op=r2(clamp(TUNE.wiOp[0]*v.d,TUNE.wiOp[1],TUNE.wiOp[2]));eff=`<span class="warn">Abaixo do peso.</span> ${o.nick} é mais pesado e vai bater com mais força.`}
+  else if(v.r==='perfeito'){fanBonus(a,TUNE.wiPop);eff=`<span class="good">Peso perfeito!</span> O público gosta de ver um atleta no ponto. Popularidade +${TUNE.wiPop}.`}
+  else if(v.r==='ok')eff='Dentro do peso. Tudo em ordem.';
+  else eff='Pesado: sem limite de peso.';
+  f.wi=wi;note(`Pesagem: ${a.nick} ${kgs(a.kg)} kg, ${o.nick} ${kgs(wi.o)} kg (${WI_TXT[v.r][0]}).`);
+  await info(`PESAGEM · ${a.cat.toUpperCase()}`,`<div class="kv wi"><div><small>${a.nick.toUpperCase()}</small><b class="${WI_TXT[v.r][1]}">${kgs(a.kg)} kg</b></div><div><small>LIMITE</small><b>${L!=null?kgs(L)+' kg':'—'}</b></div><div><small>${o.nick.toUpperCase()}</small><b>${kgs(wi.o)} kg</b></div></div>
+    <p class="hint">${eff}</p>`,'PARA O RINGUE');
+}
+function catDone(a){return(a.titles||[]).includes(`${TIERS[TIERS.length-1].n} (${a.cat})`)} // "completou a categoria": por agora o título mais alto; 3A-4 redefine com os rankings
+function catOpen(a){return catDone(a)||(a.lst||0)>=TUNE.catLoss}
+function catMoves(a){ // categorias para onde pode mudar agora: vizinhas, dentro das suas, livres no ginásio, sem luta marcada
+  if(!catOpen(a)||a.fight)return[];const i=catIdx(a.cat);
+  return natCats(a).filter(c=>Math.abs(catIdx(c)-i)===1&&!S.roster.some(x=>x!==a&&x.cat===c))}
+function catWhy(a){return catDone(a)?'ganhou tudo na categoria':`perdeu ${a.lst} lutas seguidas`}
+function askCatChange(a){
+  const mv=catMoves(a);if(!mv.length)return;
+  return card({a,title:`MUDAR DE CATEGORIA · ${a.nick.toUpperCase()}`,body:`<p class="hint">${a.nick} ${catWhy(a)} e pode mudar de categoria. Agora: <b style="color:var(--fg)">${a.cat}</b> (${CAT_KG[a.cat]}), pesa ${kgs(a.kg)} kg. A ideal dele é ${a.icat}.</p>
+    <p class="hint">Recomeça no fundo do ranking da categoria nova e as propostas atuais caem. Tem de fazer o peso novo nas pesagens.</p>`,
+    opts:[...mv.map(c=>({t:`${c.toUpperCase()}<small>${CAT_LIM[c]!=null?'limite '+CAT_KG[c]:'sem limite'} · ${catIdx(c)>catIdx(a.cat)?'tem de ganhar peso':'tem de perder peso'}${c===a.icat?' · a ideal':''}</small>`,cls:'gold',fn:()=>doCatChange(a,c)})),{t:'FICAR'}]}).then(()=>render());
+}
+function doCatChange(a,c){const o=a.cat;a.cat=c;a.offers=[];a.rank=10;a.lst=0;note(`${a.nick} muda de categoria: ${o} → ${c}.`);toast(`<b>${a.nick}</b> · agora ${c}`)}
 const LOGOS=[
  {n:'Luva',px:['....KKKK....','...KRRRRK...','..KRRRRRRK..','.KRRRRRRRRK.','.KRRRRRRRRK.','.KRRRRRRRWK.','.KRRRRRRWK..','..KRRRRRK...','..KWWWWWK...','..KWKWKWK...','..KWWWWWK...','...KKKKK....']},
  {n:'Cinturão',px:['............','............','....KKKK....','...KGGGGK...','KKKGYYYYGKKK','RRKGYRRYGKRR','RRKGYRRYGKRR','KKKGYYYYGKKK','...KGGGGK...','....KKKK....','............','............']},
@@ -994,9 +1086,11 @@ function nameTag(a){
   const w=weeksTo(a),col=w<=1?'var(--red)':'var(--gold)';
   return `<span style="color:${col}">${a.nick}<small class="wk"> · ${w<=0?'hoje':w+'s'}</small></span>`;
 }
-function selector(){
-  return `<div class="seg">${CATS.map(c=>{const i=S.roster.findIndex(x=>x.cat===c);const x=S.roster[i];
-    return `<button ${x?`data-sel="${i}"`:'disabled'} class="${x&&i===S.sel?'on':''}" style="position:relative">${x&&S.tab==='fights'&&x.offers.length>0?`<i class="rdot" title="tem propostas"></i>`:''}<b>${c.toUpperCase()}</b>${x?nameTag(x):'vazio'}</button>`}).join('')}</div>`;
+function selector(){ // 4 lugares (SLOTS), por ordem de categoria; os vazios no fim
+  const ord=S.roster.map((x,i)=>[x,i]).sort((p,q)=>catIdx(p[0].cat)-catIdx(q[0].cat));
+  const cells=ord.map(([x,i])=>`<button data-sel="${i}" class="${i===S.sel?'on':''}" style="position:relative">${S.tab==='fights'&&x.offers.length>0?`<i class="rdot" title="tem propostas"></i>`:''}<b>${x.cat.toUpperCase()}</b>${nameTag(x)}</button>`);
+  for(let k=S.roster.length;k<SLOTS;k++)cells.push(`<button disabled><b>LIVRE</b>vazio</button>`);
+  return `<div class="seg">${cells.join('')}</div>`;
 }
 function panelGym(){
   const gs=`<div class="seg"><button data-gsub="res" class="${S.gsub!=='coach'?'on':''}">Ginásio</button><button data-gsub="coach" class="${S.gsub==='coach'?'on':''}">Treinadores</button></div>`;
@@ -1114,7 +1208,7 @@ function panelAth(){
   return selector()+sub+`<div class="card ficha" style="overflow:auto;min-height:0">
     <div class="who"><canvas width="32" height="32" id="portrait"></canvas><div style="min-width:0">
       <div class="nm">${a.name.split(' ')[0]} <em>"${a.nick}"</em> ${a.name.split(' ').slice(1).join(' ')}</div>
-      <div class="meta">${a.age} anos · peso ${a.cat.toLowerCase()} (${CAT_KG[a.cat]}) · ${a.style} ${styleLv(a,a.style)}</div>
+      <div class="meta" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a.age} anos · ${a.cat} ${kgs(a.kg)} kg · ${a.style} ${styleLv(a,a.style)}</div>
       <div class="meta">${bodyLine(a)}</div>
       <div class="meta">${a.rec.w}V ${a.rec.l}D ${a.rec.d}E (${a.rec.ko} KO) · #${a.rank} ${t.n}${a.titles.length?' · '+a.titles.length+' título':''}</div>
       ${a.fight||!(a.injury>0||a.recovery>0)?fightLine(a):''}${a.injury>0||a.recovery>0?`<div class="meta">${a.injury>0?`<span class="warn">lesionado ${a.injury} sem.</span>`:''}${a.injury>0&&a.recovery>0?' · ':''}${a.recovery>0?`<span class="warn">recupera ${a.recovery} sem.</span>`:''}</div>`:''}</div></div>
@@ -1135,7 +1229,14 @@ function panelTreino(a){ // Ficha → Treino: treinador, foco do treino, categor
      :`<div class="tco"><div style="min-width:0"><div class="cn">SEM TREINADOR</div><div class="meta warn">Treina devagar e não aprende os ganchos.</div></div><button class="btn gold" data-cswap="${a.id}">ESCOLHER</button></div>`}
     <div class="fh"><h3>FOCO DO TREINO</h3><span class="meta">muda quando quiseres</span></div>
     <div class="foc">${['peso','attrs','tec'].map(k=>`<button data-focus="${k}" class="${fo===k?'on':''}" title="${FOCUS[k].d}"><b>${fo===k?'● ':''}${FOCUS[k].n}</b><span>${FOCUS[k].l[0]}</span><span>${FOCUS[k].l[1]}</span></button>`).join('')}</div>
-    <div class="fh"><h3>A MELHORAR AGORA</h3><span class="meta fcat"><b>${a.cat}</b> · até ${CAT_KG[a.cat]}</span></div><div class="imp">${improving(a)}</div></div>`;
+    ${weightBox(a)}
+    <div class="fh"><h3>A MELHORAR AGORA</h3></div><div class="imp">${improving(a)}</div></div>`;
+}
+function weightBox(a){ // Ficha → Treino: peso vs limite, categoria ideal e as suas, mudar de categoria (3A-2)
+  const L=CAT_LIM[a.cat],[st,cls]=wStatus(a),mv=catMoves(a),fw=a.fight?weeksTo(a):null;
+  const tr=fw!=null&&fw<=1?(fw<=0?'pesagem hoje':'pesagem a seguir'):a.focus==='peso'&&!(a.injury>0||a.recovery>0)?(a.kg>wFloor(a)+.05?'▼':'no mínimo'):'▲';
+  return `<div class="fh"><h3>PESO</h3><span class="meta fcat">ideal <b>${a.icat}</b> · pode ${rangeTxt(a)}</span></div>
+    <div class="wln"><span><b class="${cls}">${kgs(a.kg)} kg</b> <i>${tr}</i> · ${L!=null?`limite ${kgs(L)}`:'sem limite'} · <i class="${cls}">${st}</i></span>${mv.length?`<button class="btn gold" data-catmv="${a.id}">MUDAR</button>`:catOpen(a)&&a.fight?'<i>muda depois da luta</i>':''}</div>`;
 }
 function improving(a){ // o que está a subir, por palavras (sem números), a partir do mesmo modelo do treino diário
   const out=[],c=coachOf(a),ln=(ic,t,cls)=>out.push(`<p class="${cls||''}"><em>${ic}</em><span>${t}</span></p>`);
@@ -1158,7 +1259,7 @@ function panelFights(){
   const a=cur();
   let h=selector();
   if(a.fight){const w=weeksTo(a),o=a.fight.opp;
-    h+=`<div class="r"><div><strong>MARCADA: ${a.nick} vs ${o.nick}</strong><p>${o.academy} · ${o.style} · ${w===0?'esta semana':`daqui a ${w} semanas`} · ${fmt(a.fight.purse)} €</p></div><button class="btn" data-scoutf="1">FICHA</button></div>`}
+    h+=`<div class="r"><div><strong>MARCADA: ${a.nick} vs ${o.nick}</strong><p>${o.academy} · ${o.style} · ${w===0?'esta semana':`daqui a ${w} semanas`} · ${fmt(a.fight.purse)} €</p><p>${a.cat} · ${a.nick} pesa ${kgs(a.kg)} kg${CAT_LIM[a.cat]!=null?` (limite ${kgs(CAT_LIM[a.cat])})`:''}</p></div><button class="btn" data-scoutf="1">FICHA</button></div>`}
   h+=`<h3>PROPOSTAS PARA ${a.nick.toUpperCase()} · #${a.rank} ${TIERS[a.tier].n.toUpperCase()}</h3>`;
   if(!a.offers.length)h+=`<div class="empty">Sem propostas agora. Chegam novas ao longo das semanas, mais depressa com mais popularidade.</div>`;
   h+=`<div class="rows">${a.offers.map(o=>{const[dl,dc]=diffLabel(a,o.opp);const e=edge(a.style,o.opp.style);
@@ -1236,7 +1337,7 @@ function info(title,body,btn='CONTINUAR'){
 function help(){
   return info('COMO JOGAR',`<p class="hint">És o dono de um ginásio de bairro. O tempo corre sozinho: carrega em ▶ para andar, em ❚❚ para parar e em ×2 para ir mais depressa. Pára sozinho quando é preciso decidir alguma coisa.</p>
   <p class="hint">Os lutadores treinam sozinhos todos os dias, com o equipamento do ginásio e com o seu treinador. Cada atleta tem um treinador e luta no estilo dele (Ginásio → Treinadores). Em Atletas → Treino escolhes o foco do treino.</p>
-  <p class="hint">As lutas marcam-se com 6 a 8 semanas de antecedência. No dia, dá ordens no canto entre rounds.</p>
+  <p class="hint">As lutas marcam-se com 6 a 8 semanas de antecedência. Cada atleta luta na sua categoria de peso (no máximo 4, nunca dois na mesma): vigia o peso em Atletas → Treino e, na semana antes da luta, escolhe como chega à pesagem. No dia, dá ordens no canto entre rounds.</p>
   <p class="hint">Mais equipamento treina mais coisas e traz mais sócios, que pagam mensalidades. Às vezes aparece um talento escondido.</p>`,'VAMOS A ISSO');
 }
 
@@ -1254,6 +1355,7 @@ document.addEventListener('click',e=>{
   if(d.sk){skillInfo(cur(),d.sk);return}
   if(d.focus){const a=cur();if(FOCUS[d.focus]&&a.focus!==d.focus){a.focus=d.focus;note(`${a.nick} muda o foco do treino: ${FOCUS[d.focus].n.toLowerCase()}.`)}render();return}
   if(d.coach){const c=S.coaches.find(x=>x.id===d.coach);if(c)coachInfo(c);return}
+  if(d.catmv){const a=S.roster.find(x=>x.id===d.catmv);if(a)askCatChange(a);return}
   if(d.cswap){const a=S.roster.find(x=>x.id===d.cswap);if(a)pickCoachFor(a);return}
   if(d.cgive){const c=S.coaches.find(x=>x.id===d.cgive);if(c)pickAthFor(c);return}
   if(d.hire){hireCard(+d.hire);return}
@@ -1333,7 +1435,7 @@ async function clockDo(fn){ // um passo com janelas: o tempo fica parado e só v
 }
 function card(c){ // cartão curto com escolhas de um toque: {title, body, opts:[{t, cls, fn, stay}]}
   return new Promise(res=>{
-    const m=modal(`<h2>${c.title}</h2>${c.body}<div class="cardb">${c.opts.map((o,i)=>`<button class="btn ${o.cls||''}" data-card="${i}">${o.t}</button>`).join('')}</div>`);
+    const m=modal(`<h2>${c.title}</h2>${c.body}<div class="cardb">${c.opts.map((o,i)=>`<button class="btn ${o.cls||''}" data-card="${i}" ${o.dis?'disabled':''}>${o.t}</button>`).join('')}</div>`);
     m.querySelectorAll('[data-card]').forEach(b=>b.onclick=()=>{const o=c.opts[+b.dataset.card];closeModal();if(o.stay)stay=true;if(o.fn)o.fn();res(o)});
   });
 }
@@ -1355,6 +1457,7 @@ function dayStep(){
   const i=S.wstep||0,cards=[];if(i>=TIME.days)return cards;
   for(const a of S.roster){
     if(!a.wk||a.wk.w!==S.week)beginWeek(a);
+    weightDay(a); // o peso muda todos os dias (3A-2), também a descansar
     const k=a.wk;if(k.rest)continue;
     const n0=k.up.length;
     trainDay(a,k.up);
@@ -1465,9 +1568,11 @@ function weekEnd(){
 async function endWeek(quiet){
   const newOff=weekEnd();render();
   for(const a of [...S.roster])if(a.pendingRaise)await negotiate(a);
+  for(const a of [...S.roster])if(a.fight&&a.fight.week===S.week+1&&!a.fight.prep&&S.roster.includes(a))await prepCard(a); // pesagem na próxima semana (3A-2)
+  // talentos: com lugares livres, numa categoria livre; às vezes um para trocar com um atleta na mesma categoria
   const empty=CATS.filter(c=>!S.roster.some(a=>a.cat===c));
-  if(empty.length&&S.week>3&&Math.random()<.14+S.pop/400)await talent(pick(empty));
-  else if(S.week>3&&Math.random()<.05+S.pop/800)await talent(pick(CATS.filter(c=>!empty.includes(c))));
+  if(S.roster.length<SLOTS&&S.week>3&&Math.random()<.14+S.pop/400)await talent(pick(empty));
+  else if(S.roster.length&&S.week>3&&Math.random()<.05+S.pop/800)await talent(pick(S.roster).cat);
   if(!quiet&&TIME.offerCard)await runCards(newOff.filter(([a,o])=>S.roster.includes(a)&&a.offers.includes(o)).map(([a,o])=>offerCard(a,o)));
 }
 /* ---- botão do dia de luta; fora disso fecha a semana inteira de uma vez (para testes: window.__week()) ---- */
@@ -1478,6 +1583,7 @@ async function advanceWeek(){
     for(const a of S.roster){
       if(!(a.fight&&a.fight.week===S.week))continue;
       if(a.injury>0){await info('LUTA CANCELADA',`<p class="hint">${a.nick} está lesionado. A luta com ${a.fight.opp.nick} foi cancelada. Popularidade -2.</p>`);note(`Luta de ${a.nick} cancelada por lesão.`);a.fight=null;S.pop=Math.max(0,S.pop-2);continue}
+      await weighIn(a);
       await fightFlow(a);
     }
     busy=false;S.run=false;render();return;
@@ -1551,7 +1657,7 @@ function talent(cat){
     const s=modal(`<h2>TALENTO DESCOBERTO</h2><div class="talent" style="display:flex;flex-direction:column;gap:8px">
       <canvas width="32" height="32" id="tp"></canvas><p class="quote">Encontraste-o ${pick(FOUND)}.</p>
       <div class="r" style="grid-template-columns:1fr"><div><strong>${a.name} "${a.nick}"</strong>
-      <p>${a.age} anos · peso ${cat.toLowerCase()} (${CAT_KG[cat]}) · estilo provável: ${a.style}</p><p>Personalidade: <b>${pz.n}</b>${pz.w.length?' · '+pz.w.join(', '):''}</p><p>${bodyLine(a)}</p>
+      <p>${a.age} anos · ${cat} · ${kgs(a.kg)} kg (pode ${rangeTxt(a)}) · estilo provável: ${a.style}</p><p>Personalidade: <b>${pz.n}</b>${pz.w.length?' · '+pz.w.join(', '):''}</p><p>${bodyLine(a)}</p>
       <div class="chips" style="margin:4px 0">${[vis[0],vis[1],vis.at(-1)].map(([n,v])=>`<span class="chip">${n}: ${desc(v)}</span>`).join('')}<span class="chip">Queixo: ${a.attrs.queixo>=60?'duro':a.attrs.queixo<=40?'frágil':'normal'}</span></div>
       <p>Potencial <span class="stars">${potRange(a)}</span> · pede ${a.salary} €/semana</p>
       ${a.hint?`<p class="quote" style="text-align:left;color:var(--gold)">"${pick(GIFTS[a.hint].hint)}"</p>`:''}</div></div>${cmp}</div>
@@ -1922,7 +2028,7 @@ function line(type,v){
 }
 function fighter(src,mine){
   initBody(src,src.tier!=null?2:3);const fst=(mine&&src.fstyle&&styleLv(src,src.fstyle)>0)?src.fstyle:src.style;
-  const x={h:src.h,r:src.r,sty:src.sty,slv:Math.max(1,styleLv(src,fst)),armX:clamp(Math.round(((src.r-src.h)-2.5)/3),-1,2),hs:clamp((src.h||175)/178,.9,1.12),name:src.name,nick:src.nick,style:fst,ment:src.ment||{},look:src.look,mine,...src.attrs,skills:{...newSkills(),...pickKeys(src.skills,PKEYS)},def:{...newDefs(),...pickKeys(src.def,DKEYS)},src,cat:src.cat||'Ligeiro',gift:src.gift||null,
+  const x={h:src.h,r:src.r,sty:src.sty,slv:Math.max(1,styleLv(src,fst)),armX:clamp(Math.round(((src.r-src.h)-2.5)/3),-1,2),hs:clamp((src.h||175)/178,.9,1.12),name:src.name,nick:src.nick,style:fst,ment:src.ment||{},look:src.look,mine,...src.attrs,skills:{...newSkills(),...pickKeys(src.skills,PKEYS)},def:{...newDefs(),...pickKeys(src.def,DKEYS)},src,cat:src.cat||'Leve',gift:src.gift||null,
     hp:100,st:mine?clamp(100-(src.fatigue||0)*.5,40,100):100,kd:0,cut:0,conf:mine?src.conf:confBase(src),strat:'Equilibrado',
     rs:newRS(),dx:newDX(),wobbly:0,tot:{thrown:0,landed:0,power:0,dmg:0},card:0,dmgTaken:0,ps:{},dfs:{},cts:{},liv:[0,0],bodyAcc:0,hunch:0,headL:0,bodyL:0,lowT:0,lastK:'jab',
     pos:{x:mine?60:180,y:mine?132:44,tx:mine?60:180,ty:mine?132:44},an:{pose:'guard',t0:0,dur:1,arm:'L'},lastArm:'R',flash:0};
@@ -1939,6 +2045,8 @@ function startFight(a,done){
   if(!f.opp.grown){const wk=Math.max(0,S.week-(f.opp.made||S.week));for(const[k]of ATTRS)if(k!=='queixo')f.opp.attrs[k]=clamp(f.opp.attrs[k]+R(0,.45)*wk,5,99);f.opp.grown=true}
   F={a,done,me:fighter(a,true),op:fighter(f.opp,false),round:1,rounds:f.rounds,log:[],fast:false,over:null,ft:0,
     zoom:null,crowd:0,flashes:0,ref:{x:120,y:60,tx:120,ty:60,pose:'stand'},count:null,big:null,lastScore:[10,10],zone:'center',zp:null,ctl:null,dw:null,dist:'meio',dT:0,ord:null,ordLog:[],deaf:0,live:false,inRound:false,rr:[],kdl:[],talks:[],sx:{}};
+  if(f.wi){const w=f.wi; // pesagem (3A-2): acima do limite luta mais fraco; abaixo do peso o adversário bate mais
+    if(w.st)F.me.st=clamp(F.me.st-w.st,30,100);if(w.p){F.me.forca*=1-w.p;F.me.resistencia*=1-w.p}if(w.op)F.op.forca*=1+w.op}
   F.at0=[F.me,F.op].map(x=>ATTRS.map(([k])=>Math.round(x[k]??0))); // atributos no início da luta (COMPARAR)
   F.form0=formOf(a);F.me.form=F.form0.sc*TUNE.formK;F.op.form=0;F.venue=venueIdx({tier:a.tier,title:f.title});
   F.op.strat=f.opp.style==='In-fighter'?'Pressão':f.opp.style==='Outboxer'?'Cautela':'Equilibrado';
@@ -3151,12 +3259,12 @@ function finishFight(){
       rk=`${a.nick} é campeão ${tn}! ${a.tier<3?`Sobe para o escalão ${TIERS[a.tier+1].n}.`:'É o melhor do mundo.'}`;
       if(a.tier<3){a.tier++;a.rank=10}note(`${a.nick} ganhou o título ${tn}!`);
     }else{const up=clamp(2+Math.round((oR-myR)/8),2,4);const old=a.rank;a.rank=Math.max(1,a.rank-up);rk=`Ranking: #${old} → #${a.rank}.${a.rank<=3?' É desafiante oficial ao título!':''}`}
-    a.streak=(a.streak||0)+1;if(f.title)a.pendingRaise=1.6;else if(a.streak%4===0)a.pendingRaise=1.3;
+    a.streak=(a.streak||0)+1;a.lst=0;if(f.title)a.pendingRaise=1.6;else if(a.streak%4===0)a.pendingRaise=1.3;
     title=r.how==='KO'?'VITÓRIA POR KO!':r.how==='médico'?'VITÓRIA (MÉDICO)':'VITÓRIA AOS PONTOS';
     html=`<p class="hint">Academia (${Math.round(sh*100)}% menos ${fc} € de custos da luta) <span class="good">+${fmt(cash)} €</span> · Atleta ${fmt(f.purse*(1-sh))} € · Popularidade +${pg}</p><p class="hint">${rk}</p>`;
     lineTxt=`${a.nick} venceu ${f.opp.nick} (${r.how}).`;note(lineTxt);
   }else{
-    a.streak=0;a.rec.l++;S.money=Math.max(0,S.money-TIERS[a.tier].cost);const lc=r.how==='toalha'?8:Math.round(16-TUNE.calmL*clamp((mv(a,'calma')-50)/40,-.5,1));a.conf=clamp(a.conf-lc,0,100);
+    a.streak=0;a.lst=(a.lst||0)+1;a.rec.l++;S.money=Math.max(0,S.money-TIERS[a.tier].cost);const lc=r.how==='toalha'?8:Math.round(16-TUNE.calmL*clamp((mv(a,'calma')-50)/40,-.5,1));a.conf=clamp(a.conf-lc,0,100);
     const old=a.rank;a.rank=Math.min(15,a.rank+(f.title?3:RI(1,2)));S.pop=Math.max(0,S.pop-1);
     let inj='';if(r.how==='KO'&&Math.random()<.5){a.injury=RI(1,3);inj=` Saiu lesionado: mais ${a.injury} semana${a.injury>1?'s':''} parado.`}
     title=r.how==='KO'?'DERROTA POR KO':r.how==='toalha'?'ATIRASTE A TOALHA':'DERROTA';
@@ -3166,6 +3274,7 @@ function finishFight(){
   const rec=clamp(1+Math.round(F.me.dmgTaken/70)+(F.me.kd)+(r.how==='KO'&&!r.win?1:0),1,5);
   html+=afterFight(a,r);
   a.recovery=rec;a.fatigue=clamp(a.fatigue+25,0,100);a.fight=null;
+  if(catMoves(a).length){html+=`<p class="hint"><b style="color:var(--gold)">${a.nick} ${catWhy(a)}: pode mudar de categoria (Atletas → Treino).</b></p>`;note(`${a.nick} pode mudar de categoria.`)}
   {const m=revealGift(a,'na luta');if(m)html+=`<p class="hint"><b style="color:var(--gold)">${m}</b></p>`}
   html+=`<p class="hint">Dano sofrido: ${Math.round(F.me.dmgTaken)} · <b>Recuperação: ${rec} semana${rec>1?'s':''} sem treinar.</b></p>`;
   if(r.win)S.members=Math.min(capacity(),S.members+RI(0,2));
@@ -3345,7 +3454,7 @@ function buildAnalysis(){
     rr:F.rr.map(x=>[x.s?x.s[0]:null,x.s?x.s[1]:null,x.dn[0],x.dn[1],x.st[0],x.st[1],x.l[0],x.l[1],x.p?1:0]),
     ps:[ps(me),ps(op)],hb:[[me.headL,me.bodyL],[op.headL,op.bodyL]],df:[df(me),df(op)],ct:[ct(me),ct(op)],lv:[me.liv.slice(),op.liv.slice()],
     kdl:F.kdl.slice(0,6).map(kdTxt),ord:F.ordLog.slice(-8).map(ordTxt),ordN:F.ordLog.length,talk:F.talks.map(t=>({t:`${t.r===1?'Antes do R1':'Antes do R'+t.r}: ${t.n}`,c:t.lab==='CERTA'?'ok':t.lab==='MEIA CERTA'?'half':t.lab==='ERRADA'?'bad':''})),
-    sx:Object.entries(F.sx).sort((p,q)=>q[1]-p[1]).map(([k,v])=>`${k} ${Math.round(100*v/tot)}%`).join(' · '),why,plus,at:F.at0||null,dz:[dzOf(me),dzOf(op)],cf:confNotes(me).slice(0,3).map(x=>({s:x.s,t:x.t}))};
+    sx:Object.entries(F.sx).sort((p,q)=>q[1]-p[1]).map(([k,v])=>`${k} ${Math.round(100*v/tot)}%`).join(' · '),why,plus,at:F.at0||null,dz:[dzOf(me),dzOf(op)],cf:confNotes(me).slice(0,3).map(x=>({s:x.s,t:x.t})),wi:(a.fight&&a.fight.wi)||null};
 }
 /* ---- histórico de lutas ----
    a.hist: uma entrada pequena por luta (mais antiga primeiro): {w semana, o alcunha do adversário, ac academia, os estilo dele,
@@ -3356,7 +3465,7 @@ const HIST_AN=3,HIST_PG=4;let histPg=0;
 function trimHist(a){const n=a.hist.length;a.hist.forEach((x,i)=>{if(i<n-HIST_AN)delete x.an})}
 function addHist(a,an){
   const f=a.fight||{},o=f.opp||{},r=F.over,lk=F.kdl.at(-1);
-  const h={w:S.week,o:o.nick||F.op.nick,ac:o.academy||'',os:F.op.style,t:a.tier,r:r.draw?'E':r.win?'V':'D',h:r.how,rd:Math.min(F.round,F.rounds),c:[F.me.card,F.op.card],an};
+  const h={w:S.week,o:o.nick||F.op.nick,ac:o.academy||'',os:F.op.style,t:a.tier,ct:a.cat,r:r.draw?'E':r.win?'V':'D',h:r.how,rd:Math.min(F.round,F.rounds),c:[F.me.card,F.op.card],an};
   if(f.title)h.ti=1;
   if(r.how==='KO'&&lk)h.tm=lk.t;else if(r.how==='toalha'&&F.endT!=null)h.tm=F.endT;
   a.hist=Array.isArray(a.hist)?a.hist:[];a.hist.push(h);trimHist(a);histPg=0;
@@ -3383,7 +3492,7 @@ function panelHist(a){
   const idx=[];for(let i=n-1-histPg*HIST_PG;i>=0&&idx.length<HIST_PG;i--)idx.push(i);
   const rows=idx.map(i=>{const x=H[i],t=x.t!=null&&TIERS[x.t]?TIERS[x.t].n:'';
     return `<button class="hrow ${x.an?'has':''}" ${x.an?`data-hist="${i}"`:'disabled'}><b class="hres ${x.r}">${x.r}</b>
-      <span><strong>vs ${x.o}${x.os?` · ${x.os}`:''}</strong><small>S${x.w}${t?` · ${x.ti?'Título ':''}${t}`:''}${x.ac?` · ${x.ac}`:''}</small></span>
+      <span><strong>vs ${x.o}${x.os?` · ${x.os}`:''}</strong><small>S${x.w}${x.ct?` · ${x.ct}`:''}${t?` · ${x.ti?'Título ':''}${t}`:''}${x.ac?` · ${x.ac}`:''}</small></span>
       <em>${histHow(x)}${x.an?'<i>ANÁLISE ▸</i>':''}</em></button>`}).join('');
   const rc=a.rec,old=rc.w+rc.l+rc.d-n;
   return `<div class="card hist"><div class="hhd"><h3>LUTAS · ${rc.w}V ${rc.l}D ${rc.d}E</h3>${pages>1?`<div class="hpg"><button class="btn" data-hpg="-1" ${histPg?'':'disabled'}>◀</button>${histPg+1}/${pages}<button class="btn" data-hpg="1" ${histPg<pages-1?'':'disabled'}>▶</button></div>`:''}</div>
@@ -3412,6 +3521,7 @@ function showAnalysis(an,back,tab){
     body=`<div class="anend">${an.end}</div>
       <div class="kv"><div><small>PONTOS</small><b><em class="cme">${an.card[0]}</em>-<em class="cop">${an.card[1]}</em></b></div><div><small>ACERTOS</small><b><em class="cme">${pct(an.acc[0])}</em> <em class="cop">${pct(an.acc[1])}</em></b></div><div><small>QUEDAS (TU-ELE)</small><b><em class="cme">${an.kd[0]}</em>-<em class="cop">${an.kd[1]}</em></b></div></div>
       <div class="meta">Estilos: ${an.mSty} vs ${an.oSty}${an.sx?` · tu em ${an.sx}`:''}</div>
+      ${an.wi?`<div class="meta">${an.wi.c} · pesagem: tu ${kgs(an.wi.k)} kg, ele ${kgs(an.wi.o)} kg${an.wi.l!=null?` (limite ${kgs(an.wi.l)})`:''}${WI_TXT[an.wi.r]?` · <span class="${WI_TXT[an.wi.r][1]}">${WI_TXT[an.wi.r][0]}</span>`:''}</div>`:''}
       <h3>${an.res==='V'?'AS CHAVES DA VITÓRIA':an.res==='D'?'PORQUE PERDESTE':'O QUE PESOU'}</h3>
       ${an.why.length?an.why.map(x=>wl(x)).join(''):`<div class="why"><i>=</i><span>${an.how==='KO'?'Luta equilibrada decidida por um golpe. No ringue tudo pode acontecer.':'Luta muito equilibrada: nenhum fator se destacou. Decidiu-se nos pormenores.'}</span></div>`}
       ${an.plus?`<h3>${an.plus.s>0?'MAS CORREU BEM':'APESAR DE'}</h3>${wl(an.plus,an.res!=='V')}`:''}`;
@@ -4199,6 +4309,8 @@ async function start(){
   for(const a of S.roster){normSkills(a);a.combos=a.combos||knownCombos(a).map(c=>c.id);a.recovery=a.recovery||0;a.ment=a.ment||rollMental();for(const[k]of ATTRS){if(a.attrs[k]==null)a.attrs[k]=k==='queixo'?50:10;if(a.cap[k]==null)a.cap[k]=a.attrs[k]+5}if(a.gift===undefined){a.gift=null;a.giftKnown=true}a.weeks=a.weeks||0}
   if(!Array.isArray(S.coaches)){S.coaches=startCoaches();for(const a of S.roster){a.coach=null;autoCoach(a)}} // treinadores (3A-1)
   for(const a of S.roster){if(!FOCUS[a.focus])a.focus='attrs';a.cw=a.cw||0;if(a.coach&&!coachOf(a))a.coach=null;for(const k of['plan','padF','ovr','wcd','tlog','lastT','peak'])delete a[k]}
+  for(const a of S.roster){if(!CATS.includes(a.cat)){const OLD={Ligeiro:'Leve',Superpena:'Pena'};let c=OLD[a.cat]||'Leve'; // saves de teste com as 4 categorias antigas
+    if(S.roster.some(x=>x!==a&&x.cat===c))c=CATS.find(k=>!S.roster.some(x=>x.cat===k))||c;a.cat=c;a.icat=null;a.nw=null}initWeight(a)}
   if(S.sub==='plano')S.sub='treino';S.gsub=S.gsub||'res';delete S.wchk;
   S.tab=S.tab||'gym';
   S.run=false;S.spd=TIME.speeds.includes(S.spd)?S.spd:1;S.wt=clamp(+S.wt||0,0,1);S.wstep=clamp(S.wstep|0,0,TIME.days);for(const a of S.roster)delete a.revWeek; // relógio: começa sempre parado
