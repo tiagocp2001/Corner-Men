@@ -8,62 +8,64 @@
 <link rel="apple-touch-icon" href="icons/icon-180.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:0}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Corner Men</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Pixelify+Sans:wght@400;600;700&family=VT323&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen:wght@400;700&family=VT323&display=swap">
 <style>
 /* Layout: one fixed phone screen — HUD, gym window, switchable panel, bottom menu. Nothing scrolls the page. */
 :root{
   --bg:#17130f; --panel:#231c16; --panel2:#2e251d; --line:#463a2d;
   --fg:#f1e5d0; --muted:#a8957d; --red:#d4452f; --gold:#e8b13a; --blue:#5b8fc4; --green:#74b35d;
-  --f-display:'Press Start 2P', ui-monospace, monospace;
-  --f-body:'Pixelify Sans', system-ui, sans-serif;
+  --f-display:'Silkscreen', ui-monospace, monospace; /* títulos, nomes, botões, placard, pop-ups, palavras de estado */
+  --f-num:'Silkscreen', ui-monospace, monospace;     /* números */
+  --f-body:'VT323', ui-monospace, monospace;         /* textos (frases, análise, dicas, ajuda) */
   --f-mono:'VT323', ui-monospace, monospace;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
 html,body{height:100%;overflow:hidden;background:var(--bg)}
-*{font-variant-ligatures:none} /* a Pixelify Sans desenha o "fi" como um A (In-fighter) */
-body{color:var(--fg);font-family:var(--f-body);font-size:15px;line-height:1.3;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+*{font-variant-ligatures:none}
+body{color:var(--fg);font-family:var(--f-body);font-size:20px;line-height:1.01;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
 #app{height:100%;max-width:520px;margin:0 auto;display:flex;flex-direction:column;gap:8px;
   padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px));padding-block:8px 0}
 h2,h3{font-family:var(--f-display);font-weight:400;margin:0;letter-spacing:.02em;text-wrap:balance}
-h2{font-size:11px;line-height:1.6}
-h3{font-size:8px;color:var(--muted);letter-spacing:.1em}
+h2{font-weight:700}
+h2{font-size:14.5px;line-height:1.2}
+h3{font-size:10.5px;color:var(--muted);letter-spacing:.05em}
 p{margin:0}
 .hud{display:grid;grid-template-columns:1.25fr 1fr 1fr 1fr;gap:5px;flex:none}
 .hud div{background:var(--panel);border:2px solid var(--line);padding:4px 6px;min-width:0}
-.hud small{display:block;font-family:var(--f-display);font-size:6px;color:var(--muted);letter-spacing:.08em;margin-bottom:2px}
-.hud b{font-family:var(--f-mono);font-size:20px;font-weight:400;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hud small{display:block;font-family:var(--f-display);font-size:8px;color:var(--muted);letter-spacing:.08em;margin-bottom:2px}
+.hud b{font-family:var(--f-num);font-size:14px;font-weight:400;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
 .screen{position:relative;border:3px solid #0b0907;outline:2px solid var(--line);background:#000;line-height:0;flex:none}
 canvas.px{width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp-edges;display:block}
-.tagl{position:absolute;left:5px;top:5px;line-height:1;font-family:var(--f-display);font-size:7px;background:rgba(0,0,0,.65);color:var(--fg);padding:4px 5px}
+.tagl{position:absolute;left:5px;top:5px;line-height:1;font-family:var(--f-display);font-size:9.5px;background:rgba(0,0,0,.65);color:var(--fg);padding:4px 5px}
 .dayover{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:8px;gap:6px;line-height:1;pointer-events:none}
-.dayover b{font-family:var(--f-display);font-size:11px;background:rgba(0,0,0,.7);padding:6px 8px;color:var(--gold);font-weight:400}
+.dayover b{font-family:var(--f-display);font-size:14.5px;background:rgba(0,0,0,.7);padding:6px 8px;color:var(--gold);font-weight:400}
 .skip{position:absolute;right:5px;bottom:5px;line-height:1}
 .panel{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:8px}
 .scrolly{overflow:auto;min-height:0;flex:1;display:flex;flex-direction:column;gap:6px}
 .nav{flex:none;display:grid;grid-template-columns:1fr 1fr 1.25fr 1fr 1fr;gap:4px;padding-bottom:max(8px,env(safe-area-inset-bottom,0px))}
-.nav button{background:var(--panel);border:2px solid var(--line);color:var(--muted);font-family:var(--f-display);font-size:7px;padding:12px 2px 10px;cursor:pointer;line-height:1.4;position:relative}
+.nav button{background:var(--panel);border:2px solid var(--line);color:var(--muted);font-family:var(--f-display);font-size:9.5px;padding:12px 2px 10px;cursor:pointer;line-height:1.05;position:relative}
 .nav button.on{color:var(--fg);border-color:var(--gold);background:var(--panel2)}
 .nav button.go{background:var(--gold);color:#1b140c;border-color:#9c7420;border-bottom-width:4px}
 .nav button.go:disabled{opacity:.5}
 .nav button.go.fightgo{background:var(--red);border-color:#8f2a1b;color:#fff}
-.badge{position:absolute;top:-6px;right:-3px;background:var(--red);color:#fff;font-size:7px;padding:3px 4px;font-family:var(--f-display)}
+.badge{position:absolute;top:-6px;right:-3px;background:var(--red);color:#fff;font-size:9.5px;padding:3px 4px;font-family:var(--f-display)}
 /* relógio: tempo a correr sozinho (▶ / pausa, ×1 / ×2), dias da semana por cima do ginásio, avisos curtos e cartões */
 .nav .clkb{display:grid;grid-template-columns:1.5fr 1fr;gap:3px;min-width:0}
 .nav .clkb button{padding:0;min-width:0;display:flex;align-items:center;justify-content:center}
 .nav .clkb button.fightgo{grid-column:1/-1;padding:12px 2px 10px}
 .nav button.go.run{background:var(--panel2);color:var(--gold);border-color:var(--gold)}
-.nav button.spd{color:var(--fg);font-size:8px} .nav button.spd.x2{color:var(--gold);border-color:var(--gold)}
+.nav button.spd{color:var(--fg);font-size:10.5px} .nav button.spd.x2{color:var(--gold);border-color:var(--gold)}
 .icp{display:block;width:0;height:0;border-style:solid;border-width:7px 0 7px 11px;border-color:transparent transparent transparent currentColor}
 .icpa{display:block;width:12px;height:14px;border-left:4px solid currentColor;border-right:4px solid currentColor;box-sizing:border-box}
 .days{position:absolute;left:5px;top:5px;right:54px;z-index:2;display:grid;grid-template-columns:repeat(7,1fr);gap:2px;line-height:1;pointer-events:none}
-.days i{position:relative;font-style:normal;font-family:var(--f-display);font-size:6px;color:#9c8a70;background:rgba(0,0,0,.7);padding:5px 0 4px;text-align:center;overflow:hidden}
+.days i{position:relative;font-style:normal;font-family:var(--f-display);font-size:8px;color:#9c8a70;background:rgba(0,0,0,.7);padding:5px 0 4px;text-align:center;overflow:hidden}
 .days i u{position:absolute;left:0;top:0;bottom:0;width:0;background:rgba(232,177,58,.5);text-decoration:none}
 .days i span{position:relative}
 .days i.tr::after{content:'';position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--red)}
 .days i.dn{color:var(--fg)} .days i.now{color:#fff}
 .days.off i u{background:rgba(170,160,145,.35)}
-.toasts{position:absolute;left:5px;right:5px;top:23px;z-index:2;display:flex;flex-direction:column;gap:3px;align-items:flex-start;pointer-events:none;line-height:1.05}
+.toasts{position:absolute;left:5px;right:5px;top:23px;z-index:2;display:flex;flex-direction:column;gap:3px;align-items:flex-start;pointer-events:none;line-height:1}
 .toast{max-width:100%;box-sizing:border-box;font-family:var(--f-mono);font-size:16px;background:rgba(10,8,6,.88);border-left:3px solid var(--gold);color:var(--fg);padding:3px 7px;animation:tin .25s steps(3);transition:opacity .5s}
 .toast b{font-weight:400;color:var(--gold)} .toast .warn{font-size:inherit}
 .toast.wk{align-self:stretch;border:1px solid var(--gold);border-left-width:3px;padding:4px 7px}
@@ -72,59 +74,59 @@ canvas.px{width:100%;height:auto;image-rendering:pixelated;image-rendering:crisp
 @keyframes tin{from{transform:translateX(-12px);opacity:0}}
 @media (prefers-reduced-motion:reduce){.toast{animation:none}}
 .cardb{display:flex;flex-direction:column;gap:6px}
-.cardb .btn small{display:block;font-family:var(--f-body);font-size:12px;letter-spacing:0;margin-top:3px;opacity:.85}
-#pauseBtn{font-size:7px!important}
+.cardb .btn small{display:block;font-family:var(--f-body);font-size:16px;letter-spacing:0;margin-top:3px;opacity:.85}
+#pauseBtn{font-size:9.5px!important}
 .seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;flex:none}
-.seg button{background:var(--panel);border:2px solid var(--line);color:var(--muted);padding:6px 4px;font-family:var(--f-body);font-size:13px;cursor:pointer;min-width:0;line-height:1.2}
-.seg button b{display:block;font-family:var(--f-display);font-size:6px;letter-spacing:.08em;margin-bottom:2px;font-weight:400}
+.seg button{background:var(--panel);border:2px solid var(--line);color:var(--muted);padding:6px 4px;font-family:var(--f-body);font-size:17.5px;cursor:pointer;min-width:0;line-height:1}
+.seg button b{display:block;font-family:var(--f-display);font-size:8px;letter-spacing:.08em;margin-bottom:2px;font-weight:400}
 .seg button.on{background:var(--panel2);color:var(--fg);border-color:var(--gold)}
 .seg button:disabled{opacity:.45}
 .card{background:var(--panel);border:2px solid var(--line);padding:9px 10px;display:flex;flex-direction:column;gap:7px}
 .who{display:flex;gap:10px;align-items:center}
 .who canvas{width:48px;height:48px;image-rendering:pixelated;border:2px solid var(--line);background:#3a2d22;flex:none}
-.nm{font-family:var(--f-display);font-size:9px;line-height:1.5}
+.nm{font-family:var(--f-display);font-size:12px;line-height:1.12}
 .nm em{font-style:normal;color:var(--gold)}
-.meta{color:var(--muted);font-size:13px}
+.meta{color:var(--muted);font-size:17.5px}
 .chips{display:flex;flex-wrap:wrap;gap:4px}
-.chip{border:2px solid var(--line);padding:1px 5px;font-size:12px;background:var(--panel2)}
+.chip{border:2px solid var(--line);padding:1px 5px;font-size:16px;background:var(--panel2)}
 .chip.gold{border-color:var(--gold);color:var(--gold)}
 .chip.lock{opacity:.5}
 .stats{display:grid;gap:3px}
-.stat{display:grid;grid-template-columns:78px 1fr 26px;gap:7px;align-items:center;font-size:13px}
+.stat{display:grid;grid-template-columns:78px 1fr 26px;gap:7px;align-items:center;font-size:17.5px}
 .bar{height:8px;background:#120e0b;border:1px solid var(--line);position:relative;overflow:hidden}
 .bar i{position:absolute;inset:0 auto 0 0;background:var(--fg)}
 .bar.red i{background:var(--red)} .bar.gold i{background:var(--gold)} .bar.blue i{background:var(--blue)} .bar.green i{background:var(--green)}
-.num{font-family:var(--f-mono);font-size:18px;text-align:right;font-variant-numeric:tabular-nums;line-height:1}
+.num{font-family:var(--f-num);font-size:13px;text-align:right;font-variant-numeric:tabular-nums;line-height:1}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.warn{color:var(--red);font-size:13px}
+.warn{color:var(--red);font-size:17.5px}
 .good{color:var(--green)}
-.btn{background:var(--panel2);color:var(--fg);border:2px solid var(--line);border-bottom-width:4px;font-family:var(--f-display);font-size:8px;padding:10px 6px 8px;cursor:pointer;line-height:1.5;text-align:center}
+.btn{background:var(--panel2);color:var(--fg);border:2px solid var(--line);border-bottom-width:4px;font-family:var(--f-display);font-size:10.5px;padding:10px 6px 8px;cursor:pointer;line-height:1.12;text-align:center}
 .btn:active:not(:disabled){transform:translateY(2px);border-bottom-width:2px}
 .btn:disabled{opacity:.4;cursor:not-allowed}
 .btn.red{background:var(--red);border-color:#8f2a1b;color:#fff}
 .btn.gold{background:var(--gold);border-color:#9c7420;color:#1b140c}
-.btn.big{font-size:10px;padding:14px 8px 12px;width:100%}
+.btn.big{font-size:13.5px;padding:14px 8px 12px;width:100%}
 button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .slots{display:grid;gap:6px}
-.slot{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;background:var(--panel2);border:2px solid var(--line);padding:8px 10px;cursor:pointer;color:var(--fg);text-align:left;font-family:var(--f-body);font-size:14px}
-.slot .n{font-family:var(--f-display);font-size:10px;color:var(--gold)}
-.slot strong{display:block;font-family:var(--f-display);font-size:8px;font-weight:400;margin-bottom:3px;line-height:1.5}
-.slot span.meta{font-size:12px}
-.slot em{font-style:normal;font-family:var(--f-display);font-size:7px;color:var(--muted)}
+.slot{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;background:var(--panel2);border:2px solid var(--line);padding:8px 10px;cursor:pointer;color:var(--fg);text-align:left;font-family:var(--f-body);font-size:18.5px}
+.slot .n{font-family:var(--f-display);font-size:13.5px;color:var(--gold)}
+.slot strong{display:block;font-family:var(--f-display);font-size:10.5px;font-weight:400;margin-bottom:3px;line-height:1.12}
+.slot span.meta{font-size:16px}
+.slot em{font-style:normal;font-family:var(--f-display);font-size:9.5px;color:var(--muted)}
 .rows{display:flex;flex-direction:column;gap:5px}
 .r{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:var(--panel2);border:2px solid var(--line);padding:6px 8px;min-width:0}
-.r strong{font-family:var(--f-display);font-size:7px;font-weight:400;line-height:1.6;display:block}
-.r p{font-size:12px;color:var(--muted)}
-.r .btn{font-size:7px;padding:8px 6px 6px;white-space:nowrap}
+.r strong{font-family:var(--f-display);font-size:9.5px;font-weight:400;line-height:1.2;display:block}
+.r p{font-size:16px;color:var(--muted)}
+.r .btn{font-size:9.5px;padding:8px 6px 6px;white-space:nowrap}
 .log{background:#0f0c09;border:2px solid var(--line);padding:6px 8px;font-family:var(--f-mono);font-size:17px;line-height:1.05;color:var(--muted);display:flex;flex-direction:column;gap:2px;min-height:0;overflow:hidden;flex:1}
 .log span:first-child{color:var(--fg)}
 .log b{color:var(--gold);font-weight:400}
 .kv{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
 .kv div{background:var(--panel);border:2px solid var(--line);padding:5px 7px}
-.kv small{display:block;font-family:var(--f-display);font-size:6px;color:var(--muted);letter-spacing:.08em;margin-bottom:3px}
-.kv b{font-family:var(--f-mono);font-size:19px;font-weight:400;line-height:1}
-.empty{color:var(--muted);font-size:14px;padding:8px 2px}
-.tag{font-size:11px;padding:0 5px;border:2px solid var(--line)}
+.kv small{display:block;font-family:var(--f-display);font-size:8px;color:var(--muted);letter-spacing:.08em;margin-bottom:3px}
+.kv b{font-family:var(--f-num);font-size:14px;font-weight:400;line-height:1}
+.empty{color:var(--muted);font-size:18.5px;padding:8px 2px}
+.tag{font-size:14.5px;padding:0 5px;border:2px solid var(--line)}
 .tag.g{color:var(--green);border-color:var(--green)} .tag.b{color:var(--red);border-color:var(--red)} .tag.m{color:var(--gold);border-color:var(--gold)}
 
 /* sheets */
@@ -133,72 +135,72 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
   padding:14px max(14px,env(safe-area-inset-right,0px)) calc(14px + env(safe-area-inset-bottom,0px)) max(14px,env(safe-area-inset-left,0px));display:flex;flex-direction:column;gap:10px;animation:up .16s ease-out}
 @keyframes up{from{transform:translateY(24px);opacity:.4}}
 @media (prefers-reduced-motion:reduce){.sheet{animation:none}}
-.hint{color:var(--muted);font-size:14px}
+.hint{color:var(--muted);font-size:18.5px}
 .pick{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
-.pick button{background:var(--panel2);border:2px solid var(--line);color:var(--fg);padding:8px 5px;cursor:pointer;text-align:left;font-family:var(--f-body);font-size:12px;line-height:1.2;min-height:62px;display:flex;flex-direction:column;gap:3px;min-width:0}
-.pick button strong{font-family:var(--f-display);font-size:7px;font-weight:400;line-height:1.5}
+.pick button{background:var(--panel2);border:2px solid var(--line);color:var(--fg);padding:8px 5px;cursor:pointer;text-align:left;font-family:var(--f-body);font-size:16px;line-height:1;min-height:62px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.pick button strong{font-family:var(--f-display);font-size:9.5px;font-weight:400;line-height:1.12}
 .pick button span{color:var(--muted)}
 .pick button.on{border-color:var(--gold)}
 .pick button:disabled{opacity:.4}
-.lossw{color:var(--gold)} .lossr{color:var(--red)} .mini small .lossw,.mini small .lossr{font-size:9px}
-.plancard{gap:3px;padding:7px 9px;font-size:12px;overflow:auto;min-height:0} .plancard .meta,.plancard .warn{font-size:12px;line-height:1.3}
+.lossw{color:var(--gold)} .lossr{color:var(--red)} .mini small .lossw,.mini small .lossr{font-size:12px}
+.plancard{gap:3px;padding:7px 9px;font-size:16px;overflow:auto;min-height:0} .plancard .meta,.plancard .warn{font-size:16px;line-height:1.01}
 .planbox{grid-template-columns:1fr auto!important;padding:9px 10px!important}
-.planbox .pl{display:block;font-size:14px;color:var(--fg);margin-top:2px}
-.planbox em.ed{font-style:normal;font-family:var(--f-display);font-size:7px;color:#1b140c;background:var(--gold);padding:7px 8px;line-height:1.5;text-align:center}
+.planbox .pl{display:block;font-size:18.5px;color:var(--fg);margin-top:2px}
+.planbox em.ed{font-style:normal;font-family:var(--f-display);font-size:9.5px;color:#1b140c;background:var(--gold);padding:7px 8px;line-height:1.12;text-align:center}
 .plan3{grid-template-columns:repeat(3,1fr)}
 .plan3 .slot{grid-template-columns:1fr;gap:3px;padding:6px 7px;align-content:start;min-width:0}
-.plan3 .slot .n{font-size:6px;color:var(--muted)}
+.plan3 .slot .n{font-size:8px;color:var(--muted)}
 .plan3 .slot strong{margin:0}
-.plan3 .slot span.meta{font-size:11px;line-height:1.25}
-.panel .card .btn.keep{padding:6px;font-size:7px}
-.seg .wk{font-size:10px;opacity:.85}
-.seg.sub2 button{padding:4px;font-family:var(--f-display);font-size:7px;letter-spacing:.06em}
-.txt{width:100%;background:var(--panel2);border:2px solid var(--line);color:var(--fg);font-family:var(--f-body);font-size:16px;padding:8px}
+.plan3 .slot span.meta{font-size:14.5px;line-height:1}
+.panel .card .btn.keep{padding:6px;font-size:9.5px}
+.seg .wk{font-size:13.5px;opacity:.85}
+.seg.sub2 button{padding:4px;font-family:var(--f-display);font-size:9.5px;letter-spacing:.06em}
+.txt{width:100%;background:var(--panel2);border:2px solid var(--line);color:var(--fg);font-family:var(--f-body);font-size:21.5px;padding:8px}
 .txt:focus{outline:none;border-color:var(--gold)}
 .logos{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}
-.logos button{background:var(--panel2);border:2px solid var(--line);color:var(--muted);padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:5px;font-family:var(--f-display);font-size:7px;cursor:pointer}
+.logos button{background:var(--panel2);border:2px solid var(--line);color:var(--muted);padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:5px;font-family:var(--f-display);font-size:9.5px;cursor:pointer}
 .logos button.on{border-color:var(--gold);color:var(--fg)}
 .tagl img{margin:-2px 2px 0 0}
-.snd{position:absolute;right:5px;top:5px;z-index:3;background:rgba(0,0,0,.65);color:var(--fg);border:1px solid rgba(255,255,255,.2);font-family:var(--f-display);font-size:7px;line-height:1;padding:5px 6px;cursor:pointer}
+.snd{position:absolute;right:5px;top:5px;z-index:3;background:rgba(0,0,0,.65);color:var(--fg);border:1px solid rgba(255,255,255,.2);font-family:var(--f-display);font-size:9.5px;line-height:1;padding:5px 6px;cursor:pointer}
 .stage .snd{top:auto;bottom:5px;right:5px}
 .stys{display:flex;flex-direction:column;gap:4px}
-.sty{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center;background:var(--panel2);border:1px solid var(--line);padding:4px 6px;font-size:12px}
+.sty{display:grid;grid-template-columns:1fr auto;gap:6px;align-items:center;background:var(--panel2);border:1px solid var(--line);padding:4px 6px;font-size:16px}
 .sty.on{border-color:var(--gold)}
-.sty b{font-family:var(--f-display);font-size:7px;font-weight:400}
-.skc{min-height:0;gap:4px;padding:6px 8px;overflow:hidden}
+.sty b{font-family:var(--f-display);font-size:9.5px;font-weight:400}
+.skc{min-height:0;gap:3px;padding:5px 8px;overflow:hidden}
 .skg{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}.skg h3{margin-bottom:2px}
-.skr{display:flex;justify-content:space-between;align-items:center;gap:4px;width:100%;background:none;border:0;border-bottom:1px solid var(--line);color:var(--fg);font-family:var(--f-body);font-size:12px;line-height:1.2;padding:2px 0;cursor:pointer;text-align:left;min-width:0}
+.skr{display:flex;justify-content:space-between;align-items:center;gap:4px;width:100%;background:none;border:0;border-bottom:1px solid var(--line);color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:.95;padding:1px 0;cursor:pointer;text-align:left;min-width:0}
 .skr span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}.skr.lock{color:var(--muted);opacity:.65}
 .skr .pp{display:flex;gap:1px;flex:none}.skr .pp b{width:6px;height:6px;background:#3a2d22;border:1px solid #5a4632}.skr .pp b.f{background:var(--gold);border-color:var(--gold)}
 .skr em,.sknote em{font-style:normal;margin-right:2px}.cfu{color:var(--gold)}.cfo{color:#ff7a66}
-.sknote{font-size:11px;line-height:1.25;color:var(--muted)}
+.sknote{font-size:14.5px;line-height:1;color:var(--muted)}
 .pips{display:flex;gap:2px;margin:2px 0}.pips i{width:12px;height:5px;background:#3a2d22;border:1px solid #5a4632}.pips i.f{background:var(--gold);border-color:var(--gold)}.pips i.x{opacity:.25}
 .menu{display:flex;flex-direction:column;gap:8px;align-items:stretch;text-align:center;padding:6px 0}
-.menu .mtitle{font-family:var(--f-display);font-size:22px;color:var(--gold);letter-spacing:.06em;text-shadow:3px 3px 0 #8f2a1b;margin:6px 0 2px}
+.menu .mtitle{font-family:var(--f-display);font-size:29.5px;color:var(--gold);letter-spacing:.06em;text-shadow:3px 3px 0 #8f2a1b;margin:6px 0 2px}
 .menu .mlogo{display:flex;justify-content:center;margin-bottom:6px}
-.menu .btn small{display:block;font-family:var(--f-body);font-size:12px;letter-spacing:0;margin-top:4px;opacity:.85}
-.snd{font-size:9px!important;padding:5px 7px!important}
+.menu .btn small{display:block;font-family:var(--f-body);font-size:16px;letter-spacing:0;margin-top:4px;opacity:.85}
+.snd{font-size:12px!important;padding:5px 7px!important}
 .rdot{position:absolute;top:3px;right:3px;width:7px;height:7px;background:var(--red);border-radius:50%}
 .sumr{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;background:var(--panel2);border:2px solid var(--line);padding:6px 8px}
 .fatbox{display:grid;grid-template-columns:1fr 1fr;gap:4px 8px;background:var(--panel2);border:2px solid var(--line);padding:6px 8px}
 .fatbox .fl{display:flex;flex-direction:column;gap:3px}
-.fatbox small{font-family:var(--f-display);font-size:6px;color:var(--muted);letter-spacing:.06em}
-.fatbox b{font-family:var(--f-mono);font-size:20px;font-weight:400;line-height:1}
-.fatbox p{grid-column:1/-1;font-size:12px;color:var(--muted)}
+.fatbox small{font-family:var(--f-display);font-size:8px;color:var(--muted);letter-spacing:.06em}
+.fatbox b{font-family:var(--f-num);font-size:14px;font-weight:400;line-height:1}
+.fatbox p{grid-column:1/-1;font-size:16px;color:var(--muted)}
 .mini{display:grid;grid-template-columns:repeat(8,1fr);gap:3px}
 .mini div{background:var(--panel2);border:2px solid var(--line);padding:4px 3px;display:flex;flex-direction:column;gap:3px;min-width:0}
-.mini small{font-family:var(--f-display);font-size:6px;color:var(--muted);letter-spacing:.06em}
-.mini b{font-family:var(--f-mono);font-size:20px;font-weight:400;line-height:1}
+.mini small{font-family:var(--f-display);font-size:8px;color:var(--muted);letter-spacing:.06em}
+.mini b{font-family:var(--f-num);font-size:13px;font-weight:400;line-height:1}
 .mini .low{border-color:var(--red)} .mini .low small{color:var(--red)}
-.pick button em{font-style:normal;color:var(--gold);font-size:12px}
+.pick button em{font-style:normal;color:var(--gold);font-size:16px}
 .pick2{grid-template-columns:repeat(2,1fr)}.pick2 button{min-height:46px}
 .slot.padf{border-color:var(--gold);padding:6px 10px}
 .rep{display:flex;flex-direction:column;gap:6px}
 .rep .r{grid-template-columns:1fr}
-.rep .r p{color:var(--fg);font-size:13px}
+.rep .r p{color:var(--fg);font-size:17.5px}
 .stars{color:var(--gold);letter-spacing:1px}
 .talent canvas{width:84px;height:84px;image-rendering:pixelated;border:2px solid var(--line);background:#3a2d22;align-self:center}
-.quote{font-size:14px;color:var(--muted);text-align:center;font-style:italic}
+.quote{font-size:18.5px;color:var(--muted);text-align:center;font-style:italic}
 
 /* fight */
 .fight{position:fixed;inset:0;z-index:70;background:#0c0a08;display:flex;flex-direction:column;gap:6px;
@@ -208,98 +210,157 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .fight .bar i.pv{position:absolute;top:0;bottom:0;width:0}
 .fight .bar.gold i.pv{background:rgba(255,236,170,.65)} .fight .bar.red i.pv{background:rgba(255,170,150,.65)}
 .fight .fside.rt .bar i.pv{display:none}
-.fhead{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;flex:none}
+.fhead{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:start;flex:none}
 .fside{display:flex;flex-direction:column;gap:3px;min-width:0}
 .fside.rt{text-align:right}
 .fside.rt .bar i{left:auto;right:0}
-.fname{font-family:var(--f-display);font-size:7px;line-height:1.5;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.fclock{text-align:center;font-family:var(--f-display);font-size:7px;color:var(--muted);line-height:1.8}
-.fclock b{display:block;font-family:var(--f-mono);font-size:26px;font-weight:400;color:var(--fg);line-height:1}
-.booth{display:grid;grid-template-columns:1fr 74px;gap:6px;flex:none;height:64px;min-height:0}
-.booth.big{flex:1;height:auto;grid-template-columns:1fr 34%}
-.fcom{background:#0f0c09;border:2px solid var(--line);padding:5px 8px;font-family:var(--f-mono);font-size:18px;line-height:1.05;display:flex;flex-direction:column;justify-content:flex-end;gap:3px;overflow:hidden;min-height:0}
-.booth.big .fcom{font-size:18px;gap:5px;padding:8px 10px}
-.caster{background:#1a1410;border:2px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;padding:4px;min-height:0;overflow:hidden}
-.caster canvas{width:100%;height:auto;max-height:100%;image-rendering:pixelated;min-height:0}
-.caster span{font-family:var(--f-display);font-size:6px;color:var(--muted);letter-spacing:.06em;white-space:nowrap}
-.booth:not(.big) .caster span{display:none}
-.fcom div{opacity:.55} .fcom div:last-child{opacity:1}
-.fcom .sys{color:var(--gold)} .fcom .me{color:#ff9a86} .fcom .ok{color:#8fe07a} .fcom .half{color:#f2c94c} .fcom .bad{color:#ff6b5a} .fcom .info{color:#9cc4ec}
-.stagew{display:flex;justify-content:center;flex:none}
-.stage{position:relative;line-height:0;border:3px solid #0b0907;outline:2px solid var(--line);border-radius:4px;overflow:hidden}
-.fight canvas.px{height:min(54vh,calc(min(100vw,520px) - 26px));width:auto;max-width:100%;display:block;transition:height .25s}
-.fight.compact canvas.px{height:min(34vh,calc(min(100vw,520px) - 26px))}
-.stage .fhead{position:absolute;left:6%;right:6%;top:4%;background:rgba(10,8,6,.82);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:6px 8px;line-height:1.3}
-.stage .fclock b{font-size:22px}
-.fdist{grid-column:1/-1;display:flex;justify-content:center;align-items:center;gap:3px;font-family:var(--f-display);font-size:6px;line-height:1;color:#7d7064;margin-top:1px}
+.fname{font-family:var(--f-display);font-weight:700;font-size:12px;line-height:1.1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fst{font-family:var(--f-display);font-size:9px;line-height:1.1;color:var(--gold);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fws{display:flex;gap:3px;flex-wrap:wrap;min-height:0}
+.fside.rt .fws{justify-content:flex-end}
+.fws i,.stw i{font-style:normal;font-family:var(--f-display);font-size:8px;line-height:1;padding:2px 3px 1px;background:#7a1e14;color:#ffd9cf;border:1px solid #ff6b5a;white-space:nowrap}
+.fight .bar{height:9px}
+.fight .bar i.lo{position:absolute;top:0;bottom:0;width:0;background:#ff3b2a;opacity:0;transition:opacity .6s}
+.fight .fside.rt .bar i.lo{left:auto}
+.fight .bar.flash{box-shadow:0 0 0 2px #ff3b2a}
+.fight .bar.flash i.lo{opacity:1;transition:none}
+.fclock{text-align:center;font-family:var(--f-display);font-size:9px;color:var(--muted);line-height:1.2;padding-top:2px}
+.fclock b{display:block;font-family:var(--f-num);font-size:20px;font-weight:400;color:var(--fg);line-height:1.1}
+.stagew{display:flex;justify-content:center;flex:1 1 0;min-height:150px;overflow:hidden}
+.stage{position:relative;line-height:0;border:3px solid #0b0907;outline:2px solid var(--line);border-radius:4px;overflow:hidden;width:100%;height:100%}
+.fight canvas.px{display:block;width:100%;height:100%}
+.stage .fhead{position:absolute;left:6%;right:6%;top:5px;background:rgba(10,8,6,.82);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:6px 8px 5px;line-height:1.01}
+.fdist{grid-column:1/-1;display:flex;justify-content:center;align-items:center;gap:3px;font-family:var(--f-display);font-size:8px;line-height:1;color:#7d7064;margin-top:1px}
 .fdist i{font-style:normal;padding:2px 4px 1px;border-radius:2px;background:#15110d;transition:background .25s,color .25s} .fdist b{font-weight:400;opacity:.6}
 .fdist i.on{background:#e8b13a;color:#1a1410} .fdist.off i.on{background:#5c4a2a;color:#d8c9a8}
+/* mesa dos comentadores: o Zé do Micro à esquerda, o Abílio à direita; o balão sai do lado de quem fala; tocar abre o registo */
+.desk{flex:none;position:relative;height:66px;display:grid;grid-template-columns:46px 1fr 46px;gap:6px;align-items:end;background:#0f0c09;border:2px solid var(--line);padding:3px 4px 0;cursor:pointer}
+.desk:before{content:'';position:absolute;left:0;right:0;bottom:0;height:9px;background:#4a3424;border-top:1px solid #5e4430}
+.desk .cm{position:relative;display:flex;flex-direction:column;align-items:center;z-index:1;line-height:0}
+.desk .cm canvas{width:44px;height:53px;image-rendering:pixelated;display:block}
+.desk .cm.off{opacity:.45;filter:saturate(.5)}
+.desk .cm b{position:absolute;bottom:-1px;font-family:var(--f-display);font-size:7px;font-weight:400;line-height:1;color:#f1e5d0;letter-spacing:.04em;white-space:nowrap;z-index:2}
+.desk .cm.ab b{color:#bfe3c8}
+.desk .sb{align-self:center;position:relative;z-index:1;background:#f4ecdc;color:#1a1410;border:2px solid #1a1410;padding:3px 7px 2px;font-family:var(--f-mono);font-size:17px;line-height:.95;margin-bottom:6px;min-height:22px;max-height:44px;overflow:hidden;overflow-wrap:anywhere}
+.desk .sb.s2{font-size:15px} .desk .sb.s3{font-size:13.5px;line-height:.9}
+.desk .sb.big{background:#ffe9a8;border-color:#9c7420}
+.desk .sb.me{color:#8f2416}
+.desk .sb:after{content:'';position:absolute;top:50%;margin-top:-5px;border:5px solid transparent}
+.desk .sb.L:after{left:-9px;border-right:6px solid #1a1410;border-left:0}
+.desk .sb.R:after{right:-9px;border-left:6px solid #1a1410;border-right:0}
+.desk .sb.big.L:after{border-right-color:#9c7420} .desk .sb.big.R:after{border-left-color:#9c7420}
+.desk .reg{position:absolute;right:54px;top:2px;font-family:var(--f-display);font-size:7px;line-height:1;color:#6b5a48;z-index:2}
+/* registo da luta (a luta pára enquanto está aberto) */
+.logov{position:absolute;inset:0;z-index:20;background:rgba(8,6,4,.97);display:flex;flex-direction:column;gap:8px;cursor:pointer;
+  padding:max(12px,env(safe-area-inset-top,0px)) max(12px,env(safe-area-inset-right,0px)) max(10px,env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px))}
+.logov>*{max-width:520px;width:100%;margin:0 auto}
+.logov h2{font-size:12px;color:var(--gold);display:flex;justify-content:space-between;align-items:center;flex:none}
+.logov h2 span{font-size:8px;color:var(--muted)}
+.logov .ll{flex:1;min-height:0;display:flex;flex-direction:column;gap:5px;overflow:hidden;justify-content:flex-end}
+.logov .ln{flex:none;display:grid;grid-template-columns:26px 1fr;gap:7px;align-items:start;background:#15110d;border:1px solid #3a2d22;padding:4px 6px 4px 4px}
+.logov .ln canvas{width:26px;height:31px;image-rendering:pixelated;background:#1a1410}
+.logov .ln b{display:block;font-family:var(--f-display);font-size:7px;font-weight:400;line-height:1;color:#a8957d;margin-bottom:3px}
+.logov .ln b.ab{color:#8fc7a0} .logov .ln b.tu{color:#ff9a86} .logov .ln b i{font-style:normal;color:#6b5a48}
+.logov .ln span{font-family:var(--f-mono);font-size:17px;line-height:1;color:var(--fg)}
+.logov .ln.imp span{color:#ffd76a} .logov .ln.tu span{color:#ff9a86}
+.logov .pz{flex:none;font-family:var(--f-display);font-size:10px;line-height:1;color:#1a1410;background:#e8b13a;text-align:center;padding:10px 0 9px;border:2px solid #9c7420}
+/* canto: palavras de estado de cada um numa caixa própria */
+.stw{display:grid;grid-template-columns:1fr 1fr;gap:5px;flex:none}
+.stw div{background:#15110d;border:2px solid var(--line);padding:4px 6px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.stw b{font-family:var(--f-display);font-size:8px;font-weight:400;line-height:1}
+.stw .me b{color:#ff9a86} .stw .op b{color:#9cc4ec}
+.stw span{display:flex;gap:3px;flex-wrap:wrap}
+.stw i.okw{background:#1f3a1a;color:#a8e09a;border-color:#5fbf4a}
+.stw small{font-size:15px;color:var(--muted);line-height:1}
+.sum span.v small,.atab span.v small{font-size:8px}
+/* análise: separadores em duas linhas; COMPARAR */
+.seg.sub2.two{grid-auto-flow:row;grid-template-columns:repeat(3,1fr)}
+.seg.sub2.two button{padding:5px 2px 4px}
+.cmpg{background:var(--panel2);border:2px solid var(--line);padding:6px 8px;display:grid;grid-template-columns:84px 26px 1fr 1fr 26px;gap:5px;align-items:center}
+.cmpg.nn{grid-template-columns:84px 1fr 1fr}
+.cmpg .hd{grid-column:1/-1;font-family:var(--f-display);font-size:8px;line-height:1;color:var(--gold);letter-spacing:.08em;border-bottom:1px solid var(--line);padding-bottom:4px}
+.cmpg>b{font-family:var(--f-display);font-size:8px;font-weight:400;line-height:1;color:var(--muted)}
+.cmpg>b.me{color:#ff9a86;text-align:right} .cmpg>b.op{color:#9cc4ec}
+.cmpg .n{font-size:18px;line-height:1}
+.cmpg .hi{color:#ffd76a} .cmpg .hi:after{content:' ◆';font-size:11px}
+.cmpg .v{font-family:var(--f-num);font-size:12px;line-height:1;text-align:right;color:#ff9a86} .cmpg .v.op{color:#9cc4ec;text-align:left}
+.cmpg .bl,.cmpg .br{height:9px;background:#15110d;position:relative}
+.cmpg .bl i{position:absolute;right:0;top:0;bottom:0;background:#d4452f} .cmpg .br i{position:absolute;left:0;top:0;bottom:0;background:#2d6db3}
+.cmpk{background:var(--panel2);border:2px solid var(--line);border-left:3px solid var(--gold);padding:6px 8px;font-size:18px;line-height:1}
+.cmpk b{display:block;font-family:var(--f-display);font-size:9px;font-weight:400;color:var(--gold);margin-bottom:3px}
+/* definições: pop-ups na luta */
+.popdemo{display:flex;justify-content:center;gap:14px;align-items:center;padding:8px 4px;background:#1a1410;border:2px solid var(--line);min-height:40px}
+.pd{font-family:var(--f-display);font-size:10px;line-height:1;white-space:nowrap}
+.pd.n{color:#7fb4ff;text-shadow:-1px -1px 0 #0c0a08,1px -1px 0 #0c0a08,-1px 1px 0 #0c0a08,1px 1px 0 #0c0a08}
+.pd.n.me{color:#ff8a72}
+.pd.s{font-weight:700;color:#ffe08a;background:#8f2416;padding:4px 6px 3px;border:2px solid #e8b13a;outline:1px solid #6b4a12;box-shadow:0 0 7px 2px rgba(255,200,70,.7)}
+.pd.ghost{opacity:.25;box-shadow:none}
 .tks{display:grid;grid-template-columns:1fr 1fr;gap:5px}
 .card.ficha{gap:3px;padding:5px 10px}
-.card.ficha .who .meta{font-size:12px;line-height:1.25}
+.card.ficha .who .meta{font-size:15.5px;line-height:.95}
 .card.ficha .stats{gap:1px}
 .stats2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.stats2 .stat{grid-template-columns:66px 1fr 20px;gap:4px;font-size:12px;line-height:1.1}
-.stats2 .num{font-size:15px}
+.stats2 .stat{grid-template-columns:72px 1fr 20px;gap:4px;font-size:16px;line-height:.95}
+.stats2 .num{font-size:11px}
 .card.ficha .stats2 .stats{gap:2px}
-.sg{font-family:var(--f-display);font-size:6px;color:var(--muted);letter-spacing:.06em;line-height:1.6}
-.card.ficha .pers{font-size:12px} .card.ficha .pers b{color:var(--gold);font-weight:400}
-.card.ficha .meta{line-height:1.25}
+.sg{font-family:var(--f-display);font-size:8px;color:var(--muted);letter-spacing:.06em;line-height:1.2}
+.card.ficha .pers{font-size:15.5px;line-height:.95} .card.ficha .pers b{color:var(--gold);font-weight:400}
+.card.ficha .meta{line-height:1}
 .card.hist{gap:5px;padding:7px 8px;overflow:hidden}
 .hhd{display:flex;align-items:center;justify-content:space-between;gap:6px;flex:none}
 .hhd h3{margin:0}
-.hpg{display:flex;align-items:center;gap:4px;font-family:var(--f-mono);font-size:14px}
-.hpg button{padding:4px 8px;font-size:8px}
+.hpg{display:flex;align-items:center;gap:4px;font-family:var(--f-num);font-size:11px}
+.hpg button{padding:4px 8px;font-size:10.5px}
 .hrows{display:flex;flex-direction:column;gap:4px;min-height:0}
-.hrow{flex:none;display:grid;grid-template-columns:22px 1fr auto;gap:7px;align-items:center;background:var(--panel2);border:2px solid var(--line);padding:4px 6px;color:var(--fg);font-family:var(--f-body);font-size:12px;line-height:1.2;text-align:left;min-width:0;width:100%}
+.hrow{flex:none;display:grid;grid-template-columns:22px 1fr auto;gap:7px;align-items:center;background:var(--panel2);border:2px solid var(--line);padding:4px 6px;color:var(--fg);font-family:var(--f-body);font-size:16px;line-height:1;text-align:left;min-width:0;width:100%}
 .hrow.has{cursor:pointer;border-color:#6b5638}
 .hrow:disabled{opacity:1;cursor:default}
 .hrow>span{min-width:0;display:flex;flex-direction:column;gap:1px}
 .hrow strong{font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.hrow small{color:var(--muted);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hrow small{color:var(--muted);font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hrow em{font-style:normal;text-align:right;font-family:var(--f-mono);font-size:13px;line-height:1.1;display:flex;flex-direction:column;align-items:flex-end;gap:1px}
-.hrow em i{font-style:normal;font-family:var(--f-display);font-size:6px;color:var(--gold);letter-spacing:.06em}
-.hres{font-family:var(--f-display);font-size:9px;font-weight:400;text-align:center;padding:5px 0 4px;border:2px solid var(--line)}
+.hrow em i{font-style:normal;font-family:var(--f-display);font-size:8px;color:var(--gold);letter-spacing:.06em}
+.hres{font-family:var(--f-display);font-size:12px;font-weight:400;text-align:center;padding:5px 0 4px;border:2px solid var(--line)}
 .hres.V{color:var(--green);border-color:var(--green)} .hres.D{color:#ff6b5a;border-color:#ff6b5a} .hres.E{color:var(--gold);border-color:var(--gold)}
 .chd{color:var(--gold)}
-.tks button{background:var(--panel2);border:2px solid var(--line);color:var(--fg);padding:7px 7px 6px;text-align:left;font-family:var(--f-body);font-size:12px;line-height:1.2;cursor:pointer;display:flex;flex-direction:column;gap:3px;min-width:0}
-.tks button strong{font-family:var(--f-display);font-size:7px;font-weight:400;line-height:1.5}
+.tks button{background:var(--panel2);border:2px solid var(--line);color:var(--fg);padding:7px 7px 6px;text-align:left;font-family:var(--f-body);font-size:16px;line-height:1;cursor:pointer;display:flex;flex-direction:column;gap:3px;min-width:0}
+.tks button strong{font-family:var(--f-display);font-size:9.5px;font-weight:400;line-height:1.12}
 .tks button span{color:var(--muted)}
 .sheet.an{height:100%;gap:7px;overflow:hidden}
 .anb{flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:6px}
-.anend{font-family:var(--f-display);font-size:8px;line-height:1.7;color:var(--fg)}
+.anend{font-family:var(--f-display);font-size:10.5px;line-height:1.27;color:var(--fg)}
 .cme{color:#ff9a86;font-style:normal} .cop{color:#9cc4ec;font-style:normal} .lowst{color:var(--gold);font-style:normal;text-decoration:underline}
 .kv b em{font-style:normal}
-.why{display:grid;grid-template-columns:12px 1fr;gap:6px;background:var(--panel2);border:2px solid var(--line);padding:6px 8px;font-size:13px;line-height:1.25}
-.why i{font-style:normal;font-family:var(--f-display);font-size:8px;line-height:1.6;color:var(--muted)}
+.why{display:grid;grid-template-columns:12px 1fr;gap:6px;background:var(--panel2);border:2px solid var(--line);padding:6px 8px;font-size:17.5px;line-height:1}
+.why i{font-style:normal;font-family:var(--f-display);font-size:10.5px;line-height:1.2;color:var(--muted)}
 .why b.tip{font-weight:400;color:var(--gold)}
 .why.g{border-left-color:var(--green)} .why.g i{color:var(--green)} .why.b{border-left-color:var(--red)} .why.b i{color:#ff6b5a}
-.atab{display:grid;grid-template-columns:1fr 64px 64px;gap:2px 8px;font-size:12px;background:var(--panel2);border:2px solid var(--line);padding:5px 8px;align-items:baseline}
-.atab b{font-family:var(--f-display);font-size:6px;color:var(--muted);font-weight:400;letter-spacing:.06em;text-align:right}
+.atab{display:grid;grid-template-columns:1fr 64px 64px;gap:2px 8px;font-size:16px;background:var(--panel2);border:2px solid var(--line);padding:5px 8px;align-items:baseline}
+.atab b{font-family:var(--f-display);font-size:8px;color:var(--muted);font-weight:400;letter-spacing:.06em;text-align:right}
 .atab b:first-child{text-align:left} .atab b.me{color:#ff9a86} .atab b.op{color:#9cc4ec}
-.atab span.v{font-family:var(--f-mono);font-size:17px;text-align:right;line-height:1}
+.atab span.v{font-family:var(--f-num);font-size:12px;text-align:right;line-height:1}
 .rtab{grid-template-columns:22px 1fr 1fr 1fr 1fr} .rtab b{text-align:center} .rtab span.v{text-align:center;color:var(--fg)}
-.olist{display:flex;flex-direction:column;gap:3px;font-size:12px;line-height:1.2}
+.olist{display:flex;flex-direction:column;gap:3px;font-size:16px;line-height:1}
 .dbar{display:flex;gap:4px;height:22px;flex:none} .dbar i{position:relative;flex:1;display:flex;align-items:center;justify-content:center;min-width:0;overflow:hidden;font-style:normal;border:2px solid var(--line);background:var(--panel2)}
-.dbar s{position:absolute;left:0;top:0;bottom:0;background:#5c4a2a} .dbar b{position:relative;font-family:var(--f-display);font-size:7px;font-weight:400;white-space:nowrap;color:var(--fg)}
+.dbar s{position:absolute;left:0;top:0;bottom:0;background:#5c4a2a} .dbar b{position:relative;font-family:var(--f-display);font-size:9.5px;font-weight:400;white-space:nowrap;color:var(--fg)}
 .olist div{background:var(--panel2);border-left:3px solid var(--line);padding:3px 6px}
 .olist .ok{border-left-color:var(--green)} .olist .bad{border-left-color:var(--red)} .olist .half{border-left-color:var(--gold)}
 .verdict{border:3px solid;padding:10px 12px;display:flex;flex-direction:column;gap:4px}
-.verdict b{font-family:var(--f-display);font-size:11px;font-weight:400}
+.verdict b{font-family:var(--f-display);font-size:14.5px;font-weight:400}
 .verdict.ok{border-color:#5fbf4a;background:rgba(95,191,74,.12)} .verdict.ok b{color:#8fe07a}
 .verdict.half{border-color:#e0b23a;background:rgba(224,178,58,.12)} .verdict.half b{color:#f2c94c}
 .verdict.bad{border-color:#d4452f;background:rgba(212,69,47,.12)} .verdict.bad b{color:#ff6b5a}
 .verdict.info{border-color:#5b8fc4;background:rgba(91,143,196,.12)} .verdict.info b{color:#9cc4ec}
-.fctl{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:6px}
-.sum{display:grid;grid-template-columns:1fr 54px 54px;gap:1px 8px;font-size:12px;background:var(--panel);border:2px solid var(--line);padding:6px 8px}
-.sum b{font-family:var(--f-display);font-size:6px;color:var(--muted);font-weight:400;letter-spacing:.08em;text-align:right}
+.fctl{flex:0 1 auto;min-height:0;overflow:hidden;display:flex;flex-direction:column;gap:6px}
+.sum{display:grid;grid-template-columns:1fr 54px 54px;gap:1px 8px;font-size:16px;background:var(--panel);border:2px solid var(--line);padding:6px 8px}
+.sum b{font-family:var(--f-display);font-size:8px;color:var(--muted);font-weight:400;letter-spacing:.08em;text-align:right}
 .sum b:first-child{text-align:left}
-.sum span.v{font-family:var(--f-mono);font-size:16px;text-align:right;line-height:1}
-.sum small{font-size:12px;color:var(--muted)}
+.sum span.v{font-family:var(--f-num);font-size:12px;text-align:right;line-height:1}
+.sum small{font-size:16px;color:var(--muted)}
 .sum .me{color:#ff9a86} .sum .op{color:#9cc4ec}
 .cseg{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
 .cseg2{display:grid;grid-template-columns:1fr 1fr;gap:4px}
-.cseg .btn,.cseg2 .btn{font-size:7px;padding:9px 3px 7px}
+.cseg .btn,.cseg2 .btn{font-size:9.5px;padding:9px 3px 7px}
 .cseg .btn.on,.cseg2 .btn.on{background:var(--gold);color:#1b140c;border-color:#9c7420}
 .cseg .btn.pend{border-color:#ff9a86;color:#ffd9cf;animation:pend .7s steps(2) infinite}
 @keyframes pend{50%{border-color:var(--line);color:var(--muted)}}
@@ -307,9 +368,9 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .rctl{display:flex;flex-direction:column;gap:4px}
 .rctl h3{margin:0}
 .tconf{border:3px solid #d4452f;background:rgba(212,69,47,.12);padding:8px 10px;display:flex;flex-direction:column;gap:6px}
-.tconf b{font-family:var(--f-display);font-size:10px;font-weight:400;color:#ff9a86}
-.tconf span{font-size:13px;line-height:1.3}
-.ford{position:absolute;left:5px;bottom:5px;z-index:3;background:rgba(10,8,6,.82);border:1px solid #d4452f;color:#ffd9cf;font-family:var(--f-display);font-size:7px;line-height:1.5;padding:4px 6px;pointer-events:none;display:none;max-width:60%}
+.tconf b{font-family:var(--f-display);font-size:13.5px;font-weight:400;color:#ff9a86}
+.tconf span{font-size:17.5px;line-height:1.01}
+.ford{position:absolute;left:5px;bottom:5px;z-index:3;background:rgba(10,8,6,.82);border:1px solid #d4452f;color:#ffd9cf;font-family:var(--f-display);font-size:9.5px;line-height:1.12;padding:4px 6px;pointer-events:none;display:none;max-width:60%}
 .ford.on{display:block} .ford i{font-style:normal;color:var(--gold)} .ford.deaf{background:rgba(120,24,14,.9);border-color:#ff6b5a;color:#fff} .ford.ok{border-color:#5fbf4a;color:#8fe07a}
 </style>
 
@@ -355,7 +416,13 @@ const TUNE=Object.assign({hitDiv:350,hvy:1.55,resK:.3,qk:.45,mk:.45,cleanMul:6,n
   /* A4 velocidade de aprender (9.1): qualidade da sessão q (atleta: discQ Disciplina, concQ Concentração, confQ confiança do dia; treinador: staffQ por
      especialista de estilo); por habilidade (learnK): lCoach adjunto, lStaff cada especialista, lSpec especialista do estilo do golpe/defesa,
      lTec Técnica num golpe/defesa novo (lTec0 neutro), lFat fadiga da semana. padXP experiência dos Pads por sessão; learnXP para aprender. */
-  confQ:.0045,concQ:.05,staffQ:.02,lCoach:.25,lStaff:.05,lSpec:.3,lTec:.008,lTec0:40,lTecMin:.83,lTecMax:1.25,lFat:.3},window.__TUNE||{});
+  confQ:.0045,concQ:.05,staffQ:.02,lCoach:.25,lStaff:.05,lSpec:.3,lTec:.008,lTec0:40,lTecMin:.83,lTecMax:1.25,lFat:.3,
+  /* Fase 2 — atributos do momento (2.9), em mom(x): com o fôlego abaixo de moSt e a vida abaixo de moHp cada atributo conta menos (só nessa luta).
+     m<Atr>St / m<Atr>Hp: parte que se perde sem fôlego / sem vida (os Pés usam pesSt, pesHp e wobP, de cima); mQxKd Queixo por queda nesta luta (até mQxMin);
+     mIqCalm quanto a Calma protege o Ring IQ; mTecConc Técnica nos últimos rounds com Concentração baixa. Por afinar (fase 7).
+     w*: limites das palavras de estado ("SEM PERNAS", "MÃOS LENTAS", "ABANADO", "SEM GUARDA"). cmpNums: separador COMPARAR com números (false = só barras). */
+  moSt:50,moHp:50,mVelSt:.12,mVelHp:.08,mForSt:.12,mForHp:.08,mDefSt:.08,mDefHp:.12,mTecSt:.06,mTecHp:.06,mQxHp:.2,mQxKd:.08,mQxMin:.6,mIqHp:.3,mIqCalm:.5,mTecConc:.12,
+  wPes:.78,wVel:.93,wQx:.88,wIq:.89,wDef:.93,cmpNums:true},window.__TUNE||{});
 const CATMOD={Pena:{vol:1.25,dmg:.85,flash:.6,cost:.9},Superpena:{vol:1.15,dmg:.92,flash:.8,cost:.95},Ligeiro:{vol:1,dmg:1,flash:1,cost:1},Pesado:{vol:.75,dmg:1.3,flash:1.8,cost:1.25}};
 CATMOD.Pesado.dmg=TUNE.hvy;
 const GIFTS={
@@ -428,7 +495,7 @@ const DECAY_K=['forca','velocidade','resistencia']; // perdem condição sem tre
 function attrLow(k){return k==='iq'?'Ring IQ':ATTR_N[k].toLowerCase()}
 function gs(){return(Math.random()+Math.random()+Math.random()-1.5)*2} // ~normal(0,1)
 function rollChin(){return clamp(Math.round(50+gs()*13),22,85)}
-function chinK(x){return clamp(1+TUNE.qxK*(50-(x.queixo??50))/50,.6,1.5)} // >1 = queixo fraco (cai mais)
+function chinK(x){return clamp(1+TUNE.qxK*(50-E(x,'queixo'))/50,.6,1.5)} // >1 = queixo fraco (cai mais)
 /* ---- mentais (tema 8.2): 7 valores escondidos (5-95, 50 = normal) em a.ment. Não se treinam: mudam devagar com a carreira.
    A personalidade é o nome do que se destaca (≥ TUNE.mentOut acima ou abaixo de 50); o jogador só vê o nome e 2-3 palavras. ---- */
 const MENT=[['cor','Coração'],['calma','Calma'],['disc','Disciplina'],['conf','Confiança'],['conc','Concentração'],['fin','Instinto finalizador'],['ouvir','Ouvir o canto']];
@@ -868,17 +935,17 @@ function panelAth(){
     const kc=knownCombos(a).map(c=>c.id);
     return selector()+sub+`<div class="card skc"><div class="skg"><div><h3>GOLPES</h3>${PKEYS.map(row).join('')}</div><div><h3>DEFESAS</h3>${DKEYS.map(row).join('')}</div></div>
       <div class="sknote">${nts.length?[un.length?`<span><em class="cfu">▼</em> ainda não confia: ${un.map(nl).join(', ')}</span>`:'',ov.length?`<span><em class="cfo">▲</em> confia demais: ${ov.map(nl).join(', ')}</span>`:''].filter(Boolean).join(' · '):'Confia no que sabe fazer: nem mais, nem menos.'}</div>
-      <h3>COMBINAÇÕES</h3><div class="chips">${COMBOS.map(c=>`<span class="chip ${kc.includes(c.id)?'gold':'lock'}" style="font-size:11px;padding:0 4px">${c.n}</span>`).join('')}</div>
-      <div class="meta" style="font-size:11px">Toca num golpe ou defesa para ver como se treina.</div></div>`;
+      <h3>COMBINAÇÕES</h3><div class="chips">${COMBOS.map(c=>`<span class="chip ${kc.includes(c.id)?'gold':'lock'}" style="font-size:15px;line-height:1;padding:0 4px">${c.n}</span>`).join('')}</div>
+      <div class="meta" style="font-size:15px">Toca num golpe ou defesa para ver como se treina.</div></div>`;
   }
   if(S.sub==='estilos'){
     return selector()+sub+`<div class="card" style="min-height:0;gap:5px;padding:7px 8px"><h3>ESTILOS · CORPO ${bodyType(a).toUpperCase()} (${cm(a.h)}, alcance ${cm(a.r)})</h3>
       <div class="stys">${STYLES.map(st=>{const lv=styleLv(a,st),cap=styleCap(a,st),fit=styleFit(a,st),pr=a.style===st,coach=S.up[STY_COACH[st]];const need=SXP(lv);
         return `<div class="sty ${pr?'on':''}"><div><b>${st}</b> <span class="meta">nv ${lv}/${cap}${fit>0?' · combina com o corpo':fit<0?' · não combina':''}</span>
           <div class="pips">${[1,2,3,4,5].map(i=>`<i class="${i<=lv?'f':i<=cap?'':'x'}"></i>`).join('')}</div>
-          <span class="meta" style="font-size:11px">${lv>=cap?'no máximo':lv<1?(coach?'treino de estilo no plano para aprender':'precisa do treinador deste estilo (loja)'):`${Math.floor((a.sxp[st]||0))}/${need} · ${coach?'treino de estilo ou sparring':'sobe devagar com sparring'}`}</span></div>
-          ${pr?'<span class="meta">PRINCIPAL</span>':lv>0?`<button class="btn" data-mainsty="${st}" style="font-size:7px;padding:6px">PRINCIPAL</button>`:''}</div>`}).join('')}</div>
-      <div class="meta" style="font-size:11px">In-fighter vence Outboxer, Outboxer vence Puncher, Puncher vence In-fighter. O corpo decide o nível máximo de cada estilo.</div></div>`;
+          <span class="meta" style="font-size:15px">${lv>=cap?'no máximo':lv<1?(coach?'treino de estilo no plano para aprender':'precisa do treinador deste estilo (loja)'):`${Math.floor((a.sxp[st]||0))}/${need} · ${coach?'treino de estilo ou sparring':'sobe devagar com sparring'}`}</span></div>
+          ${pr?'<span class="meta">PRINCIPAL</span>':lv>0?`<button class="btn" data-mainsty="${st}" style="font-size:9px;padding:6px">PRINCIPAL</button>`:''}</div>`}).join('')}</div>
+      <div class="meta" style="font-size:15px">In-fighter vence Outboxer, Outboxer vence Puncher, Puncher vence In-fighter. O corpo decide o nível máximo de cada estilo.</div></div>`;
   }
   if(S.sub==='plano'){
     const f=projFat(a,weekPlan(a));
@@ -905,7 +972,7 @@ function panelAth(){
       <div class="stat" style="grid-template-columns:70px 1fr"><span>Confiança</span><div class="bar blue"><i style="width:${a.conf}%"></i></div></div></div>
     <div class="meta">Potencial <span class="stars">${potRange(a)}</span></div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:space-between">${a.giftKnown?(a.gift?`<div class="meta" title="${GIFTS[a.gift].d}"><b style="color:var(--gold)">Dom: ${GIFTS[a.gift].n}</b></div>`:'<div class="meta">Sem dom especial.</div>'):a.hint?`<div class="meta">Pista: ${GIFTS[a.hint].n.toLowerCase()}? Ainda por confirmar.</div>`:'<div></div>'}
-    ${S.roster.length>1?`<button class="btn" data-dismiss="${a.id}" style="font-size:7px;padding:7px 8px 5px;flex:none">DISPENSAR</button>`:''}</div></div>`;
+    ${S.roster.length>1?`<button class="btn" data-dismiss="${a.id}" style="font-size:9px;padding:7px 8px 5px;flex:none">DISPENSAR</button>`:''}</div></div>`;
 }
 function panelFights(){
   const a=cur();
@@ -1419,7 +1486,7 @@ function talent(cat){
     const cmp=curA?`<div class="r" style="grid-template-columns:1fr"><div><strong>ATUAL NO PESO ${cat.toUpperCase()}: ${curA.nick}</strong>
       <p>${ATTRS.map(([k])=>`${SHORT[k]} ${Math.floor(curA.attrs[k])}`).join(' · ')} · ${curA.rec.w}V ${curA.rec.l}D</p>
       <p>Potencial <span class="stars">${potRange(curA)}</span>${curA.giftKnown&&curA.gift?` · Dom: ${GIFTS[curA.gift].n}`:''}</p>
-      <p class="warn" style="font-size:12px">Trocar: ${dismissText(curA)}</p></div></div>`:'';
+      <p class="warn" style="font-size:16px">Trocar: ${dismissText(curA)}</p></div></div>`:'';
     const s=modal(`<h2>TALENTO DESCOBERTO</h2><div class="talent" style="display:flex;flex-direction:column;gap:8px">
       <canvas width="32" height="32" id="tp"></canvas><p class="quote">Encontraste-o ${pick(FOUND)}.</p>
       <div class="r" style="grid-template-columns:1fr"><div><strong>${a.name} "${a.nick}"</strong>
@@ -1790,7 +1857,7 @@ function line(type,v){
   if(F){F.lc=F.lc||{};F.lc[type]=fclock()}
   let opts=LINES[type].filter(l=>!recent.includes(l));if(!opts.length)opts=LINES[type];
   const l=pick(opts);recent.push(l);if(recent.length>14)recent.shift();
-  return l.replace(/\{(\w)\}/g,(m,k)=>v[k]??'');
+  const s=l.replace(/\{(\w)\}/g,(m,k)=>v[k]??'');LT={ty:type,s};return s;
 }
 function fighter(src,mine){
   initBody(src,src.tier!=null?2:3);const fst=(mine&&src.fstyle&&styleLv(src,src.fstyle)>0)?src.fstyle:src.style;
@@ -1811,71 +1878,327 @@ function startFight(a,done){
   if(!f.opp.grown){const wk=Math.max(0,S.week-(f.opp.made||S.week));for(const[k]of ATTRS)if(k!=='queixo')f.opp.attrs[k]=clamp(f.opp.attrs[k]+R(0,.45)*wk,5,99);f.opp.grown=true}
   F={a,done,me:fighter(a,true),op:fighter(f.opp,false),round:1,rounds:f.rounds,log:[],fast:false,over:null,ft:0,
     zoom:null,crowd:0,flashes:0,ref:{x:120,y:60,tx:120,ty:60,pose:'stand'},count:null,big:null,lastScore:[10,10],zone:'center',zp:null,ctl:null,dw:null,dist:'meio',dT:0,ord:null,ordLog:[],deaf:0,live:false,inRound:false,rr:[],kdl:[],talks:[],sx:{}};
+  F.at0=[F.me,F.op].map(x=>ATTRS.map(([k])=>Math.round(x[k]??0))); // atributos no início da luta (COMPARAR)
   F.form0=formOf(a);F.me.form=F.form0.sc*TUNE.formK;F.op.form=0;F.venue=venueIdx({tier:a.tier,title:f.title});
   F.op.strat=f.opp.style==='In-fighter'?'Pressão':f.opp.style==='Outboxer'?'Cautela':'Equilibrado';
   $('#fightRoot').innerHTML=`<div class="fight">
     <div class="stagew"><div class="stage"><canvas class="px" id="ring" width="240" height="240"></canvas><button class="snd" id="pauseF" aria-label="Pausa">II</button><div class="ford" id="fOrd" aria-live="polite"></div>
       <div class="fhead"><div class="fside" id="fL"></div><div class="fclock" id="fClock"></div><div class="fside rt" id="fR"></div><div class="fdist" id="fDist" aria-label="Distância">${DN.map(d=>`<i data-d="${d}">${d.toUpperCase()}</i>`).join('<b>·</b>')}</div></div></div></div>
-    <div class="booth" id="booth"><div class="fcom" id="fcom" aria-live="polite"></div><div class="caster"><canvas id="caster" width="40" height="48"></canvas><span>ZÉ DO MICRO</span></div></div>
+    <div class="desk" id="desk" role="button" aria-label="Registo da luta"><div class="cm ze"><canvas id="cZe" width="40" height="48"></canvas><b>ZÉ</b></div><div class="sb L" id="dsb" aria-live="polite"></div><div class="cm ab off"><canvas id="cAb" width="40" height="48"></canvas><b>ABÍLIO</b></div><span class="reg">▲ REGISTO</span></div>
     <div class="fctl" id="fctl"></div></div>`;
   recent=[];ARENA=null;
+  $('#desk').onclick=openLog;
+  if(typeof ResizeObserver!=='undefined'){F.ro=new ResizeObserver(fitStage);F.ro.observe($('#fightRoot .stagew'))}fitStage();
   requestAnimationFrame(ringLoop);
   hud();
   runFight();
 }
+/* ---- fase 2: luta legível ----
+   Placard (2.10/2.11): nome, vida e fôlego só em barra (pisca a vermelho quando cai de repente), estratégia por extenso e palavras de estado.
+   Mesa dos comentadores (2.1/2.3/2.14): o Zé do Micro (esquerda, relato curto) e o Abílio "Bigorna" Santos (direita, ex-pugilista, 1-2 vezes por
+   round). Uma frase de cada vez; todas as frases vão para F.log (registo completo), mas só algumas aparecem (canais em say()). */
 function hud(){
   if(!F)return;
+  const now=performance.now();
   const side=(el,x)=>{
-    if(!el.firstChild)el.innerHTML=`<div class="fname"></div><div class="bar red"><i class="v"></i><i class="pv"></i></div><div class="bar gold"><i class="v"></i><i class="pv"></i></div><div class="meta" style="font-size:11px"></div>`;
-    el.querySelector('.fname').textContent=`${x.nick.toUpperCase()} · ${x.strat.slice(0,3).toUpperCase()}`;
-    const pv=(x.mine&&F.prev)||{};const hp=clamp(x.hp,0,100),st=clamp(x.st,0,100);
+    if(!el.firstChild)el.innerHTML=`<div class="fname"></div><div class="bar red"><i class="v"></i><i class="pv"></i><i class="lo"></i></div><div class="bar gold"><i class="v"></i><i class="pv"></i><i class="lo"></i></div><div class="fst"></div><div class="fws"></div>`;
+    const nm=x.nick.toUpperCase(),sv=x.strat.toUpperCase();
+    const fn=el.querySelector('.fname');if(fn.textContent!==nm)fn.textContent=nm;
+    const fs=el.querySelector('.fst');if(fs.textContent!==sv)fs.textContent=sv;
+    const pv=(x.mine&&F.prev)||{};const hp=clamp(x.hp,0,100),st=clamp(x.st,0,100),rt=!x.mine;
     const[hb,sb]=el.querySelectorAll('.bar');
-    hb.children[0].style.width=hp+'%';sb.children[0].style.width=st+'%';
-    const ph=clamp(pv.hp||0,0,100-hp),ps=clamp(pv.st||0,0,100-st);
-    hb.children[1].style.left=hp+'%';hb.children[1].style.width=ph+'%';sb.children[1].style.left=st+'%';sb.children[1].style.width=ps+'%';
-    const cut=x.cut+(pv.cut||0);
-    el.querySelector('.meta').innerHTML=`${x.kd?`Quedas ${x.kd}`:''}${x.kd&&cut?' · ':''}${cut?`Cortes ${cut}`:''}${ps?` <b style="color:var(--gold);font-weight:400">+${Math.round(ps)} fôlego</b>`:''}${ph?` <b style="color:#ff9a86;font-weight:400">+${Math.round(ph)} vida</b>`:''}${pv.cut?' <b style="color:#ff9a86;font-weight:400">-1 corte</b>':''}&nbsp;`;
+    const bar=(b,v,k,pvv)=>{ // barra sem número; se cair de repente, pisca e mostra a vermelho o que perdeu
+      b.children[0].style.width=v+'%';const ph=clamp(pvv||0,0,100-v);
+      b.children[1].style.left=v+'%';b.children[1].style.width=ph+'%';
+      const H=x._bh||(x._bh={});const o=H[k];
+      if(o==null||v>o.v+.5||!F.live){H[k]={v,t:now,f:0};}
+      else if(o.v-v>=6){H[k]={v,t:now,f:now+650,from:Math.max(o.from&&now<o.f?o.from:o.v,v)};}
+      else if(now>o.t+900){o.v=v;o.t=now}
+      const c=H[k],lo=b.children[2],on=c.f>now;
+      if(on){lo.style[rt?'right':'left']=v+'%';lo.style[rt?'left':'right']='auto';lo.style.width=Math.max(0,c.from-v)+'%'}
+      b.classList.toggle('flash',on);
+    };
+    bar(hb,hp,'hp',pv.hp);bar(sb,st,'st',pv.st);
+    const ws=stWords(x).map(w=>`<i>${w}</i>`).join(''),we=el.querySelector('.fws');if(we.innerHTML!==ws)we.innerHTML=ws;
   };
   side($('#fL'),F.me);side($('#fR'),F.op);ordInd();
   distBar();
   const left=Math.max(0,180-F.ft/1000*3);
-  $('#fClock').innerHTML=F.ended?`${F.a.fight.title?'TÍTULO<br>':''}FIM<b>${F.over&&F.over.how?F.over.how.toUpperCase().slice(0,7):''}</b>`:`${F.a.fight.title?'TÍTULO<br>':''}ROUND ${Math.min(F.round,F.rounds)}/${F.rounds}<b>${Math.floor(left/60)}:${String(Math.floor(left%60)).padStart(2,'0')}</b>`;
+  const ck=F.ended?`${F.a.fight.title?'TÍTULO<br>':''}FIM<b>${F.over&&F.over.how?F.over.how.toUpperCase().slice(0,7):''}</b>`:`${F.a.fight.title?'TÍTULO · ':''}ROUND ${Math.min(F.round,F.rounds)}/${F.rounds}<b>${Math.floor(left/60)}:${String(Math.floor(left%60)).padStart(2,'0')}</b>`;
+  const fc=$('#fClock');if(fc.innerHTML!==ck)fc.innerHTML=ck;
 }
 function distBar(){const el=$('#fDist');if(!el||!F)return;const k=F.dist+F.inRound;if(el.dataset.d===k)return; // barra LONGE · MEIO · PERTO (5.5)
   el.dataset.d=k;el.classList.toggle('off',!F.inRound);el.querySelectorAll('i').forEach(i=>i.classList.toggle('on',i.dataset.d===F.dist))}
-function say(t,c){F.log.push({t,c});F.talk=performance.now()+Math.min(2200,400+t.length*28);const big=$('#booth')&&$('#booth').classList.contains('big');$('#fcom').innerHTML=F.log.slice(big?-9:-3).map(l=>`<div class="${l.c||''}">${l.t}</div>`).join('')}
-function setBooth(big){const b=$('#booth');if(!b)return;b.classList.toggle('big',big);const fr=$('#fightRoot .fight');if(fr)fr.classList.toggle('compact',!big);$('#fctl').style.flex=big?'none':'';const L=F.log;F.log=L.slice(0,-1);if(L.length)say(L.at(-1).t,L.at(-1).c)}
-function drawCaster(now){
-  const cv=$('#caster');if(!cv||!F)return;const c=cv.getContext('2d');const t=now/1000;
-  const talking=now<(F.talk||0),hype=now<F.crowd;
+/* ---- canais das frases (2.2/2.7) ----
+   4 queda/KO (passa à frente de tudo); 3 importante: sempre no ecrã, ~4 s, a dourado (quedas, counters, técnicas especiais, fígado, fim do round, ordens ouvidas/perdidas, mudanças
+   importantes como "encostou-o ao canto"); 2 normal: no ecrã ~2 s; 1.5 enchimento: só se a mesa estiver calada há um bocado; 1 rotina (cada jab,
+   bloqueio, esquiva, notas de distância): não aparece (vê-se no ringue), exceto com os pop-ups desligados, em que o Zé diz algumas.
+   O tipo vem da última line() (LPRI); frases soltas passam o canal em o.p. who: 'ze' | 'ab' (Abílio) | 'tu' (gritas do canto: vê-se no balão)
+   | 'at' (o atleta responde no canto: vê-se no quadro). Tudo fica em F.log (o registo da análise). */
+const LPRI={down:4,flash:4,ko:4,liverS:4,up:3,liverL:3,clean:3,ctr_cross:3,cc_both:3,ant_check:3,wobbly:3,ropes:3,cornered:3,end:3,
+  heard:3,heardLate:3,lost:3,deaf:3,slow:2,start:2,tired:2,stagger:2,d_in:2,d_pivot:2,d_pivotC:2,d_clinch:2,d_out:2,tiredRopes:2,ant_jab:2,ant_back:2,
+  tiring:1.5,wobblyR:1.5,combo:1,clinch:1,circle:1,wait:1,pressure:1,d_keep:1,d_mid:1,center:1,body:1,block:1,catch:1,parry:1,slip:1,pull:1,pend:1,roll:1,back:1,pivot:1,side:1,ctrMiss:1,antMiss:1};
+function lpri(ty){if(!ty)return null;if(LPRI[ty]!=null)return LPRI[ty];if(ty.startsWith('ctr_'))return 3;if(ty.startsWith('hit_'))return 1;if(ty.startsWith('v_'))return 1.5;return null}
+let LT=null; // última line(): {ty, s}
+function say(t,c,o={}){
+  if(!F||!t)return;
+  const ty=LT&&LT.s===t?LT.ty:null;LT=null;
+  const who=o.who||'ze',p=o.p!=null?o.p:lpri(ty)??2;
+  const e={t,c:c||'',who,p,r:F.round,ck:F.inRound?Math.round(clockS()):null,ty};
+  F.log.push(e);if(F.log.length>500)F.log.splice(0,100);
+  if(who==='tu'||who==='at'||window.__SIM)return;
+  let show=p>=2;
+  if(p===1.5)show=deskIdle(POPS==='off'?0:4000);
+  else if(p<1.5)show=POPS==='off'&&deskIdle(0)&&Math.random()<.5; // pop-ups desligados: o Zé diz um pouco mais (não muito)
+  if(!show)return;
+  e.sh=1;const q=F.dq||(F.dq=[]);
+  if(p>=3){for(let i=q.length-1;i>=0;i--)if(q[i].p<3)q.splice(i,1);if(p>=4){const j=q.findIndex(x=>x.p<4);if(j>=0){q.splice(j,0,e);return}}} // importante passa à frente; a queda à frente de tudo
+  else if(q.length)q.splice(0,q.length,...q.filter(x=>x.p>=3||x.who==='ab')); // normal: só a mais recente espera (o Abílio não se perde)
+  if(q.length>3)q.shift();
+  q.push(e);
+}
+const LDUR={3:4000,2:2000};
+function lineDur(e){return e?(e.p>=3?LDUR[3]:LDUR[2]):0}
+function deskIdle(ms){const D=F&&F.desk;return!D||!D.cur||(!(F.dq&&F.dq.length)&&D.t>=Math.max(ms,lineDur(D.cur)))}
+function deskTick(dt){ // uma frase de cada vez; o tempo de cada uma só corre com a luta a andar (pára no registo e no menu)
+  const D=F.desk||(F.desk={cur:null,t:0});D.t+=dt*1000*(F.paused?0:F.fast?2:1);
+  const q=F.dq||[];if(!q.length)return;const cur=D.cur;
+  const need=cur&&cur.p>=3&&q[0].p>=3?2500:lineDur(cur); // várias importantes seguidas: 2,5 s cada, para não ficar para trás
+  if(!cur||D.t>=need||(q[0].p>=3&&q[0].p>cur.p&&D.t>=700)){D.cur=q.shift();D.t=0;showLine(D.cur)}
+}
+function showLine(e){
+  const b=$('#dsb');if(!b)return;const ab=e.who==='ab';
+  b.className='sb '+(ab?'R':'L')+(e.p>=3?' big':'');b.textContent=e.t;
+  if(b.scrollHeight>b.clientHeight+1){b.classList.add('s2');if(b.scrollHeight>b.clientHeight+1){b.classList.remove('s2');b.classList.add('s3')}}
+  const d=$('#desk');d.querySelector('.ze').classList.toggle('off',ab);d.querySelector('.ab').classList.toggle('off',!ab);
+  F.talk={who:ab?'ab':'ze',until:performance.now()+Math.min(2600,500+e.t.length*30)};
+}
+/* ---- caras da mesa (pixel art) ---- */
+function bustZe(c,now,talking,hype){
+  const t=now/1000;
   c.fillStyle='#1a1410';c.fillRect(0,0,40,48);
-  c.fillStyle='#2b1f17';c.fillRect(0,0,40,30);c.fillStyle='#e8b13a';c.fillRect(3,3,12,5);c.fillStyle='#1a1410';c.fillRect(4,4,10,3);c.fillStyle='#e8b13a';c.font='4px monospace';
+  c.fillStyle='#2b1f17';c.fillRect(0,0,40,30);c.fillStyle='#e8b13a';c.fillRect(3,3,12,5);c.fillStyle='#1a1410';c.fillRect(4,4,10,3);
   const by=hype&&Math.sin(t*12)>0?-1:0;
-  // body: suit
   c.fillStyle='#2d3a55';c.fillRect(8,30+by,24,14);c.fillStyle='#e8e0d0';c.fillRect(18,30+by,4,8);c.fillStyle='#d4452f';c.fillRect(19,31+by,2,6);
-  // arms
   if(hype){c.fillStyle='#2d3a55';c.fillRect(4,22+by,4,10);c.fillRect(32,22+by,4,10);c.fillStyle='#e0a878';c.fillRect(4,19+by,4,4);c.fillRect(32,19+by,4,4)}
-  // head
   c.fillStyle='#e0a878';c.fillRect(13,12+by,14,16);c.fillStyle='#c48c5e';c.fillRect(13,26+by,14,2);
   c.fillStyle='#5a3a22';c.fillRect(12,10+by,16,4);c.fillRect(12,10+by,2,8);c.fillRect(26,10+by,2,8);
-  // headset
   c.fillStyle='#111';c.fillRect(11,13+by,2,7);c.fillRect(27,13+by,2,7);c.fillRect(12,9+by,16,2);c.fillRect(27,19+by,1,1);c.fillRect(22,24+by,6,1);c.fillStyle='#333';c.fillRect(21,23+by,2,3);
-  // eyes (blink) + brows
   const blink=(t%3.2)<.12;c.fillStyle='#111';if(blink){c.fillRect(16,18+by,3,1);c.fillRect(22,18+by,3,1)}else{c.fillRect(16,17+by,2,2);c.fillRect(22,17+by,2,2)}
   c.fillStyle='#5a3a22';c.fillRect(15,15+by-(hype?1:0),4,1);c.fillRect(21,15+by-(hype?1:0),4,1);
-  // mouth
   const open=talking&&Math.sin(t*22)>0;c.fillStyle='#7a2a20';if(open||hype)c.fillRect(18,22+by,5,hype?3:2);else c.fillRect(18,23+by,5,1);
-  // desk with mic
   c.fillStyle='#4a3424';c.fillRect(0,42,40,6);c.fillStyle='#5e4430';c.fillRect(0,42,40,1);
   c.fillStyle='#222';c.fillRect(30,34,1,8);c.fillRect(28,32,4,3);
+}
+function bustAb(c,now,talking){ // Abílio "Bigorna" Santos: ex-pugilista, careca, bigode grisalho, nariz partido, cicatriz
+  const t=now/1000;
+  c.fillStyle='#1a1410';c.fillRect(0,0,40,48);c.fillStyle='#24301f';c.fillRect(0,0,40,30);
+  c.save();c.translate(4,6);
+  c.fillStyle='#4a5a3a';c.fillRect(3,26,26,10);c.fillStyle='#e8e0d0';c.fillRect(13,26,6,6);c.fillStyle='#3a3a3a';c.fillRect(15,27,2,6);
+  c.fillStyle='#b9805a';c.fillRect(8,7,16,19);c.fillStyle='#a06c48';c.fillRect(8,24,16,2);c.fillRect(22,9,2,15);
+  c.fillStyle='#8a8a8a';c.fillRect(7,11,2,7);c.fillRect(23,11,2,7);
+  c.fillStyle='#d09a72';c.fillRect(11,7,8,2);
+  c.fillStyle='#111';c.fillRect(6,12,2,7);c.fillRect(24,12,2,7);c.fillRect(7,10,18,1);c.fillRect(17,22,7,1);c.fillStyle='#333';c.fillRect(16,21,2,3);
+  c.fillStyle='#5a3a22';c.fillRect(10,12,5,2);c.fillRect(17,12,5,2);
+  const blink=((t+1.3)%3.7)<.12;c.fillStyle='#111';if(blink){c.fillRect(11,16,2,1);c.fillRect(18,16,2,1)}else{c.fillRect(11,15,2,2);c.fillRect(18,15,2,2)}
+  c.fillStyle='#8f5a3a';c.fillRect(14,16,3,4);c.fillRect(15,15,2,1);
+  c.fillStyle='#d9d9d9';c.fillRect(11,20,10,2);c.fillRect(11,22,2,1);c.fillRect(19,22,2,1);
+  c.fillStyle='#7a2a20';c.fillRect(13,23,6,talking&&Math.sin(t*20)>0?2:1);
+  c.fillStyle='#e0b090';c.fillRect(20,9,1,4);
+  c.restore();
+  c.fillStyle='#4a3424';c.fillRect(0,42,40,6);c.fillStyle='#5e4430';c.fillRect(0,42,40,1);c.fillStyle='#222';c.fillRect(9,34,1,8);c.fillRect(8,32,4,3);
+}
+function bustTu(c){ // tu, o treinador (registo)
+  c.fillStyle='#2a1410';c.fillRect(0,0,40,48);c.fillStyle='#d4452f';c.fillRect(8,32,24,16);
+  c.fillStyle='#c98f62';c.fillRect(13,13,14,17);c.fillStyle='#8f2a1b';c.fillRect(11,9,18,5);c.fillRect(25,13,6,2);
+  c.fillStyle='#111';c.fillRect(16,19,2,2);c.fillRect(22,19,2,2);c.fillStyle='#7a2a20';c.fillRect(18,25,5,1);
+}
+function drawDesk(now){
+  if(window.__SIM)return;const z=$('#cZe'),a=$('#cAb');if(!z||!a)return;
+  const T=F.talk||{},on=now<(T.until||0);
+  bustZe(z.getContext('2d'),now,on&&T.who==='ze',now<F.crowd);bustAb(a.getContext('2d'),now,on&&T.who==='ab');
+}
+/* ---- registo da luta: tocar na mesa; a luta pára enquanto está aberto ---- */
+function openLog(){
+  if(!F||$('#logov'))return;const fr=$('#fightRoot .fight');if(!fr)return;
+  const was=F.paused;F.paused=true;
+  const NM={ze:'ZÉ DO MICRO',ab:'ABÍLIO «BIGORNA»',tu:'TU · CANTO'};
+  const L=F.log.filter(e=>e.sh||e.who==='tu').slice(-30);
+  const el=document.createElement('div');el.className='logov';el.id='logov';
+  el.innerHTML=`<h2>REGISTO DA LUTA<span>❚❚ LUTA PARADA</span></h2><div class="ll">${L.map((e,i)=>`<div class="ln ${e.who==='tu'?'tu':e.p>=3?'imp':''}"><canvas width="40" height="48" data-i="${i}"></canvas><div><b class="${e.who==='ab'?'ab':e.who==='tu'?'tu':''}">${NM[e.who]||NM.ze} <i>· ${e.ck!=null?`R${e.r} ${Math.floor((180-e.ck)/60)}:${String((180-e.ck)%60).padStart(2,'0')}`:e.r>1?`ANTES DO R${e.r}`:'ANTES DA LUTA'}</i></b><span></span></div></div>`).join('')||'<div class="ln"><canvas width="40" height="48"></canvas><div><span>Ainda ninguém disse nada.</span></div></div>'}</div><div class="pz">TOCA PARA VOLTAR À LUTA</div>`;
+  fr.appendChild(el);
+  el.querySelectorAll('.ln').forEach((r,i)=>{const e=L[i];if(e)r.querySelector('span').textContent=e.t;const c=r.querySelector('canvas').getContext('2d');c.imageSmoothingEnabled=false;
+    if(e&&e.who==='ab')bustAb(c,0,false);else if(e&&e.who==='tu')bustTu(c);else bustZe(c,0,false,false)});
+  el.onclick=()=>{el.remove();if(F)F.paused=was};
+}
+/* ---- Abílio "Bigorna" Santos, comentador ex-pugilista (2.1/2.5) ----
+   Fala 1-2 vezes por round (F.abT: segundos de relógio marcados no início de cada round). Primeiro procura o porquê do que se passa, com o estado
+   real da luta (pernas, mãos, guarda, jab que não chega perto, corpo, distância, cordas, precisão, counters, estilos); se não houver nada a dizer,
+   uma história ou opinião (o ginásio, a academia dele, o percurso, a desforra, o público, o título). Não repete o mesmo assunto na luta. */
+const ABL={
+  legs:['O {x} está a perder as pernas. Já não tem os pés de há bocado.','Repara nos pés do {x}: já não sai da frente.','Sem pernas, o {x} vai acabar encostado.'],
+  hands:['As mãos do {x} estão mais lentas. O cansaço vê-se aí primeiro.','O {x} já chega tarde com as mãos.'],
+  hurt:['O {x} está tocado. Abanado, já não pensa tão depressa.','Aquele queixo já não aguenta o mesmo. Cuidado, {x}.'],
+  guard:['O {x} está a baixar a guarda. Vai pagar por isso.','A guarda do {x} já não sobe como subia.'],
+  jabIn:['Colado assim, o jab do {x} não chega. Tem de abrir espaço.','Perto não há jab que valha ao {x}.'],
+  body:['Aquilo ao corpo não se vê, mas sente-se no round {n}.','O {y} já sente o corpo. O {x} está a fazer bem.'],
+  bodyL:['O {y} já baixa os cotovelos. O trabalho ao corpo pagou.'],
+  dist:['Quem manda na distância é o {x}. A luta está onde ele quer.','O {x} ganha a batalha da distância. O {y} não chega lá.'],
+  ropes:['O {y} passa demasiado tempo nas cordas. Assim só leva.','O {x} corta o ringue muito bem.'],
+  acc:['O {x} acerta quase tudo. O {y} tem de mexer a cabeça.','Cada golpe do {x} encontra caminho.'],
+  ctr:['O {x} lê os golpes. Cada vez que o {y} falha, leva.','O {y} ataca e o {x} responde. Assim não.'],
+  style:['{s} contra {t}: o estilo dá vantagem ao {x}.','Estilos fazem lutas. O {s} do {x} complica a vida ao {y}.']
+};
+const ABC={
+  gym:['Conheço o treinador do {me}. Ginásio pequeno, muito trabalho.','O {gym} anda a dar que falar no bairro.'],
+  acad:['O {op} vem da {ac}. Lá ensina-se bem.','A {ac} manda sempre gente dura.'],
+  recOp:['O {op} tem {w} vitórias, {ko} por KO. Respeito.'],
+  newOp:['Do {op} sei pouco. Vamos ver o que traz.'],
+  first:['Primeira luta do {me}. Os nervos pesam mais do que as luvas.'],
+  streak:['O {me} vem de {n} vitórias seguidas. Está confiante.'],
+  rematch:['Já lutaram na semana {w}: {res}. Há contas a acertar.'],
+  crowd:['Casa cheia! Este público quer guerra.'],
+  quiet:['Pouca gente hoje, mas quem veio sabe de boxe.'],
+  title:['Há um cinturão em jogo. Ninguém quer arriscar cedo.'],
+  old:['No meu tempo partiram-me o nariz assim. Duas vezes.','Eu aos vinte anos lutava assim. Depois aprendi.']
+};
+function abFill(l,v){return l.replace(/\{(\w+)\}/g,(m,k)=>v[k]??'')}
+function abPick(set,key,v){const L=set[key];if(!L)return null;F.abU.add(key);return abFill(pick(L),v)}
+function abRound(){ // marca quando o Abílio fala neste round
+  F.abU=F.abU||new Set();F.abT=[R(35,75)];if(Math.random()<.6)F.abT.push(R(105,150));
+  F.ab0={me:{...F.me.dx.d,z:{...F.me.dx.z},bl:F.me.bodyL},op:{...F.op.dx.d,z:{...F.op.dx.z},bl:F.op.bodyL}};
+}
+function abInsight(){
+  const{me,op}=F,C=[],add=(k,sc,x,y,ex={})=>{if(!F.abU.has(k))C.push({k,sc,v:{x:x.nick,y:y.nick,...ex}})};
+  for(const[x,y]of[[me,op],[op,me]]){
+    const m=mom(x);
+    if(x.hp<40)add('hurt',6,x,y);
+    if(m.pes<=.85&&x.st<45)add('legs',5,x,y);
+    if(m.defesa<=.95)add('guard',3,x,y);
+    if(m.velocidade<=.95)add('hands',2.5,x,y);
+    if(F.dist==='perto'&&x.style==='Outboxer'&&x.skills.jab>0)add('jabIn',4,x,y);
+    const bl=x.bodyL-F.ab0[x===me?'me':'op'].bl;
+    if(bl>=4&&y.st<65)F.round<F.rounds?add('body',4,x,y,{n:F.round+1}):add('bodyL',4,x,y);
+    const rs=x.rs;if(rs.thrown>=10&&y.rs.thrown>=6&&rs.landed/rs.thrown>=.5&&rs.landed/rs.thrown>y.rs.landed/Math.max(1,y.rs.thrown)+.15)add('acc',3,x,y);
+    const ct=Object.values(x.cts).reduce((t,c)=>t+c[1],0);if(ct>=3)add('ctr',3,x,y);
+  }
+  {const pm=DPREF[me.style]||'meio',po=DPREF[op.style]||'meio';if(pm!==po){const d0=F.ab0.me,D=me.dx.d,T=DN.reduce((t,d)=>t+D[d]-d0[d],0);
+    if(T>=25){const fm=(D[pm]-d0[pm])/T,fo=(D[po]-d0[po])/T;if(fm>=.6)add('dist',4,me,op);else if(fo>=.6)add('dist',4,op,me)}}}
+  for(const[x,y,k]of[[me,op,'op'],[op,me,'me']]){const z0=F.ab0[k].z,Z=y.dx.z,enc=Z.cordas+Z.canto-z0.cordas-z0.canto,tt=Z.centro+Z.cordas+Z.canto-z0.centro-z0.cordas-z0.canto;if(tt>=25&&enc/tt>=.35)add('ropes',4.5,x,y)}
+  {const e=edge(me.style,op.style);if(e&&Math.max(me.slv||1,op.slv||1)>=2){const w=e>0?me:op,l=e>0?op:me;add('style',2,w,l,{s:w.style,t:l.style})}}
+  if(!C.length)return null;C.sort((a,b)=>b.sc-a.sc||Math.random()-.5);const c=C[0];
+  return abPick(ABL,c.k,c.v);
+}
+function abColour(){
+  const{me,op}=F,a=F.a,o=a.fight.opp,C=[],add=(k,v)=>{if(!F.abU.has(k))C.push({k,v})};
+  const H=(a.hist||[]).filter(h=>h.o===op.nick);
+  if(H.length){const h=H.at(-1);add('rematch',{w:h.w,res:h.r==='V'?`ganhou o ${me.nick}`:h.r==='D'?`ganhou o ${op.nick}`:'deu empate'})}
+  if(a.fight.title)add('title',{});
+  const rc=a.rec||{w:0,l:0,d:0};if(!rc.w&&!rc.l&&!rc.d)add('first',{me:me.nick});else if((a.streak||0)>=3)add('streak',{me:me.nick,n:a.streak});
+  const r=o.rec||{w:0,ko:0};if(r.w>=3)add('recOp',{op:op.nick,w:r.w,ko:r.ko||0});else if(!r.w)add('newOp',{op:op.nick});
+  if(o.academy)add('acad',{op:op.nick,ac:o.academy});
+  add('gym',{me:me.nick,gym:S.gymName||'Ginásio Esperança'});
+  if((F.venue||0)>=2&&!F.abU.has('quiet'))add('crowd',{});else if(!F.venue&&!F.abU.has('crowd'))add('quiet',{});
+  add('old',{});
+  if(!C.length)return null;const pri=['rematch','title','first','streak'];const top=C.find(c=>pri.includes(c.k));const c=top&&Math.random()<.8?top:pick(C);
+  return abPick(ABC,c.k,c.v);
+}
+function abTick(){ // chamado depois de cada troca
+  if(!F||!F.inRound||F.over||!F.abT||!F.abT.length)return;
+  if(clockS()<F.abT[0]||!deskIdle(1200))return;
+  F.abT.shift();
+  const first=F.round===1&&!F.abU.size;
+  let t=first&&Math.random()<.75?abColour():null;
+  if(!t)t=Math.random()<.2?abColour()||abInsight():abInsight()||abColour();
+  if(t)say(t,'',{who:'ab',p:2});
+}
+/* ---- pop-ups no ringue (2.6/2.15): uma palavra de cada vez (fila), do lado de fora do pugilista a que pertence ----
+   normal: pequeno, na cor do canto (defesas, combinações, LIMPO!); especial: moldura e brilho dourado (COUNTER!, CROSS!, FÍGADO!, QUEDA!, CHECK HOOK!).
+   Opção nas definições: todos / só especiais / desligados (localStorage 'cm-popups'). */
+const POPK='cm-popups';let POPS='all';try{const v=localStorage.getItem(POPK);if(['all','esp','off'].includes(v))POPS=v}catch(e){}
+function setPops(v){POPS=v;try{localStorage.setItem(POPK,v)}catch(e){}}
+const POPW={block:'BLOQUEIO',catch:'BLOQUEIO',parry:'APARA',slip:'ESQUIVA',slipIn:'ESQUIVA',slipOut:'ESQUIVA',pull:'ESQUIVA',pend:'BAIXA',roll:'OMBRO',back:'PÉS',side:'PÉS',pivot:'PIVÔ',clinch:'CLINCH'};
+function pop(x,t,sp){
+  if(!F||!t||window.__SIM||POPS==='off'||(POPS==='esp'&&!sp))return;
+  const q=F.pq||(F.pq=[]);F.npop=F.npop||{n:0,s:0};F.npop[sp?'s':'n']++;
+  if(!sp&&q.filter(p=>!p.sp).length>=2)return; // a rotina não se acumula
+  q.push({x,t,sp:!!sp});
+  while(q.length>4){const i=q.findIndex(p=>!p.sp);q.splice(i>=0?i:0,1)}
+}
+function popTick(dt){const P=F.pc;if(P){P.age+=dt*1000*(F.paused?0:F.fast?2:1);if(P.age>=P.life+90)F.pc=null}
+  if(!F.pc&&F.pq&&F.pq.length){const n=F.pq.shift();n.age=0;n.life=n.sp?1250:720;F.pc=n}}
+function drawPop(c,pm,po){
+  const P=F.pc;if(!P||P.age>P.life)return;
+  const x=P.x,q=x===F.me?pm:po,o=x===F.me?po:pm,left=q.x<o.x||(q.x===o.x&&x===F.me),k=P.age/P.life;
+  const sc=q.s*(x.hs||1),hy=q.y-60*sc-(x.an.pose==='down'||x.an.pose==='ko'?-30*sc:0);
+  c.save();c.font=(P.sp?'bold ':'')+'8px Silkscreen, monospace';c.textBaseline='alphabetic';c.textAlign='left';
+  const w=Math.ceil(c.measureText(P.t).width),pad=P.sp?3:0,bw=w+pad*2,bh=P.sp?12:7;
+  let bx=left?q.x-6*sc-bw:q.x+6*sc;bx=Math.round(clamp(bx,3,237-bw));const by=Math.round(hy-k*7);
+  c.globalAlpha=k<.12?k/.12:k>.75?(1-k)/.25:1;
+  const me=x===F.me;
+  if(P.sp){
+    c.shadowColor='rgba(255,200,70,.85)';c.shadowBlur=7;c.fillStyle='#e8b13a';c.fillRect(bx-1,by-bh-1,bw+2,bh+2);c.shadowBlur=0;
+    c.fillStyle='#6b4a12';c.fillRect(bx-2,by-bh-2,bw+4,1);c.fillRect(bx-2,by+1,bw+4,1);c.fillRect(bx-2,by-bh-2,1,bh+4);c.fillRect(bx+bw+1,by-bh-2,1,bh+4);
+    c.fillStyle=me?'#8f2416':'#1d3f6e';c.fillRect(bx,by-bh,bw,bh);
+    c.fillStyle='#6b3a0a';c.fillText(P.t,bx+pad,by-3+1);c.fillStyle='#ffe08a';c.fillText(P.t,bx+pad,by-3);
+  }else{
+    c.fillStyle='#0c0a08';for(const[dx,dy]of[[-1,0],[1,0],[0,-1],[0,1],[0,2],[1,1],[-1,1]])c.fillText(P.t,bx+dx,by+dy);
+    c.fillStyle=me?'#ff8a72':'#7fb4ff';c.fillText(P.t,bx,by);
+  }
+  c.restore();
+}
+/* ---- balões dos treinadores (2.8): a ordem gritada por cima do nosso treinador, a reaparecer enquanto o atleta não ouve;
+   o treinador adversário grita coisas de ambiente de vez em quando (sem efeito na luta, por agora) ---- */
+const OPSH=['Mexe a cabeça!','Jab, jab!','Mãos em cima!','Respira!','Ao corpo!','Sai daí!','Trabalha!','Pés, pés!','Queixo em baixo!','Agora!'];
+function balTick(dt){
+  if(!F.inRound||F.over||F.paused)return;const B=F.opb||(F.opb={next:R(6,12),until:0,t:''});
+  B.next-=dt*(F.fast?2:1);if(B.next<=0){B.t=pick(OPSH);B.until=(F.rt||0)+2000;B.next=R(11,20)}
+}
+function wrap2(c,t,max){if(c.measureText(t).width<=max)return[t];const w=t.split(' ');let a='';for(let i=0;i<w.length;i++){const n=a?a+' '+w[i]:w[i];if(c.measureText(n).width>max&&a)return[a,w.slice(i).join(' ')];a=n}return[t]}
+function balloon(c,hx,hy,t,me){
+  c.save();c.font='8px Silkscreen, monospace';c.textAlign='left';c.textBaseline='alphabetic';
+  const L=wrap2(c,t,120),w=Math.ceil(Math.max(...L.map(l=>c.measureText(l).width)))+6,h=L.length*8+4;
+  const bx=Math.round(clamp(hx-(me?12:w-12),2,238-w)),by=Math.round(hy-h-5);
+  c.fillStyle=me?'#8f2416':'#1d3f6e';c.fillRect(bx-1,by-1,w+2,h+2);
+  c.fillStyle=me?'#f4ecdc':'#dde6f2';c.fillRect(bx,by,w,h);
+  const tx=Math.round(clamp(hx,bx+4,bx+w-5));c.fillStyle=me?'#8f2416':'#1d3f6e';c.fillRect(tx-2,by+h+1,5,1);c.fillRect(tx-1,by+h+2,3,1);c.fillRect(tx,by+h+3,1,1);
+  c.fillStyle=me?'#f4ecdc':'#dde6f2';c.fillRect(tx-1,by+h,3,1);c.fillRect(tx,by+h+1,1,1);
+  c.fillStyle='#1a1410';L.forEach((l,i)=>c.fillText(l,bx+3,by+8+i*8));
+  c.restore();
+}
+function drawBalloons(c,now){
+  if(!F.crew)return;
+  const head=side=>{const m=F.crew.find(m=>m.side===side&&m.lk.role==='boss');if(!m||m.hidden)return null;const p=proj(m.x,m.y),sc=Math.min(p.s,1.16)*.78;return{x:p.x,y:p.y-(m.pose==='talk'||m.pose==='ice'||m.pose==='water'?40:50)*sc}};
+  const o=F.ord;
+  if(o&&o.txt&&F.inRound&&!F.over){const ph=((F.rt||0)-o.t0)%3600;if(ph<2300){const h=head('me');if(h)balloon(c,h.x,h.y,o.txt,true)}}
+  const B=F.opb;if(B&&(F.rt||0)<B.until&&F.inRound&&!F.over){const h=head('op');if(h)balloon(c,h.x,h.y,B.t,false)}
+}
+/* ---- ringue a ocupar o espaço livre: por cima tecto do pavilhão, por baixo o público da frente (2.3/2.13) ---- */
+function fitStage(){
+  if(!F)return;const sw=$('#fightRoot .stagew'),cv=$('#ring');if(!sw||!cv)return;
+  const W=sw.clientWidth-6,Hc=sw.clientHeight-6;if(W<60||Hc<60)return;
+  const H=clamp(Math.round(240*Hc/W),120,480);if(cv.height!==H)cv.height=H;
+  const ex=H-240;F.EX=ex>=0?Math.round(ex*.72):ex;F.EB=ex>=0?ex-F.EX:0;
+}
+function drawFrame(c,H){
+  const EX=F.EX||0,EB=F.EB||0;
+  if(EX>0){const g=c.createLinearGradient(0,0,0,EX+8);g.addColorStop(0,'#0e0b09');g.addColorStop(1,'#2a221c');c.fillStyle=g;c.fillRect(0,0,240,EX+2);
+    c.fillStyle='#3a3029';for(let x=-20;x<260;x+=30)c.fillRect(x,0,2,EX);for(let y=6;y<EX;y+=16)c.fillRect(0,y,240,1);
+    c.fillStyle='#4d4037';for(let x=-20;x<260;x+=30)for(let y=0;y<EX;y+=16)c.fillRect(x,y,2,2);
+    if(EX>30)for(const lx of[48,120,192]){c.fillStyle='#55473c';c.fillRect(lx,0,1,EX-26);c.fillStyle='#222';c.fillRect(lx-7,EX-27,15,5);c.fillStyle='#fff3c8';c.fillRect(lx-6,EX-22,13,2);
+      c.fillStyle='rgba(255,240,190,.06)';c.beginPath();c.moveTo(lx-6,EX-20);c.lineTo(lx+7,EX-20);c.lineTo(lx+40,EX+30);c.lineTo(lx-40,EX+30);c.fill()}}
+  if(EB>0){const y0=H-EB;c.fillStyle='#1b1511';c.fillRect(0,y0,240,EB);c.fillStyle='#2c231c';c.fillRect(0,y0,240,2);
+    const jump=performance.now()<F.crowd,t=performance.now()/1000;
+    for(let i=0;i<35;i++){const x=i*7+1,hh=clamp(EB-8-(i*37%5),6,40),b=jump&&Math.sin(t*12+i)>0?-2:0;c.fillStyle=['#2a1e17','#1f242e','#2e2217','#251d1f'][i%4];c.fillRect(x,H-hh+5+b,6,hh);
+      c.fillStyle=['#c98f62','#7a4a2a','#e8b78f','#5a3a22'][i%4];c.fillRect(x+1,H-hh+b,4,4);c.fillStyle='#1a120c';c.fillRect(x+1,H-hh+b,4,1)}}
 }
 function spd(){return F.fast?.3:1}
 function slowF(){return F.zoom&&performance.now()<F.zoom.until?2.4:1}
 async function fsleep(ms,count=true){if(count){F.ft+=ms;orderTick()}await sleep(ms*spd()*slowF());while(F&&(F.paused||F.towelAsk))await sleep(120);hud()}
 function act(x,pose,dur,extra={}){x.an={pose,t0:performance.now(),dur:Math.max(1,dur*spd()*slowF()),arm:extra.arm||x.an.arm,side:extra.side||1,body:!!extra.body}}
 async function waitArrive(maxMs){
-  const t0=performance.now();
-  while(F&&performance.now()-t0<maxMs*spd()){if([F.me,F.op].every(x=>Math.hypot(x.pos.tx-x.pos.x,x.pos.ty-x.pos.y)<1.5))break;await sleep(40)}
+  let t0=performance.now();
+  while(F&&performance.now()-t0<maxMs*spd()){if([F.me,F.op].every(x=>Math.hypot(x.pos.tx-x.pos.x,x.pos.ty-x.pos.y)<1.5))break;if(F.paused||F.towelAsk){const p0=performance.now();while(F&&(F.paused||F.towelAsk))await sleep(100);t0+=performance.now()-p0;continue}await sleep(40)}
   if(F){F.ft+=(performance.now()-t0)/spd();orderTick();hud()}
 }
 function setT(x,tx,ty){x.pos.tx=clamp(tx,LIM.x0,LIM.x1);x.pos.ty=clamp(ty,LIM.y0,LIM.y1)}
@@ -1896,10 +2219,10 @@ async function enterRing(){
   F.skipIn=!!window.__SIM;F.refLock=true;F.ref.x=F.ref.tx=120;F.ref.y=F.ref.ty=88;
   me.robe='#8f2a1b';op.robe='#1d3f6e';me.hidden=true;op.hidden=true;
   op.pos={x:196,y:-14,tx:196,ty:-14};me.pos={x:44,y:-14,tx:44,ty:-14};
-  const fc=$('#fctl');fc.innerHTML=`<button class="btn" id="skipIn">SALTAR ENTRADA</button>`;setBooth(true);
+  const fc=$('#fctl');fc.innerHTML=`<button class="btn" id="skipIn">SALTAR ENTRADA</button>`;
   $('#skipIn').onclick=()=>{F.skipIn=true};
   const evN=f.title?`combate pelo título ${TIERS[a.tier].n}`:['Torneio Amador','Liga Regional','Gala Nacional','Gala Mundial'][a.tier];
-  say(`Boa noite e bem-vindos ao ${VENUES[F.venue||0]}! Esta noite: ${evN}.`,'sys');F.cheer=.5;F.crowd=performance.now()+1500;
+  say(`Boa noite e bem-vindos ao ${VENUES[F.venue||0]}! Esta noite: ${evN}.`,'sys',{p:3});F.cheer=.5;F.crowd=performance.now()+1500;
   await pauseIn(1600);
   const fm=fame(a,true),fo=fame(o,false),sh=fm/(fm+fo);const cm=clamp(.08+.87*sh,.06,.95),co=clamp(.08+.87*(1-sh),.06,.95);
   const react=(c,n)=>c>.65?`O público levanta-se todo para ${n}!`:c>.4?`Bons aplausos para ${n}.`:c>.2?`Alguns aplausos para ${n}.`:`Quase ninguém conhece ${n}. Palmas tímidas.`;
@@ -1925,17 +2248,17 @@ async function ceremony(){
   me.pos.tx=102;me.pos.ty=84;op.pos.tx=138;op.pos.ty=84;F.ref.tx=120;F.ref.ty=94;
   await waitArrive(3500);await sleep(300);
   F.ref.pose='hold';say('O árbitro chama os dois ao centro e segura-lhes os pulsos...','sys');await sleep(1500);
-  if(!win){F.ref.pose='raise2';act(me,'win1',99999);act(op,'win1',99999);F.bigTop=true;F.big='EMPATE';say('...e levanta os dois braços. Empate!','sys');await sleep(2800);return}
+  if(!win){F.ref.pose='raise2';act(me,'win1',99999);act(op,'win1',99999);F.bigTop=true;F.big='EMPATE';say('...e levanta os dois braços. Empate!','sys',{p:3});await sleep(2800);return}
   const pw=proj(win.pos.x,win.pos.y),pr=proj(F.ref.x,F.ref.y);F.ref.side=pw.x>pr.x?1:-1;
   F.ref.pose='raise';act(win,'win1',99999);act(lose,'sad',99999);SFX.play(win.mine?'fanfare':'lose');
-  say(`E o vencedor... ${win.name.split(' ')[0]} "${win.nick}"!`,win.mine?'me':'');F.crowd=performance.now()+(win.mine?3500:1500);F.flashes=performance.now()+1500;
+  say(`E o vencedor... ${win.name.split(' ')[0]} "${win.nick}"!`,win.mine?'me':'',{p:3});F.crowd=performance.now()+(win.mine?3500:1500);F.flashes=performance.now()+1500;
   await sleep(2300);
   if(title){
-    F.ref.pose='present';say(`O cinturão ${TIERS[F.a.tier].n} é entregue a ${win.nick}!`,'sys');await sleep(1600);
+    F.ref.pose='present';say(`O cinturão ${TIERS[F.a.tier].n} é entregue a ${win.nick}!`,'sys',{p:3});await sleep(1600);
     F.ref.pose='stand';F.ref.tx=120;F.ref.ty=60;
     act(win,'belt',99999);if(win.mine)setTimeout(()=>SFX.play('fanfare'),300);F.confetti=performance.now();F.conf=null;F.crowd=performance.now()+6500;F.flashes=performance.now()+4500;
     if(win.mine){F.bigTop=true;F.big='CAMPEÃO!'}
-    say(win.mine?`${win.nick} é o novo campeão ${TIERS[F.a.tier].n}! Isto vem abaixo!`:`${win.nick} levanta o cinturão. Fica para a próxima.`,win.mine?'me':'sys');
+    say(win.mine?`${win.nick} é o novo campeão ${TIERS[F.a.tier].n}! Isto vem abaixo!`:`${win.nick} levanta o cinturão. Fica para a próxima.`,win.mine?'me':'sys',{p:3});
     await sleep(4800);
   }else{F.ref.pose='stand';act(win,'celebrate',99999);await sleep(win.mine?2400:1600)}
 }
@@ -1945,7 +2268,7 @@ function opSwitch(){
   if(Math.random()>[0,0,.4,.6][tier])return;
   const opts=STYLES.filter(x=>x!==op.style&&styleLv(op,x)>=2&&edge(x,me.style)>cur).sort((p,q)=>edge(q,me.style)-edge(p,me.style)||styleLv(op,q)-styleLv(op,p));
   if(!opts.length)return;op.style=opts[0];op.slv=styleLv(op,op.style);
-  say(`O canto de ${op.nick} mexe-se: ele muda para ${op.style}!`,'sys');
+  say(`O canto de ${op.nick} mexe-se: ele muda para ${op.style}!`,'sys',{p:3});
 }
 /* ---- ordens do canto durante o round ----
    Gritas uma estratégia e o treinador continua a gritá-la até o atleta "ouvir". A cada momento o atleta vai percebendo
@@ -1954,7 +2277,7 @@ function opSwitch(){
    Se o gongo tocar antes, ouve-te no canto, no intervalo. Uma ordem nova substitui a anterior e recomeça.
    A toalha é para o árbitro: acaba a luta logo (com confirmação). F.autoOrd agenda ordens nos testes (window.__sim). */
 const SHOUT={'Pressão':['Vai! Em cima dele!','Pressão! Não o deixes respirar!','Agora! Mãos e para a frente!'],'Equilibrado':['Com cabeça! Faz o teu boxe!','Calma! Nem para a frente nem para trás!','Equilibra! Jab e respira!'],'Cautela':['Guarda alta! Sai daí!','Cautela! Mexe-te e defende!','Para trás! Não troques com ele!']};
-function hearFactors(x){return{f:clamp((70-x.st)/50,0,1),h:clamp((60-x.hp)/45,0,1)+TUNE.hearKd*((F.op.rs&&F.op.rs.kd)||0)}}
+function hearFactors(x){const m=mom(x);return{f:m.hf,h:m.hh+TUNE.hearKd*((F.op.rs&&F.op.rs.kd)||0)}} // o estado do momento (mom) também decide se ouve
 function hearDelay(x,j=1){ // segundos que demoraria a ouvir se ficasse sempre neste estado (Infinity = não ouve)
   const{f,h}=hearFactors(x);
   if(f>=TUNE.hearDeaf&&h>=TUNE.hearDeaf)return Infinity;
@@ -1966,12 +2289,12 @@ function giveOrder(s){
   if(!F||F.over||!F.inRound||!STRAT[s])return;const me=F.me,o=F.ord;
   if(o&&o.s===s)return;
   if(!o&&me.strat===s)return;
-  if(o&&me.strat===s){F.ordLog.push({...o,lost:'cancel'});F.ord=null;say(`Mudas de ideias: ${me.nick} continua em ${s}.`,'sys');roundCtl();return}
+  if(o&&me.strat===s){F.ordLog.push({...o,lost:'cancel'});F.ord=null;say(`Mudas de ideias: ${me.nick} continua em ${s}.`,'me',{who:'tu'});roundCtl();return}
   if(o)F.ordLog.push({...o,lost:'replaced'});
-  F.shout=performance.now()+1800;
-  say(`Gritas do canto: "${pick(SHOUT[s])}"`,'me');
+  F.shout=performance.now()+1800;const txt=pick(SHOUT[s]);
+  say(`Gritas: "${txt}"`,'me',{who:'tu'});
   const{f,h}=hearFactors(me),j=R(1-TUNE.hearJit,1+TUNE.hearJit),d=hearDelay(me,j);
-  F.ord={r:F.round,s,from:me.strat,t:Math.round(clockS()),st:Math.round(me.st),hp:Math.round(me.hp),kd:(F.op.rs&&F.op.rs.kd)||0,f:+f.toFixed(2),h:+h.toFixed(2),j,p:0,lt:clockS(),deaf:d===Infinity,wasDeaf:d===Infinity,saidDeaf:d===Infinity};
+  F.ord={txt,t0:F.rt||0,r:F.round,s,from:me.strat,t:Math.round(clockS()),st:Math.round(me.st),hp:Math.round(me.hp),kd:(F.op.rs&&F.op.rs.kd)||0,f:+f.toFixed(2),h:+h.toFixed(2),j,p:0,lt:clockS(),deaf:d===Infinity,wasDeaf:d===Infinity,saidDeaf:d===Infinity};
   if(F.ord.deaf)say(line('deaf',{x:me.nick}),'bad');
   else if(d>=TUNE.hearSlow)say(line('slow',{x:me.nick}),'half');
   roundCtl();
@@ -2010,7 +2333,7 @@ function throwTowel(){
   F.over={win:false,how:'toalha'};F.endT=Math.round(clockS());F.towelT=performance.now();F.big='TOALHA';F.count=null;F.refLock=true;F.ref.pose='stand';
   F.ref.tx=clamp(F.me.pos.x+18,LIM.x0,LIM.x1);F.ref.ty=clamp(F.me.pos.y-8,LIM.y0,LIM.y1);
   if(F.me.an.pose!=='down')act(F.me,'guard',1);act(F.op,'guard',1);
-  SFX.play('bell');say(`A toalha voa do canto vermelho! O árbitro pára a luta. ${F.me.nick} está salvo, mas perde.`,'sys');
+  SFX.play('bell');say(`A toalha voa do canto vermelho! O árbitro pára a luta. ${F.me.nick} está salvo, mas perde.`,'sys',{p:3});
   roundCtl();hud();
 }
 function roundCtl(){
@@ -2040,9 +2363,9 @@ async function runFight(){
   await preTalk();
   for(F.round=1;F.round<=F.rounds;F.round++){
     F.ft=0;F.me.rs=newRS();F.op.rs=newRS();
-    F.ord=null;F.heard=null;F.live=true;F.inRound=false;roundCtl();setBooth(true);
-    say(line('start',{n:F.round}),'sys');SFX.play('bell');
-    if(F.round===1){const fm=F.me.form||0;if(fm>=.3)say(`${F.me.nick} entra em grande forma, muito solto.`,'sys');else if(fm<=-.3)say(`${F.me.nick} parece pesado hoje...`,'sys')}
+    F.ord=null;F.heard=null;F.live=true;F.inRound=false;roundCtl();
+    say(line('start',{n:F.round}),'sys');SFX.play('bell');abRound();F.opb=null;
+    if(F.round===1){const fm=F.me.form||0;if(fm>=.3)say(`${F.me.nick} entra em grande forma, muito solto.`,'sys',{p:1.5});else if(fm<=-.3)say(`${F.me.nick} parece pesado hoje...`,'sys',{p:1.5})}
     if(F.crew)setCrew('round');act(F.me,'guard',1);act(F.op,'guard',1);
     setT(F.me,98,88);setT(F.op,142,88);F.refLock=false;F.zone='center';F.zp=null;F.ctl=null;F.dw=null;F.dist='meio';
     for(const x of[F.me,F.op]){x.wobbly=x.wob2||0;x.wob2=0} // pernas bambas: o que sobra depois do intervalo
@@ -2055,7 +2378,7 @@ async function runFight(){
     toCorners();
     await waitArrive(2500);if(!F.over&&F.round<F.rounds){act(F.me,'sit',99999);act(F.op,'sit',99999);if(F.crew)setCrew('break')}
     await fsleep(400,false);
-    if(F.round<F.rounds){const c=await corner();if(c==='towel'){F.over={win:false,how:'toalha'};say(`Atiras a toalha. ${F.me.nick} está salvo, mas perde.`,'sys');break}if(F.over)break;opSwitch();await preTalk(true)}
+    if(F.round<F.rounds){const c=await corner();if(c==='towel'){F.over={win:false,how:'toalha'};say(`Atiras a toalha. ${F.me.nick} está salvo, mas perde.`,'sys',{p:3});break}if(F.over)break;opSwitch();await preTalk(true)}
   }
   if(!F.over){
     const a=F.me.card,b=F.op.card;
@@ -2063,13 +2386,13 @@ async function runFight(){
     setT(F.me,104,88);setT(F.op,136,88);F.refLock=true;F.ref.tx=120;F.ref.ty=70;
     await sleep(900);
     F.big=F.over.draw?'EMPATE':'DECISÃO';
-    say(F.over.draw?`Os juízes dão empate: ${a}-${b}.`:`Decisão dos juízes, ${Math.max(a,b)}-${Math.min(a,b)}: vitória de ${F.over.win?F.me.nick:F.op.nick}!`,'sys');
+    say(F.over.draw?`Os juízes dão empate: ${a}-${b}.`:`Decisão dos juízes, ${Math.max(a,b)}-${Math.min(a,b)}: vitória de ${F.over.win?F.me.nick:F.op.nick}!`,'sys',{p:3});
   }
   fc.innerHTML='';await ceremony();
   const an=buildAnalysis();F.an=an;addHist(F.a,an);
   const r=finishFight();
   const done=F.done;
-  SFX.ambient(0);$('#fightRoot').innerHTML='';F=null;
+  SFX.ambient(0);if(F.ro)F.ro.disconnect();$('#fightRoot').innerHTML='';F=null;
   await resultInfo(r.title,r.html,an);
   done(r.line);
 }
@@ -2187,7 +2510,7 @@ function styleOptions(op){
 }
 function preTalk(mid){
   return new Promise(res=>{
-    setBooth(false);const{me,op}=F;const a=F.a,o=a.fight.opp;
+    const{me,op}=F;const a=F.a,o=a.fight.opp;
     let disadv=edge(me.style,op.style)<0;let fsty=me.style;
     F.usedQ=F.usedQ||[];
     let kind,question,opts,sit=null;
@@ -2240,7 +2563,7 @@ function preTalk(mid){
           }
         }
         F.talks.push({r:mid?F.round+1:1,n:x.n,lab,kind,dis:disadv});
-        say(`${me.nick}: ${reply}`,cls);SFX.play(cls==='ok'?'good':cls==='half'?'half':'bad');
+        say(`${me.nick}: ${reply}`,cls,{who:'at'});SFX.play(cls==='ok'?'good':cls==='half'?'half':'bad');
         $('#fctl').innerHTML=`<div class="verdict ${cls}"><b>${lab}</b><span>${me.nick}: ${reply}</span><span class="meta">${eff}</span></div>`;
         setTimeout(res,F&&F.fast?600:2600);
       });
@@ -2259,7 +2582,7 @@ function scoreRound(){
   F.rr.push(rrOf([ms,os]));
 }
 function finM(x,o){return(o.hp<40||o.st<25)?1+TUNE.finK*(mv(x,'fin')-50)/50:1} // Instinto finalizador: vai buscá-lo quando está magoado
-function concF(att,def){if(!F||F.rounds<2)return 0;const late=clamp((F.round-1)/(F.rounds-1),0,1);return TUNE.concK*late*(mv(att,'conc')-mv(def,'conc'))/50} // Concentração nos últimos rounds
+function concF(att,def){return 0} // a Concentração nos últimos rounds passou para a Técnica do momento (mom, 2.9)
 /* ---- distância e ringue (tema 5, A3) ----
    F.dist: 'longe' | 'meio' | 'perto'. Cada atleta prefere uma distância pelo estilo (DPREF: Outboxer longe, Puncher meio, In-fighter perto).
    Em cada troca, se querem distâncias diferentes, disputam-na (ringStep): contam sobretudo os Pés que valem agora (pesEff: descem com pouco
@@ -2278,8 +2601,55 @@ const DN=['longe','meio','perto'],DI={longe:0,meio:1,perto:2};
 const DPREF={'Outboxer':'longe','Puncher':'meio','In-fighter':'perto'};
 const GAP={longe:50,meio:35,perto:22},DMUL={longe:.8,meio:1,perto:1.15},DCOST={longe:.8,meio:1,perto:1.2};
 function prefD(x){return DI[DPREF[x.style]||'meio']}
-function pesEff(x){let v=clamp(x.pes??20,1,100);if(x.st<50)v*=1-TUNE.pesSt+TUNE.pesSt*Math.max(0,x.st)/50;if(x.hp<50)v*=1-TUNE.pesHp+TUNE.pesHp*Math.max(0,x.hp)/50;if(F&&x.wobbly>F.ft)v*=TUNE.wobP;return v} // Pés que contam agora (5.4)
-function ringPow(x){return pesEff(x)+TUNE.dIQ*clamp(x.iq??20,0,100)+TUNE.dStrat*((STRAT[x.strat]||STRAT.Equilibrado).agg-.5)*100}
+/* ---- atributos do momento (2.9) ----
+   Durante a luta cada atributo conta menos conforme o estado (só nessa luta, temporário). Resumo: o cansaço tira o corpo, a dor tira a cabeça.
+   Fôlego baixo (f: 0 com fôlego >= moSt, 1 sem fôlego): Pés (muito), Velocidade, Força, Defesa e Técnica (um pouco).
+   Vida baixa (h: 0 com vida >= moHp, 1 sem vida): Queixo (e cada queda nesta luta), Ring IQ (abanado não pensa; a Calma ajuda), Defesa, Pés, Força,
+   Velocidade e Técnica (um pouco). Pernas bambas: Pés. Concentração baixa: Técnica nos últimos rounds. A Resistência não desce (é o próprio fôlego).
+   mom(x) devolve o multiplicador de cada atributo (1 = inteiro) e, no mesmo sítio, os outros efeitos do estado que já existiam (acerto e dano com
+   pouco fôlego, golpes mais lentos, defesa de cabeça cansada, counters e antecipação sem pernas, ouvir o canto). E(x,k) = atributo que conta agora.
+   Números por afinar (fase 7): constantes m*, pesSt/pesHp/wobP e w* no TUNE. */
+function mom(x){
+  const st=x.st,hp=x.hp,f=clamp((TUNE.moSt-st)/TUNE.moSt,0,1),h=clamp((TUNE.moHp-hp)/TUNE.moHp,0,1),wob=!!(F&&x.wobbly>F.ft);
+  const late=F&&F.rounds>1?clamp((F.round-1)/(F.rounds-1),0,1):0;
+  return{f,h,wob,
+    pes:(1-TUNE.pesSt*f)*(1-TUNE.pesHp*h)*(wob?TUNE.wobP:1),
+    velocidade:1-TUNE.mVelSt*f-TUNE.mVelHp*h,
+    forca:1-TUNE.mForSt*f-TUNE.mForHp*h,
+    defesa:1-TUNE.mDefSt*f-TUNE.mDefHp*h,
+    tecnica:1-TUNE.mTecSt*f-TUNE.mTecHp*h-TUNE.mTecConc*late*clamp((50-mv(x,'conc'))/50,0,1),
+    queixo:Math.max(TUNE.mQxMin,1-TUNE.mQxHp*h-TUNE.mQxKd*(x.kd||0)),
+    iq:1-TUNE.mIqHp*h*(1-TUNE.mIqCalm*clamp((mv(x,'calma')-50)/50,-1,1)),
+    resistencia:1,
+    hitA:st<=30?-.1:st<70?-.03:0,                 // acerto de quem bate cansado
+    hitD:st<=30?TUNE.tdB:st<70?TUNE.tdA:0,        // cansado é mais fácil de acertar
+    dmgK:.55+.45*st/100,                           // força do golpe com o fôlego
+    durK:st>=70?1:st>30?1.1:1.25,                  // golpes mais lentos
+    headK:st<50?.6+.4*Math.max(0,st)/50:1,         // movimento de cabeça cansado
+    lowK:st<30?.6:1,                               // counters e antecipação sem pernas
+    ccK:st<30?.5:1,
+    hf:clamp((70-st)/50,0,1),hh:clamp((60-hp)/45,0,1)}; // ouvir o canto (hearFactors)
+}
+function E(x,k){const v=x[k]??(k==='queixo'?50:20);return v*mom(x)[k]}
+function stWords(x){ // palavras de estado (2.10): só quando algo desce muito
+  const m=mom(x),w=[];
+  if(m.pes<=TUNE.wPes)w.push('SEM PERNAS');
+  if(m.velocidade<=TUNE.wVel)w.push('MÃOS LENTAS');
+  if(m.queixo<=TUNE.wQx||m.iq<=TUNE.wIq||m.wob)w.push('ABANADO');
+  if(m.defesa<=TUNE.wDef)w.push('SEM GUARDA');
+  return w;
+}
+function stWhy(x,ws){ // uma frase curta para o canto
+  const me=x.mine,has=w=>ws.includes(w);
+  if(!ws.length)return x.st>=60&&x.hp>=60?(me?'Fresco: aguenta o ritmo.':'Ainda inteiro.'):(me?'Ainda aguenta.':'Ainda aguenta, mas já sente.');
+  if(has('SEM PERNAS')&&has('ABANADO'))return me?'Cansado e tocado: ouve pior.':'Cansado e tocado: é agora.';
+  if(has('ABANADO'))return me?'Tocado: o queixo cede, pensa devagar.':'Tocado: o queixo já cede.';
+  if(has('SEM PERNAS'))return me?'Sem pernas: vai acabar nas cordas.':'Sem pernas: encosta-o às cordas.';
+  if(has('SEM GUARDA'))return me?'Sem guarda: chega-se-lhe à cabeça.':'Abre a guarda: chega-lhe à cabeça.';
+  return me?'Mãos lentas: acerta menos.':'Mãos lentas: acerta menos.';
+}
+function pesEff(x){return clamp(x.pes??20,1,100)*mom(x).pes} // Pés que contam agora (5.4): fôlego, dor e pernas bambas (mom)
+function ringPow(x){return pesEff(x)+TUNE.dIQ*clamp(E(x,'iq'),0,100)+TUNE.dStrat*((STRAT[x.strat]||STRAT.Equilibrado).agg-.5)*100}
 function newDX(){return{d:{longe:0,meio:0,perto:0},z:{centro:0,cordas:0,canto:0},ctl:0,xw:{longe:0,meio:0,perto:0},ant:[0,0],cc:[0,0,0],ang:[0,0],clo:[0,0],esc:{pes:0,clinch:0,bater:0},wob:[0,0]}}
 function distTick(){ // conta o tempo (segundos de relógio) de cada um em cada distância e sítio do ringue
   if(!F||!F.inRound)return;const dt=Math.max(0,F.ft-(F.dT||0));F.dT=F.ft;if(!dt)return;const s=dt*3/1000;
@@ -2296,7 +2666,7 @@ function zoneIn(){F.zone=F.zone==='corner'?'ropes':'center';if(F.zone==='center'
 function antKey(x){const j=x.skills.jab>0,g=x.skills.ganchoF>0;if(F.dist==='longe')return j?'jab':null;return g&&(!j||Math.random()<.6)?'ganchoF':j?'jab':null}
 function antP(x,o,k){ // 4.2: apanhá-lo a entrar. Ring IQ, Velocidade, Pés, nível e crença no jab / gancho da frente
   if(!k||x.hunch>F.ft)return 0;const lv=x.skills[k]||1;
-  return TUNE.antK*(.5+clamp(x.iq??20,0,100)/100)*(.6+x.velocidade/125)*(.6+pesEff(x)/125)*(.7+.15*lv)*clamp(belOf(x,k)/Math.max(1,lv),.4,1.3)*(x.st<30?.6:1);
+  return TUNE.antK*(.5+clamp(E(x,'iq'),0,100)/100)*(.6+E(x,'velocidade')/125)*(.6+pesEff(x)/125)*(.7+.15*lv)*clamp(belOf(x,k)/Math.max(1,lv),.4,1.3)*mom(x).lowK;
 }
 async function ringStep(){
   const{me,op}=F;let di=DI[F.dist],ev=null,cl=null,kp=null;const pm=prefD(me),po=prefD(op);F.dw=null;
@@ -2390,7 +2760,7 @@ async function exchange(){
   const AM=fmods(att),DM=fmods(def);let n=1;const pc=(AM.vol-1)*.8+.35+STRAT[strat].combo+(att.style==='In-fighter'?.15:att.style==='Outboxer'?-.1:0)*sf(att)/.74;if(att.st>25&&Math.random()<pc)n++;if(att.st>45&&Math.random()<pc*.5)n++;
   let seq=null;
   if(F.dist==='longe'&&n>2&&Math.random()<.5)n--; // longe: menos golpes seguidos
-  if(n>=2){const kc=knownCombos(att).filter(c=>c.seq.length<=n+2&&(att.st>30||c.seq.length<=2));if(kc.length&&Math.random()<.7){const c=kc.at(-1-Math.floor(Math.random()*Math.min(2,kc.length)));seq=c.seq;n=seq.length;say(`${c.n}! Combinação de ${att.nick}.`,att.mine?'me':'')}}
+  if(n>=2){const kc=knownCombos(att).filter(c=>c.seq.length<=n+2&&(att.st>30||c.seq.length<=2));if(kc.length&&Math.random()<.7){const c=kc.at(-1-Math.floor(Math.random()*Math.min(2,kc.length)));seq=c.seq;n=seq.length;say(`${c.n}! Combinação de ${att.nick}.`,att.mine?'me':'',{p:1})}}
   let landed=0;const thrown=[];
   for(let i=0;i<n;i++){
     let k,tgt;
@@ -2411,19 +2781,19 @@ async function exchange(){
       else if(fam==='bloqueio'&&Math.random()<.35)break;
     }
   }
-  if(thrown.length>=2&&landed>=2)say(line('combo',{a:att.nick,n:landed,c:pNums(thrown)}),att.mine?'me':'');
+  if(thrown.length>=2&&landed>=2){pop(att,pNums(thrown));say(line('combo',{a:att.nick,n:landed,c:pNums(thrown)}),att.mine?'me':'')}
   else if(att.style==='In-fighter'&&Math.random()<.12)say(line('pressure',{a:att.nick}));
   if(F.zp===att&&F.zone!=='center'&&landed>=2&&Math.random()<.5){zoneIn();att.dx.esc.bater++;say(line('d_out',{x:def.nick,y:att.nick}),att.mine?'me':'')} // sai a bater
   {const dm=me.tot.dmg-m0,dp=op.tot.dmg-o0;if(Math.abs(dm-dp)>.5)(dm>dp?me:op).dx.xw[d0]++} // trocas ganhas em cada distância
   for(const x of[me,op]){if(x.cut)x.hp=Math.max(1,x.hp-x.cut*.4)}
   {const x=me.st<op.st?me:op;if(x.st<=30&&Math.random()<.15)say(line('tired',{x:x.nick}));else if(x.st<70&&Math.random()<.05)say(line('tiring',{x:x.nick}))}
   const b=unit(att,def);setT(att,att.pos.tx-b.dx*8,att.pos.ty-b.dy*8);
-  hud();
+  hud();abTick();
 }
 async function clinch(who){
   const{me,op}=F;const u=unit(op,me);if(who&&who.rs)who.rs.cl++; // os juízes não gostam de quem agarra
   setT(me,op.pos.x+u.dx*19,op.pos.y+u.dy*19);await waitArrive(900);
-  act(me,'clinch',1700);act(op,'clinch',1700);say(line('clinch',{a:who===me?op.nick:me.nick,d:(who||me).nick}));
+  act(me,'clinch',1700);act(op,'clinch',1700);pop(who||me,'CLINCH');say(line('clinch',{a:who===me?op.nick:me.nick,d:(who||me).nick}));
   {const mx=(me.pos.x+op.pos.x)/2,my=(me.pos.y+op.pos.y)/2,sd=Math.sign((F.ref.x-mx)*(-u.dy)+(F.ref.y-my)*u.dx)||1;F.refLock=true;F.ref.tx=mx-u.dy*sd*17;F.ref.ty=my+u.dx*sd*17}
   await fsleep(1300);
   setT(me,me.pos.x+u.dx*14,me.pos.y+u.dy*14);setT(op,op.pos.x-u.dx*14,op.pos.y-u.dy*14);
@@ -2458,7 +2828,7 @@ function chooseTarget(att,def,k){ // cabeça ou corpo: estilo, ordem do canto, e
 }
 function chooseDef(x,o,k,body){
   const cls=body?'body':SKILLS[k].cls,fams=DKEYS.filter(f=>(x.def[f]||0)>0);if(!fams.length)return null;
-  const need=x.st<=35||x.hp<40,read=Math.random()<clamp(TUNE.readB+((x.iq??20)-30)/150,.25,.92),pref=DSTY[x.style]||{};
+  const need=x.st<=35||x.hp<40,read=Math.random()<clamp(TUNE.readB+(E(x,'iq')-30)/150,.25,.92),pref=DSTY[x.style]||{};
   return wpick(fams,f=>{if(f==='clinch'&&!need)return .04;const E=read?DEFS[f].E[cls]:.55;
     return E*E*(pref[f]||1)*bf(belOf(x,f))*(f==='clinch'?2.5:1)*((f==='cabeca'||f==='pes')&&x.st<40?.6:1)*(need&&f==='bloqueio'?1.3:1)*distFit(f,curDist())});
 }
@@ -2473,9 +2843,9 @@ function subDef(fam,k,body,x){ // a forma concreta da defesa (para o comentador,
 }
 function defPow(x,fam,k,body){ // quanto a defesa escolhida tira à hipótese de acertar (negativo = defesa errada para este golpe)
   let lf=.5+.15*(x.def[fam]||0);const cls=body?'body':SKILLS[k].cls;
-  if(fam==='cabeca')lf*=x.st<50?.6+.4*x.st/50:1;                                    // piora com o cansaço
+  if(fam==='cabeca')lf*=mom(x).headK;                                                // piora com o cansaço
   if(fam==='pes')lf*=.6+pesEff(x)/100;                                               // usa os Pés que contam agora (fôlego, dor, pernas bambas)
-  if(fam==='ombro')lf*=.6+clamp(x.iq??20,0,100)/100;                                 // precisa de timing
+  if(fam==='ombro')lf*=.6+clamp(E(x,'iq'),0,100)/100;                                 // precisa de timing
   return TUNE.dfK*(DEFS[fam].E[cls]*lf-TUNE.dfE0);
 }
 function ctrPick(x,sub,k){ // tabela 3.3 do Guia: o golpe de resposta (se não o souber, a alternativa; senão não há counter)
@@ -2491,11 +2861,11 @@ function ctrPick(x,sub,k){ // tabela 3.3 do Guia: o golpe de resposta (se não o
 }
 function ctrChance(x,o,fam,ck,b0){ // cabeça e ombro abrem mais; aparar e pés médio; bloqueio e clinch pouco. Ring IQ, Técnica, nível, confiança
   const base=b0??({cabeca:TUNE.ctrCab,ombro:TUNE.ctrOmb,aparar:TUNE.ctrApa,pes:TUNE.ctrPes,bloqueio:TUNE.ctrBlq,clinch:TUNE.ctrCl}[fam]||0);
-  return Math.min(TUNE.ctrMax,base*(.55+.15*(x.def[fam]||0))*(.6+clamp(x.iq??20,0,100)/100)*(.8+x.tecnica/250)*(.85+(x.conf??50)/330)*clamp(belOf(x,ck)/Math.max(1,x.skills[ck]||1),.4,1.3)
-    *(x.style!=='In-fighter'?1.15:1)*(o.style==='In-fighter'?1-TUNE.inCtr-(o.slv>=4?TUNE.inCl:0):1)*(x.st<30?.6:1));
+  return Math.min(TUNE.ctrMax,base*(.55+.15*(x.def[fam]||0))*(.6+clamp(E(x,'iq'),0,100)/100)*(.8+E(x,'tecnica')/250)*(.85+(x.conf??50)/330)*clamp(belOf(x,ck)/Math.max(1,x.skills[ck]||1),.4,1.3)
+    *(x.style!=='In-fighter'?1.15:1)*(o.style==='In-fighter'?1-TUNE.inCtr-(o.slv>=4?TUNE.inCl:0):1)*mom(x).lowK);
 }
 function livP(att,def,lv,ctr){ // gancho ao fígado: golpe forte, adversário cansado, trabalho ao corpo antes, curta distância; o Queixo ajuda pouco
-  return TUNE.livK*(.6+att.forca/100)*(1+(lv-1)*.15)*fmods(att).dmg*(def.st<30?1.8:def.st<60?1.3:1)*(1+Math.min(1.5,(def.bodyAcc||0)/40))*(1+TUNE.livClose*closeRange())*(1+.15*(50-(def.queixo??50))/50)*(ctr?1.5:1);
+  return TUNE.livK*(.6+att.forca/100)*(1+(lv-1)*.15)*fmods(att).dmg*(def.st<30?1.8:def.st<60?1.3:1)*(1+Math.min(1.5,(def.bodyAcc||0)/40))*(1+TUNE.livClose*closeRange())*(1+.15*(50-E(def,'queixo'))/50)*(ctr?1.5:1);
 }
 function varLine(att,k,body,clean,dmg,first,v){ // variações do Guia: só texto (tema 1.4), conforme o golpe, o estilo, o alvo e a distância
   const c=[],d=curDist();
@@ -2512,8 +2882,8 @@ function varLine(att,k,body,clean,dmg,first,v){ // variações do Guia: só text
    o timing depende de Ring IQ, Técnica, Velocidade e do nível do direto. Se resulta: o golpe dele não entra e o direto entra com muita hipótese de
    queda relâmpago. Se falha o timing: os dois acertam. ---- */
 function ccTry(x,o,k){if(!(x.skills.direto>0)||x.hunch>F.ft||x.wobbly>F.ft)return 0;
-  return TUNE.ccK*(.4+clamp(x.iq??20,0,100)/80)*bf(belOf(x,'direto'))*(k==='jab'?1:.8)*(F.dist==='perto'?.4:F.dist==='longe'?.7:1)*(x.st<30?.5:1)}
-function ccOk(x,o){return clamp(TUNE.ccOk+((x.iq??20)-(o.iq??20))/200+(x.tecnica-50)/250+(x.velocidade-o.velocidade)/200+.05*((x.skills.direto||1)-2),.15,.85)}
+  return TUNE.ccK*(.4+clamp(E(x,'iq'),0,100)/80)*bf(belOf(x,'direto'))*(k==='jab'?1:.8)*(F.dist==='perto'?.4:F.dist==='longe'?.7:1)*mom(x).ccK}
+function ccOk(x,o){return clamp(TUNE.ccOk+(E(x,'iq')-E(o,'iq'))/200+(E(x,'tecnica')-50)/250+(E(x,'velocidade')-E(o,'velocidade'))/200+.05*((x.skills.direto||1)-2),.15,.85)}
 async function crossCounter(att,def,k,strat,bonus,talk,flow,o){
   def.dx.cc[0]++;
   if(Math.random()<ccOk(def,att)){def.dx.cc[1]++;
@@ -2534,7 +2904,8 @@ async function punch(att,def,k,strat,bonus,talk,flow=0,o={}){
   if(o.ant)dp*=.6;                                     // apanhado a entrar
   const dist=F.dist,trap=def===F.zp&&F.zone!=='center'?F.zone:null; // encostado: defende pior
   if(trap&&dp>0)dp*=trap==='corner'?TUNE.cornD:TUNE.ropeD;
-  let hit=.5+(att.tecnica+att.velocidade-def.defesa-def.velocidade)/TUNE.hitDiv+sk.h+lv*.025+e*.05*TUNE.edge+phys(att,def,k,body)-STRAT[def.strat].def-(def.style==='In-fighter'?TUNE.sdA:def.style==='Outboxer'?TUNE.sdD:TUNE.sdC)*sf(def)/.74+(att.st<=30?-.1:att.st<70?-.03:0)+(def.st<=30?TUNE.tdB:def.st<70?TUNE.tdA:0)+(att.conf-50)/500+(att.hitB||0)+(att.tacB||0)+(ar.hit||0)-(dr.def||0)+flow+concF(att,def)+(att.form||0)*.04
+  const MA=mom(att),MD=mom(def);
+  let hit=.5+(E(att,'tecnica')+E(att,'velocidade')-E(def,'defesa')-E(def,'velocidade'))/TUNE.hitDiv+sk.h+lv*.025+e*.05*TUNE.edge+phys(att,def,k,body)-STRAT[def.strat].def-(def.style==='In-fighter'?TUNE.sdA:def.style==='Outboxer'?TUNE.sdD:TUNE.sdC)*sf(def)/.74+MA.hitA+MD.hitD+(att.conf-50)/500+(att.hitB||0)+(att.tacB||0)+(ar.hit||0)-(dr.def||0)+flow+concF(att,def)+(att.form||0)*.04
     -dp+(ctr?TUNE.ctrHit:0)+(def.hunch>F.ft?TUNE.livHit:0)+TUNE.dHit*(distFit(k,dist)-1)+(trap==='corner'?TUNE.cornH:trap?TUNE.ropeH:0)+(o.ant?TUNE.antHit:0)+(o.ang?TUNE.ctrAng:0)+(body?0:Math.min(TUNE.bodyGMax,(def.bodyAcc||0)*TUNE.bodyG)); // trabalho ao corpo baixa a guarda
   hit=clamp(hit,.12,.9);att.lastK=k;if(att.st<=30)att.lowT++;
   att.st=clamp(att.st-(TUNE.pc+STRAT[strat].cost*TUNE.scm)*(att.style==='Puncher'?1-.15*sf(att):1)*(1.5-att.resistencia/100*TUNE.resK-(1-TUNE.resK)*.35)*(att.calm===true?.85:att.calm?.93:1)*(1+TUNE.calmSt*(50-mv(att,'calma'))/50)*(ar.stam||1)*fmods(att).cost*(1-(att.form||0)*.1)*(sk.cost||1)*DCOST[dist],0,100);
@@ -2543,12 +2914,12 @@ async function punch(att,def,k,strat,bonus,talk,flow=0,o={}){
   const CT=ctr&&DEFS[ctr]?(att.cts[ctr]||(att.cts[ctr]=[0,0])):null;if(CT)CT[0]++; // o cross-counter conta à parte (x.dx.cc)
   const arm=sk.arm;att.lastArm=arm;
   const v={a:att.nick,d:def.nick,p:pLow(k)};
-  const dur=sk.dur*(att.st>=70?1:att.st>30?1.1:1.25);
+  const dur=sk.dur*MA.durK;
   act(att,sk.anim,dur,{arm,body});
   await fsleep(dur*.45);if(F.over){act(att,'guard',1);return 'over'}
   const u=unit(att,def);
   const ok=o.force||Math.random()<hit;belUpd(att,k,ok,hit);if(fam)belUpd(def,fam,!ok,1-hit); // confiança: ajusta-se durante a luta
-  const raw=()=>(3+att.forca*TUNE.forK+lv*.9)*sk.d*(att.style==='Puncher'?1+TUNE.punD*sf(att)*(def.style==='Outboxer'?.4:1):1)*(.55+.45*att.st/100)*R(.75,1.25)*(1+e*.1*TUNE.edge)*STRAT[strat].dmg*bonus*(1+(ar.dmg||0))*fmods(att).dmg*(fmods(def).chin<1&&!body?1-.15*TUNE.giftK:1)*(body?1:1+TUNE.qxD*(50-(def.queixo??50))/50)*TUNE.dmg
+  const raw=()=>(3+E(att,'forca')*TUNE.forK+lv*.9)*sk.d*(att.style==='Puncher'?1+TUNE.punD*sf(att)*(def.style==='Outboxer'?.4:1):1)*MA.dmgK*R(.75,1.25)*(1+e*.1*TUNE.edge)*STRAT[strat].dmg*bonus*(1+(ar.dmg||0))*fmods(att).dmg*(fmods(def).chin<1&&!body?1-.15*TUNE.giftK:1)*(body?1:1+TUNE.qxD*(50-E(def,'queixo'))/50)*TUNE.dmg
     *DMUL[dist]*(1+TUNE.dDmg*(distFit(k,dist)-1))*(trap==='corner'&&o.ci>0?TUNE.cornC:1); // distância; no canto as combinações fazem mais estragos
   let res;
   if(ok){
@@ -2565,23 +2936,25 @@ async function punch(att,def,k,strat,bonus,talk,flow=0,o={}){
     setT(def,def.pos.x+u.dx*(clean?9:5),def.pos.y+u.dy*(clean?9:5));
     const cls=att.mine?'me':'';
     const txt=o.ln?line(o.ln,v):ctr?line('ctr_'+o.sub,v):(Math.random()<TUNE.varP&&(talk||dmg>7||body)&&varLine(att,k,body,clean,dmg,o.first,v))||(body?line('body',v):talk||dmg>7?line(k==='jab'&&dist==='perto'?'hit_jabC':'hit_'+k,v):null);
+    if(ctr==='cross')pop(att,'CROSS!',true);else if(ctr)pop(att,'COUNTER!',true);else if(o.ln==='ant_check')pop(att,'CHECK HOOK!',true);else if(clean)pop(att,'LIMPO!');
     if(clean||def.hp<=0){F.react={by:att.mine?'me':'op',until:performance.now()+1800};F.zoom={until:performance.now()+1300*spd(),cx:(att.pos.x+def.pos.x)/2,cy:(att.pos.y+def.pos.y)/2};F.crowd=performance.now()+1500;F.flashes=performance.now()+1200;if(ctr)say(txt,cls);say(line('clean',v),'sys')}
     else if(txt)say(txt,cls);
     await fsleep(dur*.55+(clean?200:60));
     if(def.hp<=0){await knockdown(def,att);return res}
     if(!F.over&&body&&k==='ganchoF'&&Math.random()<livP(att,def,lv,ctr)){ // gancho ao fígado: leve (curvado, sem ar) ou forte e raro (queda atrasada)
+      pop(att,'FÍGADO!',true);
       if(Math.random()<TUNE.livS){att.liv[1]++;say(line('liverS',v),'sys');act(def,'hurtBody',900);await fsleep(700);await knockdown(def,att,'liver');return res}
       att.liv[0]++;def.st=clamp(def.st-TUNE.livSt,0,100);def.hunch=F.ft+TUNE.livT;act(def,'hurtBody',1800);F.crowd=performance.now()+1200;say(line('liverL',v),'sys');await fsleep(500);return res;
     }
     if(!F.over&&!body&&clean){ // queda relâmpago (à cabeça); o counter apanha-o aberto
-      let pf=sk.fl*(.5+att.tecnica/60*TUNE.resK+(1-TUNE.resK)*.58)*(1+(lv-1)*.25)*(.8+att.forca/150)*(bonus>1?2:1)*clamp(1.4-def.resistencia/100*TUNE.resK-(1-TUNE.resK)*.35,.5,1.4)*(def.st<=30?1.5:def.st<70?1.15:1)*(def.hp<50?1.3:1)*fmods(att).flash*fmods(def).chin*chinK(def);
+      let pf=sk.fl*(.5+E(att,'tecnica')/60*TUNE.resK+(1-TUNE.resK)*.58)*(1+(lv-1)*.25)*(.8+E(att,'forca')/150)*(bonus>1?2:1)*clamp(1.4-def.resistencia/100*TUNE.resK-(1-TUNE.resK)*.35,.5,1.4)*(def.st<=30?1.5:def.st<70?1.15:1)*(def.hp<50?1.3:1)*fmods(att).flash*fmods(def).chin*chinK(def);
       pf*=topF(def);if(att.style==='Puncher')pf*=1+TUNE.punF*sf(att)*(def.style==='Outboxer'?.4:1);if(ctr)pf*=ctr==='cross'?TUNE.ccFl:TUNE.ctrFl;
       if(Math.random()<Math.min(ctr==='cross'?.3:.18,pf*TUNE.flash)){await knockdown(def,att,'flash');return res}
     }
     if(def.hp<25&&Math.random()<.5){act(def,'stagger',800);say(line('stagger',v));await fsleep(750)}
   }else{
     res='def';
-    if(fam){def.dfs[fam][1]++;
+    if(fam){def.dfs[fam][1]++;if(sub!=='clinch')pop(def,POPW[sub]);
       if(fam==='bloqueio'){const c=raw()*TUNE.normMul*TUNE.blkD*topF(def);def.hp=Math.max(1,def.hp-c);def.dmgTaken+=c;def.st=clamp(def.st-1.2*(1.3-def.resistencia/100),0,100)} // a guarda absorve, mas passa algum
     }
     if(sub==='block'||sub==='catch'||sub==='parry'||sub==='roll')act(def,'block',dur*(sub==='parry'?.9:1.3));
@@ -2602,16 +2975,16 @@ async function punch(att,def,k,strat,bonus,talk,flow=0,o={}){
 }
 async function knockdown(x,att,kind){
   if(F.over)return;x.kd++;att.rs.kd++;F.kdl.push({r:F.round,t:Math.round(clockS()),me:!!x.mine,k:att.lastK,kind:kind||''});
-  act(x,'down',99999);act(att,'guard',1);SFX.play('fall');F.react={by:att.mine?'me':'op',until:performance.now()+4000};
+  act(x,'down',99999);act(att,'guard',1);SFX.play('fall');pop(att,'QUEDA!',true);F.react={by:att.mine?'me':'op',until:performance.now()+4000};
   if(kind!=='liver')say(line(kind||'down',{a:att.nick,d:x.nick}),'sys');F.crowd=performance.now()+2500;
   if(kind){if(kind==='flash'){if(!x.mine)x.src.glass=(x.src.glass||0)+1;if(!att.mine)att.src.fk=(att.src.fk||0)+1}F.zoom={until:performance.now()+1600,cx:x.pos.x,cy:x.pos.y};F.flashes=performance.now()+1500}
   const ncs=[[LIM.x0+4,LIM.y0+4],[LIM.x1-4,LIM.y1-4]];const nc=ncs.sort((p,q)=>Math.hypot(q[0]-x.pos.x,q[1]-x.pos.y)-Math.hypot(p[0]-x.pos.x,p[1]-x.pos.y))[0];
   setT(att,nc[0],nc[1]);if(Math.random()<.5)act(att,'win',2600);
   await fsleep(700);
   F.refLock=true;F.ref.tx=clamp(x.pos.x+(x.pos.x<120?24:-24),LIM.x0,LIM.x1);F.ref.ty=clamp(x.pos.y-10,LIM.y0,LIM.y1);F.ref.pose='count';
-  let getup=.45+x.resistencia/220+x.conf/500+TUNE.corG*(mv(x,'cor')-50)/50+TUNE.qxG*((x.queixo??50)-50)/50-x.kd*.12+(x.st-50)/250;
-  if(kind==='flash')getup=x.resistencia>=25||(x.queixo??50)>=60||x.gift==='queixo'?1:clamp(getup+.3,0,.94);
-  else if(kind==='liver')getup=clamp(.3+x.resistencia/300+TUNE.corG*(mv(x,'cor')-50)/50+.05*((x.queixo??50)-50)/50-(x.kd-1)*.1,.05,.75); // lúcido, mas o corpo não responde
+  const qx=E(x,'queixo');let getup=.45+x.resistencia/220+x.conf/500+TUNE.corG*(mv(x,'cor')-50)/50+TUNE.qxG*(qx-50)/50-x.kd*.12+(x.st-50)/250;
+  if(kind==='flash')getup=x.resistencia>=25||qx>=60||x.gift==='queixo'?1:clamp(getup+.3,0,.94);
+  else if(kind==='liver')getup=clamp(.3+x.resistencia/300+TUNE.corG*(mv(x,'cor')-50)/50+.05*(qx-50)/50-(x.kd-1)*.1,.05,.75); // lúcido, mas o corpo não responde
   if(x.gift==='queixo')getup+=.15;
   const ok=x.kd<3&&Math.random()<getup;
   const upAt=ok?RI(4,8):11;
@@ -2631,14 +3004,14 @@ async function knockdown(x,att,kind){
 }
 function corner(){
   return new Promise(res=>{
-    setBooth(false);const{me,op}=F;
+    const{me,op}=F;
     const b0={st:me.st,hp:me.hp};
     for(const x of[me,op]){x.st=clamp(x.st+TUNE.cr+(x.form||0)*4,0,100);x.hp=clamp(x.hp+TUNE.hprec+x.resistencia*.06+(x.form||0)*3,0,100)}
     say(`Intervalo: ${me.nick} recupera +${Math.round(me.st-b0.st)} de fôlego e +${Math.round(me.hp-b0.hp)} de vida.`,'sys');
     const ch=F.cornerHeard;F.cornerHeard=null; // ordem gritada no round que ele só ouviu agora, no canto (já está em me.strat)
     hud();
-    if(me.cut>=4){F.over={win:false,how:'médico'};say(`O médico vê os cortes de ${me.nick} e pára a luta.`,'sys');res('doc');return}
-    if(op.cut>=4){F.over={win:true,how:'médico'};say(`O médico pára a luta: ${op.nick} tem demasiados cortes!`,'sys');res('doc');return}
+    if(me.cut>=4){F.over={win:false,how:'médico'};say(`O médico vê os cortes de ${me.nick} e pára a luta.`,'sys',{p:3});res('doc');return}
+    if(op.cut>=4){F.over={win:true,how:'médico'};say(`O médico pára a luta: ${op.nick} tem demasiados cortes!`,'sys',{p:3});res('doc');return}
     if(ch)say(line('lost',{x:me.nick,s:ch.s}),'half');
     let strat=me.strat,act_=me.cut?'corte':'folego',csty=me.style;const cst=STYLES.filter(st=>st===me.style||styleLv(F.a,st)>=2);
     const s0=me.strat; // estratégia com que acabaria o round (inclui a ordem ouvida no canto)
@@ -2652,8 +3025,9 @@ function corner(){
         <span>Golpes de poder</span><span class="v">${m.power}</span><span class="v">${o.power}</span>
         <span>Quedas provocadas</span><span class="v">${m.kd}</span><span class="v">${o.kd}</span>
         <span>Pontos round / total</span><span class="v">${F.lastScore[0]}/${me.card}</span><span class="v">${F.lastScore[1]}/${op.card}</span></div>
+      <div class="stw">${[[me,'me'],[op,'op']].map(([x,k])=>{const ws=stWords(x);return `<div class="${k}"><b>${x.nick.toUpperCase()}</b><span>${ws.length?ws.map(w=>`<i>${w}</i>`).join(''):'<i class="okw">INTEIRO</i>'}</span><small>${stWhy(x,ws)}</small></div>`}).join('')}</div>
       <h3>ESTRATÉGIA DO R${F.round+1} · ELE EM ${op.strat.toUpperCase()}</h3><div class="cseg">${Object.keys(STRAT).map(k=>`<button class="btn ${strat===k?'on':''}" data-s="${k}">${k.toUpperCase()}</button>`).join('')}</div>
-      <p class="meta" style="font-size:12px">${ch?`<span class="chd">Ouviu no canto o que gritavas: ${ch.s}.</span> `:''}${STRAT_D[strat]}</p>
+      <p class="meta" style="font-size:16px">${ch?`<span class="chd">Ouviu no canto o que gritavas: ${ch.s}.</span> `:''}${STRAT_D[strat]}</p>
       ${cst.length>1?`<div class="cseg">${cst.map(st=>`<button class="btn ${csty===st?'on':''}" data-cs="${st}">${st.toUpperCase()} ${styleLv(F.a,st)}${edge(st,op.style)>0?' ▲':edge(st,op.style)<0?' ▼':''}</button>`).join('')}</div>`:''}
       <div class="cseg2"><button class="btn ${act_==='corte'?'on':''}" data-c="corte" ${me.cut?'':'disabled'}>TRATAR CORTE</button><button class="btn ${act_==='folego'?'on':''}" data-c="folego">RECUPERAR FÔLEGO</button></div>
       <div class="cseg2"><button class="btn" id="towel">ATIRAR A TOALHA</button><button class="btn red" id="goR">ROUND ${F.round+1}</button></div>`;
@@ -2664,11 +3038,11 @@ function corner(){
       $('#towel').onclick=()=>res('towel');
       $('#goR').onclick=()=>{
         me.strat=strat;
-        if(strat!==s0){F.ordLog.push({r:F.round,s:strat,from:s0,t:180,cs:1});say(`No canto: ${strat} para o round ${F.round+1}. ${me.nick} acena.`,'ok')}
+        if(strat!==s0){F.ordLog.push({r:F.round,s:strat,from:s0,t:180,cs:1});say(`No canto: ${strat} para o round ${F.round+1}. ${me.nick} acena.`,'ok',{who:'tu'})}
         if(csty!==me.style){me.style=csty;me.slv=Math.max(1,styleLv(F.a,csty));say(`${me.nick} muda para ${csty}.`,'sys')}
         F.prev=null;
-        if(act_==='corte'){me.cut=Math.max(0,me.cut-1);me.hp=clamp(me.hp+4,0,100);say('Tratas o corte com vaselina e gelo.','sys')}
-        else{me.st=clamp(me.st+18,0,100);say('Mandas respirar fundo. Recupera o fôlego.','sys')}
+        if(act_==='corte'){me.cut=Math.max(0,me.cut-1);me.hp=clamp(me.hp+4,0,100);say('Tratas o corte com vaselina e gelo.','sys',{who:'tu'})}
+        else{me.st=clamp(me.st+18,0,100);say('Mandas respirar fundo. Recupera o fôlego.','sys',{who:'tu'})}
         if(strat===s0&&Math.random()<.4*stubP(me))say(`${me.nick} acena, mas tu sabes que não vai ouvir.`);
         res('go');
       };
@@ -2907,7 +3281,7 @@ function buildAnalysis(){
     rr:F.rr.map(x=>[x.s?x.s[0]:null,x.s?x.s[1]:null,x.dn[0],x.dn[1],x.st[0],x.st[1],x.l[0],x.l[1],x.p?1:0]),
     ps:[ps(me),ps(op)],hb:[[me.headL,me.bodyL],[op.headL,op.bodyL]],df:[df(me),df(op)],ct:[ct(me),ct(op)],lv:[me.liv.slice(),op.liv.slice()],
     kdl:F.kdl.slice(0,6).map(kdTxt),ord:F.ordLog.slice(-8).map(ordTxt),ordN:F.ordLog.length,talk:F.talks.map(t=>({t:`${t.r===1?'Antes do R1':'Antes do R'+t.r}: ${t.n}`,c:t.lab==='CERTA'?'ok':t.lab==='MEIA CERTA'?'half':t.lab==='ERRADA'?'bad':''})),
-    sx:Object.entries(F.sx).sort((p,q)=>q[1]-p[1]).map(([k,v])=>`${k} ${Math.round(100*v/tot)}%`).join(' · '),why,plus,dz:[dzOf(me),dzOf(op)],cf:confNotes(me).slice(0,3).map(x=>({s:x.s,t:x.t}))};
+    sx:Object.entries(F.sx).sort((p,q)=>q[1]-p[1]).map(([k,v])=>`${k} ${Math.round(100*v/tot)}%`).join(' · '),why,plus,at:F.at0||null,dz:[dzOf(me),dzOf(op)],cf:confNotes(me).slice(0,3).map(x=>({s:x.s,t:x.t}))};
 }
 /* ---- histórico de lutas ----
    a.hist: uma entrada pequena por luta (mais antiga primeiro): {w semana, o alcunha do adversário, ac academia, os estilo dele,
@@ -2950,7 +3324,7 @@ function panelHist(a){
   const rc=a.rec,old=rc.w+rc.l+rc.d-n;
   return `<div class="card hist"><div class="hhd"><h3>LUTAS · ${rc.w}V ${rc.l}D ${rc.d}E</h3>${pages>1?`<div class="hpg"><button class="btn" data-hpg="-1" ${histPg?'':'disabled'}>◀</button>${histPg+1}/${pages}<button class="btn" data-hpg="1" ${histPg<pages-1?'':'disabled'}>▶</button></div>`:''}</div>
     ${n?`<div class="hrows">${rows}</div>`:'<div class="empty">Ainda sem lutas registadas.</div>'}
-    <div class="meta" style="font-size:11px">${n?`Análise guardada nas ${HIST_AN} últimas.`:''}${old>0?` ${old} antiga${old>1?'s':''} sem registo.`:''}</div></div>`;
+    <div class="meta" style="font-size:15px">${n?`Análise guardada nas ${HIST_AN} últimas.`:''}${old>0?` ${old} antiga${old>1?'s':''} sem registo.`:''}</div></div>`;
 }
 function resultInfo(title,body,an){
   return new Promise(res=>{
@@ -2961,10 +3335,10 @@ function resultInfo(title,body,an){
 }
 function showAnalysis(an,back,tab){
   tab=tab||'res';
-  const T=[['res','RESUMO'],['golpes','GOLPES'],['ringue','RINGUE'],['rounds','ROUNDS'],['canto','CANTO']];
+  const T=[['res','RESUMO'],['golpes','GOLPES'],['ringue','RINGUE'],['rounds','ROUNDS'],['canto','CANTO'],['comp','COMPARAR']];
   const res=an.res==='V'?'VITÓRIA':an.res==='D'?'DERROTA':'EMPATE';
   const hd=`<h2>ANÁLISE · <span style="color:${an.res==='V'?'var(--green)':an.res==='D'?'#ff6b5a':'var(--gold)'}">${res}</span> VS ${an.opp.toUpperCase()}</h2>
-    <div class="seg sub2">${T.map(([k,n])=>`<button data-ant="${k}" class="${tab===k?'on':''}">${n}</button>`).join('')}</div>`;
+    <div class="seg sub2 two">${T.map(([k,n])=>`<button data-ant="${k}" class="${tab===k?'on':''}">${n}</button>`).join('')}</div>`;
   const pct=([l,t])=>t?Math.round(100*l/t)+'%':'-';
   const v2=(m,o,cm='cme',co='cop')=>`<span class="v ${cm}">${m}</span><span class="v ${co}">${o}</span>`;
   const head=(a,b,c)=>`<b>${a}</b><b class="me">${b}</b><b class="op">${c}</b>`;
@@ -3016,6 +3390,7 @@ function showAnalysis(an,back,tab){
       ${row('Ângulo (pivô/lado)',fr(m.ang),fr(o.ang))}
       ${row('Sair do clinch a bater',fr(m.clo),fr(o.clo))}</div>
       <p class="meta">Antecipação: apanhá-lo a entrar. Cross-counter: o direto por cima do golpe dele; sem timing, os dois acertam.</p>`}
+  }else if(tab==='comp'){body=cmpBody(an)
   }else if(tab==='rounds'){
     const cls=(a,b)=>a>b?'cme':a<b?'cop':'';
     body=`<div class="atab rtab"><b>R</b><b>PONTOS</b><b>QUEDAS</b><b>FÔLEGO</b><b>ACERTOS</b>
@@ -3034,6 +3409,20 @@ function showAnalysis(an,back,tab){
   s.querySelector('#anBack').onclick=()=>{if(back)back();else closeModal()};
 }
 
+/* ---- COMPARAR (2.12): os 8 atributos no início da luta, o teu atleta (vermelho) e o adversário (azul) lado a lado; as maiores diferenças em
+   destaque. Sem mentais nem técnicas dele. TUNE.cmpNums: true = com números; false = só barras (a diferença dita por palavras). ---- */
+function cmpBody(an){
+  const at=an.at;if(!Array.isArray(at)||at.length!==2||!at.every(r=>Array.isArray(r)&&r.length===ATTRS.length))return `<div class="why"><i>=</i><span>Esta luta é de uma versão antiga do jogo: não guardou os atributos dos dois.</span></div>`;
+  const num=!!TUNE.cmpNums,idx=k=>ATTRS.findIndex(([q])=>q===k),nm=k=>ATTRS[idx(k)][1];
+  const gaps=ATTRS.map(([k],i)=>({k,d:at[0][i]-at[1][i]})).filter(g=>Math.abs(g.d)>=5).sort((p,q)=>Math.abs(q.d)-Math.abs(p.d)).slice(0,3),hi=new Set(gaps.map(g=>g.k));
+  const w=v=>clamp(Math.round(v),0,100);
+  const grp=([g,ks])=>`<div class="cmpg ${num?'':'nn'}"><div class="hd">${g}</div><b></b>${num?'<b class="me">TU</b><b></b><b></b><b class="op">ELE</b>':'<b class="me">TU</b><b class="op">ELE</b>'}
+    ${ks.map(k=>{const i=idx(k),m=at[0][i],o=at[1][i];return `<span class="n ${hi.has(k)?'hi':''}">${nm(k)}</span>${num?`<span class="v">${m}</span>`:''}<div class="bl"><i style="width:${w(m)}%"></i></div><div class="br"><i style="width:${w(o)}%"></i></div>${num?`<span class="v op">${o}</span>`:''}`}).join('')}</div>`;
+  const pw=d=>{d=Math.abs(d);return d<10?'um pouco mais':d<20?'mais':'muito mais'};
+  const gk=gaps.map(g=>`${nm(g.k)}: ${num?`<em class="${g.d>0?'cme':'cop'}">${g.d>0?'tu':'ele'} +${Math.abs(g.d)}</em>`:`<em class="${g.d>0?'cme':'cop'}">${g.d>0?'tu':'ele'}</em> ${pw(g.d)}`}`).join(' · ');
+  return ATTR_G.map(grp).join('')+`<div class="cmpk"><b>◆ MAIORES DIFERENÇAS</b>${gk||'Muito parecidos: nenhum atributo se destaca.'}</div>
+    <p class="meta">Atributos no início da luta. Não mostra os mentais nem as técnicas dele.</p>`;
+}
 /* ---- arena fight drawing (elevated front view) ---- */
 function shade(hex){const n=parseInt(hex.slice(1),16);const r=(n>>16)*.78|0,g=((n>>8)&255)*.78|0,b=(n&255)*.78|0;return `rgb(${r},${g},${b})`}
 function disc(c,x,y,r,col){c.fillStyle=col;c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fill()}
@@ -3486,7 +3875,7 @@ function buildArena(){
   // canvas
   c.fillStyle='#c9d3dc';c.beginPath();c.moveTo(RA.x-4,RA.y-2);c.lineTo(RB.x+4,RB.y-2);c.lineTo(RD.x+6,RD.y+3);c.lineTo(RE.x-6,RE.y+3);c.fill();
   c.fillStyle=v===3?'#dfe6f2':'#e3e9ee';c.beginPath();c.moveTo(RA.x,RA.y);c.lineTo(RB.x,RB.y);c.lineTo(RD.x,RD.y);c.lineTo(RE.x,RE.y);c.fill();
-  c.fillStyle=v===3?'rgba(30,60,160,.16)':v===2?'rgba(150,100,20,.18)':'rgba(143,42,27,.14)';{const nm=deacc(ev);const fs=nm.length<=13?10:nm.length<=17?8:6;c.font=fs+'px "Press Start 2P", monospace';c.textAlign='center';c.fillText(nm,120,(RA.y+RE.y)/2+6);}
+  c.fillStyle=v===3?'rgba(30,60,160,.16)':v===2?'rgba(150,100,20,.18)':'rgba(143,42,27,.14)';{const nm=deacc(ev);const fs=nm.length<=13?13:nm.length<=17?11:8;c.font=fs+'px Silkscreen, monospace';c.textAlign='center';c.fillText(nm,120,(RA.y+RE.y)/2+6);}
   ARENA=cv;
 }
 function refFollow(){
@@ -3589,7 +3978,9 @@ function ringLoop(now){
   if(!ARENA)buildArena();
   if(F.count!==F._cnt){F._cnt=F.count;if(F.count)SFX.play('count',F.count)}
   const c=cv.getContext('2d');const t=now/1000;
-  const dt=Math.min(.05,(now-(F.lt||now))/1000);F.lt=now;const mul=F.paused||F.towelAsk?0:(F.fast?3.3:1)/slowF();
+  const dt=Math.min(.05,(now-(F.lt||now))/1000);F.lt=now;
+  /* o ringue (240x240) desce F.EX; por cima tecto, por baixo público */c.setTransform(1,0,0,1,0,0);drawFrame(c,cv.height);c.setTransform(1,0,0,1,0,F.EX||0);
+ const mul=F.paused||F.towelAsk?0:(F.fast?3.3:1)/slowF();
   const mv=(o,sp)=>{const dx=o.tx-o.x,dy=o.ty-o.y,d=Math.hypot(dx,dy);const v=sp*dt*mul*(d>30?1:.55+.45*d/30);if(d<=v||d<.01){o.x=o.tx;o.y=o.ty}else{o.x+=dx/d*v;o.y+=dy/d*v}};
   for(const x of[F.me,F.op])mv(x.pos,x.robe?40:(x.an.pose==='hurt'||x.an.pose==='hurtBody'?90:70)*(x.st>=70?1:x.st>30?.82:.6));
   for(const x of[F.me,F.op]){ // A4 (animações do tema 5): encostado às cordas/canto (x.lean) e pernas bambas (x.wobA), 0..1 com transição suave
@@ -3674,16 +4065,18 @@ function ringLoop(now){
   rope(c,E,hN,D,hN,'#d4452f');
   post(c,E.x,E.y,hN,'#d4452f');post(c,D.x,D.y,hN,'#e8e8ee');
   list.filter(o=>o.fr).forEach(o=>o.d());
+  drawBalloons(c,now);popTick(dt);drawPop(c,pm,po);
   c.restore();
   if(F.towelT){const p=clamp((now-F.towelT)/650,0,1),q=proj(F.me.pos.x,F.me.pos.y),x0=26,y0=196,tx=q.x-10,ty=q.y-4;
     const x=x0+(tx-x0)*p,y=y0+(ty-y0)*p-Math.sin(p*Math.PI)*46;c.fillStyle='#f1e5d0';
     if(p<1){const fl=Math.floor(now/70)%2;c.fillRect(Math.round(x-4),Math.round(y-(fl?3:2)),9,fl?6:4);c.fillStyle='#c9c0ae';c.fillRect(Math.round(x-4),Math.round(y+(fl?2:1)),9,1)}
     else{c.fillRect(Math.round(x-5),Math.round(y-1),11,3);c.fillStyle='#c9c0ae';c.fillRect(Math.round(x-5),Math.round(y+1),11,1)}}
-  if(F.count){c.fillStyle='rgba(0,0,0,.55)';c.fillRect(96,70,48,30);c.fillStyle='#fff';c.font='20px "Press Start 2P", monospace';c.textAlign='center';c.fillText(String(F.count),120,95)}
+  if(F.count){c.fillStyle='rgba(0,0,0,.55)';c.fillRect(96,70,48,30);c.fillStyle='#fff';c.font='bold 24px Silkscreen, monospace';c.textAlign='center';c.fillText(String(F.count),120,94)}
   if(F.confetti){if(!F.conf)F.conf=Array.from({length:150},(_,i)=>({x:Math.random()*240,y0:-Math.random()*260,v:.6+Math.random()*1.1,w:2+Math.random()*3,ph:Math.random()*6,c:['#e8b13a','#d4452f','#2d6db3','#f1e5d0','#74b35d','#f5d36a'][i%6]}));
     const el=(now-F.confetti)/1000;for(const q of F.conf){const y=q.y0+el*q.v*55;if(y<-4||y>244)continue;const x=q.x+Math.sin(el*q.w+q.ph)*5;c.fillStyle=q.c;const fl=Math.sin(el*q.w*2+q.ph)>0;c.fillRect(Math.round(x),Math.round(y),fl?3:1,2)}}
-  if(F.big){const by=F.bigTop?18:96;c.fillStyle='rgba(0,0,0,.6)';c.fillRect(40,by,160,30);c.fillStyle='#e8b13a';c.font='16px "Press Start 2P", monospace';c.textAlign='center';c.fillText(F.big,120,by+22)}
-  drawCaster(now);distBar();
+  if(F.big){const by=F.bigTop?18:94;c.fillStyle='rgba(0,0,0,.6)';c.fillRect(40,by,160,34);c.fillStyle='#e8b13a';c.font='bold 18px Silkscreen, monospace';c.textAlign='center';c.fillText(F.big,120,by+25)}
+  F.rt=(F.rt||0)+dt*1000*(F.paused?0:F.fast?2:1); // relógio real da luta (pára em pausa): balões
+  balTick(dt);deskTick(dt);drawDesk(now);distBar();
   requestAnimationFrame(ringLoop);
 }
 
@@ -3708,10 +4101,16 @@ function menu(mode){
       if(q('#mHelp'))q('#mHelp').onclick=async()=>{await help();main()};
     };
     const sett=()=>{
+      const PH={all:'Palavras por cima dos pugilistas: defesas, combinações e, em destaque, as técnicas, os counters e as quedas.',esp:'<b class="chd">Só especiais:</b> ficam as técnicas, os counters e as quedas; saem as defesas e as combinações.',off:'<b class="chd">Desligados:</b> sem palavras no ringue. O Zé do Micro fala um pouco mais.'};
       const m=modal(`<div class="menu"><h2>DEFINIÇÕES</h2>
         <button class="btn big ${SFX.on?'gold':''}" id="mSnd">SOM: ${SFX.on?'LIGADO':'DESLIGADO'}</button>
+        <h3>POP-UPS NA LUTA</h3>
+        <div class="cseg">${[['all','TODOS'],['esp','SÓ ESPECIAIS'],['off','DESLIGADOS']].map(([k,n])=>`<button class="btn ${POPS===k?'on':''}" data-pop="${k}">${n}</button>`).join('')}</div>
+        <p class="hint">${PH[POPS]}</p>
+        <div class="popdemo"><span class="pd n ${POPS!=='all'?'ghost':''}">BLOQUEIO</span><span class="pd s ${POPS==='off'?'ghost':''}">COUNTER!</span><span class="pd n me ${POPS!=='all'?'ghost':''}">1-2-3</span></div>
         <button class="btn" id="mBack">VOLTAR</button></div>`);
       m.querySelector('#mSnd').onclick=()=>{SFX.setOn(!SFX.on);SFX.play('click');sett()};
+      m.querySelectorAll('[data-pop]').forEach(b=>b.onclick=()=>{setPops(b.dataset.pop);SFX.play('click');if(F&&POPS!=='all'){F.pq=(F.pq||[]).filter(p=>POPS==='esp'&&p.sp);if(F.pc&&!(POPS==='esp'&&F.pc.sp))F.pc=null}sett()});
       m.querySelector('#mBack').onclick=main;
     };
     main();
@@ -3744,7 +4143,7 @@ start();
 })();
 </script>
 
-<div id="cm-ver" style="position:fixed;left:0;right:0;bottom:max(0px,calc(env(safe-area-inset-bottom,0px) - 16px));text-align:center;font:8px/8px 'Press Start 2P',monospace;color:#a8957d;opacity:.7;pointer-events:none;z-index:40">v13 · 11 nov 2026</div>
+<div id="cm-ver" style="position:fixed;left:0;right:0;bottom:max(0px,calc(env(safe-area-inset-bottom,0px) - 16px));text-align:center;font:8px/8px 'Silkscreen',monospace;color:#a8957d;opacity:.7;pointer-events:none;z-index:40">v13 · 11 nov 2026</div>
 <script>
 if('serviceWorker' in navigator){addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}))}
 </script>
