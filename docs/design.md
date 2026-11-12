@@ -32,6 +32,8 @@
 - 2.10 **Decidido — estado por palavras:** junto ao nome de cada pugilista no placard aparecem palavras curtas só quando algo desce muito ("SEM PERNAS", "MÃOS LENTAS", "ABANADO", "SEM GUARDA"); também no ecrã do canto, para ajudar a escolher a estratégia.
 - 2.11 **Decidido — barras:** vida e fôlego só com a barra (sem número); a barra pisca a vermelho quando cai de repente; a estratégia por extenso ("PRESSÃO", não "PRE").
 - 2.12 **Decidido — comparar com o adversário:** separador novo na análise ("COMPARAR") com os 8 atributos lado a lado (o nosso atleta a vermelho, o adversário a azul), **com números por agora** — fica preparado para trocar por barras sem números com uma só opção, se o Tiago mudar de ideias. Mentais e técnicas do adversário não aparecem. A parte de conhecer melhor o adversário (ficha mais precisa depois de lutar, vídeos, desforras) fica para a fase 6.
+- 2.13 **Decidido (imagens de teste):** o espaço livre por cima/baixo do ringue fica como está (decide-se melhor na fase 8); frases normais ~2 s e importantes ~4 s no ecrã (a experimentar); palavras de estado: mostrar todas por agora (arrumar na fase 8); separadores da análise em **duas linhas**; no canto, as palavras de estado numa caixa própria.
+- 2.14 **Decidido — mesa de comentadores:** os dois comentadores aparecem no ecrã, o Zé do Micro de um lado e o Abílio do outro, e cada balão sai do lado de quem fala.
 - 2.3 **Decidido — uma linha de cada vez:** só a frase atual, com a cara pequena de quem fala; as frases importantes ficam mais tempo no ecrã; o retrato grande sai e o espaço vai para o ringue.
 
 Detalhes das ideias das fases 2–4: `docs/pesquisa-bgs.md`.
