@@ -335,6 +335,31 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .hb b{font-family:var(--f-display);font-size:8px;font-weight:400;letter-spacing:.05em}
 .hb span{font-size:14px;line-height:.95;color:var(--fg)}
 .hb:disabled{border-color:var(--line);opacity:.5;cursor:default} .hb:disabled span{color:var(--muted);font-family:var(--f-display);font-size:7px;letter-spacing:.04em;line-height:1.2}
+/* 3A-4 carreira: ranking, quadro do Rookie, prémios, caminho da carreira na Ficha */
+.rkc{gap:4px;padding:6px 8px;min-height:0}
+.rkh{display:flex;align-items:center;gap:5px;flex:none} .rkh>b{font-family:var(--f-display);font-size:10px;flex:1;text-align:center;font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rkh .btn{padding:5px 8px 4px;font-size:10px}
+.rkl{display:flex;gap:3px} .rkl button{background:var(--panel2);border:2px solid var(--line);color:var(--muted);font-family:var(--f-display);font-size:8.5px;padding:5px 5px 4px;cursor:pointer} .rkl button.on{color:var(--fg);border-color:var(--gold)}
+.rkrs{display:flex;flex-direction:column;gap:2px;min-height:0}
+.rkr{display:grid;grid-template-columns:18px 1fr auto;gap:5px;align-items:center;background:var(--panel2);border:1px solid var(--line);padding:0 4px;height:24px;flex:none;overflow:hidden}
+.rkr.me{border-color:var(--gold)} .rkr.ch{border:2px solid #9c7420;background:#2a2014}
+.rkr .rp{font-family:var(--f-num);font-size:10.5px;color:var(--muted);text-align:right;font-weight:400} .rkr.ch .rp{color:var(--gold)}
+.rkn{background:none;border:0;color:var(--fg);text-align:left;font-family:var(--f-body);font-size:16px;line-height:1;padding:0;min-width:0;display:flex;gap:6px;align-items:baseline;cursor:pointer}
+.rkn:disabled{cursor:default;opacity:1}
+.rkn span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:none;max-width:60%} .rkn small{font-size:13.5px;min-width:0;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rkn em{font-style:normal;font-family:var(--f-display);font-size:7.5px;color:var(--red)} .rkn i{color:var(--muted)}
+.rkr .btn{font-size:8px;padding:3px 5px 2px;border-bottom-width:2px}
+.rkf{display:flex;justify-content:space-between;align-items:center;gap:6px;flex:none} .rkf .meta{font-size:15px;line-height:1}
+.brc{gap:5px;padding:7px 8px} .brk{display:grid;grid-template-columns:1.15fr 1fr 1fr .95fr;gap:4px;align-items:stretch}
+.bcol{display:flex;flex-direction:column;justify-content:space-around;gap:1px;min-width:0}
+.bcol span{background:var(--panel2);border:1px solid var(--line);font-size:14px;line-height:1;padding:1px 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bcol span.me{border-color:var(--gold)} .bcol.w span{border-color:#9c7420} .bcol i{font-style:normal;color:var(--muted)}
+.bnf{display:flex;gap:6px;align-items:baseline;background:var(--panel2);border:2px solid #9c7420;padding:2px 6px;font-size:16px;line-height:1} .bnf small{font-family:var(--f-display);font-size:8px;color:var(--muted);flex:none}
+.awl{display:flex;flex-direction:column;gap:4px} .awl p{background:var(--panel2);border:1px solid var(--line);padding:3px 6px;font-size:16px;line-height:1.05} .awl p.me{border-color:var(--gold)}
+.awl small{display:block;font-family:var(--f-display);font-size:8px;color:var(--muted);letter-spacing:.06em} .awl i{display:block;font-style:normal;color:var(--muted);font-size:15px}
+.awl.sm{gap:2px} .awl.sm p{font-size:15px;padding:2px 5px}
+.carp{font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .carp b{color:var(--gold);font-weight:400} .carp s{opacity:.5;text-decoration:none}
+.cseg.rgs{display:grid;grid-template-columns:1fr 1fr;gap:6px} .cseg.rgs .btn.on{border-color:var(--gold);color:var(--gold)}
 .evo{background:var(--panel);border:2px solid var(--line);border-left:3px solid var(--gold);padding:4px 8px;display:flex;flex-direction:column;gap:2px;flex:none}
 .evo .eh{display:flex;justify-content:space-between} .evo small{font-family:var(--f-display);font-size:8px;color:var(--muted);letter-spacing:.08em}
 .evo .er{display:grid;grid-template-columns:64px 1fr;gap:6px;align-items:baseline;font-size:16.5px;line-height:1}
@@ -514,7 +539,15 @@ const TUNE=Object.assign({hitDiv:350,hvy:1.55,resK:.3,qk:.45,mk:.45,cleanMul:6,n
      mIqCalm quanto a Calma protege o Ring IQ; mTecConc Técnica nos últimos rounds com Concentração baixa. Por afinar (fase 7).
      w*: limites das palavras de estado ("SEM PERNAS", "MÃOS LENTAS", "ABANADO", "SEM GUARDA"). cmpNums: separador COMPARAR com números (false = só barras). */
   moSt:50,moHp:50,mVelSt:.12,mVelHp:.08,mForSt:.12,mForHp:.08,mDefSt:.08,mDefHp:.12,mTecSt:.06,mTecHp:.06,mQxHp:.2,mQxKd:.08,mQxMin:.6,mIqHp:.3,mIqCalm:.5,mTecConc:.12,
-  wPes:.78,wVel:.93,wQx:.88,wIq:.89,wDef:.93,cmpNums:true},window.__TUNE||{});
+  wPes:.78,wVel:.93,wQx:.88,wIq:.89,wDef:.93,cmpNums:true,
+  /* 3A-4 carreira e mundo (por afinar na fase 7): amLic lutas amadoras para a licença (e pelo menos 1 vitória); mandW semanas entre defesas obrigatórias;
+     t3W semanas no top 3 para subir de nível; champMinW semanas de campeão do mundo antes de subir; keepP um campeão do mundo que sobe fica com o título;
+     inact semanas parado até começar a descer; wFight semanas entre lutas do mundo [mín, máx]; wLuck acaso da conta rápida; wDraw empates; wKO KOs [base, peso da categoria];
+     wRet idades da reforma do mundo [começa, certa]; rkPool lugares do Nacional que ficam depois do Rookie; chal desafio [base, por lugar], chalGap lugares acima, chalCd semanas;
+     retAge/retQx/retGap/retConv reforma dos nossos (idade, Queixo, semanas entre cartões, chance de convencer); crowdC efeito do público na confiança, crowdThr Confiança de quem
+     cresce com o público contra; licPop/rookPop/galaPop popularidade (fãs na 3B). */
+  amLic:3,mandW:39,t3W:36,champMinW:26,keepP:.4,inact:20,wFight:[8,17],wLuck:6,wDraw:.04,wKO:[.18,.25],wRet:[33,36],rkPool:26,chal:[.8,.12],chalGap:5,chalCd:2,
+  retAge:33,retQx:22,retGap:8,retConv:.75,crowdC:6,crowdThr:65,licPop:2,rookPop:[6,5,3,3],galaPop:4},window.__TUNE||{});
 /* carácter de cada categoria na luta (3A-2, interpolado das 4 antigas; por afinar na fase 7): vol golpes, dmg dano, flash quedas relâmpago, cost fôlego.
    Mais leve = mais rápido e menos KOs; mais pesado = mais potência e KOs, mais lento. Leve = antigo Ligeiro (referência 1). */
 const CATMOD={Mosca:{vol:1.35,dmg:.78,flash:.45,cost:.85},Galo:{vol:1.3,dmg:.82,flash:.52,cost:.88},Pena:{vol:1.25,dmg:.85,flash:.6,cost:.9},Leve:{vol:1,dmg:1,flash:1,cost:1},
@@ -616,12 +649,6 @@ function stubP(x){return clamp((TUNE.stubT-mv(x,'ouvir'))/TUNE.stubT,0,1)}      
 function confBase(x){return 40+.4*mv(x,'conf')}                                   // confiança "natural" para onde a confiança do dia volta
 function hearMul(x){const o=mv(x,'ouvir'),m=o>=50?1-(1-TUNE.hearCalm)*(o-50)/50:1+(TUNE.hearStub-1)*(50-o)/50;
   return m*(1-TUNE.hearIQ*clamp(((x.iq??20)-20)/60,-.25,1))}                      // Ouvir o canto e Ring IQ: ouve mais depressa
-const TIERS=[
-  {n:'Amador',rounds:3,base:12,purse:[200,400],share:.5,cost:30,spons:20},
-  {n:'Regional',rounds:4,base:32,purse:[900,1800],share:.4,cost:120,spons:70},
-  {n:'Nacional',rounds:6,base:50,purse:[4000,8000],share:.33,cost:400,spons:200},
-  {n:'Mundial',rounds:8,base:68,purse:[20000,40000],share:.25,cost:1500,spons:600}
-];
 const ECON={fee:15,rentBase:30,rentPerUpg:20,maint:3};
 function weeklyCosts(){
   const sal=S.roster.reduce((t,a)=>t+a.salary,0),staff=coachPay(); // treinadores: só recebem quando acompanham um atleta
@@ -800,9 +827,8 @@ function techLack(a,id){ // o que falta para poder aprender (texto curto) ou ''
   for(const[k,v]of Object.entries(r.at||{}))if((a.attrs[k]||0)<v)L.push(`${attrLow(k)} ${v}`);
   for(const k of r.t||[])if(!knownT(a).includes(k))L.push(`saber ${TECH[k].n}`);
   return L.join(', ')}
-/* lugares na build: por escalão (3A-4 troca pelos níveis da carreira: careerLv), +1 campeão do mundo, +1 com Ring IQ muito alto */
-function careerLv(a){return a.tier||0}
-function techSlots(a){const S0=TUNE.slots,b=(S0[careerLv(a)]??S0[S0.length-1])+((a.titles||[]).some(t=>t.startsWith(TIERS[TIERS.length-1].n))?1:0);
+/* lugares na build: pela carreira (careerLv: amador, Nacional, Europeu, Mundial), +1 campeão do mundo, +1 com Ring IQ muito alto */
+function techSlots(a){const S0=TUNE.slots,b=(S0[careerLv(a)]??S0[S0.length-1])+((a.titles||[]).some(t=>t.startsWith('Mundial'))?1:0);
   return Math.min(TUNE.slotMax,b)+((a.attrs.iq||0)>=TUNE.slotIQ?1:0)}
 function techBoost(a){return 1} // gancho para as cartas (3A-5): multiplica a velocidade de aprender a técnica em curso
 /* velocidade de aprender a técnica (1 = normal): Técnica (mais nas básicas), Disciplina e Concentração, treinador do estilo natural (ou Ring IQ nas de
@@ -837,8 +863,12 @@ const DAYS=['SEGUNDA','TERÇA','QUARTA','QUINTA','SEXTA','SÁBADO'];
 /* ================= STATE ================= */
 let S=null;
 const KEY='corner-men-v8';
-function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
-function load(){try{const t=localStorage.getItem(KEY);return t?JSON.parse(t):null}catch(e){return null}}
+/* no save, os pugilistas do mundo (S.W.b) vão em listas por ordem de FB (sem os nomes dos campos): ~40% menos espaço (3A-4) */
+const FB=['i','n','k','nt','c','L','rg','g','q','p','o','x','s','y','h','r','m','lk','t','w','l','d','ko','kl','ls','nf','lf','li','tt','t3','ys','ac','gf','bk','rkb'];
+function packB(b){return Object.values(b).map(x=>{const r=FB.map(k=>x[k]??null);while(r.length&&r[r.length-1]==null)r.pop();return r})}
+function unpackB(L){const b={};for(const r of L){const x={};FB.forEach((k,i)=>{if(r[i]!=null)x[k]=r[i]});b[x.i]=x}return b}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S,function(k,v){return k==='b'&&this===S.W?packB(v):v}))}catch(e){}}
+function load(){try{const t=localStorage.getItem(KEY);const s=t?JSON.parse(t):null;if(s&&s.W&&Array.isArray(s.W.b))s.W.b=unpackB(s.W.b);return s}catch(e){return null}}
 function look(){return{skin:pick(SKINS),hair:pick(HAIRS),trunk:pick(TRUNKS)}}
 function makeAthlete(cat,o={}){
   const pot=o.pot??RI(40,88);
@@ -846,7 +876,7 @@ function makeAthlete(cat,o={}){
   const a={h:bd.h,r:bd.r,id:'a'+Date.now()+RI(0,9999),name:o.name||pick(FIRST)+' '+pick(LAST),nick:o.nick||pick(NICKS),age:o.age||RI(16,21),cat,
     style:o.style||styleForBody(bodyType({cat,h:bd.h,r:bd.r})),ment:o.ment?Object.assign(Object.fromEntries(MENT.map(([k])=>[k,50])),o.ment):rollMental(),bw:RI(0,51),salary:o.salary||RI(30,45),look:o.look||look(),
     attrs:{},cap:{},pot,fatigue:0,conf:55,injury:0,skills:newSkills(),xp:Object.fromEntries(PKEYS.map(k=>[k,0])),def:newDefs(),dxp:Object.fromEntries(DKEYS.map(k=>[k,0])),bel:{jab:1,bloqueio:1,pes:1},use:{},combos:[],recovery:0,coach:null,cw:0,focus:'attrs',tech:{k:[],l:null,w:0,p:0,fg:null},
-    rec:{w:0,l:0,d:0,ko:0},tier:0,rank:10,titles:[],fight:null,offers:[],gift:o.gift===undefined?rollGift(cat):o.gift,giftKnown:false,weeks:0,hint:null,base:{},refusals:0};
+    rec:{w:0,l:0,d:0,ko:0},car:{am:true,af:0,aw:0,li:null,L:0,ys:[0,0,0],y0:S&&S.week?yearOf():1},titles:[],fight:null,offers:[],gift:o.gift===undefined?rollGift(cat):o.gift,giftKnown:false,weeks:0,hint:null,base:{},refusals:0};
   for(const[k]of ATTRS){a.attrs[k]=k==='queixo'?rollChin():k==='iq'?RI(6,16)+(o.boost||0):RI(8,20)+(o.boost||0);a.cap[k]=k==='queixo'?a.attrs[k]+RI(3,8):clamp(pot+RI(-12,12),28,99)}
   if(o.attrs)Object.assign(a.attrs,o.attrs);
   if(o.attrs&&o.attrs.queixo!=null)a.cap.queixo=a.attrs.queixo+5;
@@ -875,9 +905,11 @@ function newGame(){
   S={week:1,money:500,pop:5,members:4,up:{},eq:{saco:1,sparring:1,corda:0,pera:0,pads:0,pesos:0,esquiva:0,pneu:0,bola:0},
     roster:[rui],sel:0,tab:'gym',sub:'ficha',shopSub:'eq',gsub:'res',coaches:startCoaches(),
     rivals:[{n:'Academia Tubarão',lvl:0},{n:'Boxe Clube Ribeira',lvl:0},{n:'Punhos de Aço',lvl:1},{n:'Ginásio Estrela do Norte',lvl:0},{n:'Clube Leões da Margem',lvl:2}],
-    log:[],seen:false};
+    log:[],seen:false,reg:0,hof:[]};
+  rui.car.y0=1;
   assignCoach(rui,S.coaches.find(c=>c.st===rui.style),true);
-  addOffer(rui,true);
+  genWorld();
+  amOffer(rui,true);
   note(`Abriste as portas do ${S.gymName||'teu ginásio'}. O ${rui.nick} é o teu único lutador.`);
 }
 /* ---- treinadores ---- */
@@ -967,7 +999,7 @@ async function weighIn(a){ // dia da luta: pesagem dos dois; o efeito fica em a.
   await info(`PESAGEM · ${a.cat.toUpperCase()}`,`<div class="kv wi"><div><small>${a.nick.toUpperCase()}</small><b class="${WI_TXT[v.r][1]}">${kgs(a.kg)} kg</b></div><div><small>LIMITE</small><b>${L!=null?kgs(L)+' kg':'—'}</b></div><div><small>${o.nick.toUpperCase()}</small><b>${kgs(wi.o)} kg</b></div></div>
     <p class="hint">${eff}</p>`,'PARA O RINGUE');
 }
-function catDone(a){return(a.titles||[]).includes(`${TIERS[TIERS.length-1].n} (${a.cat})`)} // "completou a categoria": por agora o título mais alto; 3A-4 redefine com os rankings
+function catDone(a){return(a.titles||[]).includes(`${RLV[2]} (${a.cat})`)} // "completou a categoria": foi campeão do mundo nela (3A-4)
 function catOpen(a){return catDone(a)||(a.lst||0)>=TUNE.catLoss}
 function catMoves(a){ // categorias para onde pode mudar agora: vizinhas, dentro das suas, livres no ginásio, sem luta marcada
   if(!catOpen(a)||a.fight)return[];const i=catIdx(a.cat);
@@ -976,10 +1008,10 @@ function catWhy(a){return catDone(a)?'ganhou tudo na categoria':`perdeu ${a.lst}
 function askCatChange(a){
   const mv=catMoves(a);if(!mv.length)return;
   return card({a,title:`MUDAR DE CATEGORIA · ${a.nick.toUpperCase()}`,body:`<p class="hint">${a.nick} ${catWhy(a)} e pode mudar de categoria. Agora: <b style="color:var(--fg)">${a.cat}</b> (${CAT_KG[a.cat]}), pesa ${kgs(a.kg)} kg. A ideal dele é ${a.icat}.</p>
-    <p class="hint">Recomeça no fundo do ranking da categoria nova e as propostas atuais caem. Tem de fazer o peso novo nas pesagens.</p>`,
+    <p class="hint">Recomeça no n.º 10 do ranking da categoria nova (se for profissional); os títulos e as propostas atuais caem. Tem de fazer o peso novo nas pesagens.</p>`,
     opts:[...mv.map(c=>({t:`${c.toUpperCase()}<small>${CAT_LIM[c]!=null?'limite '+CAT_KG[c]:'sem limite'} · ${catIdx(c)>catIdx(a.cat)?'tem de ganhar peso':'tem de perder peso'}${c===a.icat?' · a ideal':''}</small>`,cls:'gold',fn:()=>doCatChange(a,c)})),{t:'FICAR'}]}).then(()=>render());
 }
-function doCatChange(a,c){const o=a.cat;a.cat=c;a.offers=[];a.rank=10;a.lst=0;note(`${a.nick} muda de categoria: ${o} → ${c}.`);toast(`<b>${a.nick}</b> · agora ${c}`)}
+function doCatChange(a,c){const o=a.cat;leaveWorld(a);a.cat=c;a.offers=[];a.lst=0;if(a.car&&!a.car.am)for(const L of homeLists('POR',a.car.L)){const R=RK(c,L);rkInsert(R,a.id,Math.min(9,R.l.length))}note(`${a.nick} muda de categoria: ${o} → ${c}.`);toast(`<b>${a.nick}</b> · agora ${c}`)}
 const LOGOS=[
  {n:'Luva',px:['....KKKK....','...KRRRRK...','..KRRRRRRK..','.KRRRRRRRRK.','.KRRRRRRRRK.','.KRRRRRRRWK.','.KRRRRRRWK..','..KRRRRRK...','..KWWWWWK...','..KWKWKWK...','..KWWWWWK...','...KKKKK....']},
  {n:'Cinturão',px:['............','............','....KKKK....','...KGGGGK...','KKKGYYYYGKKK','RRKGYRRYGKRR','RRKGYRRYGKRR','KKKGYYYYGKKK','...KGGGGK...','....KKKK....','............','............']},
@@ -1011,7 +1043,10 @@ function setupGym(){
         <input id="gName" class="txt" maxlength="22" placeholder="Ginásio Esperança" value="${(S.gymName||'').replace(/"/g,'&quot;')}">
         <div class="meta">Emblema</div>
         <div class="logos">${LOGOS.map((L,i)=>`<button class="${i===logo?'on':''}" data-lg="${i}">${logoImg(i,36)}<span>${L.n}</span></button>`).join('')}</div>
+        <div class="meta">Região (Torneio Rookie)</div>
+        <div class="cseg rgs">${REG.map((n,i)=>`<button class="btn ${(S.reg||0)===i?'on':''}" data-rg="${i}">${n.toUpperCase()}</button>`).join('')}</div>
         <button class="btn gold big" id="gOk">ABRIR AS PORTAS</button>`);
+      m.querySelectorAll('[data-rg]').forEach(b=>b.onclick=()=>{S.gymName=m.querySelector('#gName').value;S.reg=+b.dataset.rg;draw()});
       m.querySelectorAll('[data-lg]').forEach(b=>b.onclick=()=>{S.gymName=m.querySelector('#gName').value;logo=+b.dataset.lg;draw()});
       m.querySelector('#gOk').onclick=()=>{const v=m.querySelector('#gName').value.trim().replace(/[<>]/g,'');S.gymName=v||'Ginásio Esperança';S.logo=logo;ARENA=null;
         S.log=[];note(`Abriste as portas do ${S.gymName}. O ${S.roster[0].nick} é o teu único lutador.`);closeModal();res()};
@@ -1027,21 +1062,20 @@ function capacity(){return 4+eqUnits()*2+(S.up.pintura?4:0)+(S.up.balneario?6:0)
 function weeksTo(a){return a.fight?a.fight.week-S.week:null}
 
 /* ================= OFFERS ================= */
-function makeOpp(a,title){
-  const t=TIERS[a.tier],rv=pick(S.rivals);
-  const r=t.base+RI(-4,6)+Math.min(rv.lvl,6)+(12-a.rank)*.9+(title?6:0);
+function makeOpp(a){ // adversário amador (3A-4: os profissionais vêm do mundo de pugilistas, toOpp)
+  const rv=pick(S.rivals),tier=0,title=false;
+  const r=10+RI(-4,5)+Math.min(rv.lvl,6)*.5+Math.min(4,(a.car&&a.car.af)||0)*.5;
   const bd=rollBody(a.cat);const st=styleForBody(bodyType({cat:a.cat,...bd}));
   const used=S.roster.map(x=>x.nick);const o={name:pick(FIRST)+' '+pick(LAST),nick:pick(NICKS.filter(n=>!used.includes(n))),academy:rv.n,style:st,look:{...look(),trunk:pick(TRUNKS.filter(c=>c!==a.look.trunk))},attrs:{},
     skills:oppSkills(r,st),def:oppDefs(r,st),rating:0,ment:rollMental()};
-  for(const[k]of ATTRS)o.attrs[k]=k==='queixo'?clamp(rollChin()+a.tier*2,20,92):clamp(r+RI(-7,7),5,99);
+  for(const[k]of ATTRS)o.attrs[k]=k==='queixo'?clamp(rollChin(),20,92):clamp(r+RI(-7,7),5,99);
   if(st==='In-fighter')o.attrs.forca+=4;if(st==='Outboxer')o.attrs.defesa+=4;if(st==='Puncher')o.attrs.forca+=4;
-  o.rating=rating(o);o.made=S.week;o.cat=a.cat;o.gift=rollGift(a.cat);o.h=bd.h;o.r=bd.r;initBody(o,clamp(a.tier+1+RI(0,1)+(title?1:0),1,5));
-  if(a.tier>=2){const others=shuffle(STYLES.filter(x=>x!==o.style));others.slice(0,a.tier>=3?2:1).forEach(x=>{o.sty[x]=Math.min(styleCap(o,x),Math.max(1,o.sty[o.style]-RI(0,1)))})}
-  const n=clamp(Math.round(RI(0,3)+a.tier*4+(r-14)/5),0,40);const w=Math.round(n*R(.5,.85));
+  o.rating=rating(o);o.made=S.week;o.cat=a.cat;o.gift=rollGift(a.cat);o.h=bd.h;o.r=bd.r;initBody(o,clamp(1+RI(0,1),1,5));
+  const n=clamp(Math.round(RI(0,3)+(r-14)/5),0,12);const w=Math.round(n*R(.5,.85));
   o.rec={w,l:n-w,ko:Math.round(w*R(.2,.6))};
   o.fk=n>=4&&Math.random()<clamp((o.attrs.tecnica-35)/60,0,.6)?RI(1,Math.max(1,Math.floor(n/4))):0;
   o.glass=n>=4&&o.attrs.queixo<40&&Math.random()<.6?RI(1,2):0;
-  oppTech(o,a.tier,title);
+  oppTech(o,tier,title);
   return o;
 }
 function oppTech(o,tier,title){ // técnicas e guardas do adversário (3A-3): conforme o estilo e o nível (amador 0-1, regional 1-2, nacional 2-3, mundial 3-5)
@@ -1071,29 +1105,513 @@ function showScout(o,a,when){
   const sc=scoutOf(o);const n=o.rec.w+o.rec.l;
   const prec=n<=2?'Muito pouca informação':n<=5?'Informação razoável':n<=10?'Boa informação':'Muito bem estudado';
   const rows=ATTRS.map(([k,nm])=>{const[lo,hi]=sc.attrs[k];const mine=a.attrs[k];
-    return `<div class="stat" style="grid-template-columns:78px 1fr 54px"><span>${nm}</span><div class="bar" style="height:12px"><i style="left:${clamp(lo,0,100)}%;width:${clamp(hi-lo,1,100)}%;background:var(--blue);opacity:.75"></i><b style="position:absolute;top:-2px;bottom:-2px;width:2px;left:${clamp(mine,0,99)}%;background:var(--gold)"></b></div><span class="num" style="font-size:16px">${lo}–${hi}</span></div>`}).join('');
+    return `<div class="stat" style="grid-template-columns:78px 1fr 58px"><span>${nm}</span><div class="bar" style="height:12px"><i style="left:${clamp(lo,0,100)}%;width:${clamp(hi-lo,1,100)}%;background:var(--blue);opacity:.75"></i><b style="position:absolute;top:-2px;bottom:-2px;width:2px;left:${clamp(mine,0,99)}%;background:var(--gold)"></b></div><span class="num" style="font-size:12px;white-space:nowrap">${lo}–${hi}</span></div>`}).join('');
   const weeks=S.week-o.made;
-  return info(`FICHA DE ${o.nick.toUpperCase()}`,`<div class="r" style="grid-template-columns:1fr"><div><strong>${o.name} "${o.nick}"</strong><p>${o.academy} · ${o.style} ${styleLv(o,o.style)}${n>=5&&o.sty?STYLES.filter(x=>x!==o.style&&styleLv(o,x)>0).map(x=>` · também ${x}`).join(''):''} · ${o.rec.w}V ${o.rec.l}D (${o.rec.ko} KO)</p><p>${bodyLine(o)} · ${(()=>{const d=Math.round((o.r||0)-(a.r||0));return d>0?`<span class="warn">+${d} cm de alcance que ${a.nick}</span>`:d<0?`<span class="good">${d} cm de alcance que ${a.nick}</span>`:'mesmo alcance'})()}</p></div></div>
-    <p class="hint">${prec} (${n} luta${n===1?'':'s'} vista${n===1?'':'s'}). Barra azul: onde achamos que está. Linha dourada: ${a.nick}.</p>
-    <div class="stats">${rows}</div>
-    <p class="hint">Golpes que já lhe vimos: ${sc.skills.filter(k=>SKILLS[k]).map(k=>pName(k)).join(', ')||'nenhum registo'}.</p>
-    ${n>=5&&o.tech&&o.tech.k&&o.tech.k.length?`<p class="hint">Técnicas que já lhe vimos: ${o.tech.k.slice(0,2).map(k=>TECH[k].n).join(', ')}.</p>`:''}
-    ${o.fk?`<p class="hint"><span class="warn">Mão perigosa:</span> já fez ${o.fk} queda${o.fk>1?'s':''} relâmpago a adversários que estavam inteiros.</p>`:''}
-    ${o.gift&&(o.rec.w+o.rec.l)>=5?`<p class="hint"><span class="warn">Dom conhecido:</span> ${GIFTS[o.gift].n}. ${GIFTS[o.gift].d}</p>`:''}
-    ${o.glass?`<p class="hint"><span class="good">Queixo frágil:</span> já foi ao chão ${o.glass} vez${o.glass>1?'es':''} sem estar ferido.</p>`:''}
-    <div class="r" style="grid-template-columns:1fr"><div><strong>TÁTICAS CONTRA UM ${o.style.toUpperCase()}</strong>${TACTICS[o.style].good.map(g=>`<p>Resulta: <b style="color:var(--fg)">${g.n}</b> (precisa de ${attrLow(g.need)}${a.attrs[g.need]>=(sc.attrs[g.need][0]+sc.attrs[g.need][1])/2-3?'':', <span class="warn">o teu atleta pode não ter</span>'})</p>`).join('')}<p>Ajuda em parte: ${TACTICS[o.style].half.map(h=>h.n.toLowerCase()).join(', ')}.</p></div></div>
+  return info(`FICHA DE ${o.nick.toUpperCase()}`,`<div class="r" style="grid-template-columns:1fr"><div><strong>${o.name} "${o.nick}"</strong><p>${o.academy}${o.nt&&o.nt!=='POR'?` (${NAT[o.nt].n})`:''}${oppRank(o)?` · <b style="color:var(--gold);font-weight:400">${oppRank(o)}</b>`:''} · ${o.style} ${styleLv(o,o.style)}${n>=5&&o.sty?STYLES.filter(x=>x!==o.style&&styleLv(o,x)>0).map(x=>` · também ${x}`).join(''):''} · ${o.rec.w}V ${o.rec.l}D (${o.rec.ko} KO)</p><p>${bodyLine(o)} · ${(()=>{const d=Math.round((o.r||0)-(a.r||0));return d>0?`<span class="warn">+${d} cm de alcance</span>`:d<0?`<span class="good">${d} cm de alcance</span>`:'mesmo alcance'})()}</p></div></div>
+    <p class="hint">${prec} (${n} luta${n===1?'':'s'}) · azul: ele · dourado: ${a.nick}</p>
+    <div class="stats" style="gap:1px">${rows}</div>
+    <p class="hint">Golpes que já lhe vimos: ${sc.skills.filter(k=>SKILLS[k]).map(k=>pName(k)).join(', ')||'nenhum registo'}.${n>=5&&o.tech&&o.tech.k&&o.tech.k.length?` Técnicas: ${o.tech.k.slice(0,2).map(k=>TECH[k].n).join(', ')}.`:''}</p>
+    ${o.fk||o.glass||(o.gift&&(o.rec.w+o.rec.l)>=5)?`<p class="hint">${[o.fk?`<span class="warn">Mão perigosa:</span> ${o.fk} queda${o.fk>1?'s':''} relâmpago`:'',o.gift&&(o.rec.w+o.rec.l)>=5?`<span class="warn">Dom:</span> ${GIFTS[o.gift].n}`:'',o.glass?`<span class="good">Queixo frágil:</span> ${o.glass} queda${o.glass>1?'s':''} sem estar ferido`:''].filter(Boolean).join(' · ')}.</p>`:''}
+    <div class="r" style="grid-template-columns:1fr"><div><strong>TÁTICAS CONTRA UM ${o.style.toUpperCase()}</strong>${TACTICS[o.style].good.map(g=>`<p>Resulta: <b style="color:var(--fg)">${g.n}</b> (precisa de ${attrLow(g.need)}${a.attrs[g.need]>=(sc.attrs[g.need][0]+sc.attrs[g.need][1])/2-3?'':', <span class="warn">o teu atleta pode não ter</span>'})</p>`).join('')}${n<10?`<p>Ajuda em parte: ${TACTICS[o.style].half.map(h=>h.n.toLowerCase()).join(', ')}.</p>`:''}</div></div>
     <p class="hint">${edge(a.style,o.style)>0?`<span class="good">O estilo de ${a.nick} tem vantagem.</span>`:edge(a.style,o.style)<0?`<span class="warn">O estilo de ${a.nick} está em desvantagem.</span>`:'Mesmo estilo: ninguém tem vantagem.'} ${when?`Faltam ${when} semanas: ele também vai treinar até lá.`:''}${weeks>0?` Dados de há ${weeks} semana${weeks>1?'s':''}.`:''}</p>`,'FECHAR');
 }
-function addOffer(a,easy){
-  if(a.offers.length>=3)return;
-  const t=TIERS[a.tier];
-  const title=!easy&&a.rank<=3&&!a.offers.some(x=>x.title);
-  const opp=makeOpp(a,title);
-  if(easy){for(const[k]of ATTRS)opp.attrs[k]=clamp(a.attrs[k]+RI(-3,3),5,99);opp.rating=rating(opp)}
-  const purse=RI(t.purse[0],t.purse[1])*(title?2:1);
-  a.offers.push({id:'o'+Date.now()+RI(0,999),opp,purse:Math.round(purse/10)*10,inWeeks:RI(6,8),expires:S.week+2,title,rounds:t.rounds+(title?1:0)});
-}
 function diffLabel(a,o){const d=scoutRating(o)-rating(a);if(d<-6)return['Fácil','g'];if(d<4)return['Equilibrada','m'];if(d<12)return['Difícil','b'];return['Muito difícil','b']}
+
+/* ================= CAREER ================= */
+/* ---- carreira e mundo (3A-4) ----
+   Calendário: 1 ano = 52 semanas em 4 estações de 13 (S.week conta desde o início; a semana 1 é Primavera · Sem. 1 · Ano 1). Estações só no calendário.
+   Atleta (a.car): am amador, af/aw lutas e vitórias como amador, li semana da licença, L nível do ranking em que luta (0 Nacional, 1 Europeu, 2 Mundial),
+   lf última luta, t3 semanas no top 3 por nível, rk ano em que se inscreveu no Torneio Rookie, ys o ano [V, KO, títulos], df defesas, kos KOs sofridos
+   seguidos, cv vezes que o convenceste a não se reformar, rtw semana do último cartão de reforma, fw a próxima luta é a de despedida, aw2 prémios, ex ex-campeão,
+   bp melhor posição [nível, n.º], y0 ano em que chegou, chw semana do último desafio, pp cartão de subida de nível à espera.
+   Mundo (S.W): b = {id: pugilista compacto}; R['Categoria|nível'] = {c campeão (id ou null), cd prazo da defesa obrigatória (semana), cw semana em que ganhou,
+   l lista (l[0] = n.º 1 = desafiador obrigatório ou null; l[1..19] = n.º 2–20; o resto sem ranking), ew semana da última eliminatória proposta ao nosso atleta};
+   T Torneio Rookie do ano; yr melhor KO do ano; chg trocas de campeão; gal última gala; st contas (reformas, novos).
+   ids: números = pugilistas do mundo; texto = atletas do nosso ginásio (a.id).
+   Pugilista compacto: {i, n nome, k alcunha, nt nacionalidade, ac academia (portugueses), c categoria (índice), L nível principal, rg região (0 Norte, 1 Sul,
+   -1 estrangeiro), g idade, q qualidade (média dos atributos), p teto, o desvio de cada atributo, x Queixo, s estilo, y nível do estilo, h/r altura e alcance,
+   m mentais, lk aspeto, t técnicas, gf dom, w/l/d/ko recorde, kl derrotas por KO, ls derrotas seguidas, nf próxima luta, lf última, li licença, tt títulos
+   [N, E, M], t3 semanas no top 3, ys o ano [V, KO, títulos], bk atleta nosso com luta marcada com ele}.
+   Listas: Nacional = portugueses de nível 0; Europeu = europeus de nível ≥ 1; Mundial = nível 2 (os melhores aparecem em mais de uma).
+   Lutas fora do ecrã por uma conta rápida (quickBout: qualidade + acaso), uma vez por mês; os campeões defendem; eliminatórias entre os n.º 2–4. */
+const SEAS=['Primavera','Verão','Outono','Inverno'],SEA3=['PRIM.','VERÃO','OUT.','INV.'];
+function yearOf(w){return Math.floor(((w??S.week)-1)/52)+1}
+function ywk(w){return(((w??S.week)-1)%52+52)%52}                      // 0..51
+function seasOf(w){return Math.floor(ywk(w)/13)}
+function sWk(w){return ywk(w)%13+1}
+function calTxt(w){return `${SEAS[seasOf(w)]} · Sem. ${sWk(w)} · Ano ${yearOf(w)}`}
+function calMini(w){return `${SEA3[seasOf(w)]} ${sWk(w)}`}
+function calAbs(y,yw){return(y-1)*52+yw+1}
+const RLV=['Nacional','Europeu','Mundial'],RLV3=['NAC','EUR','MUN'];
+const PURSE=[{n:'Amador',purse:[0,0],share:0,cost:30},{n:'Nacional',purse:[700,1500],share:.4,cost:120},{n:'Europeu',purse:[4000,8000],share:.33,cost:400},{n:'Mundial',purse:[18000,36000],share:.25,cost:1500}];
+const ROOK={wk:[2,6,10,14],n:['quartos de final','meias-finais','final regional','Final Nacional Rookie'],sh:['QUARTOS','MEIAS','FINAL REGIONAL','FINAL NACIONAL'],rounds:[4,4,6,6],purse:[300,450,800,1600]};
+const REG=['Norte','Sul'],REGK=['N','S'];
+const KIND_N={am:'Amador',rok:'Torneio Rookie',rk:'Ranking',el:'Eliminatória',ti:'Título'};
+const NAT={POR:{n:'Portugal',eu:1},
+  ESP:{n:'Espanha',eu:1,g:'Gimnasio Hércules',f:['Javier','Sergio','Álvaro','Rubén','Iker','Dani'],l:['García','Navarro','Ruiz','Moreno','Herrera','Castillo']},
+  FRA:{n:'França',eu:1,g:'Boxe Club du Vieux-Port',f:['Yanis','Karim','Julien','Mathis','Bilal','Hugo'],l:['Dubois','Lefèvre','Benali','Moreau','Girard','Traoré']},
+  ITA:{n:'Itália',eu:1,g:'Palestra Romana',f:['Luca','Matteo','Giorgio','Davide','Salvatore'],l:['Russo','Esposito','Ferrari','Bianchi','Romano']},
+  ALE:{n:'Alemanha',eu:1,g:'Boxstall Hamburg',f:['Felix','Jonas','Lukas','Marvin','Dennis'],l:['Schmidt','Wagner','Becker','Krüger','Hoffmann']},
+  ING:{n:'Inglaterra',eu:1,g:'East End Boxing',f:['Jack','Callum','Reece','Liam','Harry'],l:['Smith','Walker','Hughes','Clarke','Brennan']},
+  IRL:{n:'Irlanda',eu:1,g:'Liffey Boxing Club',f:['Conor','Sean','Paddy','Eoin'],l:["O'Brien",'Murphy','Kelly','Byrne']},
+  POL:{n:'Polónia',eu:1,g:'Klub Bokserski Gdańsk',f:['Kacper','Mateusz','Piotr','Tomasz'],l:['Kowalski','Nowak','Zieliński','Wójcik']},
+  UCR:{n:'Ucrânia',eu:1,g:'Klub Dnipro',f:['Oleksandr','Dmytro','Taras','Bohdan'],l:['Kovalenko','Bondarenko','Tkachenko','Melnyk']},
+  BEL:{n:'Bélgica',eu:1,g:'Boxing Anvers',f:['Thomas','Jens','Ilias','Wout'],l:['Peeters','Janssens','Maes','Claes']},
+  EUA:{n:'EUA',g:'Motor City Boxing',f:['Marcus','Devon','Andre','Tyrell','Jake','Carlos'],l:['Johnson','Williams','Brooks','Jackson','Rivera','Hill']},
+  MEX:{n:'México',g:'Gimnasio Azteca',f:['Juan','Óscar','Ramón','Erik','Jaime','Luis'],l:['Hernández','Ramírez','Torres','Flores','Vargas','Mendoza']},
+  CUB:{n:'Cuba',g:'Escuela de Boxeo Habana',f:['Yoel','Lázaro','Osvaldo','Yasiel'],l:['Pérez','Fonseca','Valdés','Cárdenas']},
+  JAP:{n:'Japão',g:'Tokyo Boxing Dojo',f:['Takeshi','Ryo','Kenji','Daichi','Sho'],l:['Sato','Suzuki','Tanaka','Watanabe','Kobayashi']},
+  FIL:{n:'Filipinas',g:'Manila Boxing Camp',f:['Jerwin','Mark','Reymart','Jonas'],l:['Santos','Reyes','Dela Cruz','Bautista']},
+  BRA:{n:'Brasil',g:'Academia Carioca',f:['Thiago','Wellington','Everton','Kauã'],l:['Silva','Oliveira','Souza','Barbosa']},
+  ARG:{n:'Argentina',g:'Club Atlético Boxeo',f:['Facundo','Matías','Lautaro','Gonzalo'],l:['Gómez','Fernández','Acosta','Sosa']},
+  CAZ:{n:'Cazaquistão',g:'Almaty Boxing',f:['Daniyar','Yerlan','Askhat'],l:['Abenov','Seitkali','Nurlanov']},
+  GAN:{n:'Gana',g:'Accra Boxing Club',f:['Kofi','Kwame','Isaac'],l:['Mensah','Owusu','Boateng']},
+  PRI:{n:'Porto Rico',g:'Club Boricua',f:['Ángel','Xander','Edwin'],l:['Rosario','Colón','Ortiz']}};
+const NAT_EU=Object.keys(NAT).filter(k=>NAT[k].eu&&k!=='POR'),NAT_W=Object.keys(NAT).filter(k=>!NAT[k].eu);
+const ACAD=[['Ginásio Estrela do Norte',0],['Boxe Clube Ribeira',0],['Punhos de Aço',0],['Clube Leões do Douro',0],['Academia Invicta',0],['Boxe Clube de Braga',0],['Ginásio Ferro Velho',0],
+  ['Academia Tubarão',1],['Clube Leões da Margem',1],['Boxe Clube Alfama',1],['Ginásio Sol do Sul',1],['Academia Barreiro Boxe',1],['Clube Pugilista do Algarve',1],['Ginásio Tejo',1]];
+const NICKW=[...NICKS,'Trovão','Bisonte','Navalha','Tornado','Pantera','Escorpião','Tigre','Falcão','Rocha','Ciclone','Coiote','Mamba','Pitbull','Ferro','Corvo','Gelo','Dínamo','Canhão',
+  'Bala','Leão','Urso','Lince','Tubarão','Vulcão','Machado','Trator','Chacal','Gavião','Maestro','Professor','Fantasma','Matador','Doutor','Pedreiro','Carteiro','Padeiro','Marinheiro',
+  'Pirata','Xerife','Samurai','Viking','Cossaco','Gladiador','Bombardeiro','Relojoeiro','Mosquito','Javali','Búfalo','Condor','Tufão','Aço','Diabo','Anjo','Rei','Príncipe','Sargento','Zorro','Titã'];
+const ATI=k=>ATTRS.findIndex(([x])=>x===k);
+const isEU=nt=>!!(NAT[nt]&&NAT[nt].eu);
+/* ---- consultas ---- */
+function wb(id){return typeof id==='number'&&S.W?S.W.b[id]||null:null}
+function ourA(id){return typeof id==='string'?S.roster.find(a=>a.id===id)||null:null}
+function idNick(id){const b=wb(id);if(b)return b.k;const a=ourA(id);return a?a.nick:'—'}
+function acName(b){return b.nt==='POR'?(ACAD[b.ac]||ACAD[0])[0]:NAT[b.nt].g}
+function rkKey(c,L){return c+'|'+L}
+function RK(c,L){return S.W.R[rkKey(c,L)]}
+function rkPos(R,id){if(!R)return -1;if(R.c===id)return 0;const i=R.l.indexOf(id);return i<0?-1:i+1} // 0 campeão · 1 desafiador obrigatório · 2..20 · >20 sem ranking
+function posTxt(p){return p===0?'campeão':p<0?'fora':p>20?`sem ranking (${p}.º)`:`n.º ${p}`}
+function rkRemove(R,id){const i=R.l.indexOf(id);if(i===0)R.l[0]=null;else if(i>0)R.l.splice(i,1);return i}
+function rkInsert(R,id,ix){rkRemove(R,id);ix=clamp(ix,1,R.l.length);R.l.splice(ix,0,id)} // ix = índice (1 = n.º 2)
+function homeLists(nt,L){return nt==='POR'||isEU(nt)?(L===0?(nt==='POR'?[0]:[]):L===1?[1]:[1,2]):(L===2?[2]:[])}
+function belongs(id,ci,L){const b=wb(id);if(b)return b.c===ci&&homeLists(b.nt,b.L).includes(L);const a=ourA(id);return!!(a&&a.car&&!a.car.am&&catIdx(a.cat)===ci&&homeLists('POR',a.car.L).includes(L))}
+function carK(a){if(!a.car)a.car={am:true,af:0,aw:0,li:null,L:0,ys:[0,0,0],y0:S&&S.week?yearOf():1};const c=a.car;c.ys=c.ys||[0,0,0];c.t3=c.t3||[0,0,0];return c}
+function careerLv(a){const c=a&&a.car;return!c||c.am?0:1+(c.L||0)}  // 0 amador, 1 Nacional, 2 Europeu, 3 Mundial (lugares das técnicas, aumentos)
+function champOf(a){const r=[];if(!S.W||!a.car||a.car.am)return r;for(let L=0;L<3;L++)if(RK(a.cat,L).c===a.id)r.push(L);return r}
+function carShort(a){const c=carK(a);if(c.am)return `Amador ${c.af}/${TUNE.amLic}`;const ch=champOf(a);if(ch.length)return `Campeão ${RLV[ch.at(-1)]}`;
+  const p=rkPos(RK(a.cat,c.L),a.id);return p===1?`#1 ${RLV[c.L]} (obrig.)`:p>20?`${RLV[c.L]} s/ ranking`:`#${p} ${RLV[c.L]}`}
+function carPath(a){ // amador → licença → Nacional → Europeu → Mundial, com o passo atual em destaque
+  const c=carK(a),st=c.am?0:1+c.L,ch=champOf(a);
+  const lab=['AMADOR','NACIONAL','EUROPEU','MUNDIAL'];
+  return lab.map((t,i)=>i===st?`<b>${i?(ch.includes(i-1)?'CAMPEÃO ':'#'+Math.max(1,rkPos(RK(a.cat,i-1),a.id))+' ')+t:`${t} ${c.af}/${TUNE.amLic}`}</b>`:i<st?`<s>${t}</s>`:t).join(' ▸ ')}
+/* ---- criar o mundo ---- */
+function newBoxer(ci,nt,L,q,age,rg){
+  const W=S.W,cat=CATS[ci],bd=rollBody(cat),st=styleForBody(bodyType({cat,...bd}));
+  const used=new Set(Object.values(W.b).filter(b=>b.c===ci).map(b=>b.k));for(const a of S.roster)used.add(a.nick);
+  const k=pick(NICKW.filter(n=>!used.has(n)))||pick(NICKW);
+  const n=nt==='POR'?pick(FIRST)+' '+pick(LAST):pick(NAT[nt].f)+' '+pick(NAT[nt].l);
+  const o=ATTRS.map(([kk])=>kk==='queixo'?0:RI(-6,6));if(st==='Outboxer')o[ATI('defesa')]+=4;else o[ATI('forca')]+=4;
+  const b={i:W.n++,n,k,nt,c:ci,L,rg:nt==='POR'?rg:-1,g:age,q:Math.round(q*10)/10,p:Math.round(age<26?q+RI(4,16):q+RI(0,4)),o,x:clamp(rollChin()+L*2,20,92),
+    s:STYLES.indexOf(st),y:clamp(1+Math.floor((q-10)/14)+RI(0,1),1,styleCap({cat,...bd},st)),h:bd.h,r:bd.r,m:MENT.map(()=>clamp(Math.round(50+gs()*TUNE.mentSd),5,95)),
+    lk:[RI(0,SKINS.length-1),RI(0,HAIRS.length-1),RI(0,TRUNKS.length-1)],t:[],w:0,l:0,d:0,ko:0,kl:0,ls:0,nf:S.week+RI(1,16),lf:S.week,li:S.week-1,tt:[0,0,0],t3:0,ys:[0,0,0]};
+  if(nt==='POR'){const ac=ACAD.map((x,i)=>[x,i]).filter(([x])=>x[1]===rg);b.ac=pick(ac)[1]}
+  const gf=rollGift(cat);if(gf)b.gf=gf;
+  W.b[b.i]=b;bTech(b);return b}
+function bTier(b){return b.q<20?0:b.L===0?(b.q>=34?2:1):b.L+1} // como os escalões antigos de oppTech (0 amador … 3 mundial)
+function bTech(b){ // técnicas: até ao número do nível (oppTech), preferindo as do estilo
+  const o=toOpp(b);o.tech={k:b.t.slice(),l:null,w:0,p:0,fg:null};const want=clamp(bTier(b)+(b.q>=bTier(b)*14+26?1:0),0,5);
+  while(o.tech.k.length<want){const T=o.tech,can=TKEYS.filter(id=>!T.k.includes(id)&&!techLack(o,id)&&!(TECH[id].k==='grd'&&T.k.some(k=>TECH[k].k==='grd')));if(!can.length)break;
+    T.k.push(wpick(can,id=>TECH[id].sty===o.style?3:TECH[id].sty==='ctr'?1.2:.6))}
+  b.t=o.tech.k}
+function bRecord(b,qmid){const n=clamp(Math.round((b.g-18)*R(1.6,3.2)),0,48),wf=clamp(.5+(b.q-qmid)/45+R(-.12,.12),.25,.95),w=Math.round(n*wf);
+  b.w=w;b.l=n-w;b.ko=Math.round(w*R(.2,.6));b.kl=Math.round(b.l*R(0,.35));b.li=S.week-Math.max(0,(b.g-19))*52-RI(1,40)}
+function genWorld(){
+  S.W={n:1,b:{},R:{},T:null,yr:{y:yearOf(),ko:null},chg:[],gal:null,st:{ret:0,quit:0,new:0}};
+  CATS.forEach((cat,ci)=>{
+    for(let L=0;L<3;L++)S.W.R[rkKey(cat,L)]={c:null,cd:0,cw:0,l:[null],ew:-99};
+    const mk=(nt,L,q0,q1,a0,a1,rg)=>{const q=q0+(q1-q0)*Math.pow(Math.random(),1.2),age=clamp(Math.round(a0+(a1-a0)*(q-q0)/(q1-q0)+RI(-2,2)),18,34);const b=newBoxer(ci,nt,L,q,age,rg);bRecord(b,(q0+q1)/2);return b};
+    for(let i=0;i<21;i++)mk('POR',0,15,39,19,31,i%2);
+    for(let i=0;i<4;i++){const b=mk('POR',0,11,18,18,21,i%2);b.li=S.week-RI(20,45)}
+    for(let i=0;i<3;i++)mk('POR',1,38,50,24,31,i%2);mk('POR',2,50,60,26,31,RI(0,1));
+    for(let i=0;i<8;i++)mk(pick(NAT_EU),1,36,54,22,32);for(let i=0;i<7;i++)mk(pick(NAT_EU),2,50,66,24,32);
+    for(let i=0;i<12;i++)mk(pick(NAT_W),2,50,70,23,32);
+    for(let L=0;L<3;L++){const R=RK(cat,L),pool=Object.values(S.W.b).filter(b=>b.c===ci&&homeLists(b.nt,b.L).includes(L)).map(b=>[b,b.q+R_(3)]).sort((p,q)=>q[1]-p[1]).map(x=>x[0]);
+      if(!pool.length)continue;const ch=pool.shift();R.c=ch.i;ch.tt[L]=RI(1,3);R.cw=S.week-RI(0,30);R.cd=S.week+RI(8,39);
+      R.l=[Math.random()<.6&&pool.length?pool.shift().i:null,...pool.map(b=>b.i)]}
+  });
+  rookieBuild(false);
+}
+function R_(s){return R(-s,s)}
+/* ---- o pugilista do mundo num adversário completo (lutas, ficha) ---- */
+function toOpp(b,a){
+  const cat=CATS[b.c],st=STYLES[b.s],attrs={};ATTRS.forEach(([k],i)=>{attrs[k]=k==='queixo'?Math.round(b.x):clamp(Math.round(b.q+b.o[i]),5,99)});
+  const o={wid:b.i,name:b.n,nick:b.k,nt:b.nt,academy:acName(b),style:st,look:{skin:SKINS[b.lk[0]]||SKINS[0],hair:HAIRS[b.lk[1]]||HAIRS[0],trunk:TRUNKS[b.lk[2]]||TRUNKS[1]},
+    attrs,skills:oppSkills(b.q,st),def:oppDefs(b.q,st),ment:Object.fromEntries(MENT.map(([k],i)=>[k,b.m[i]??50])),cat,h:b.h,r:b.r,gift:b.gf||null,
+    rec:{w:b.w,l:b.l,ko:b.ko},made:S.week,age:b.g,tech:{k:(b.t||[]).filter(k=>TECH[k]),l:null,w:0,p:0,fg:null},sxp:STY0(),ttn:b.tt.reduce((t,v)=>t+v,0)};
+  if(a&&a.look&&o.look.trunk===a.look.trunk)o.look.trunk=TRUNKS.find(c=>c!==a.look.trunk);
+  o.sty=STY0();o.sty[st]=b.y;if(b.L>=1){const s2=STYLES[(b.s+1)%3];o.sty[s2]=Math.min(styleCap(o,s2),Math.max(1,b.y-1))}
+  o.rating=rating(o);const n=b.w+b.l+b.d;o.fk=n>=4&&b.ko>=3?Math.min(3,Math.floor(b.ko/4)):0;o.glass=n>=4&&b.kl>=2?Math.min(2,b.kl-1):0;
+  return o}
+function oppRank(o,cat){ // "n.º 5 Nacional" de um adversário do mundo (ficha, propostas)
+  if(!o||o.wid==null||!S.W)return '';const b=wb(o.wid);if(!b)return '';const L=b.L,ps=[0,1,2].map(l=>rkPos(RK(CATS[b.c],l),b.i));
+  const ch=ps.findIndex(p=>p===0);if(ch>=0)return `campeão ${RLV[ch]}`;const p=ps[L];return p>0&&p<=20?`n.º ${p} ${RLV[L]}`:p>20?`${RLV[L]}, sem ranking`:''}
+/* ---- conta rápida das lutas fora do ecrã ---- */
+function wPow(b){return b.q+(b.x-50)*.1+b.y*1.2+(b.t?b.t.length:0)*.6}
+function quickBout(x,y,rounds,L){
+  if(Math.random()<TUNE.wDraw)return{res:.5,how:'pontos',rd:rounds,mg:0};
+  const p=1/(1+Math.exp(-(wPow(x)-wPow(y))/TUNE.wLuck)),res=Math.random()<p?1:0,w=res?x:y;
+  const ko=clamp(TUNE.wKO[0]+TUNE.wKO[1]*x.c/7+L*.04+Math.abs(p-.5)*.4+(w.ko/(w.w+1)-.4)*.2,.05,.75);
+  if(Math.random()<ko)return{res,how:'KO',rd:RI(1,rounds),mg:0};
+  return{res,how:'pontos',rd:rounds,mg:RI(1,8)}}
+/* ---- resultado de uma luta (do mundo ou nossa) no recorde, nos rankings e nos títulos. res: 1 ganha x, 0 ganha y, .5 empate.
+   Ranking: ganhar a quem está acima fica no lugar dele (o outro desce mais); ganhar a quem está abaixo sobe pouco; perder desce (mais contra quem estava abaixo).
+   O n.º 1 (desafiador obrigatório) só se ganha numa eliminatória; os campeões não estão na lista. ---- */
+function rkMove(R,w,l){
+  const iw=R.l.indexOf(w),il=R.l.indexOf(l);
+  if(iw>0&&il>0){if(iw>il){R.l.splice(iw,1);R.l.splice(il,0,w);const d=RI(1,3);rkInsert(R,l,il+1+d)}
+    else{if(iw>1&&Math.random()<.6){R.l.splice(iw,1);R.l.splice(iw-1,0,w)}const nl=R.l.indexOf(l);if(Math.random()<.6)rkInsert(R,l,nl+1)}}
+  else if(iw>1){if(Math.random()<.5){R.l.splice(iw,1);R.l.splice(iw-1,0,w)}}
+  else if(il>0)rkInsert(R,l,il+1)}
+function boutApply(x,y,res,ctx){
+  const{c,L,kind}=ctx,ci=catIdx(c),wk=S.week,W=S.W;
+  const win=res===1?x:res===0?y:null,los=res===1?y:res===0?x:null;
+  for(const[id,me]of[[x,res],[y,1-res]]){const b=wb(id);if(!b)continue;
+    if(me===1){b.w++;b.ls=0;b.ys[0]++;if(ctx.how==='KO'){b.ko++;b.ys[1]++}}else if(me===0){b.l++;b.ls++;if(ctx.how==='KO'){b.kl++;b.x=Math.max(5,b.x-3)}}else b.d++;
+    b.lf=wk;b.nf=wk+RI(TUNE.wFight[0],TUNE.wFight[1])+(kind==='ti'?4:0)}
+  if(ctx.how==='KO'&&win!=null&&kind!=='am'){const k=W.yr.ko,v={id:win,o:los,rd:ctx.rd||1,L:kind==='rok'?-1:L,c:ci,ti:kind==='ti'?1:0,w:wk};
+    if(!k||v.rd<k.rd||(v.rd===k.rd&&(v.L>k.L||(v.L===k.L&&v.ti>k.ti))))W.yr.ko=v}
+  if(kind==='rok'||kind==='am')return;
+  const R=RK(c,L);if(!R)return;
+  if(win==null){if(kind==='ti'&&ctx.mand&&R.c!=null){R.cd=wk+TUNE.mandW;const m=R.l[0];if(m===x||m===y){R.l[0]=null;rkInsert(R,m,2)}}return}
+  if(kind==='ti'){
+    const old=R.c;
+    if(old!=null&&win===old){if(R.l[0]===los){R.l[0]=null;R.cd=wk+TUNE.mandW}if(belongs(los,ci,L))rkInsert(R,los,Math.min(R.l.length,3+RI(0,2)));else rkRemove(R,los);addTT(win,L,false)}
+    else{rkRemove(R,win);if(old!=null){if(belongs(old,ci,L))rkInsert(R,old,2);else rkRemove(R,old)}else if(R.l[0]===los){R.l[0]=null;rkInsert(R,los,1)}
+      R.c=win;R.cd=wk+TUNE.mandW;R.cw=wk;addTT(win,L,true);W.chg.push({w:wk,c:ci,L,id:win,n:idNick(win)});W.chg=W.chg.slice(-40)}
+  }else if(kind==='el'){rkRemove(R,win);R.l[0]=win;if(R.c!=null&&R.cd<wk+10)R.cd=wk+10;const il=R.l.indexOf(los);if(il>0)rkInsert(R,los,il+1)}
+  else for(let LL=0;LL<3;LL++){const Q=RK(c,LL);if(Q.l.includes(x)||Q.l.includes(y))rkMove(Q,win,los)}
+}
+function addTT(id,L,isNew){const b=wb(id);if(b&&isNew){b.tt[L]++;b.ys[2]++}}
+/* ---- mês do mundo: os pugilistas melhoram ou descem com a idade; campeões defendem (obrigatória de 9 em 9 meses, voluntárias pelo meio);
+   eliminatórias entre os n.º 2–4 quando não há desafiador; lutas normais com quem está perto no ranking; parados descem devagar; top 3 muito tempo sobe de nível. ---- */
+function avail(id){const b=wb(id);return!!b&&!b.bk&&!b.rkb}
+function wFight(x,y,c,L,kind,ex={}){ // luta entre dois do mundo
+  const X=wb(x),Y=wb(y),rounds=kind==='ti'?[10,12,12][L]:kind==='el'?[8,10,12][L]:L===0?6:L===1?8:10,q=quickBout(X,Y,rounds,L);
+  boutApply(x,y,q.res,{c,L,kind,how:q.how,rd:q.rd,...ex});return q}
+function worldMonth(){
+  const W=S.W,wk=S.week;
+  for(const b of Object.values(W.b)){const g=b.g;let d;if(g<=24)d=.45;else if(g<=27)d=.3;else if(g<=30)d=.08;else d=-(.12+.08*(g-31));
+    if(d>0)b.q=Math.round(Math.min(Math.max(b.q,b.p),b.q+d*clamp((b.p-b.q)/8,.2,1))*10)/10;else b.q=Math.round(Math.max(8,b.q+d)*10)/10}
+  CATS.forEach((cat,ci)=>{
+    for(let L=0;L<3;L++){const R=RK(cat,L),ch=R.c,cb=wb(ch),md=R.l[0];
+      if(ch==null){const top=R.l.filter(x=>x!=null).slice(0,2);if(top.length===2&&top.every(avail))wFight(top[0],top[1],cat,L,'ti')}
+      else if(cb&&avail(ch)){
+        if(md!=null&&avail(md)&&(R.cd-wk<=8||(cb.nf<=wk&&Math.random()<.5)))wFight(ch,md,cat,L,'ti',{mand:1});
+        else if(cb.nf<=wk){const v=R.l.slice(1,10).filter(x=>x!=null&&avail(x));if(v.length&&Math.random()<.6)wFight(ch,pick(v),cat,L,'ti');else cb.nf=wk+RI(4,8)}
+        if(R.l[0]==null&&wk>R.cd)R.cd=wk+8}
+      else if(ourA(ch)==null&&!cb){R.c=null}
+      if(R.l[0]==null&&R.c!=null){const cand=R.l.slice(1,4).filter(x=>x!=null);
+        if(!(cand.some(x=>ourA(x))&&wk-R.ew<6)){const w=shuffle(cand.filter(avail));if(w.length>=2)wFight(w[0],w[1],cat,L,'el')}}
+    }
+    for(let L=0;L<3;L++){const Q=RK(cat,L),done=new Set();
+      const ok=id=>{const b=wb(id);return b&&b.L===L&&!b.bk&&!done.has(id)&&Q.l.indexOf(id)>0&&!b.rkb};
+      for(const id of shuffle(Q.l.filter(x=>ok(x)&&wb(x).nf<=wk))){if(!ok(id))continue;const i=Q.l.indexOf(id);
+        const near=Q.l.slice(Math.max(1,i-4),i+5).filter(y=>y!==id&&ok(y));if(!near.length)continue;const y=pick(near);done.add(id);done.add(y);wFight(id,y,cat,L,'rk')}}
+    for(let L=0;L<3;L++){const Q=RK(cat,L); // parados há muito descem devagar; top 3 muito tempo sobe de nível
+      for(let i=Q.l.length-1;i>=1;i--){const id=Q.l[i],b=wb(id),a=ourA(id),lf=b?b.lf:a?(a.car.lf??a.car.li??wk):wk;if(a&&a.fight)continue;if(wk-lf>TUNE.inact&&i<Q.l.length-1)rkInsert(Q,id,i+1)}
+      Q.l.forEach((id,i)=>{if(id==null)return;const b=wb(id),a=ourA(id);if(b&&b.L===L){b.t3=i<=2?(b.t3||0)+4:0}if(a&&a.car.L===L){a.car.t3[L]=i<=2?(a.car.t3[L]||0)+4:0}});
+      for(const id of Q.l.slice(0,3)){const b=wb(id);if(b&&b.L===L&&L<2&&b.t3>=TUNE.t3W&&!b.bk)promoteB(b)}
+      const cb=wb(Q.c);if(cb&&cb.L===L&&L<2&&wk-Q.cw>=TUNE.champMinW&&!cb.bk){const keep=Math.random()<TUNE.keepP;promoteB(cb);if(!keep){Q.c=null;W.chg.push({w:wk,c:ci,L,id:null,n:cb.k,v:1})}}
+    }
+  });
+  for(const b of Object.values(W.b))if(b.bk&&!S.roster.some(a=>a.id===b.bk&&a.fight&&a.fight.wid===b.i))b.bk=null; // marcação perdida
+}
+function promoteB(b){ // sobe de nível: sai das listas que já não são as dele e entra no fundo do ranking da nova
+  const cat=CATS[b.c],old=homeLists(b.nt,b.L);b.L=Math.min(2,b.L+1);b.t3=0;const nw=homeLists(b.nt,b.L);
+  for(const L of old)if(!nw.includes(L))rkRemove(RK(cat,L),b.i);
+  for(const L of nw){const R=RK(cat,L);if(R.c!==b.i&&!R.l.includes(b.i))rkInsert(R,b.i,Math.min(19,R.l.length))}
+  bTech(b)}
+function retireB(b,quit){const cat=CATS[b.c],W=S.W;for(let L=0;L<3;L++){const R=RK(cat,L);if(R.c===b.i){R.c=null;W.chg.push({w:S.week,c:b.c,L,id:null,n:b.k,v:2})}rkRemove(R,b.i)}
+  delete W.b[b.i];if(quit)W.st.quit++;else W.st.ret++}
+function worldYear(){ // começo do ano: idade, reformas, estrangeiros novos para manter o mundo cheio
+  const W=S.W;
+  for(const b of Object.values(W.b)){b.g++;if(b.g>=31)b.x=Math.max(5,b.x-1.5*(b.g-30));
+    let p=0;if(b.g>=TUNE.wRet[0])p=.2+.2*(b.g-TUNE.wRet[0]);if(b.g>=TUNE.wRet[1])p=1;if(b.kl>=4&&b.g>=27)p+=.25;if(b.ls>=5)p+=.35;if(b.x<20)p+=.4;
+    if(!b.bk&&Math.random()<p)retireB(b);else if(b.t.length<5&&Math.random()<.3)bTech(b)}
+  CATS.forEach((cat,ci)=>{const all=Object.values(W.b).filter(b=>b.c===ci),eu=all.filter(b=>isEU(b.nt)&&b.nt!=='POR').length,wo=all.filter(b=>!isEU(b.nt)).length;
+    for(let i=eu;i<15;i++){const b=newBoxer(ci,pick(NAT_EU),1,R(36,46),RI(21,25));bRecord(b,40);rkInsert(RK(cat,1),b.i,RK(cat,1).l.length);W.st.new++}
+    for(let i=wo;i<12;i++){const b=newBoxer(ci,pick(NAT_W),2,R(48,58),RI(22,26));bRecord(b,52);rkInsert(RK(cat,2),b.i,RK(cat,2).l.length);W.st.new++}});
+}
+function worldCull(){ // depois do Torneio Rookie: quem fica muito para trás no ranking Nacional deixa o boxe
+  CATS.forEach(cat=>{const R=RK(cat,0);for(const id of R.l.slice(TUNE.rkPool)){const b=wb(id);if(b&&!b.bk)retireB(b,true)}})}
+/* ---- Torneio Rookie (direção do Tiago): Norte e Sul, quadro de 8 por categoria uma vez por ano; inscrições na Primavera sem. 1, quartos sem. 3,
+   meias sem. 7, final regional sem. 11, Final Nacional Rookie no Verão sem. 2. Pode entrar quem tirou a licença há menos de 12 meses.
+   S.W.T = {y, C:{índice da categoria: {N:{e:[8 ids], r:[[4],[2],[1]]}, S:{...}, F:{w,l}}}, st:{id:{w,ko,rd,mg}}, done}. ---- */
+function rookieOk(a){const c=carK(a);return!c.am&&c.li!=null&&S.week-c.li<=52}
+function rookieAlive(a){const T=S.W&&S.W.T;if(!T||T.done||T.y!==yearOf()||a.car.rk!==T.y)return false;const C=T.C[catIdx(a.cat)];if(!C)return false;
+  if(C.F)return false;const B=C[REGK[S.reg||0]];const s=B.r[2].length?3:B.r[1].length?2:B.r[0].length?1:0;const P=s===0?B.e:B.r[s-1];
+  if(s===3)return C.N.r[2].concat(C.S.r[2]).includes(a.id);return P.includes(a.id)}
+async function rookieOpen(){
+  const y=yearOf(),qf=calAbs(y,ROOK.wk[0]);
+  for(const a of [...S.roster]){if(!rookieOk(a))continue;const busy=a.fight&&a.fight.week>=qf-1;
+    await card({a,title:`TORNEIO ROOKIE · ${a.nick.toUpperCase()}`,body:`<p class="hint">Abriram as inscrições do Torneio Rookie (${REG[S.reg||0]}, ${a.cat}). ${a.nick} tirou a licença há ${S.week-a.car.li} semana${S.week-a.car.li===1?'':'s'}: pode entrar.</p>
+      <p class="hint">Quadro de 8: quartos na Primavera sem. 3, meias na sem. 7, final regional na sem. 11 e Final Nacional no Verão sem. 2. O campeão começa no n.º 10 do ranking Nacional.</p>${busy?`<p class="hint warn">Tem uma luta marcada para essa altura: não pode entrar este ano.</p>`:''}`,
+      opts:busy?[{t:'OK'}]:[{t:'INSCREVER',cls:'gold',fn:()=>{a.car.rk=y;a.offers=a.offers.filter(o=>o.kind==='ti');note(`${a.nick} inscreveu-se no Torneio Rookie.`)}},{t:'NÃO VAI'}]})}
+  rookieBuild(true);
+}
+function rookieBuild(withOurs){
+  const W=S.W,y=yearOf(),wk=S.week,T=W.T={y,C:{},st:{},nm:{},done:false};
+  CATS.forEach((cat,ci)=>{const C=T.C[ci]={N:null,S:null,F:null};
+    for(let rg=0;rg<2;rg++){const mine=withOurs?S.roster.find(a=>catIdx(a.cat)===ci&&a.car&&a.car.rk===y&&(S.reg||0)===rg):null,need=mine?7:8;
+      const el=Object.values(W.b).filter(b=>b.c===ci&&b.nt==='POR'&&b.L===0&&b.rg===rg&&wk-b.li<52&&!b.bk&&RK(cat,0).c!==b.i).sort((p,q)=>q.q-p.q).slice(0,need).map(b=>b.i);
+      while(el.length<need){const b=newBoxer(ci,'POR',0,R(11,19),RI(18,22),rg);b.p=Math.round(b.q+RI(8,30));b.li=wk;rkInsert(RK(cat,0),b.i,RK(cat,0).l.length);el.push(b.i);W.st.new++}
+      for(const id of el){const b=wb(id);b.rkb=1;T.nm[id]=b.k}
+      if(mine)el.push(mine.id);
+      C[REGK[rg]]={e:shuffle(el),r:[[],[],[]]}}});
+  for(const a of S.roster)if(a.car&&a.car.rk===y&&withOurs)rookieBook(a,0);
+}
+function rookiePair(B,s,id){const P=s===0?B.e:B.r[s-1],i=P.indexOf(id);return i<0?null:P[i^1]}
+function rookieBook(a,s){
+  const T=S.W.T,ci=catIdx(a.cat),C=T.C[ci],B=C[REGK[S.reg||0]];
+  const oid=s<3?rookiePair(B,s,a.id):(C.N.r[2][0]===a.id?C.S.r[2][0]:C.N.r[2][0]);const b=wb(oid);if(!b)return;
+  a.fight={opp:toOpp(b,a),wid:b.i,purse:ROOK.purse[s],week:calAbs(T.y,ROOK.wk[s]),title:false,rounds:ROOK.rounds[s],kind:'rok',stage:s,lv:0,pl:1};b.bk=a.id;if(a.car.fw)a.fight.last=1;
+  note(`Torneio Rookie: ${a.nick} vs ${b.k} (${ROOK.n[s]}, ${calTxt(a.fight.week)}).`)}
+function rookieRes(T,id,won,how,rd,mg){const s=T.st[id]||(T.st[id]={w:0,ko:0,rd:9,mg:0,dec:0});if(won){s.w++;if(how==='KO'){s.ko++;s.rd=Math.min(s.rd,rd)}else{s.mg+=mg;s.dec++}}}
+function rookieOur(a,f,r){ // a nossa luta do torneio: regista quem passa (empate: passa quem acertou mais golpes)
+  const T=S.W.T;if(!T)return true;const s=f.stage,ci=catIdx(a.cat),C=T.C[ci];
+  let won=r.draw?F.me.tot.landed>=F.op.tot.landed:!!r.win;const oid=f.wid;
+  rookieRes(T,a.id,won,r.how,Math.min(F.round,F.rounds),Math.abs(F.me.card-F.op.card));rookieRes(T,oid,!won,r.how,Math.min(F.round,F.rounds),Math.abs(F.me.card-F.op.card));
+  const w=won?a.id:oid;
+  if(s<3){const B=C[REGK[S.reg||0]],P=s===0?B.e:B.r[s-1],i=P.indexOf(a.id);if(i>=0)B.r[s][i>>1]=w}else C.F={w,l:won?oid:a.id};
+  return won}
+function rookieStage(){ // fim de uma semana de torneio: as outras lutas da ronda (conta rápida) e as nossas seguintes
+  const T=S.W&&S.W.T;if(!T||T.done||T.y!==yearOf())return[];const s=ROOK.wk.indexOf(ywk());if(s<0)return[];const out=[];
+  const fight=(x,y,rounds)=>{if(typeof x==='string'||typeof y==='string'){const ours=typeof x==='string'?x:y,oth=ours===x?y:x;return oth} // a nossa não aconteceu (lesão): passa o outro
+    const q=quickBout(wb(x),wb(y),rounds,0),w=q.res===.5?(Math.random()<.5?x:y):q.res?x:y;boutApply(x,y,w===x?1:0,{c:CATS[wb(x).c],L:0,kind:'rok',how:q.how,rd:q.rd});
+    rookieRes(T,w,true,q.how,q.rd,q.mg);rookieRes(T,w===x?y:x,false);return w};
+  CATS.forEach((cat,ci)=>{const C=T.C[ci];
+    if(s<3)for(const rk of REGK){const B=C[rk],P=s===0?B.e:B.r[s-1];for(let i=0;i<P.length;i+=2){if(B.r[s][i>>1]!=null)continue;B.r[s][i>>1]=fight(P[i],P[i+1],ROOK.rounds[s])}}
+    else if(!C.F){const x=C.N.r[2][0],y=C.S.r[2][0],w=fight(x,y,ROOK.rounds[3]);C.F={w,l:w===x?y:x}}});
+  for(const a of S.roster){if(a.car.rk!==T.y||a.fight)continue;const C=T.C[catIdx(a.cat)];
+    if(s<2){const B=C[REGK[S.reg||0]];if(B.r[s].includes(a.id))rookieBook(a,s+1)}
+    else if(s===2){if(C.N.r[2][0]===a.id||C.S.r[2][0]===a.id)rookieBook(a,3)}}
+  if(s===3)out.push(...rookieEnd());
+  return out}
+function rookieEnd(){ // prémios e ranking inicial: campeão n.º 10, perdeu a Final Nacional n.º 12, perdeu a final regional n.º 15, os outros n.º 20
+  const T=S.W.T,W=S.W;T.done=true;const place=(cat,id,pos)=>{const R=RK(cat,0);if(R.c===id)return;const i=R.l.indexOf(id);if(i<0||i>pos-1)rkInsert(R,id,pos-1)};
+  const champs=[];
+  CATS.forEach((cat,ci)=>{const C=T.C[ci];if(!C.F)return;place(cat,C.F.w,10);place(cat,C.F.l,12);
+    for(const rk of REGK){const B=C[rk];for(const id of B.r[1])if(id!==B.r[2][0])place(cat,id,15);for(const id of B.e)if(!B.r[1].includes(id)&&ourA(id))place(cat,id,20)}
+    champs.push([ci,C.F.w])});
+  for(const b of Object.values(W.b))delete b.rkb;
+  const ids=Object.keys(T.st).map(k=>isNaN(+k)?k:+k),st=id=>T.st[id];
+  const mvp=champs.map(([,id])=>id).sort((p,q)=>(st(q).ko*2+st(q).w+st(q).mg/10)-(st(p).ko*2+st(p).w+st(p).mg/10))[0];
+  const tec=ids.filter(id=>st(id).dec>=2&&id!==mvp).sort((p,q)=>st(q).mg/st(q).dec-st(p).mg/st(p).dec)[0];
+  const ko=ids.filter(id=>st(id).ko>0).sort((p,q)=>st(p).rd-st(q).rd||st(q).ko-st(p).ko)[0];
+  T.aw={ch:champs,mvp,tec,ko};
+  worldCull();
+  const ours=S.roster.filter(a=>a.car.rk===T.y);
+  const nm=id=>{const a=ourA(id);return a?`<b class="gd">${a.nick} (${S.gymName})</b>`:wb(id)?`${idNick(id)} (${acName(wb(id))})`:id!=null?T.nm[id]||'—':'—'};
+  const win=(a,k,t)=>{if(!a)return;fanBonus(a,TUNE.rookPop[k]);(a.car.aw2=a.car.aw2||[]).push(`${t} (Ano ${T.y})`);awardHook(a,'rookie',k);note(`${a.nick}: ${t}!`)};
+  for(const[ci,id]of champs){const a=ourA(id);if(a)win(a,0,`Campeão Rookie ${CATS[ci]}`)}
+  win(ourA(mvp),1,'Melhor do Torneio Rookie');win(ourA(tec),2,'Prémio Técnico do Rookie');win(ourA(ko),3,'Prémio KO do Rookie');
+  if(!ours.length)return[];
+  const myC=ours.map(a=>{const ci=catIdx(a.cat),C=T.C[ci];const p=rkPos(RK(a.cat,0),a.id);return `<p class="hint">${a.cat}: campeão ${nm(C.F.w)}. ${a.nick} começa no ${posTxt(p)} do ranking Nacional.</p>`}).join('');
+  return[{title:'TORNEIO ROOKIE · PRÉMIOS',body:`${myC}<div class="awl"><p><small>MELHOR DO TORNEIO</small>${nm(mvp)}</p><p><small>PRÉMIO TÉCNICO</small>${nm(tec)}</p><p><small>PRÉMIO KO</small>${nm(ko)}${ko!=null&&st(ko)?` · KO no R${st(ko).rd}`:''}</p></div>`,opts:[{t:'VER RANKING',cls:'gold',fn:()=>{S.tab='fights';S.fsub='rank';S.rkv=null}},{t:'CONTINUAR'}]}]}
+function awardHook(a,src,k){} // gancho para as cartas (3A-5): prémios grandes dão cartas raras; fãs na 3B
+/* ---- os nossos atletas: licença, propostas, desafios, títulos, subir de nível, reforma ---- */
+function license(a){const c=carK(a);c.am=false;c.li=S.week;c.L=0;c.lf=S.week;const R=RK(a.cat,0);rkInsert(R,a.id,Math.min(19,R.l.length));
+  fanBonus(a,TUNE.licPop);note(`${a.nick} tirou a licença de profissional!`);toast(`<b>${a.nick}</b> · licença de profissional!`)}
+function leaveWorld(a){ // sai do ginásio ou reforma-se: deixa os rankings e os títulos
+  if(!S.W)return;for(const b of Object.values(S.W.b))if(b.bk===a.id)b.bk=null;
+  CATS.forEach(cat=>{for(let L=0;L<3;L++){const R=RK(cat,L);if(R.c===a.id){R.c=null;S.W.chg.push({w:S.week,c:catIdx(cat),L,id:null,n:a.nick,v:2})}rkRemove(R,a.id)}})}
+function roundsFor(kind,L,pos){if(kind==='am')return 3;if(kind==='el')return[8,10,12][L];if(kind==='ti')return[10,12,12][L];return L===0?(pos>0&&pos<=10?6:4):L===1?8:10}
+function prepFor(kind){return kind==='am'?RI(2,3):kind==='el'?RI(6,8):kind==='ti'?RI(8,10):RI(4,6)}
+function mkOffer(a,kind,b,ex={}){
+  const c=carK(a),L=ex.lv??c.L,R=RK(a.cat,L),pb=b?rkPos(R,b.i):-1,pa=rkPos(R,a.id),pl=kind==='am'?0:L+1,P=PURSE[pl];
+  const purse=RI(P.purse[0],P.purse[1])*(kind==='ti'?2:kind==='el'?1.4:1)*(kind==='rk'&&pb>0&&pb<=10?1.2:1);
+  const opp=b?toOpp(b,a):ex.opp,ab=b&&L>=1&&b.nt!=='POR'&&Math.random()<(kind==='ti'&&R.c===b.i?.6:.35);
+  return{id:'o'+Date.now().toString(36)+RI(0,99999),opp,wid:b?b.i:null,purse:Math.round(purse/10)*10,inWeeks:ex.inWeeks??prepFor(kind),expires:S.week+(ex.exp??2),
+    title:kind==='ti',kind,lv:L,pl,def:ex.def?1:0,mand:ex.mand?1:0,ch:ex.ch?1:0,ab:ab?1:0,rounds:roundsFor(kind,L,Math.min(pa>0?pa:99,pb>0?pb:99))}}
+function addOff(a,o){if(!o)return null;if(a.offers.length>=3)a.offers.shift();a.offers.push(o);return o}
+function amOffer(a,easy){
+  const opp=makeOpp(a);if(easy){for(const[k]of ATTRS)opp.attrs[k]=clamp(a.attrs[k]+RI(-3,3),5,99);opp.rating=rating(opp)}
+  return addOff(a,mkOffer(a,'am',null,{opp}))}
+function rankOffer(a){ // proposta normal: um pugilista do mundo perto da posição do atleta (mais vezes um pouco acima)
+  const c=carK(a),R=RK(a.cat,c.L),i=Math.max(1,R.l.indexOf(a.id)<0?R.l.length:R.l.indexOf(a.id)),have=new Set(a.offers.map(o=>o.wid));
+  const cand=R.l.map((id,j)=>[id,j]).filter(([id,j])=>j>=Math.max(1,i-4)&&j<=i+3&&id!==a.id&&wb(id)&&!wb(id).bk&&!have.has(id));
+  if(!cand.length)return null;const[id,j]=wpick(cand,([,j])=>j<i?1.3:1);return addOff(a,mkOffer(a,'rk',wb(id)))}
+function careerWeek(a,news){ // propostas da semana (amadoras, especiais: título, defesa obrigatória, eliminatória; normais)
+  const c=carK(a);if(a.fight)return;
+  if(c.am){if(a.offers.length<3&&Math.random()<.45+S.pop/300){amOffer(a);news.push(`Nova proposta para ${a.nick}.`)}return}
+  if(rookieAlive(a))return;
+  for(let L=0;L<3;L++){const R=RK(a.cat,L);if(R.c!==a.id)continue;const m=R.l[0];
+    if(S.week>R.cd){if(m!=null){stripTitle(a,L);continue}R.cd=S.week+8}
+    if(m!=null&&wb(m)&&!wb(m).bk&&R.cd-S.week<=12&&!a.offers.some(o=>o.mand&&o.lv===L)){addOff(a,mkOffer(a,'ti',wb(m),{lv:L,def:1,mand:1,inWeeks:clamp(R.cd-S.week,3,RI(8,10)),exp:3}));
+      news.push(`${a.nick} tem de defender o título ${RLV[L]} contra ${wb(m).k}, o desafiador obrigatório (prazo: ${calTxt(R.cd)}).`)}}
+  const L=c.L,R=RK(a.cat,L),i=R.l.indexOf(a.id);
+  if(i===0&&!a.offers.some(o=>o.kind==='ti'&&!o.def)){const cb=wb(R.c);
+    if(cb&&!cb.bk){addOff(a,mkOffer(a,'ti',cb,{exp:3}));news.push(`${a.nick} é o desafiador obrigatório: proposta para lutar pelo título ${RLV[L]} contra ${cb.k}!`)}
+    else if(R.c==null){const o=R.l.find(x=>x!=null&&x!==a.id&&wb(x)&&!wb(x).bk);if(o!=null){addOff(a,mkOffer(a,'ti',wb(o),{exp:3}));news.push(`Título ${RLV[L]} vago: ${a.nick} pode lutar por ele!`)}}}
+  else if(R.c==null&&i>0){const top=R.l.filter(x=>x!=null).slice(0,2);if(top.includes(a.id)&&!a.offers.some(o=>o.kind==='ti'&&!o.def)){const o=top.find(x=>x!==a.id);if(wb(o)&&!wb(o).bk){addOff(a,mkOffer(a,'ti',wb(o),{exp:3}));news.push(`Título ${RLV[L]} vago: ${a.nick} pode lutar por ele!`)}}}
+  else if(R.l[0]==null&&R.c!=null&&i>=1&&i<=3&&S.week-(R.ew??-99)>=6&&!a.offers.some(o=>o.kind==='el')){const v=R.l.slice(1,4).filter(x=>x!=null&&x!==a.id&&wb(x)&&!wb(x).bk);
+    if(v.length){R.ew=S.week;addOff(a,mkOffer(a,'el',wb(pick(v)),{exp:3}));news.push(`${a.nick} tem uma eliminatória: quem ganhar fica desafiador obrigatório ao título ${RLV[L]}.`)}}
+  if(a.offers.length<3&&Math.random()<.3+S.pop/200){const n=a.offers.length;rankOffer(a);if(a.offers.length>n)news.push(`Nova proposta para ${a.nick}.`)}
+}
+function offerOk(a,o){ // a proposta ainda faz sentido? (o adversário pode ter outra luta, ter-se reformado ou perdido o título)
+  if(o.wid==null)return true;const b=wb(o.wid);if(!b||b.bk)return false;
+  if(o.kind==='ti'&&!o.def){const R=RK(a.cat,o.lv);if(R.c!=null&&R.c!==b.i)return false;if(R.c==null&&R.l.indexOf(a.id)<0)return false}
+  if(o.kind==='el'&&RK(a.cat,o.lv).l[0]!=null)return false;
+  return true}
+function offerDrop(a,o,why){ // recusou ou deixou expirar: o desafiador obrigatório perde o lugar
+  if(o.kind==='ti'&&!o.def&&o.lv!=null){const R=RK(a.cat,o.lv);if(R.l[0]===a.id){rkInsert(R,a.id,2);note(`${a.nick} ${why} a luta pelo título ${RLV[o.lv]}: deixa de ser o desafiador obrigatório.`)}}}
+function challenge(a,id){ // desafiar alguém um pouco acima: pode aceitar ou recusar
+  const c=carK(a),b=wb(id);if(!b||a.fight)return;const R=RK(a.cat,c.L),gap=Math.max(1,R.l.indexOf(a.id)-R.l.indexOf(id));c.chw=S.week;
+  const p=clamp(TUNE.chal[0]-TUNE.chal[1]*gap+(S.pop-30)/300+(b.ls>=2?.1:0),.1,.9);
+  if(Math.random()<p){const o=addOff(a,mkOffer(a,'rk',b,{ch:1,exp:2}));note(`${b.k} aceitou o desafio de ${a.nick}.`);
+    return card({a,title:'DESAFIO ACEITE',body:`<p class="hint"><b style="color:var(--fg)">${b.k}</b> (${posTxt(rkPos(R,b.i))} ${RLV[c.L]}) aceitou o desafio de ${a.nick}. A proposta está em Lutas → Propostas: ${o.rounds} rounds, daqui a ${o.inWeeks} semanas.</p>`,opts:[{t:'VER PROPOSTA',cls:'gold',fn:()=>{S.fsub='off';render()}},{t:'DEPOIS'}]}).then(render)}
+  note(`${b.k} recusou o desafio de ${a.nick}.`);
+  return card({a,title:'DESAFIO RECUSADO',body:`<p class="hint">${b.k} não quer arriscar o lugar contra ${a.nick}. ${pick(['"Ele que ganhe mais umas."','"Não luto com qualquer um."','"Agora não dá jeito."'])}</p><p class="hint">Podes voltar a tentar daqui a ${TUNE.chalCd} semanas.</p>`,opts:[{t:'OK'}]}).then(render)}
+function vDefend(a,id){const b=wb(id),L=champOf(a).find(l=>RK(a.cat,l).l.includes(id));if(!b||L==null||a.fight)return;
+  addOff(a,mkOffer(a,'ti',b,{lv:L,def:1,exp:2}));note(`${a.nick} vai defender o título ${RLV[L]} contra ${b.k} (defesa voluntária).`);S.fsub='off';render()}
+function stripTitle(a,L){const R=RK(a.cat,L);R.c=null;(carK(a).ex=a.car.ex||[]).push(RLV[L]);if(belongs(a.id,catIdx(a.cat),L))rkInsert(R,a.id,2);S.W.chg.push({w:S.week,c:catIdx(a.cat),L,id:null,n:a.nick,v:3});
+  note(`${a.nick} perdeu o título ${RLV[L]}: não fez a defesa obrigatória a tempo.`);
+  CQ.push({a,title:`TÍTULO RETIRADO · ${a.nick.toUpperCase()}`,body:`<p class="hint">Passaram os 9 meses e ${a.nick} não defendeu o título ${RLV[L]} contra o desafiador obrigatório. O cinturão fica vago.</p>`,opts:[{t:'OK'}]})}
+function abandonTitle(a,L){const R=RK(a.cat,L);if(R.c!==a.id)return;R.c=null;(carK(a).ex=a.car.ex||[]).push(RLV[L]);S.W.chg.push({w:S.week,c:catIdx(a.cat),L,id:null,n:a.nick,v:1});
+  a.offers=a.offers.filter(o=>!(o.def&&o.lv===L));note(`${a.nick} largou o título ${RLV[L]}: fica ex-campeão.`)}
+function promote(a,keep){ // entra no nível seguinte (fundo do ranking); o título que tinha fica (keep) ou fica vago
+  const c=carK(a),L=c.L,cat=a.cat;c.pp=false;if(L>=2)return;const was=RK(cat,L).c===a.id;
+  if(was&&!keep)abandonTitle(a,L);const old=homeLists('POR',L);c.L=L+1;c.t3=[0,0,0];const nw=homeLists('POR',c.L);
+  for(const l of old)if(!nw.includes(l))rkRemove(RK(cat,l),a.id);
+  for(const l of nw){const R=RK(cat,l);if(R.c!==a.id&&!R.l.includes(a.id))rkInsert(R,a.id,Math.min(19,R.l.length))}
+  a.offers=a.offers.filter(o=>o.def);note(`${a.nick} entra no ranking ${RLV[c.L]}.`)}
+function promoCheck(a){ // campeão (ou muito tempo no top 3) → cartão para entrar no nível seguinte
+  const c=carK(a);if(c.am||c.L>=2||c.pp||a.fight||rookieAlive(a))return;const L=c.L,isCh=RK(a.cat,L).c===a.id;
+  if(!isCh&&(c.t3[L]||0)<TUNE.t3W)return;c.pp=true;const nx=RLV[L+1];
+  CQ.push(isCh?{a,title:`${nx.toUpperCase()} · ${a.nick.toUpperCase()}`,body:`<p class="hint">Campeão ${RLV[L]}, ${a.nick} entra no ranking ${nx} (no fundo, n.º 20). E o cinturão ${RLV[L]}?</p>
+      <p class="hint"><b style="color:var(--fg)">Manter:</b> continua a defendê-lo (bolsas de campeão e público), mas sobe mais devagar no ${nx}. <b style="color:var(--fg)">Largar:</b> fica ex-campeão, com o prestígio todo, e luta só no ${nx}.</p>`,
+      opts:[{t:`MANTER O TÍTULO<small>defende o ${RLV[L]} de 9 em 9 meses</small>`,cls:'gold',fn:()=>promote(a,true)},{t:`LARGAR O TÍTULO<small>fica ex-campeão ${RLV[L]}</small>`,fn:()=>promote(a,false)}]}
+    :{a,title:`${nx.toUpperCase()} · ${a.nick.toUpperCase()}`,body:`<p class="hint">${a.nick} passou muito tempo no top 3 do ranking ${RLV[L]}: entra no ranking ${nx} (no fundo, n.º 20).</p>`,opts:[{t:'BOA!',cls:'gold',fn:()=>promote(a,false)}]})}
+/* ---- reforma dos nossos atletas: a partir dos ~33 (ou antes, com o Queixo muito em baixo, muitas derrotas ou KOs seguidos, lesão grave, confiança muito baixa)
+   aparece o cartão "está a pensar reformar-se": aceitar (a próxima luta é a despedida) ou convencê-lo (cada vez mais difícil). Depois: hall da fama e treinador. ---- */
+function retireWhy(a){const c=carK(a),w=[];if(a.age>=TUNE.retAge)w.push(`já tem ${a.age} anos`);if(a.attrs.queixo<TUNE.retQx)w.push('o queixo já não aguenta');
+  if((a.lst||0)>=4)w.push(`perdeu ${a.lst} seguidas`);if((c.kos||0)>=2)w.push(`foi ao tapete ${c.kos} lutas seguidas`);if(a.injury>=4)w.push('a lesão foi séria');if(a.conf<20&&(a.lst||0)>=2)w.push('perdeu a confiança');return w}
+function retireCheck(a){const c=carK(a);if(c.fw||a.fight||S.week-(c.rtw??-99)<TUNE.retGap)return;const w=retireWhy(a);if(!w.length)return;
+  const p=.04*w.length+(a.age>=TUNE.retAge?.03*(a.age-TUNE.retAge):0);if(Math.random()>=p)return;c.rtw=S.week;
+  const conv=clamp(TUNE.retConv*Math.pow(.6,c.cv||0)+(mv(a,'cor')-50)/200,.05,.9);
+  CQ.push({a,title:`${a.nick.toUpperCase()} ESTÁ A PENSAR REFORMAR-SE`,body:`<p class="hint">${a.nick} veio falar contigo: ${andList(w)}. Acha que está na altura de pendurar as luvas.</p><p class="hint">Se aceitares, a próxima luta é a de despedida. Podes tentar convencê-lo a ficar${c.cv?` (já o convenceste ${c.cv} vez${c.cv>1?'es':''}: cada vez é mais difícil)`:''}.</p>`,
+    opts:[{t:'ACEITAR<small>a próxima luta é a despedida</small>',cls:'red',fn:()=>setFarewell(a)},
+      {t:`CONVENCÊ-LO A FICAR<small>${conv>=.6?'deve ficar':conv>=.35?'talvez fique':'difícil'}</small>`,fn:()=>{if(Math.random()<conv){c.cv=(c.cv||0)+1;a.conf=clamp(a.conf+5,0,100);note(`${a.nick} deixou-se convencer: fica mais um tempo.`);toast(`<b>${a.nick}</b> · fica!`)}
+        else{setFarewell(a);note(`Não convenceste ${a.nick}: a próxima luta é a despedida.`);toast(`<b>${a.nick}</b> · não o convenceste: vai despedir-se`)}}}]})}
+function setFarewell(a){const c=carK(a);c.fw=true;if(a.fight)a.fight.last=1;note(`${a.nick} vai reformar-se: a próxima luta é a de despedida.`)}
+function askRetire(a){
+  const m=modal(`<h2>REFORMAR ${a.nick.toUpperCase()}?</h2><p class="hint">${a.nick} tem ${a.age} anos · ${a.rec.w}V ${a.rec.l}D ${a.rec.d}E · ${carShort(a)}.</p>
+    <p class="hint">Com uma luta de despedida, a próxima luta é a última (o público gosta). Também pode pendurar as luvas já${a.fight?' (a luta marcada cai)':''}.</p>
+    <div class="cardb"><button class="btn gold" id="rFw" ${carK(a).fw?'disabled':''}>LUTA DE DESPEDIDA</button><button class="btn red" id="rNow">REFORMAR JÁ</button><button class="btn" id="rX">CANCELAR</button></div>`);
+  m.querySelector('#rX').onclick=closeModal;m.querySelector('#rFw').onclick=()=>{setFarewell(a);closeModal()};
+  m.querySelector('#rNow').onclick=async()=>{if(a.fight){const b=wb(a.fight.wid);if(b)b.bk=null;a.fight=null}closeModal();await retireNow(a);render()}}
+function coachTierOf(a){const t=a.titles||[];return t.some(x=>x.startsWith('Mundial'))?4:t.some(x=>x.startsWith('Europeu'))?3:t.some(x=>x.startsWith('Nacional'))?2:a.rec.w>=10?1:0}
+async function retireNow(a){
+  const c=carK(a),bp=c.bp;
+  const e={n:a.name,k:a.nick,c:a.cat,st:a.style,rec:{...a.rec},ti:(a.titles||[]).slice(),aw:(c.aw2||[]).slice(),y0:c.y0||1,y1:yearOf(),age:a.age,lk:a.look,bp:bp||null,pro:!c.am};
+  (S.hof=S.hof||[]).push(e);leaveWorld(a);S.roster=S.roster.filter(x=>x!==a);S.sel=0;note(`${a.nick} reformou-se: entra no hall da fama do ginásio.`);
+  const t=coachTierOf(a),room=S.coaches.length<CMAX;let n=null;
+  if(!S.roster.length){n=makeAthlete(pick(CATS.slice(1,6)),{boost:2});S.roster.push(n);S.sel=0;amOffer(n,true)} // o ginásio nunca fica vazio: chega um miúdo novo
+  await card({title:`REFORMA · ${a.nick.toUpperCase()}`,body:`<p class="hint">${a.name} "${a.nick}" pendura as luvas: ${a.rec.w}V ${a.rec.l}D ${a.rec.d}E (${a.rec.ko} KO)${e.ti.length?` · ${e.ti.length} título${e.ti.length>1?'s':''}: ${e.ti.join(', ')}`:''}. Entra no hall da fama do ginásio.</p>
+    <p class="hint">${room?`Pode ficar no ginásio como treinador ${a.style} (${CT[t].n}${t?', pelo que ganhou':''}).`:'Gostava de ficar como treinador, mas a equipa está cheia.'}</p>`,
+    opts:[...(room?[{t:`FICA COMO TREINADOR<small>${a.style} · ${CT[t].n} · ${CT[t].sal} €/sem quando treina</small>`,cls:'gold',fn:()=>{const nc=makeCoach(a.style,t,`${a.name.split(' ')[0]} "${a.nick}"`);nc.ex=1;nc.lk=a.look;S.coaches.push(nc);note(`${a.nick} fica no ginásio como treinador ${a.style}.`)}}]:[]),{t:'OBRIGADO, CAMPEÃO'}]});
+  if(n){autoCoach(n);note(`${n.name} "${n.nick}" chega ao ginásio.`);
+    await info('UM MIÚDO NOVO',`<p class="hint">No dia seguinte aparece à porta ${n.name} "${n.nick}", ${n.age} anos, ${n.cat}. Quer ser como o ${a.nick}. Começa como amador.</p>`,'BEM-VINDO')}
+}
+/* ---- gala de fim de ano (Inverno): melhor pugilista, melhor KO, revelação, treinador do ano ---- */
+function galaRun(){
+  const W=S.W,y=yearOf(),A=[...Object.values(W.b).map(b=>({id:b.i,ys:b.ys,L:b.L,li:b.li,nick:b.k,ac:acName(b),c:b.c})),
+    ...S.roster.filter(a=>a.car&&!a.car.am).map(a=>({id:a.id,ys:a.car.ys,L:a.car.L,li:a.car.li,nick:a.nick,ac:S.gymName,c:catIdx(a.cat),me:a}))];
+  const sc=x=>x.ys[0]*2+x.ys[1]+x.ys[2]*6+x.L*4;
+  const best=A.filter(x=>x.ys[0]>=2).sort((p,q)=>sc(q)-sc(p))[0]||null,rev=A.filter(x=>x!==best&&S.week-x.li<=104&&x.ys[0]>=1).sort((p,q)=>sc(q)-sc(p))[0]||null;
+  const k=W.yr.ko,kA=k?A.find(x=>x.id===k.id):null;
+  const by={};for(const x of A){if(!x.ys[0])continue;by[x.ac]=(by[x.ac]||0)+sc(x)}const cAc=Object.entries(by).sort((p,q)=>q[1]-p[1])[0];
+  const coach=best&&best.me&&coachOf(best.me)?{n:coachOf(best.me).n,me:best.me}:cAc&&cAc[0]===S.gymName?{n:S.roster.map(coachOf).filter(Boolean)[0]?.n||'o teu treinador',me:S.roster[0]}:{n:cAc?`o treinador da ${cAc[0]}`:'—'};
+  const L=[['MELHOR PUGILISTA DO ANO',best,best?`${best.ys[0]} vitórias${best.ys[2]?`, ${best.ys[2]} título${best.ys[2]>1?'s':''}`:''} · ${CATS[best.c]}`:''],
+    ['MELHOR KO DO ANO',kA,k?`KO no R${k.rd} a ${idNick(k.o)} · ${CATS[k.c]}${k.ti?' (título)':''}`:''],['REVELAÇÃO DO ANO',rev,rev?`${rev.ys[0]} vitórias · ${CATS[rev.c]}`:''],['TREINADOR DO ANO',coach.me?{me:coach.me,nick:coach.n,ac:S.gymName}:{nick:coach.n,ac:''},'']];
+  const win=[];for(const[t,x]of L)if(x&&x.me){win.push([t,x.me]);fanBonus(x.me,TUNE.galaPop);if(t!=='TREINADOR DO ANO')(x.me.car.aw2=x.me.car.aw2||[]).push(`${t.charAt(0)+t.slice(1).toLowerCase()} (Ano ${y})`);awardHook(x.me,'gala',t);note(`Gala: ${t==='TREINADOR DO ANO'?x.nick:x.me.nick} — ${t.toLowerCase()}!`)}
+  W.gal={y,l:L.map(([t,x,d])=>[t,x?x.nick:'—',x&&x.ac?x.ac:'',d,!!(x&&x.me)])};
+  for(const b of Object.values(W.b))b.ys=[0,0,0];for(const a of S.roster)if(a.car)a.car.ys=[0,0,0];W.yr={y:y+1,ko:null};
+  return{title:`GALA DO BOXE · ANO ${y}`,body:`<p class="hint">A noite dos prémios do ano. ${win.length?`<b class="gd">O ${S.gymName} sobe ao palco!</b> Popularidade +${TUNE.galaPop*win.length}.`:'Desta vez o teu ginásio fica a aplaudir na plateia.'}</p>
+    <div class="awl">${W.gal.l.map(([t,n,ac,d,me])=>`<p class="${me?'me':''}"><small>${t}</small>${me?`<b class="gd">${n}</b>`:n}${ac?` (${ac})`:''}${d?`<i>${d}</i>`:''}</p>`).join('')}</div>`,opts:[{t:'CONTINUAR',cls:'gold'}]}}
+/* ---- arenas e público: o sítio depende do tipo de luta (desenhos novos na fase 8: por agora os 4 locais, com nome e faixa);
+   o público depende da fama dos dois (fãs na 3B), da importância e das desforras; quem tem mais apoio sente-se mais confiante. Juízes sempre justos. ---- */
+function venueOf(a){
+  const f=a.fight||{},k=f.kind||'am',L=f.lv||0,b=f.wid!=null?wb(f.wid):null;let d,n,ar='ao',ev,base,imp;
+  if(k==='am'){d=0;n=pick(['Pavilhão do Bairro','Salão do Clube Recreativo']);ar=n.startsWith('Pav')?'ao':'ao';ev='COMBATE AMADOR';base=50;imp=.4}
+  else if(k==='rok'){const s=f.stage||0;if(s<3){d=0;n='Pavilhão Municipal';base=350}else{d=1;n='Pavilhão Multiusos';base=2500}ev='TORNEIO ROOKIE · '+ROOK.sh[s];imp=.55+.15*s}
+  else if(L===0){if(k==='ti'){d=2;n='Coliseu';ev='TÍTULO NACIONAL';base=4000;imp=1}else{d=1;n='Salão de Eventos do Casino';ev=k==='el'?'ELIMINATÓRIA NACIONAL':'RANKING NACIONAL';base=k==='el'?1500:800;imp=k==='el'?.85:.7}}
+  else if(L===1){d=k==='ti'?3:2;n=k==='ti'?'Grande Arena':'Arena';ar='à';ev=k==='ti'?'TÍTULO EUROPEU':k==='el'?'ELIMINATÓRIA EUROPEIA':'RANKING EUROPEU';base=k==='ti'?12000:6000;imp=k==='ti'?1.1:.9}
+  else{d=3;n=k==='ti'?'Estádio':'Arena';ar=k==='ti'?'ao':'à';ev=k==='ti'?'TÍTULO MUNDIAL':k==='el'?'ELIMINATÓRIA MUNDIAL':'RANKING MUNDIAL';base=k==='ti'?40000:10000;imp=k==='ti'?1.25:1}
+  const ab=!!f.ab&&b;if(ab)n+=` (${NAT[b.nt].n})`;if(f.last)ev='DESPEDIDA · '+ev.split(' · ')[0];
+  const fm=fame(a,true),fo=fame(f.opp||{},false),rem=f.wid!=null&&(a.hist||[]).some(h=>h.wi===f.wid);
+  const cr=Math.round(base*clamp(.5+(fm+fo)/60,.5,1.6)*(rem?1.3:1)*(f.last?1.3:1)/10)*10;
+  return{d,n,ar,ev,cr,imp,ab,rem,fill:clamp(.45+.55*cr/(base*1.6),.45,1)}}
+function crowdFx(x,d,imp){ // d: -1 (público todo contra) a +1 (todo a favor) → confiança na luta; a Calma tira o efeito; muita Confiança cresce com o público contra
+  const calm=clamp((mv(x,'calma')-50)/40,0,1);let e=TUNE.crowdC*d*imp*(1-.6*calm);if(d<0&&mv(x,'conf')>=TUNE.crowdThr)e=-e*.5;return Math.round(e)}
+/* ---- ecrãs: Lutas → RANKING (top 20 por categoria e nível, campeões, desafiar / defender), Lutas → ROOKIE (quadro), Ginásio → HALL DA FAMA ---- */
+function panelRank(a){
+  const c=carK(a);let v=S.rkv;if(!v||v.a!==a.id)v=S.rkv={a:a.id,c:a.cat,l:c.am?0:c.L,p:0};
+  const R=RK(v.c,v.l),ch=R.c,PG=7,pages=3,p0=v.p*PG,mineHere=v.c===a.cat&&!c.am,iMe=R.l.indexOf(a.id),myCh=mineHere&&ch===a.id;
+  const chCd=S.week-(c.chw??-99)<TUNE.chalCd;
+  const row=(id,pos)=>{const b=wb(id),me=ourA(id),nm=id==null?'<i>vago</i>':me?`<b class="gd">${me.nick}</b>`:b.k,sub=id==null?(pos===1?'à espera da eliminatória':''):me?`${S.gymName} · ${me.rec.w}-${me.rec.l}`:`${b.nt} · ${b.w}-${b.l}${b.d?'-'+b.d:''} · ${b.g}a`;
+    let act='';
+    if(mineHere&&!a.fight&&b&&!b.bk&&!me){
+      if(myCh&&pos>=1&&pos<=10)act=`<button class="btn" data-vdef="${id}">DEFENDER</button>`;
+      else if(!myCh&&v.l===c.L&&iMe>1&&pos>=2&&iMe+1-pos>=1&&iMe+1-pos<=TUNE.chalGap)act=`<button class="btn" data-chal="${id}" ${chCd?'disabled':''}>DESAFIAR</button>`}
+    if(me&&pos===0&&v.l<c.L)act=`<button class="btn" data-abt="${v.l}">LARGAR</button>`;
+    return `<div class="rkr ${me?'me':''} ${pos===0?'ch':''}"><b class="rp">${pos===0?'★':pos}</b><button class="rkn" ${b?`data-rkb="${id}"`:'disabled'}><span>${nm}${pos===1&&id!=null?' <em>OBRIG.</em>':''}</span><small>${sub}</small></button>${act}</div>`};
+  const list=[];for(let i=p0;i<p0+PG&&i<Math.min(20,R.l.length);i++)list.push(row(R.l[i],i+1));
+  const my=mineHere&&v.l<=c.L?(myCh?`${a.nick} é o campeão ${RLV[v.l]}${R.l[0]!=null?` · defesa obrigatória até ${calMini(R.cd)} A${yearOf(R.cd)}`:''}.`:iMe>=0?`${a.nick}: ${posTxt(iMe+1)}${iMe>=1&&iMe<=3&&R.l[0]==null?' · na zona da eliminatória':''}${chCd&&iMe>1?' · desafio feito há pouco':''}.`:''):c.am?`${a.nick} ainda é amador: entra no ranking Nacional com a licença.`:'';
+  return `<div class="card rkc"><div class="rkh"><button class="btn" data-rkc="-1">◀</button><b>${v.c.toUpperCase()}</b><button class="btn" data-rkc="1">▶</button><div class="rkl">${RLV3.map((n,i)=>`<button data-rkl="${i}" class="${v.l===i?'on':''}">${n}</button>`).join('')}</div></div>
+    ${row(ch,0)}<div class="rkrs">${list.join('')}</div>
+    <div class="rkf"><span class="meta">${my||'Toca num nome para ver a ficha.'}</span><span class="hpg"><button class="btn" data-rkp="-1" ${v.p?'':'disabled'}>◀</button>${v.p+1}/${pages}<button class="btn" data-rkp="1" ${v.p<pages-1?'':'disabled'}>▶</button></span></div></div>`}
+function panelRook(a){
+  const T=S.W.T,ci=catIdx(a.cat),y=yearOf(),c=carK(a);
+  const nm=id=>{if(id==null)return '<i>·</i>';const me=ourA(id);return me?`<b class="gd">${me.nick}</b>`:wb(id)?idNick(id):(T&&T.nm&&T.nm[id])||'—'};
+  const elig=c.am?`${a.nick} ainda é amador: o torneio é para quem tirou a licença há menos de 12 meses.`:rookieOk(a)?`${a.nick} pode entrar ${ywk()===0?'agora':`na próxima edição (Primavera · Ano ${y+1})`}.`:`${a.nick} já não pode entrar (a licença tem mais de 12 meses).`;
+  if(!T||!T.C||!T.C[ci])return `<div class="card"><div class="empty">Ainda não houve Torneio Rookie.</div><div class="meta">${elig}</div></div>`;
+  const C=T.C[ci],rg=S.rkr??(S.reg||0),B=C[REGK[rg]];
+  const col=(L,cls)=>`<div class="bcol ${cls}">${L.map(id=>`<span class="${typeof id==='string'?'me':''}">${nm(id)}</span>`).join('')}</div>`;
+  const pad=(L,n)=>{const r=L.slice();while(r.length<n)r.push(null);return r};
+  const stg=T.done?'acabou':ywk()<ROOK.wk[0]?'quartos na Primavera sem. 3':ywk()<ROOK.wk[1]?'meias na sem. 7':ywk()<ROOK.wk[2]?'final regional na sem. 11':'Final Nacional no Verão sem. 2';
+  const fin=C.F?`${nm(C.F.w)} <b class="gd">CAMPEÃO</b> · ${nm(C.F.l)}`:`${nm(C.N.r[2][0])} vs ${nm(C.S.r[2][0])}`;
+  const aw=T.aw&&T.done?`<div class="meta" style="font-size:15px;line-height:1">Melhor do torneio: ${nm(T.aw.mvp)} · Técnico: ${nm(T.aw.tec)} · KO: ${nm(T.aw.ko)}</div>`:'';
+  return `<div class="card brc"><div class="rkh"><b>ANO ${T.y} · ${a.cat.toUpperCase()}${T.y===y&&!T.done?'':' · FIM'}</b><div class="rkl">${REG.map((n,i)=>`<button data-rkr="${i}" class="${rg===i?'on':''}">${n.toUpperCase()}</button>`).join('')}</div></div>
+    <div class="brk">${col(B.e,'q')}${col(pad(B.r[0],4),'s')}${col(pad(B.r[1],2),'f')}${col(pad(B.r[2],1),'w')}</div>
+    <div class="bnf"><small>FINAL NACIONAL</small><span>${fin}</span></div>${aw||`<div class="meta" style="font-size:15px;line-height:1">${T.y===y&&!T.done?stg[0].toUpperCase()+stg.slice(1)+'. ':''}${elig}</div>`}</div>`}
+let hofPg=0;
+function panelHall(){
+  const H=S.hof||[],n=H.length,pages=Math.max(1,Math.ceil(n/4));hofPg=clamp(hofPg,0,pages-1);
+  const rows=H.slice().reverse().slice(hofPg*4,hofPg*4+4).map((e,i)=>`<button class="hrow has" data-hof="${n-1-(hofPg*4+i)}"><b class="hres V">★</b><span><strong>${e.n.split(' ')[0]} "${e.k}" · ${e.c}</strong><small>${e.rec.w}V ${e.rec.l}D ${e.rec.d}E (${e.rec.ko} KO) · Ano ${e.y0}–${e.y1}</small></span><em>${e.ti.length?e.ti.length+' título'+(e.ti.length>1?'s':''):e.pro?'profissional':'amador'}</em></button>`).join('');
+  return `<div class="card hist"><div class="hhd"><h3>HALL DA FAMA · ${n}</h3>${pages>1?`<div class="hpg"><button class="btn" data-hfp="-1" ${hofPg?'':'disabled'}>◀</button>${hofPg+1}/${pages}<button class="btn" data-hfp="1" ${hofPg<pages-1?'':'disabled'}>▶</button></div>`:''}</div>
+    ${n?`<div class="hrows">${rows}</div>`:'<div class="empty">Ainda ninguém se reformou no teu ginásio. Os atletas que pendurarem as luvas ficam aqui.</div>'}
+    ${S.W&&S.W.gal?`<h3>GALA · ANO ${S.W.gal.y}</h3><div class="awl sm">${S.W.gal.l.map(([t,nm,ac,d,me])=>`<p class="${me?'me':''}"><small>${t}</small>${me?`<b class="gd">${nm}</b>`:nm}</p>`).join('')}</div>`:''}</div>`}
+function hofInfo(e){const p=info(`${e.n.toUpperCase()} "${e.k.toUpperCase()}"`,`<div class="tco"><canvas width="32" height="32" id="hofp"></canvas><div><div class="cl">${styTag(e.st)} ${e.c.toUpperCase()}</div><div class="meta">Ano ${e.y0} a ${e.y1} · reformou-se aos ${e.age}</div></div></div>
+  <p class="hint">${e.rec.w}V ${e.rec.l}D ${e.rec.d}E (${e.rec.ko} KO)${e.pro?'':' · não chegou a profissional'}.</p>
+  <p class="hint">${e.ti.length?`Títulos: ${e.ti.join(', ')}.`:e.bp?`Melhor: ${posTxt(e.bp[1])} ${RLV[e.bp[0]]}.`:''}</p>${e.aw&&e.aw.length?`<p class="hint">Prémios: ${e.aw.join(', ')}.</p>`:''}`,'FECHAR');const cv=$('#hofp');if(cv&&e.lk)drawPortrait(cv,e.lk);return p}
+function careerResult(a,f,r){ // depois de uma luta nossa: amador e licença, Torneio Rookie, ranking, eliminatória, títulos (devolve frases)
+  const c=carK(a),out=[],k=f.kind||'am',L=f.lv||0,b=wb(f.wid),res=r.draw?.5:r.win?1:0,rd=F?Math.min(F.round,F.rounds):1;
+  c.lf=S.week;if(r.win){c.ys[0]++;if(r.how==='KO')c.ys[1]++}
+  c.kos=!r.win&&!r.draw&&r.how==='KO'?(c.kos||0)+1:0;if(b)b.bk=null;
+  if(k==='am'){c.af++;if(r.win)c.aw++;
+    if(c.am&&c.af>=TUNE.amLic&&c.aw>=1){license(a);out.push(`<b class="gd">LICENÇA DE PROFISSIONAL!</b> ${a.nick} passa a profissional e entra no ranking Nacional no ${posTxt(rkPos(RK(a.cat,0),a.id))}.${S.week-c.li<=52?' No próximo Torneio Rookie (Primavera) pode entrar.':''}`)}
+    else if(c.am)out.push(`Amador: ${c.af} luta${c.af>1?'s':''}, ${c.aw} vitória${c.aw===1?'':'s'}. ${c.af<TUNE.amLic?`A licença pede ${TUNE.amLic} lutas e pelo menos uma vitória.`:'Falta ganhar uma luta para tirar a licença.'}`);
+    return out}
+  if(k==='rok'){if(b)boutApply(a.id,b.i,res,{c:a.cat,L:0,kind:'rok',how:r.how,rd});const won=rookieOur(a,f,r),s=f.stage||0;
+    out.push(won?(s<3?`<b class="gd">Passa ${['às meias-finais','à final regional','à Final Nacional Rookie'][s]} do Torneio Rookie!</b>${r.draw?' (empate: passou por ter acertado mais)':''}`:`<b class="gd">CAMPEÃO ROOKIE ${a.cat.toUpperCase()}!</b> Começa no n.º 10 do ranking Nacional.`)
+      :`Fica pelas ${['quartos de final','meias-finais','final regional','Final Nacional'][s]} do Torneio Rookie.${r.draw?' (empate: passou o outro, que acertou mais)':''}`);
+    return out}
+  const R=RK(a.cat,L),p0=rkPos(R,a.id);
+  if(b)boutApply(a.id,b.i,res,{c:a.cat,L,kind:k,mand:f.mand,how:r.how,rd});
+  const p1=rkPos(R,a.id);
+  if(k==='ti'){
+    if(R.c===a.id){if(p0===0){c.df=(c.df||0)+1;out.push(`<b class="gd">Defendeu o título ${RLV[L]}!</b> (${c.df}.ª defesa)${f.mand?' Próxima obrigatória daqui a 9 meses.':''}`)}
+      else{a.titles.push(`${RLV[L]} (${a.cat})`);c.ys[2]++;c.df=0;out.push(`<b class="gd">${a.nick} é campeão ${RLV[L]}!</b>${L<2?` Vai poder entrar no ranking ${RLV[L+1]}.`:catDone(a)?' Completou a categoria: pode mudar de peso.':''} Defesa obrigatória de 9 em 9 meses.`);note(`${a.nick} ganhou o título ${RLV[L]}!`)}}
+    else if(p0===0){out.push(`Perdeu o título ${RLV[L]}: fica ex-campeão${p1>0?`, ${posTxt(p1)} do ranking`:''}.`);(c.ex=c.ex||[]).push(RLV[L])}
+    else out.push(`Não foi desta. Ranking ${RLV[L]}: ${posTxt(p1)}.`)}
+  else if(k==='el'&&r.win)out.push(`<b class="gd">Ganhou a eliminatória:</b> é o desafiador obrigatório ao título ${RLV[L]} (n.º 1).`);
+  else out.push(`Ranking ${RLV[L]}: ${posTxt(p0)} → ${posTxt(p1)}.${p1===1?' É o desafiador obrigatório!':''}`);
+  const pp=rkPos(RK(a.cat,c.L),a.id);if(pp>=0){const bp=c.bp;if(!bp||c.L>bp[0]||(c.L===bp[0]&&pp<bp[1]))c.bp=[c.L,pp]}
+  return out}
 
 /* ================= SOUND (8-bit, generated) ================= */
 const SFX=(()=>{let ctx=null,master=null,nb=null,on=true,amb=null;
@@ -1159,7 +1677,7 @@ function sndLabel(){return SFX.on?'SOM ✓':'SOM ✕'}
 let busy=false;
 function render(){
   if(!S)return;
-  $('#hud').innerHTML=`<div><small>DINHEIRO</small><b>${fmt(S.money)} €</b></div><div><small>POPULAR.</small><b>${Math.round(S.pop)}</b></div><div><small>SÓCIOS</small><b>${S.members}/${capacity()}</b></div><div><small>SEMANA</small><b>${S.week}</b></div>`;
+  $('#hud').innerHTML=`<div><small>DINHEIRO</small><b>${fmt(S.money)} €</b></div><div><small>POPULAR.</small><b>${Math.round(S.pop)}</b></div><div><small>SÓCIOS</small><b>${S.members}/${capacity()}</b></div><div><small>ANO ${yearOf()}</small><b>${SEA3[seasOf()]} ${sWk()}</b></div>`;
   $('#tagl').style.display='none';
   const nOff=S.roster.reduce((t,a)=>t+a.offers.length,0);
   const tabs=[['gym','GINÁSIO'],['ath','ATLETAS'],['go',''],['fights','LUTAS'],['shop','LOJA']];
@@ -1181,7 +1699,7 @@ function fightLine(a){
   if(!a.fight)return `<div class="meta">Sem luta marcada</div>`;
   const w=weeksTo(a);
   const when=w<=0?'ESTA SEMANA':w===1?'daqui a 1 semana':`daqui a ${w} semanas`;
-  return `<div class="meta">${a.fight.title?'<b class="warn">TÍTULO</b> · ':''}Luta vs <b>${a.fight.opp.nick}</b> · <b class="${w<=0?'warn':''}" style="${w>0?'color:var(--gold)':''}">${when}</b></div>`;
+  return `<div class="meta">${a.fight.title?'<b class="warn">TÍTULO</b> · ':a.fight.kind==='rok'?'<b class="gd">ROOKIE</b> · ':a.fight.last?'<b class="gd">DESPEDIDA</b> · ':''}Luta vs <b>${a.fight.opp.nick}</b> · <b class="${w<=0?'warn':''}" style="${w>0?'color:var(--gold)':''}">${when}</b></div>`;
 }
 function canTrain(a){return !(a.injury>0||a.recovery>0)}
 function nameTag(a){
@@ -1196,15 +1714,16 @@ function selector(){ // 4 lugares (SLOTS), por ordem de categoria; os vazios no 
   return `<div class="seg">${cells.join('')}</div>`;
 }
 function panelGym(){
-  const gs=`<div class="seg"><button data-gsub="res" class="${S.gsub!=='coach'?'on':''}">Ginásio</button><button data-gsub="coach" class="${S.gsub==='coach'?'on':''}">Treinadores</button></div>`;
+  const gs=`<div class="seg"><button data-gsub="res" class="${S.gsub!=='coach'&&S.gsub!=='hall'?'on':''}">Ginásio</button><button data-gsub="coach" class="${S.gsub==='coach'?'on':''}">Treinadores</button><button data-gsub="hall" class="${S.gsub==='hall'?'on':''}">Hall da fama</button></div>`;
   if(S.gsub==='coach')return gs+panelCoaches();
+  if(S.gsub==='hall')return gs+panelHall();
   const fees=S.members*ECON.fee+sponsors(),WC=weeklyCosts(),sal=WC.total;
-  const fights=S.roster.filter(a=>a.fight).map(a=>{const w=weeksTo(a);return `<div class="r"><div><strong>${a.nick} vs ${a.fight.opp.nick}</strong><p>${w===0?'Esta semana!':`Daqui a ${w} semana${w>1?'s':''}`} · ${a.fight.rounds} rounds · ${fmt(a.fight.purse)} €</p></div></div>`}).join('');
+  const fights=S.roster.filter(a=>a.fight).map(a=>{const w=weeksTo(a);return `<div class="r"><div><strong>${a.nick} vs ${a.fight.opp.nick}</strong><p>${w===0?'Esta semana!':`Daqui a ${w} semana${w>1?'s':''}`} · ${fightLabel(a.fight)} · ${a.fight.rounds} rounds${a.fight.purse?` · ${fmt(a.fight.purse)} €`:''}</p></div></div>`}).join('');
   const ev=S.evo&&S.evo.rows&&S.evo.rows.filter(r=>S.roster.some(a=>a.id===r.id));
   return gs+`<div class="kv"><div><small>ENTRADAS/SEM</small><b class="good">+${fmt(fees)} €</b></div><div><small>DESPESAS/SEM</small><b class="warn">-${fmt(sal)} €</b></div><div><small>SALDO/SEM</small><b class="${fees-sal>=0?'good':'warn'}">${fees-sal>=0?'+':''}${fmt(fees-sal)} €</b></div></div>
   ${fights?`<h3>LUTAS MARCADAS</h3><div class="rows">${fights}</div>`:`<div class="empty">Nenhuma luta marcada. Vê as propostas em Lutas.</div>`}
   ${ev&&ev.length?`<div class="evo"><div class="eh"><small>ESTA SEMANA</small><small>S${S.evo.w}</small></div>${ev.map(r=>`<div class="er"><small>${r.n}</small><span>${r.it.length?r.it.join(' · '):'<i>semana sem mudanças</i>'}</span></div>`).join('')}</div>`:''}
-  <h3>DIÁRIO</h3><div class="log">${S.log.map(l=>`<span><b>S${l.w}</b> ${l.t}</span>`).join('')}</div>
+  <h3>DIÁRIO · ${calTxt().toUpperCase()}</h3><div class="log">${S.log.map(l=>`<span><b>${calMini(l.w)}</b> ${l.t}</span>`).join('')}</div>
   <div class="row2" style="grid-template-columns:1fr 1fr 1fr;gap:5px"><button class="btn" id="repBtn" ${S.rep?'':'disabled'}>RELATÓRIO</button><button class="btn" id="helpBtn">COMO JOGAR</button><button class="btn" id="menuBtn">MENU</button></div>`;
 }
 /* ---- treinadores (separador Treinadores do Ginásio) ---- */
@@ -1281,7 +1800,7 @@ function hireCard(t){ // contratar: 3 à escolha (um de cada estilo), renovam-se
 }
 function paintCP(root){(root||document).querySelectorAll('canvas[data-cp]').forEach(cv=>{const c=[...(S.coaches||[]),...Object.values(S.cand||{}).flatMap(x=>x.l)].find(x=>x.id===cv.dataset.cp);if(c)drawPortrait(cv,c.lk)})}
 function panelAth(){
-  const a=cur();const t=TIERS[a.tier];
+  const a=cur();
   const inF=S.sub!=='treino';
   const sub=`<div class="seg"><button data-sub="ficha" class="${inF?'on':''}">Ficha</button><button data-sub="treino" class="${!inF?'on':''}">Treino</button></div>`
     +(inF?`<div class="seg sub2"><button data-sub="ficha" class="${!['golpes','tecnicas','estilos','lutas'].includes(S.sub)?'on':''}">ATRIBUTOS</button><button data-sub="golpes" class="${S.sub==='golpes'?'on':''}">GOLPES</button><button data-sub="tecnicas" class="${S.sub==='tecnicas'?'on':''}">TÉCNICAS</button><button data-sub="estilos" class="${S.sub==='estilos'?'on':''}">ESTILOS</button><button data-sub="lutas" class="${S.sub==='lutas'?'on':''}">LUTAS</button></div>`:'');
@@ -1313,16 +1832,15 @@ function panelAth(){
     <div class="who"><canvas width="32" height="32" id="portrait"></canvas><div style="min-width:0">
       <div class="nm">${a.name.split(' ')[0]} <em>"${a.nick}"</em> ${a.name.split(' ').slice(1).join(' ')}</div>
       <div class="meta" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a.age} anos · ${a.cat} ${kgs(a.kg)} kg · ${a.style} ${styleLv(a,a.style)}</div>
-      <div class="meta">${bodyLine(a)}</div>
-      <div class="meta">${a.rec.w}V ${a.rec.l}D ${a.rec.d}E (${a.rec.ko} KO) · #${a.rank} ${t.n}${a.titles.length?' · '+a.titles.length+' título':''}</div>
+      <div class="meta">${a.rec.w}V ${a.rec.l}D ${a.rec.d}E (${a.rec.ko} KO) ${a.titles.length?' · '+a.titles.length+' título'+(a.titles.length>1?'s':''):''}</div>
+      <div class="meta carp">${carPath(a)}</div>
       ${a.fight||!(a.injury>0||a.recovery>0)?fightLine(a):''}${a.injury>0||a.recovery>0?`<div class="meta">${a.injury>0?`<span class="warn">lesionado ${a.injury} sem.</span>`:''}${a.injury>0&&a.recovery>0?' · ':''}${a.recovery>0?`<span class="warn">recupera ${a.recovery} sem.</span>`:''}</div>`:''}</div></div>
     ${(()=>{const p=persona(a);return `<div class="meta pers"><b>${p.n}</b>${p.w.length?' · '+p.w.slice(0,p.n.length>14?2:3).join(', '):''}</div>`})()}
     <div class="stats2">${ATTR_G.map(([g,ks])=>`<div class="stats"><small class="sg">${g}</small>${ks.map(k=>`<div class="stat"><span>${ATTR_N[k]}</span><div class="bar"><i style="width:${clamp(a.attrs[k],0,100)}%"></i></div><span class="num">${Math.floor(a.attrs[k])}</span></div>`).join('')}</div>`).join('')}</div>
     <div class="row2"><div class="stat" style="grid-template-columns:70px 1fr"><span>Confiança</span><div class="bar blue"><i style="width:${a.conf}%"></i></div></div>
-      <div class="meta" style="align-self:center">${a.recovery>0?'<span class="warn">a recuperar da luta</span>':a.injury>0?'<span class="warn">lesionado</span>':''}</div></div>
-    <div class="meta">Potencial <span class="stars">${potRange(a)}</span></div>
+      <div class="meta" style="align-self:center;white-space:nowrap">Pot. <span class="stars">${potRange(a)}</span></div></div>
     <div style="display:flex;gap:8px;align-items:center;justify-content:space-between">${a.giftKnown?(a.gift?`<div class="meta" title="${GIFTS[a.gift].d}"><b style="color:var(--gold)">Dom: ${GIFTS[a.gift].n}</b></div>`:'<div class="meta">Sem dom especial.</div>'):a.hint?`<div class="meta">Pista: ${GIFTS[a.hint].n.toLowerCase()}? Ainda por confirmar.</div>`:'<div></div>'}
-    ${S.roster.length>1?`<button class="btn" data-dismiss="${a.id}" style="font-size:9px;padding:7px 8px 5px;flex:none">DISPENSAR</button>`:''}</div></div>`;
+    <span style="display:flex;gap:4px;flex:none"><button class="btn" data-retire="${a.id}" style="font-size:9px;padding:7px 8px 5px">${a.car&&a.car.fw?'DESPEDIDA':'REFORMAR'}</button>${S.roster.length>1?`<button class="btn" data-dismiss="${a.id}" style="font-size:9px;padding:7px 8px 5px">DISPENSAR</button>`:''}</span></div></div>`;
 }
 /* ---- Ficha → TÉCNICAS (3A-3): lugares, a técnica em curso (semanas e o que diz o treinador) e o catálogo (sabe / a aprender / pode / bloqueada) ---- */
 function panelTech(a){
@@ -1399,19 +1917,24 @@ function improving(a){ // o que está a subir, por palavras (sem números), a pa
   if(top.length&&canTrain(a))ln('▲',`Mais treinados: ${andList(top)}`,'md');
   return out.join('');
 }
+function fightLabel(f){const k=f.kind||'am',L=RLV[f.lv||0];return(f.last?'Despedida · ':'')+(k==='am'?'Amador':k==='rok'?'Rookie · '+ROOK.n[f.stage||0]:k==='el'?'Eliminatória '+L:k==='ti'?(f.def?'Defesa ':'Título ')+L:L)}
 function panelFights(){
-  const a=cur();
-  let h=selector();
+  const a=cur(),fs=S.fsub||'off';
+  const seg=`<div class="seg"><button data-fsub="off" class="${fs==='off'?'on':''}">Propostas</button><button data-fsub="rank" class="${fs==='rank'?'on':''}">Ranking</button><button data-fsub="rook" class="${fs==='rook'?'on':''}">Rookie</button></div>`;
+  if(fs==='rank')return selector()+seg+panelRank(a);
+  if(fs==='rook')return selector()+seg+panelRook(a);
+  let h=selector()+seg;
   if(a.fight){const w=weeksTo(a),o=a.fight.opp;
-    h+=`<div class="r"><div><strong>MARCADA: ${a.nick} vs ${o.nick}</strong><p>${o.academy} · ${o.style} · ${w===0?'esta semana':`daqui a ${w} semanas`} · ${fmt(a.fight.purse)} €</p><p>${a.cat} · ${a.nick} pesa ${kgs(a.kg)} kg${CAT_LIM[a.cat]!=null?` (limite ${kgs(CAT_LIM[a.cat])})`:''}</p></div><button class="btn" data-scoutf="1">FICHA</button></div>`}
-  h+=`<h3>PROPOSTAS PARA ${a.nick.toUpperCase()} · #${a.rank} ${TIERS[a.tier].n.toUpperCase()}</h3>`;
-  if(!a.offers.length)h+=`<div class="empty">Sem propostas agora. Chegam novas ao longo das semanas, mais depressa com mais popularidade.</div>`;
+    h+=`<div class="r"><div><strong>MARCADA: ${a.nick} vs ${o.nick}</strong><p>${fightLabel(a.fight)} · ${w===0?'esta semana':`daqui a ${w} semanas`}${a.fight.purse?` · ${fmt(a.fight.purse)} €`:''}</p><p>${o.academy} · ${o.style}${oppRank(o)?' · '+oppRank(o):''}</p><p>${a.cat} · ${a.nick} pesa ${kgs(a.kg)} kg${CAT_LIM[a.cat]!=null?` (limite ${kgs(CAT_LIM[a.cat])})`:''}</p></div><button class="btn" data-scoutf="1">FICHA</button></div>`}
+  h+=`<h3>PROPOSTAS PARA ${a.nick.toUpperCase()} · ${carShort(a).toUpperCase()}</h3>`;
+  if(!a.offers.length)h+=`<div class="empty">${rookieAlive(a)?`${a.nick} está no Torneio Rookie: as lutas do torneio marcam-se sozinhas.`:'Sem propostas agora. Chegam novas ao longo das semanas, mais depressa com mais popularidade.'}${!a.car.am&&!a.fight?' Em Ranking podes desafiar alguém acima.':''}</div>`;
   h+=`<div class="rows">${a.offers.map(o=>{const[dl,dc]=diffLabel(a,o.opp);const e=edge(a.style,o.opp.style);
-    return `<div class="r"><div style="min-width:0"><strong>${o.title?'TÍTULO · ':''}${o.opp.nick} · ${fmt(o.purse)} €</strong>
-      <p>${o.opp.academy} · ${o.opp.style} · ${o.rounds} rounds · daqui a ${o.inWeeks} sem.</p>
+    const kt=o.kind==='ti'?(o.def?(o.mand?'DEFESA OBRIGATÓRIA':'DEFESA'):'TÍTULO'):o.kind==='el'?'ELIMINATÓRIA':o.ch?'DESAFIO':o.kind==='am'?'AMADOR':'';
+    return `<div class="r"><div style="min-width:0"><strong>${kt?kt+' · ':''}${o.opp.nick}${o.purse?` · ${fmt(o.purse)} €`:''}</strong>
+      <p>${oppRank(o.opp)||o.opp.academy} · ${o.opp.style} · ${o.rounds} rounds · daqui a ${o.inWeeks} sem.${o.ab?' · fora':''}</p>
       <div class="chips" style="margin-top:3px"><span class="tag ${dc}">${dl}</span>${e?`<span class="tag ${e>0?'g':'b'}">Estilo ${e>0?'+':'-'}</span>`:''}<span class="tag">expira S${o.expires}</span></div></div>
       <div style="display:flex;flex-direction:column;gap:4px"><button class="btn red" data-acc="${o.id}" ${a.fight||a.injury>0?'disabled':''}>ACEITAR</button><button class="btn" data-scout="${o.id}">FICHA</button><button class="btn" data-rej="${o.id}">RECUSAR</button></div></div>`}).join('')}</div>`;
-  h+=`<div class="meta">No escalão ${TIERS[a.tier].n} a academia fica com ${Math.round(TIERS[a.tier].share*100)}% do prémio e paga ${TIERS[a.tier].cost} € de custos por luta.</div>`;
+  {const pl=careerLv(a),P=PURSE[pl];h+=`<div class="meta">${pl?`No ranking ${RLV[pl-1]} a academia fica com ${Math.round(P.share*100)}% da bolsa e paga ${P.cost} € de custos por luta.`:`Amador: sem bolsa; ${P.cost} € de custos por luta. Licença: ${TUNE.amLic} lutas e pelo menos 1 vitória.`}</div>`}
   return h;
 }
 function panelShop(){
@@ -1481,7 +2004,7 @@ function info(title,body,btn='CONTINUAR'){
 function help(){
   return info('COMO JOGAR',`<p class="hint">És o dono de um ginásio de bairro. O tempo corre sozinho: carrega em ▶ para andar, em ❚❚ para parar e em ×2 para ir mais depressa. Pára sozinho quando é preciso decidir alguma coisa.</p>
   <p class="hint">Os lutadores treinam sozinhos todos os dias, com o equipamento do ginásio e com o seu treinador. Cada atleta tem um treinador e treina no estilo dele (Ginásio → Treinadores). Em Atletas → Treino escolhes o foco do treino; em Atletas → Ficha → TÉCNICAS, a técnica que está a aprender. Na luta, o estilo e a guarda escolhe-os o atleta.</p>
-  <p class="hint">As lutas marcam-se com 6 a 8 semanas de antecedência. Cada atleta luta na sua categoria de peso (no máximo 4, nunca dois na mesma): vigia o peso em Atletas → Treino e, na semana antes da luta, escolhe como chega à pesagem. No dia, dá ordens no canto entre rounds.</p>
+  <p class="hint">Cada atleta começa amador: com ${TUNE.amLic} lutas e pelo menos uma vitória tira a licença e entra no ranking Nacional (depois Europeu e Mundial; em Lutas → Ranking podes desafiar quem está acima). No primeiro ano de licença pode ir ao Torneio Rookie, na Primavera. As lutas marcam-se com 2 a 10 semanas de antecedência, mais nas importantes. Cada atleta luta na sua categoria de peso (no máximo 4, nunca dois na mesma): vigia o peso em Atletas → Treino e, na semana antes da luta, escolhe como chega à pesagem. No dia, dá ordens no canto entre rounds.</p>
   <p class="hint">Mais equipamento treina mais coisas e traz mais sócios, que pagam mensalidades. Às vezes aparece um talento escondido.</p>`,'VAMOS A ISSO');
 }
 
@@ -1492,7 +2015,20 @@ document.addEventListener('click',e=>{
   if(!t.disabled)SFX.play('click');
   const d=t.dataset;
   if(d.tab){S.tab=d.tab;render();return}
-  if(d.sel!==undefined){S.sel=+d.sel;histPg=0;render();return}
+  if(d.sel!==undefined){S.sel=+d.sel;histPg=0;S.rkv=null;render();return}
+  if(d.fsub){S.fsub=d.fsub;render();return}
+  if(d.rkc){const v=S.rkv;if(v){v.c=CATS[(catIdx(v.c)+(+d.rkc)+CATS.length)%CATS.length];v.p=0}render();return}
+  if(d.rkl!==undefined){const v=S.rkv;if(v){v.l=+d.rkl;v.p=0}render();return}
+  if(d.rkp){const v=S.rkv;if(v)v.p=clamp(v.p+(+d.rkp),0,2);render();return}
+  if(d.rkr!==undefined){S.rkr=+d.rkr;render();return}
+  if(d.rkb){const b=wb(+d.rkb);if(b)showScout(toOpp(b,cur()),cur());return}
+  if(d.chal){challenge(cur(),+d.chal);return}
+  if(d.vdef){vDefend(cur(),+d.vdef);return}
+  if(d.abt!==undefined){const a=cur(),L=+d.abt,m=modal(`<h2>LARGAR O TÍTULO ${RLV[L].toUpperCase()}?</h2><p class="hint">${a.nick} fica ex-campeão ${RLV[L]} (com o prestígio todo) e luta só no ranking ${RLV[a.car.L]}. O cinturão fica vago.</p><div class="row2"><button class="btn" id="abN">CANCELAR</button><button class="btn red" id="abY">LARGAR</button></div>`);
+    m.querySelector('#abN').onclick=closeModal;m.querySelector('#abY').onclick=()=>{abandonTitle(a,L);closeModal()};return}
+  if(d.retire){const a=S.roster.find(x=>x.id===d.retire);if(a)askRetire(a);return}
+  if(d.hof!==undefined){const e=(S.hof||[])[+d.hof];if(e)hofInfo(e);return}
+  if(d.hfp){hofPg+=+d.hfp;render();return}
   if(d.sub){S.sub=d.sub;render();return}
   if(d.shop){S.shopSub=d.shop;render();return}
   if(d.gsub){S.gsub=d.gsub;render();return}
@@ -1505,14 +2041,16 @@ document.addEventListener('click',e=>{
   if(d.cgive){const c=S.coaches.find(x=>x.id===d.cgive);if(c)pickAthFor(c);return}
   if(d.hire){hireCard(+d.hire);return}
   if(d.acc){const a=cur(),o=a.offers.find(x=>x.id===d.acc);if(!o)return;
-    a.fight={opp:o.opp,purse:o.purse,week:S.week+o.inWeeks,title:o.title,rounds:o.rounds};a.offers=a.offers.filter(x=>x!==o);
+    if(!offerOk(a,o)){a.offers=a.offers.filter(x=>x!==o);note(`A proposta contra ${o.opp.nick} já não está de pé.`);render();return}
+    a.fight={opp:o.opp,wid:o.wid,purse:o.purse,week:S.week+o.inWeeks,title:o.title,rounds:o.rounds,kind:o.kind||'am',lv:o.lv||0,pl:o.pl??0,def:o.def,mand:o.mand,ab:o.ab};a.offers=a.offers.filter(x=>x!==o);
+    if(a.car&&a.car.fw)a.fight.last=1;{const b=wb(o.wid);if(b)b.bk=a.id}
     note(`Luta marcada: ${a.nick} vs ${o.opp.nick}, semana ${a.fight.week}.`);render();return}
   if(d.scout){const a=cur(),o=a.offers.find(x=>x.id===d.scout);if(o)showScout(o.opp,a,o.inWeeks);return}
   if(d.scoutf){const a=cur();if(a.fight)showScout(a.fight.opp,a,weeksTo(a));return}
   if(d.hist!==undefined){const x=(cur().hist||[])[+d.hist];if(x&&x.an)showAnalysis(x.an);return}
   if(d.hpg){histPg+=+d.hpg;render();return}
   if(d.dismiss){const a=S.roster.find(x=>x.id===d.dismiss);if(a)askDismiss(a);return}
-  if(d.rej){const a=cur();a.offers=a.offers.filter(x=>x.id!==d.rej);render();return}
+  if(d.rej){const a=cur(),o=a.offers.find(x=>x.id===d.rej);if(o)offerDrop(a,o,'recusou');a.offers=a.offers.filter(x=>x.id!==d.rej);render();return}
   if(d.eq){const id=d.eq,e=EQ[id],have=S.eq[id]||0;if(have>=e.max)return;const c=e.cost[have];if(S.money<c)return;
     S.money-=c;S.eq[id]=have+1;SFX.play('buy');S.roster.forEach(checkUnlocks);note(`Compraste: ${e.n}${have?' (mais um)':''}.`);render();return}
   if(d.up){const u=UPG.find(x=>x.id===d.up);if(!u||S.up[u.id]||S.money<u.cost)return;
@@ -1520,7 +2058,7 @@ document.addEventListener('click',e=>{
     S.roster.forEach(checkUnlocks);note(`Compraste: ${u.n}.`);render();return}
   if(t.id==='goBtn'){if(anyFightNow())advanceWeek();else if(!busy){S.run=!S.run;render()}return}
   if(t.id==='spdBtn'){const v=TIME.speeds;S.spd=v[(v.indexOf(S.spd||1)+1)%v.length];render();return}
-  if(t.id==='repBtn'){if(S.rep)info(`SEMANA ${S.rep.w}`,S.rep.html,'FECHAR');return}
+  if(t.id==='repBtn'){if(S.rep)info(calTxt(S.rep.w).toUpperCase(),S.rep.html,'FECHAR');return}
   if(t.id==='helpBtn'){help();return}
   if(t.id==='menuBtn'){pauseMenu();return}
   if(t.id==='resetBtn'){const m=modal(`<h2>COMEÇAR DE NOVO?</h2><p class="hint">Perdes todo o progresso deste ginásio.</p><div class="row2"><button class="btn" id="rNo">CANCELAR</button><button class="btn red" id="rYes">APAGAR TUDO</button></div>`);
@@ -1586,8 +2124,8 @@ function card(c){ // cartão curto com escolhas de um toque: {title, body, opts:
 }
 async function runCards(cards){for(const c of cards){if(c.a&&!S.roster.includes(c.a))continue;await card(c);if(stay)break}}
 function offerCard(a,o){
-  return{a,title:`${o.title?'LUTA PELO TÍTULO':'NOVA PROPOSTA'} · ${a.nick.toUpperCase()}`,
-    body:`<p class="hint">${o.title?`${a.nick} é desafiante oficial ao título ${TIERS[a.tier].n}. `:''}Contra <b style="color:var(--fg)">${o.opp.nick}</b> · daqui a ${o.inWeeks} semanas · ${o.rounds} rounds · ${fmt(o.purse)} €.</p>`,
+  return{a,title:`${o.title?(o.def?'DEFESA DO TÍTULO':'LUTA PELO TÍTULO'):o.kind==='el'?'ELIMINATÓRIA':'NOVA PROPOSTA'} · ${a.nick.toUpperCase()}`,
+    body:`<p class="hint">${o.title?(o.def?`${o.mand?'Defesa obrigatória':'Defesa voluntária'} do título ${RLV[o.lv]}. `:`Luta pelo título ${RLV[o.lv]}. `):o.kind==='el'?`Eliminatória: quem ganhar fica desafiador obrigatório ao título ${RLV[o.lv]}. `:''}${o.opp.wid!=null&&oppRank(o.opp)?`${o.opp.nick} é ${oppRank(o.opp)}. `:''}Contra <b style="color:var(--fg)">${o.opp.nick}</b> · daqui a ${o.inWeeks} semanas · ${o.rounds} rounds${o.purse?` · ${fmt(o.purse)} €`:' · sem bolsa (amador)'}.</p>`,
     opts:[{t:'VER PROPOSTAS',cls:'gold',stay:true,fn:()=>{const i=S.roster.indexOf(a);if(i>=0){S.tab='fights';S.sel=i;render()}}},{t:'DEPOIS'}]};
 }
 /* ---- treino diário (3A-1): um dia (o n.º S.wstep desta semana) para todos os atletas; devolve os cartões que precisam do jogador ---- */
@@ -1654,7 +2192,7 @@ function weekTrain(a){ // fim da semana: ligação ao treinador, outros estilos 
 }
 /* ---- técnicas (3A-3): no fim de cada semana de treino há uma chance de aprender a técnica escolhida (sem barra). A recuperar ou lesionado não conta.
    Quando aprende e não há lugar, esquece a que o jogador marcou (a.tech.fg). Devolve o cartão "técnica aprendida" (ou null). ---- */
-let techCards=[];
+let techCards=[],CQ=[];
 function techWeek(a){
   const T=techK(a);if(!T.l||!TECH[T.l])return null;
   if(techLack(a,T.l)){T.l=null;T.w=0;T.p=0;return null} // deixou de cumprir (não deve acontecer): pára
@@ -1700,17 +2238,19 @@ function weekEnd(){
   if(S.members<target)S.members+=Math.min(2,target-S.members);else if(S.members>target)S.members--;
   let extra='';
   if(!S.up.pintura&&S.members>8&&Math.random()<.4){S.members--;extra='Um sócio saiu a queixar-se do estado das paredes.'}
-  for(const r of S.rivals)if(Math.random()<.15&&r.lvl<8)r.lvl+=1;
+  for(const r of S.rivals)if(Math.random()<.08&&r.lvl<8)r.lvl+=1;
   S.pop=Math.min(100,S.pop);
+  if(S.W)CQ.push(...rookieStage()); // Torneio Rookie: as outras lutas desta ronda (3A-4)
   S.week++;S.wt=0;S.wstep=0;
+  if(S.W){if(ywk()===0)worldYear();if(ywk()%4===0)worldMonth();if(ywk()===50)CQ.push(galaRun())} // mundo de pugilistas: ano, mês, gala de fim de ano
   const news=[...reveals],newOff=[];
   for(const a of S.roster){
     if(a.injury>0)a.injury--;
-    a.offers=a.offers.filter(o=>o.expires>=S.week);
+    carK(a);a.offers=a.offers.filter(o=>{if(o.expires<S.week){offerDrop(a,o,'deixou passar');return false}return offerOk(a,o)});
     const had=new Set(a.offers);
-    if(!a.fight&&a.rank<=3&&!a.offers.some(o=>o.title)){if(a.offers.length>=3)a.offers.shift();addOffer(a);news.push(`${a.nick} é desafiante oficial: tem uma proposta para lutar pelo título ${TIERS[a.tier].n}!`)}
-    else if(!a.fight&&Math.random()<.3+S.pop/200){const n=a.offers.length;addOffer(a);if(a.offers.length>n)news.push(`Nova proposta para ${a.nick}.`)}
+    careerWeek(a,news); // propostas: amadoras, do ranking, título, defesa obrigatória, eliminatória (3A-4)
     for(const o of a.offers)if(!had.has(o))newOff.push([a,o]);
+    retireCheck(a);promoCheck(a);
   }
   note(`Semana fechada: ${net>=0?'+':''}${net} €.`);
   const dm=S.members-prevM;
@@ -1723,12 +2263,14 @@ function weekEnd(){
   </div>`};
   // aviso curto que não pára o tempo: o que melhorou, depois as contas e as novidades
   const l3=[...news,extra].filter(Boolean);
-  toast(`<div><b>Semana ${S.week-1}</b> · ${short.join(' · ')||'sem atletas'}</div><div class="wm"><span class="${net>=0?'good':'warn'}">${net>=0?'+':''}${fmt(net)} €</span>${dm?` · sócios ${dm>0?'+':''}${dm}`:''}${l3.length?` · <span style="color:var(--gold)">${l3.join(' ')}</span>`:''}</div>`,'wk',TIME.noticeMs);
+  toast(`<div><b>${calMini(S.week-1)}</b> · ${short.join(' · ')||'sem atletas'}</div><div class="wm"><span class="${net>=0?'good':'warn'}">${net>=0?'+':''}${fmt(net)} €</span>${dm?` · sócios ${dm>0?'+':''}${dm}`:''}${l3.length?` · <span style="color:var(--gold)">${l3.join(' ')}</span>`:''}</div>`,'wk',TIME.noticeMs);
   return newOff;
 }
 async function endWeek(quiet){
   const newOff=weekEnd();render();
   {const tc=techCards;techCards=[];if(tc.length)await runCards(tc)} // técnicas aprendidas (3A-3)
+  {const q=CQ;CQ=[];if(q.length)await runCards(q)} // carreira (3A-4): títulos, subir de nível, reforma, prémios, gala
+  if(S.W&&ywk()===0&&(!S.W.T||S.W.T.y!==yearOf()))await rookieOpen(); // inscrições no Torneio Rookie
   for(const a of [...S.roster])if(a.pendingRaise)await negotiate(a);
   for(const a of [...S.roster])if(a.fight&&a.fight.week===S.week+1&&!a.fight.prep&&S.roster.includes(a))await prepCard(a); // pesagem na próxima semana (3A-2)
   // talentos: com lugares livres, numa categoria livre; às vezes um para trocar com um atleta na mesma categoria
@@ -1744,9 +2286,10 @@ async function advanceWeek(){
     busy=true;render();
     for(const a of S.roster){
       if(!(a.fight&&a.fight.week===S.week))continue;
-      if(a.injury>0){await info('LUTA CANCELADA',`<p class="hint">${a.nick} está lesionado. A luta com ${a.fight.opp.nick} foi cancelada. Popularidade -2.</p>`);note(`Luta de ${a.nick} cancelada por lesão.`);a.fight=null;S.pop=Math.max(0,S.pop-2);continue}
+      if(a.injury>0){await info('LUTA CANCELADA',`<p class="hint">${a.nick} está lesionado. A luta com ${a.fight.opp.nick} foi cancelada${a.fight.kind==='rok'?': fica fora do Torneio Rookie':''}. Popularidade -2.</p>`);note(`Luta de ${a.nick} cancelada por lesão.`);{const b=wb(a.fight.wid);if(b)b.bk=null}a.fight=null;S.pop=Math.max(0,S.pop-2);continue}
       await weighIn(a);
       await fightFlow(a);
+      if(a.car&&a.car.fw&&S.roster.includes(a))await retireNow(a); // luta de despedida: reforma-se
     }
     busy=false;S.run=false;render();return;
   }
@@ -1754,6 +2297,7 @@ async function advanceWeek(){
 }
 window.__week=()=>advanceWeek();
 window.__fstate=()=>F?{pops:(F.pl||[]).slice(),log:F.log.map(e=>e.t),mk:[mkWords(F.me),mkWords(F.op)],sty:[F.me.style,F.op.style],grd:[F.me.guard,F.op.guard],tq:[F.me.tq,F.op.tq]}:null; // para os testes
+window.__S=()=>S; // para os testes (3A-4: preparar carreiras e o mundo)
 window.__clock=()=>S&&{week:S.week,wt:S.wt||0,step:S.wstep||0,run:!!S.run,spd:S.spd||1,busy};
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&S&&S.run){S.run=false;save();drawClock()}});
 /* ---- velocidade de aprender (tema 9.1, passo A4; 3A-1): golpes, defesas, atributos e estilos.
@@ -1778,7 +2322,7 @@ function gain(a,k,base,q,mult=1){ // ganho fora do treino diário (lutas: Ring I
   a.attrs[k]=clamp(a.attrs[k]+g,0,a.cap[k]+2);
 }
 function dismissCost(a){const pen=1+(a.fight?3:0)+a.titles.length*2+(a.rec.w>=5?1:0);return{money:a.salary*2,pop:pen}}
-function doDismiss(a){const c=dismissCost(a);S.money=Math.max(0,S.money-c.money);S.pop=Math.max(0,S.pop-c.pop);
+function doDismiss(a){const c=dismissCost(a);S.money=Math.max(0,S.money-c.money);S.pop=Math.max(0,S.pop-c.pop);leaveWorld(a);
   S.roster=S.roster.filter(x=>x!==a);S.sel=0;note(`${a.name} "${a.nick}" saiu do ginásio${a.fight?' e a luta marcada foi cancelada':''}.`)}
 function dismissText(a){const c=dismissCost(a);return `Pagas ${c.money} € de indemnização (2 semanas de salário) e perdes ${c.pop} de popularidade${a.fight?' (inclui cancelar a luta marcada)':''}${a.titles.length?' (os sócios não gostam de ver sair um campeão)':''}.`}
 function askDismiss(a){
@@ -1787,7 +2331,7 @@ function askDismiss(a){
   m.querySelector('#dNo').onclick=closeModal;m.querySelector('#dYes').onclick=()=>{doDismiss(a);closeModal()};
 }
 async function negotiate(a){
-  const req=Math.max(Math.round(a.salary*a.pendingRaise/5)*5,a.pendingRaise>=1.6?[45,90,220,600][a.tier]:0),ctr=Math.round((a.salary+req)/2/5)*5;a.pendingRaise=0;
+  const req=Math.max(Math.round(a.salary*a.pendingRaise/5)*5,a.pendingRaise>=1.6?[45,90,220,600][careerLv(a)]:0),ctr=Math.round((a.salary+req)/2/5)*5;a.pendingRaise=0;
   return new Promise(res=>{
     const m=modal(`<h2>${a.nick.toUpperCase()} QUER UM AUMENTO</h2><p class="hint">${a.titles.length?'Depois do título':'Depois de uma série de vitórias'}, ${a.nick} pede para passar de ${a.salary} € para <b>${req} € por semana</b>.</p>
       <p class="hint">Personalidade: ${persona(a).n} · Confiança ${Math.round(a.conf)}${a.refusals?` · já recusaste ${a.refusals} vez${a.refusals>1?'es':''}`:''}</p>
@@ -1796,7 +2340,7 @@ async function negotiate(a){
     const refuse=async(t)=>{a.conf=clamp(a.conf-12,0,100);a.refusals=(a.refusals||0)+1;
       if(a.refusals>=2&&S.roster.length>1){closeModal();
         const q=modal(`<h2>${a.nick.toUpperCase()} QUER SAIR</h2><p class="hint">${t} ${a.nick} sente-se desvalorizado e quer ir para outro ginásio.</p><div class="row2"><button class="btn" id="lGo">DEIXÁ-LO IR</button><button class="btn gold" id="lPay">PAGAR ${req} €</button></div>`);
-        q.querySelector('#lGo').onclick=()=>{S.roster=S.roster.filter(x=>x!==a);S.sel=0;S.pop=Math.max(0,S.pop-2);end(`${a.nick} saiu do ginásio.`)};
+        q.querySelector('#lGo').onclick=()=>{leaveWorld(a);S.roster=S.roster.filter(x=>x!==a);S.sel=0;S.pop=Math.max(0,S.pop-2);end(`${a.nick} saiu do ginásio.`)};
         q.querySelector('#lPay').onclick=()=>{a.salary=req;a.refusals=0;a.conf=clamp(a.conf+8,0,100);end(`${a.nick} fica, agora a ganhar ${req} € por semana.`)};
       }else end(t+' Ficou com menos confiança.')};
     m.querySelector('#nA').onclick=()=>{a.salary=req;a.refusals=0;a.conf=clamp(a.conf+6,0,100);end(`${a.nick} aceita: agora ganha ${req} € por semana.`)};
@@ -1827,7 +2371,7 @@ function talent(cat){
       <div class="row2"><button class="btn" id="ig">IGNORAR</button><button class="btn gold" id="tk">${curA?'TROCAR':'TRAZER'}</button></div>`);
     drawPortrait(s.querySelector('#tp'),a.look);
     s.querySelector('#ig').onclick=()=>{note(`Deixaste ir um talento (${a.nick}).`);closeModal();res()};
-    s.querySelector('#tk').onclick=()=>{if(curA)doDismiss(curA);S.roster.push(a);S.sel=S.roster.length-1;addOffer(a,true);note(`${a.name} "${a.nick}" juntou-se ao ginásio (${cat}).`);autoCoach(a);closeModal();res()};
+    s.querySelector('#tk').onclick=()=>{if(curA)doDismiss(curA);S.roster.push(a);S.sel=S.roster.length-1;amOffer(a,true);note(`${a.name} "${a.nick}" juntou-se ao ginásio (${cat}).`);autoCoach(a);closeModal();res()};
   });
 }
 
@@ -2215,7 +2759,7 @@ function line(type,v){
   const s=l.replace(/\{(\w)\}/g,(m,k)=>v[k]??'');LT={ty:type,s};return s;
 }
 function fighter(src,mine){
-  initBody(src,src.tier!=null?2:3);const fst=src.style; // o atleta começa no seu estilo e escolhe sozinho durante a luta (styleAI)
+  initBody(src,src.car!=null?2:3);const fst=src.style; // o atleta começa no seu estilo e escolhe sozinho durante a luta (styleAI)
   const x={h:src.h,r:src.r,sty:src.sty,slv:Math.max(1,styleLv(src,fst)),armX:clamp(Math.round(((src.r-src.h)-2.5)/3),-1,2),hs:clamp((src.h||175)/178,.9,1.12),name:src.name,nick:src.nick,style:fst,ment:src.ment||{},look:src.look,mine,...src.attrs,skills:{...newSkills(),...pickKeys(src.skills,PKEYS)},def:{...newDefs(),...pickKeys(src.def,DKEYS)},src,cat:src.cat||'Leve',gift:src.gift||null,
     hp:100,st:mine?clamp(100-(src.fatigue||0)*.5,40,100):100,kd:0,cut:0,conf:mine?src.conf:confBase(src),strat:'Equilibrado',
     rs:newRS(),dx:newDX(),wobbly:0,tot:{thrown:0,landed:0,power:0,dmg:0},card:0,dmgTaken:0,ps:{},dfs:{},cts:{},liv:[0,0],bodyAcc:0,hunch:0,headL:0,bodyL:0,lowT:0,lastK:'jab',
@@ -2231,13 +2775,16 @@ function initBel(x,src,mine){ // crença em cada habilidade na luta: a do atleta
 function fightFlow(a){return new Promise(res=>startFight(a,res))}
 function startFight(a,done){
   const f=a.fight;
+  if(f.wid!=null&&wb(f.wid)){const sc=f.opp.scout;f.opp=toOpp(wb(f.wid),a);if(sc)f.opp.scout=sc;f.opp.grown=true} // o adversário do mundo como está hoje
   if(!f.opp.grown){const wk=Math.max(0,S.week-(f.opp.made||S.week));for(const[k]of ATTRS)if(k!=='queixo')f.opp.attrs[k]=clamp(f.opp.attrs[k]+R(0,.45)*wk,5,99);f.opp.grown=true}
   F={a,done,me:fighter(a,true),op:fighter(f.opp,false),round:1,rounds:f.rounds,log:[],fast:false,over:null,ft:0,
     zoom:null,crowd:0,flashes:0,ref:{x:120,y:60,tx:120,ty:60,pose:'stand'},count:null,big:null,lastScore:[10,10],zone:'center',zp:null,ctl:null,dw:null,dist:'meio',dT:0,ord:null,ordLog:[],deaf:0,live:false,inRound:false,rr:[],kdl:[],talks:[],sx:{}};
   if(f.wi){const w=f.wi; // pesagem (3A-2): acima do limite luta mais fraco; abaixo do peso o adversário bate mais
     if(w.st)F.me.st=clamp(F.me.st-w.st,30,100);if(w.p){F.me.forca*=1-w.p;F.me.resistencia*=1-w.p}if(w.op)F.op.forca*=1+w.op}
   F.at0=[F.me,F.op].map(x=>ATTRS.map(([k])=>Math.round(x[k]??0))); // atributos no início da luta (COMPARAR)
-  F.form0=formOf(a);F.me.form=F.form0.sc*TUNE.formK;F.op.form=0;F.venue=venueIdx({tier:a.tier,title:f.title});
+  F.form0=formOf(a);F.me.form=F.form0.sc*TUNE.formK;F.op.form=0;F.ven=venueOf(a);F.venue=F.ven.d;
+  {const fm=fame(a,true),fo=fame(f.opp,false);let sh=fm/(fm+fo);if(F.ven.ab)sh*=.35;F.ven.sh=sh; // público (3A-4): quem tem mais apoio fica mais confiante
+   const em=crowdFx(F.me,2*sh-1,F.ven.imp),eo=crowdFx(F.op,1-2*sh,F.ven.imp);F.me.conf=clamp(F.me.conf+em,0,100);F.op.conf=clamp(F.op.conf+eo,0,100);F.crowdFx=[em,eo]}
   F.op.strat=f.opp.style==='In-fighter'?'Pressão':f.opp.style==='Outboxer'?'Cautela':'Equilibrado';
   $('#fightRoot').innerHTML=`<div class="fight">
     <div class="stagew"><div class="stage"><canvas class="px" id="ring" width="240" height="240"></canvas><button class="snd" id="pauseF" aria-label="Pausa">II</button><div class="ford" id="fOrd" aria-live="polite"></div>
@@ -2419,7 +2966,14 @@ const ABC={
   crowd:['Casa cheia! Este público quer guerra.'],
   quiet:['Pouca gente hoje, mas quem veio sabe de boxe.'],
   title:['Há um cinturão em jogo. Ninguém quer arriscar cedo.'],
-  old:['No meu tempo partiram-me o nariz assim. Duas vezes.','Eu aos vinte anos lutava assim. Depois aprendi.']
+  old:['No meu tempo partiram-me o nariz assim. Duas vezes.','Eu aos vinte anos lutava assim. Depois aprendi.'],
+  rank:['O {op} é o {r}. Não chegou lá por acaso.','O {op} é o {r}: quem ganhar aqui sobe muito.'],
+  champ:['O {op} é o campeão {lv}. Quem lhe quiser o cinturão tem de o arrancar.'],
+  rook:['Torneio Rookie! Estes miúdos lutam como se fosse a última vez.','No Rookie ninguém guarda nada para depois.'],
+  fare:['Última luta do {me}. Vai ser difícil não me emocionar.','O {me} despede-se hoje. Que noite para pendurar as luvas.'],
+  elim:['Eliminatória: quem ganhar fica com o direito de lutar pelo título.'],
+  away:['Fora de casa, com a sala toda contra. É aqui que se vê quem tem coração.'],
+  nat:['O {op} vem de {pais}. Lá fora treina-se de outra maneira.']
 };
 function abFill(l,v){return l.replace(/\{(\w+)\}/g,(m,k)=>v[k]??'')}
 function abPick(set,key,v){const L=set[key];if(!L)return null;F.abU.add(key);return abFill(pick(L),v)}
@@ -2450,7 +3004,9 @@ function abInsight(){
 }
 function abColour(){
   const{me,op}=F,a=F.a,o=a.fight.opp,C=[],add=(k,v)=>{if(!F.abU.has(k))C.push({k,v})};
-  const H=(a.hist||[]).filter(h=>h.o===op.nick);
+  const H=(a.hist||[]).filter(h=>a.fight.wid!=null?h.wi===a.fight.wid:h.o===op.nick);
+  {const f=a.fight;if(f.last)add('fare',{me:me.nick});if(f.kind==='rok')add('rook',{});if(f.kind==='el')add('elim',{});if(F.ven&&F.ven.ab)add('away',{});
+   const rr=oppRank(o);if(rr.startsWith('campeão'))add('champ',{op:op.nick,lv:rr.split(' ')[1]});else if(rr&&!rr.includes('sem'))add('rank',{op:op.nick,r:rr});if(o.nt&&o.nt!=='POR')add('nat',{op:op.nick,pais:NAT[o.nt].n})}
   if(H.length){const h=H.at(-1);add('rematch',{w:h.w,res:h.r==='V'?`ganhou o ${me.nick}`:h.r==='D'?`ganhou o ${op.nick}`:'deu empate'})}
   if(a.fight.title)add('title',{});
   const rc=a.rec||{w:0,l:0,d:0};if(!rc.w&&!rc.l&&!rc.d)add('first',{me:me.nick});else if((a.streak||0)>=3)add('streak',{me:me.nick,n:a.streak});
@@ -2459,7 +3015,7 @@ function abColour(){
   add('gym',{me:me.nick,gym:S.gymName||'Ginásio Esperança'});
   if((F.venue||0)>=2&&!F.abU.has('quiet'))add('crowd',{});else if(!F.venue&&!F.abU.has('crowd'))add('quiet',{});
   add('old',{});
-  if(!C.length)return null;const pri=['rematch','title','first','streak'];const top=C.find(c=>pri.includes(c.k));const c=top&&Math.random()<.8?top:pick(C);
+  if(!C.length)return null;const pri=['fare','rematch','title','champ','elim','rook','first','streak'];const top=C.find(c=>pri.includes(c.k));const c=top&&Math.random()<.8?top:pick(C);
   return abPick(ABC,c.k,c.v);
 }
 function abTick(){ // chamado depois de cada troca
@@ -2571,7 +3127,7 @@ async function walkTo(x,tx,ty,maxMs=7000){x.pos.tx=tx;x.pos.ty=ty;const t0=perfo
   while(F&&!F.skipIn&&performance.now()-t0<maxMs*spd()){if(Math.hypot(x.pos.tx-x.pos.x,x.pos.ty-x.pos.y)<1.5)break;await sleep(40)}
   if(F&&F.skipIn){x.pos.x=tx;x.pos.y=ty}}
 async function pauseIn(ms){if(F&&!F.skipIn)await sleep(ms*spd())}
-function fame(x,mine){const r=x.rec||{w:0,l:0,ko:0};return Math.max(.5,2*r.w+r.ko-.5*r.l+((x.titles&&x.titles.length)||0)*6+(mine?S.pop*.12:0)+1)}
+function fame(x,mine){const r=x.rec||{w:0,l:0,ko:0};return Math.max(.5,2*r.w+r.ko-.5*r.l+(((x.titles&&x.titles.length)||x.ttn||0))*6+(mine?S.pop*.12:0)+1)} // fãs na 3B
 async function enterRing(){
   const a=F.a,f=a.fight,o=f.opp,me=F.me,op=F.op;
   makeCrew();
@@ -2580,10 +3136,10 @@ async function enterRing(){
   op.pos={x:196,y:-14,tx:196,ty:-14};me.pos={x:44,y:-14,tx:44,ty:-14};
   const fc=$('#fctl');fc.innerHTML=`<button class="btn" id="skipIn">SALTAR ENTRADA</button>`;
   $('#skipIn').onclick=()=>{F.skipIn=true};
-  const evN=f.title?`combate pelo título ${TIERS[a.tier].n}`:['Torneio Amador','Liga Regional','Gala Nacional','Gala Mundial'][a.tier];
-  say(`Boa noite e bem-vindos ao ${VENUES[F.venue||0]}! Esta noite: ${evN}.`,'sys',{p:3});F.cheer=.5;F.crowd=performance.now()+1500;
+  const k=f.kind||'am',LN=RLV[f.lv||0],evN=(f.title?`combate pelo título ${LN}${f.def?' (defesa)':''}`:k==='am'?'boxe amador':k==='rok'?`Torneio Rookie, ${ROOK.n[f.stage||0]}`:k==='el'?`eliminatória do ranking ${LN}`:`combate do ranking ${LN}`)+(f.last?`, a despedida de ${a.nick}`:'');
+  say(`Boa noite e bem-vindos ${F.ven.ar} ${F.ven.n}! Esta noite: ${evN}. ${F.ven.cr>=1000?`Cerca de ${fmt(F.ven.cr)} pessoas`:`${fmt(F.ven.cr)} pessoas`} na sala.`,'sys',{p:3});F.cheer=.5;F.crowd=performance.now()+1500;
   await pauseIn(1600);
-  const fm=fame(a,true),fo=fame(o,false),sh=fm/(fm+fo);const cm=clamp(.08+.87*sh,.06,.95),co=clamp(.08+.87*(1-sh),.06,.95);
+  const sh=F.ven.sh;const cm=clamp(.08+.87*sh,.06,.95),co=clamp(.08+.87*(1-sh),.06,.95);
   const react=(c,n)=>c>.65?`O público levanta-se todo para ${n}!`:c>.4?`Bons aplausos para ${n}.`:c>.2?`Alguns aplausos para ${n}.`:`Quase ninguém conhece ${n}. Palmas tímidas.`;
   op.hidden=false;say(`No canto azul, de ${o.academy}... ${o.name.split(' ')[0]} "${o.nick}"!`);F.cheer=co;F.crowd=performance.now()+(co>.4?2600:1400);setTimeout(()=>{if(F&&!F.skipIn)say(react(co,o.nick),'sys')},900);
   await walkTo(op,186,12);await pauseIn(300);await walkTo(op,LIM.x1-2,LIM.y0+2);await pauseIn(900);op.robe=null;
@@ -2592,6 +3148,9 @@ async function enterRing(){
   await walkTo(me,54,12);await pauseIn(300);await walkTo(me,56,44);await walkTo(me,LIM.x0+2,LIM.y1-2);await pauseIn(900);me.robe=null;
   me.hidden=op.hidden=false;me.robe=op.robe=null;
   if(F.skipIn){me.pos.x=me.pos.tx;me.pos.y=me.pos.ty;op.pos.x=op.pos.tx;op.pos.y=op.pos.ty}
+  {const[em,eo]=F.crowdFx||[0,0]; // o público na confiança (3A-4)
+   if(em>=2)say(`A sala está com ${me.nick}! Sente-se em casa.`,'sys',{p:2});else if(em<=-2)say(`O público está todo com ${op.nick}. ${me.nick} sente o peso da sala.`,'sys',{p:2});
+   else if(sh<.4&&em>0)say(`Público contra, mas ${me.nick} parece crescer com isso!`,'sys',{p:2});else if(sh>.6&&eo>0)say(`A sala é do ${me.nick}, mas ${op.nick} parece gostar de ter o público contra.`,'sys',{p:2})}
   const skipped=F.skipIn;F.skipIn=false;fc.innerHTML='';F.cheer=1;
   if(skipped){for(const m of F.crew){m.placed=true;crewPlace(m);m.hidden=false}}setCrew('round');
   toCorners();await pauseIn(600);
@@ -2613,11 +3172,11 @@ async function ceremony(){
   say(`E o vencedor... ${win.name.split(' ')[0]} "${win.nick}"!`,win.mine?'me':'',{p:3});F.crowd=performance.now()+(win.mine?3500:1500);F.flashes=performance.now()+1500;
   await sleep(2300);
   if(title){
-    F.ref.pose='present';say(`O cinturão ${TIERS[F.a.tier].n} é entregue a ${win.nick}!`,'sys',{p:3});await sleep(1600);
+    F.ref.pose='present';say(`O cinturão ${RLV[F.a.fight.lv||0]} é entregue a ${win.nick}!`,'sys',{p:3});await sleep(1600);
     F.ref.pose='stand';F.ref.tx=120;F.ref.ty=60;
     act(win,'belt',99999);if(win.mine)setTimeout(()=>SFX.play('fanfare'),300);F.confetti=performance.now();F.conf=null;F.crowd=performance.now()+6500;F.flashes=performance.now()+4500;
     if(win.mine){F.bigTop=true;F.big='CAMPEÃO!'}
-    say(win.mine?`${win.nick} é o novo campeão ${TIERS[F.a.tier].n}! Isto vem abaixo!`:`${win.nick} levanta o cinturão. Fica para a próxima.`,win.mine?'me':'sys',{p:3});
+    say(win.mine?(F.a.fight.def?`${win.nick} defende o título ${RLV[F.a.fight.lv||0]}! Isto vem abaixo!`:`${win.nick} é o novo campeão ${RLV[F.a.fight.lv||0]}! Isto vem abaixo!`):`${win.nick} levanta o cinturão. Fica para a próxima.`,win.mine?'me':'sys',{p:3});
     await sleep(4800);
   }else{F.ref.pose='stand';act(win,'celebrate',99999);await sleep(win.mine?2400:1600)}
 }
@@ -3537,35 +4096,30 @@ function afterFight(a,r){ // experiência da luta: Ring IQ, mentais (devagar) e 
 }
 function finishFight(){
   const a=F.a,f=a.fight,r=F.over;
-  const myR=rating(a),oR=f.opp.rating;
   let html='',title='',lineTxt='';
   const st=`<div class="sum"><b>TOTAL</b><b class="me">${F.me.nick.slice(0,7).toUpperCase()}</b><b class="op">${F.op.nick.slice(0,7).toUpperCase()}</b>
     <span>Lançados</span><span class="v">${F.me.tot.thrown}</span><span class="v">${F.op.tot.thrown}</span>
     <span>Acertados</span><span class="v">${F.me.tot.landed}</span><span class="v">${F.op.tot.landed}</span>
     <span>Pontos</span><span class="v">${F.me.card}</span><span class="v">${F.op.card}</span></div>`;
+  const pl=f.pl??0,P=PURSE[pl];
   if(r.draw){
-    a.rec.d++;const sh=TIERS[a.tier].share;const cash=Math.round(f.purse*sh*.6)-TIERS[a.tier].cost;S.money+=cash;S.pop+=1;
-    title='EMPATE';html=`<p class="hint">Academia recebe <span class="good">+${fmt(cash)} €</span>. Popularidade +1.</p>`;
+    a.rec.d++;const cash=Math.round(f.purse*P.share*.6)-P.cost;S.money=Math.max(0,S.money+cash);S.pop+=1;
+    title='EMPATE';html=`<p class="hint">${pl?`Academia recebe <span class="${cash>=0?'good':'warn'}">${cash>=0?'+':''}${fmt(cash)} €</span>`:`Amador: sem bolsa (custos -${P.cost} €)`}. Popularidade +1.</p>`;
     lineTxt=`${a.nick} empatou com ${f.opp.nick}.`;note(lineTxt);
   }else if(r.win){
     a.rec.w++;if(r.how==='KO')a.rec.ko++;
-    const sh=TIERS[a.tier].share,fc=TIERS[a.tier].cost;const cash=Math.round(f.purse*sh)-fc;S.money+=cash;
-    const pg=3+(r.how==='KO'?2:0)+(f.title?8:0)+a.tier*2;S.pop+=pg;a.conf=clamp(a.conf+10,0,100);
-    let rk='';
-    if(f.title){const tn=TIERS[a.tier].n;a.titles.push(`${tn} (${a.cat})`);
-      rk=`${a.nick} é campeão ${tn}! ${a.tier<3?`Sobe para o escalão ${TIERS[a.tier+1].n}.`:'É o melhor do mundo.'}`;
-      if(a.tier<3){a.tier++;a.rank=10}note(`${a.nick} ganhou o título ${tn}!`);
-    }else{const up=clamp(2+Math.round((oR-myR)/8),2,4);const old=a.rank;a.rank=Math.max(1,a.rank-up);rk=`Ranking: #${old} → #${a.rank}.${a.rank<=3?' É desafiante oficial ao título!':''}`}
-    a.streak=(a.streak||0)+1;a.lst=0;if(f.title)a.pendingRaise=1.6;else if(a.streak%4===0)a.pendingRaise=1.3;
+    const sh=P.share,fc=P.cost;const cash=Math.round(f.purse*sh)-fc;S.money=Math.max(0,S.money+cash);
+    const pg=pl?3+(r.how==='KO'?2:0)+(f.title?8:0)+pl*2:1+(r.how==='KO'?1:0);S.pop+=pg;a.conf=clamp(a.conf+10,0,100);
+    a.streak=(a.streak||0)+1;a.lst=0;if(f.title&&!f.def)a.pendingRaise=1.6;else if(a.streak%4===0&&pl)a.pendingRaise=1.3;
     title=r.how==='KO'?'VITÓRIA POR KO!':r.how==='médico'?'VITÓRIA (MÉDICO)':'VITÓRIA AOS PONTOS';
-    html=`<p class="hint">Academia (${Math.round(sh*100)}% menos ${fc} € de custos da luta) <span class="good">+${fmt(cash)} €</span> · Atleta ${fmt(f.purse*(1-sh))} € · Popularidade +${pg}</p><p class="hint">${rk}</p>`;
+    html=`<p class="hint">${pl?`Academia (${Math.round(sh*100)}% menos ${fc} € de custos da luta) <span class="good">+${fmt(cash)} €</span> · Atleta ${fmt(f.purse*(1-sh))} €`:`Amador: sem bolsa (custos -${fc} €)`} · Popularidade +${pg}</p>`;
     lineTxt=`${a.nick} venceu ${f.opp.nick} (${r.how}).`;note(lineTxt);
   }else{
-    a.streak=0;a.lst=(a.lst||0)+1;a.rec.l++;S.money=Math.max(0,S.money-TIERS[a.tier].cost);const lc=r.how==='toalha'?8:Math.round(16-TUNE.calmL*clamp((mv(a,'calma')-50)/40,-.5,1));a.conf=clamp(a.conf-lc,0,100);
-    const old=a.rank;a.rank=Math.min(15,a.rank+(f.title?3:RI(1,2)));S.pop=Math.max(0,S.pop-1);
+    a.streak=0;a.lst=(a.lst||0)+1;a.rec.l++;S.money=Math.max(0,S.money-P.cost);const lc=r.how==='toalha'?8:Math.round(16-TUNE.calmL*clamp((mv(a,'calma')-50)/40,-.5,1));a.conf=clamp(a.conf-lc,0,100);
+    S.pop=Math.max(0,S.pop-1);
     let inj='';if(r.how==='KO'&&Math.random()<.5){a.injury=RI(1,3);inj=` Saiu lesionado: mais ${a.injury} semana${a.injury>1?'s':''} parado.`}
     title=r.how==='KO'?'DERROTA POR KO':r.how==='toalha'?'ATIRASTE A TOALHA':'DERROTA';
-    html=`<p class="hint">Sem prémio. Custos da luta -${TIERS[a.tier].cost} €. Confiança -${lc}. Ranking #${old} → #${a.rank}.<span class="warn">${inj}</span></p>`;
+    html=`<p class="hint">Sem prémio. Custos da luta -${P.cost} €. Confiança -${lc}.<span class="warn">${inj}</span></p>`;
     lineTxt=`${a.nick} perdeu com ${f.opp.nick} (${r.how}).`;note(lineTxt);
   }
   let rec=clamp(1+Math.round(F.me.dmgTaken/70)+(F.me.kd)+(r.how==='KO'&&!r.win?1:0),1,5);
@@ -3573,6 +4127,7 @@ function finishFight(){
    if(hd>=2&&Math.random()<.5){const w=RI(1,2);a.injury=Math.max(a.injury||0,w);html+=`<p class="hint"><span class="warn">A mão ficou muito magoada: ${w} semana${w>1?'s':''} lesionado.</span></p>`}
    else if(hd)html+=`<p class="hint">Saiu com a mão magoada, mas não é nada de grave.</p>`;
    if(mk.eye){rec=Math.min(5,rec+1);html+='<p class="hint"><span class="warn">O olho fechado precisa de tempo: mais uma semana de recuperação.</span></p>'}}
+  html+=careerResult(a,f,r).map(t=>`<p class="hint">${t}</p>`).join(''); // licença, Rookie, ranking, títulos (3A-4)
   html+=afterFight(a,r);
   a.recovery=rec;a.fatigue=clamp(a.fatigue+25,0,100);a.fight=null;
   if(catMoves(a).length){html+=`<p class="hint"><b style="color:var(--gold)">${a.nick} ${catWhy(a)}: pode mudar de categoria (Atletas → Treino).</b></p>`;note(`${a.nick} pode mudar de categoria.`)}
@@ -3761,19 +4316,19 @@ function buildAnalysis(){
     rr:F.rr.map(x=>[x.s?x.s[0]:null,x.s?x.s[1]:null,x.dn[0],x.dn[1],x.st[0],x.st[1],x.l[0],x.l[1],x.p?1:0]),
     ps:[ps(me),ps(op)],hb:[[me.headL,me.bodyL],[op.headL,op.bodyL]],df:[df(me),df(op)],ct:[ct(me),ct(op)],lv:[me.liv.slice(),op.liv.slice()],
     kdl:F.kdl.slice(0,6).map(kdTxt),ord:F.ordLog.slice(-8).map(ordTxt),ordN:F.ordLog.length,talk:F.talks.map(t=>({t:`${t.r===1?'Antes do R1':'Antes do R'+t.r}: ${t.n}`,c:t.lab==='CERTA'?'ok':t.lab==='MEIA CERTA'?'half':t.lab==='ERRADA'?'bad':''})),
-    sx:Object.entries(F.sx).sort((p,q)=>q[1]-p[1]).map(([k,v])=>`${k} ${Math.round(100*v/tot)}%`).join(' · '),why,plus,at:F.at0||null,dz:[dzOf(me),dzOf(op)],tq:[tqOf(me),tqOf(op)],mk:[mkWords(me),mkWords(op)],sc:[me.styN||0,op.styN||0,me.grdN||0,op.grdN||0],cf:confNotes(me).slice(0,3).map(x=>({s:x.s,t:x.t})),wi:(a.fight&&a.fight.wi)||null};
+    sx:Object.entries(F.sx).sort((p,q)=>q[1]-p[1]).map(([k,v])=>`${k} ${Math.round(100*v/tot)}%`).join(' · '),why,plus,at:F.at0||null,dz:[dzOf(me),dzOf(op)],tq:[tqOf(me),tqOf(op)],mk:[mkWords(me),mkWords(op)],sc:[me.styN||0,op.styN||0,me.grdN||0,op.grdN||0],cf:confNotes(me).slice(0,3).map(x=>({s:x.s,t:x.t})),wi:(a.fight&&a.fight.wi)||null,cr:F.ven?{n:F.ven.n,c:F.ven.cr,fx:(F.crowdFx||[0])[0]}:null};
 }
 /* ---- histórico de lutas ----
    a.hist: uma entrada pequena por luta (mais antiga primeiro): {w semana, o alcunha do adversário, ac academia, os estilo dele,
-   t escalão (índice de TIERS), ti 1 se foi título, r 'V'|'D'|'E', h como acabou ('KO'|'pontos'|'toalha'|'médico'), rd round,
+   t tipo de luta (texto, fightLabel), ti 1 se foi título, wi id do adversário no mundo, r 'V'|'D'|'E', h como acabou ('KO'|'pontos'|'toalha'|'médico'), rd round,
    tm segundos do relógio quando acabou a meio do round, c [pontos teus, dele], an análise completa}.
    A análise completa (an) só fica nas HIST_AN lutas mais recentes; as outras guardam só o registo (~150 bytes). */
 const HIST_AN=3,HIST_PG=4;let histPg=0;
 function trimHist(a){const n=a.hist.length;a.hist.forEach((x,i)=>{if(i<n-HIST_AN)delete x.an})}
 function addHist(a,an){
   const f=a.fight||{},o=f.opp||{},r=F.over,lk=F.kdl.at(-1);
-  const h={w:S.week,o:o.nick||F.op.nick,ac:o.academy||'',os:F.op.style,t:a.tier,ct:a.cat,r:r.draw?'E':r.win?'V':'D',h:r.how,rd:Math.min(F.round,F.rounds),c:[F.me.card,F.op.card],an};
-  if(f.title)h.ti=1;
+  const h={w:S.week,o:o.nick||F.op.nick,ac:o.academy||'',os:F.op.style,t:fightLabel(f),ct:a.cat,r:r.draw?'E':r.win?'V':'D',h:r.how,rd:Math.min(F.round,F.rounds),c:[F.me.card,F.op.card],an};
+  if(f.title)h.ti=1;if(f.wid!=null)h.wi=f.wid;
   if(r.how==='KO'&&lk)h.tm=lk.t;else if(r.how==='toalha'&&F.endT!=null)h.tm=F.endT;
   a.hist=Array.isArray(a.hist)?a.hist:[];a.hist.push(h);trimHist(a);histPg=0;
 }
@@ -3797,9 +4352,9 @@ function histHow(x){
 function panelHist(a){
   const H=a.hist||[],n=H.length,pages=Math.max(1,Math.ceil(n/HIST_PG));histPg=clamp(histPg,0,pages-1);
   const idx=[];for(let i=n-1-histPg*HIST_PG;i>=0&&idx.length<HIST_PG;i--)idx.push(i);
-  const rows=idx.map(i=>{const x=H[i],t=x.t!=null&&TIERS[x.t]?TIERS[x.t].n:'';
+  const rows=idx.map(i=>{const x=H[i],t=typeof x.t==='string'?x.t:x.t!=null?(['Amador','Regional','Nacional','Mundial'][x.t]||''):'';
     return `<button class="hrow ${x.an?'has':''}" ${x.an?`data-hist="${i}"`:'disabled'}><b class="hres ${x.r}">${x.r}</b>
-      <span><strong>vs ${x.o}${x.os?` · ${x.os}`:''}</strong><small>S${x.w}${x.ct?` · ${x.ct}`:''}${t?` · ${x.ti?'Título ':''}${t}`:''}${x.ac?` · ${x.ac}`:''}</small></span>
+      <span><strong>vs ${x.o}${x.os?` · ${x.os}`:''}</strong><small>${calMini(x.w)} A${yearOf(x.w)}${x.ct?` · ${x.ct}`:''}${t?` · ${typeof x.t==='string'?'':x.ti?'Título ':''}${t}`:''}${x.ac?` · ${x.ac}`:''}</small></span>
       <em>${histHow(x)}${x.an?'<i>ANÁLISE ▸</i>':''}</em></button>`}).join('');
   const rc=a.rec,old=rc.w+rc.l+rc.d-n;
   return `<div class="card hist"><div class="hhd"><h3>LUTAS · ${rc.w}V ${rc.l}D ${rc.d}E</h3>${pages>1?`<div class="hpg"><button class="btn" data-hpg="-1" ${histPg?'':'disabled'}>◀</button>${histPg+1}/${pages}<button class="btn" data-hpg="1" ${histPg<pages-1?'':'disabled'}>▶</button></div>`:''}</div>
@@ -3827,7 +4382,7 @@ function showAnalysis(an,back,tab){
     const wl=(x,tip=true)=>`<div class="why ${x.s>0?'g':'b'}"><i>${x.s>0?'▲':'▼'}</i><span>${x.t}${tip&&x.tip?` <b class="tip">${x.tip}</b>`:''}</span></div>`;
     body=`<div class="anend">${an.end}</div>
       <div class="kv"><div><small>PONTOS</small><b><em class="cme">${an.card[0]}</em>-<em class="cop">${an.card[1]}</em></b></div><div><small>ACERTOS</small><b><em class="cme">${pct(an.acc[0])}</em> <em class="cop">${pct(an.acc[1])}</em></b></div><div><small>QUEDAS (TU-ELE)</small><b><em class="cme">${an.kd[0]}</em>-<em class="cop">${an.kd[1]}</em></b></div></div>
-      <div class="meta">Estilos: ${an.mSty} vs ${an.oSty}${an.sx?` · tu em ${an.sx}`:''}</div>
+      <div class="meta">Estilos: ${an.mSty} vs ${an.oSty}${an.sx?` · tu em ${an.sx}`:''}</div>${an.cr?`<div class="meta">${an.cr.n} · ${fmt(an.cr.c)} pessoas${an.cr.fx?` · público ${an.cr.fx>0?'a favor':'contra'}: confiança ${an.cr.fx>0?'+':''}${an.cr.fx}`:''}</div>`:''}
       ${an.wi?`<div class="meta">${an.wi.c} · pesagem: tu ${kgs(an.wi.k)} kg, ele ${kgs(an.wi.o)} kg${an.wi.l!=null?` (limite ${kgs(an.wi.l)})`:''}${WI_TXT[an.wi.r]?` · <span class="${WI_TXT[an.wi.r][1]}">${WI_TXT[an.wi.r][0]}</span>`:''}</div>`:''}
       <h3>${an.res==='V'?'AS CHAVES DA VITÓRIA':an.res==='D'?'PORQUE PERDESTE':'O QUE PESOU'}</h3>
       ${an.why.length?an.why.map(x=>wl(x)).join(''):`<div class="why"><i>=</i><span>${an.how==='KO'?'Luta equilibrada decidida por um golpe. No ringue tudo pode acontecer.':'Luta muito equilibrada: nenhum fator se destacou. Decidiu-se nos pormenores.'}</span></div>`}
@@ -4243,10 +4798,7 @@ function drawRef(c,cx,gy,face,pose,t,tg){
 }
 /* static arena, cached per venue */
 let ARENA=null,SEATS=[];
-const VENUES=['Pavilhão Municipal','Pavilhão Desportivo','Coliseu','Arena'];
-const EVN=['TORNEIO AMADOR','LIGA REGIONAL','GALA NACIONAL','GALA MUNDIAL'];
-function venueIdx(f){return Math.min(3,(f.tier!==undefined?f.tier:0)+(f.title?1:0))}
-function eventName(a){const f=a.fight;return f.title?'TÍTULO '+TIERS[a.tier].n.toUpperCase():EVN[a.tier]}
+function eventName(a){return F&&F.ven?F.ven.ev:'BOXE'} // faixa da arena (3A-4: venueOf; desenhos novos na fase 8)
 let BLK=[];
 function gymBanner(c,x,y,w,name,logo,bg,fg,trim,pal){
   BLK.push([x,y,w,14]);
@@ -4259,7 +4811,7 @@ function buildArena(){
   const W=240,H=240;
   const cv=document.createElement('canvas');cv.width=W;cv.height=H;const c=cv.getContext('2d');
   SEATS=[];BLK=[];
-  const a=F.a,f=a.fight,v=venueIdx({tier:a.tier,title:f.title});F.venue=v;
+  const a=F.a,f=a.fight;if(!F.ven)F.ven=venueOf(a);const v=F.ven.d;F.venue=v;
   const myName=S.gymName||'Ginásio Esperança',opName=f.opp.academy||'Rivais';
   const ev=eventName(a);
   const aisle=x=>(x>62&&x<78)||(x>162&&x<178);
@@ -4482,7 +5034,7 @@ function ringLoop(now){
   if(z>1.01){const q=proj(F.zoom.cx,F.zoom.cy);const cy=q.y-34;c.translate(q.x,cy);c.scale(z,z);c.translate(-q.x,-cy)}
   c.drawImage(ARENA,0,0);
   // crowd in seats
-  const fill=[.5,.72,.9,.98][F.venue||0];const jump=now<F.crowd;
+  const fill=F.ven?F.ven.fill:[.5,.72,.9,.98][F.venue||0];const jump=now<F.crowd;
   const chf=F.cheer===undefined?1:F.cheer;SEATS.forEach(([x,y,s],i)=>{const L=crowdLooks[i%400];if(L.on>fill)return;const jp=jump&&((i*53)%100)/100<chf;const b=jp&&Math.sin(t*14+i)>0?-2*s:0;
     c.fillStyle=L.c;c.fillRect(Math.round(x-2*s),Math.round(y+b),Math.ceil(4*s),Math.ceil(4*s));
     c.fillStyle=L.s;c.fillRect(Math.round(x-1.5*s),Math.round(y-3*s+b),Math.ceil(3*s),Math.ceil(3*s));c.fillStyle=L.h;c.fillRect(Math.round(x-1.5*s),Math.round(y-3*s+b),Math.ceil(3*s),Math.max(1,Math.round(s)));
@@ -4571,7 +5123,7 @@ function menu(mode){
     const main=()=>{
       const m=modal(`<div class="menu"><div class="mtitle">CORNER MEN</div>
         <div class="mlogo">${logoImg((saved&&saved.logo)||0,40)}</div>
-        ${mode==='start'?(hasSave?`<button class="btn gold big" id="mCont">CONTINUAR<small>${(saved.gymName||'Ginásio Esperança')} · semana ${saved.week}</small></button>`:''):`<button class="btn gold big" id="mCont">${mode==='fight'?'VOLTAR À LUTA':'VOLTAR AO JOGO'}</button>`}
+        ${mode==='start'?(hasSave?`<button class="btn gold big" id="mCont">CONTINUAR<small>${(saved.gymName||'Ginásio Esperança')} · ${calTxt(saved.week)}</small></button>`:''):`<button class="btn gold big" id="mCont">${mode==='fight'?'VOLTAR À LUTA':'VOLTAR AO JOGO'}</button>`}
         ${mode!=='fight'?`<button class="btn big ${mode==='start'&&!hasSave?'gold':''}" id="mNew">NOVO JOGO</button>`:''}
         <button class="btn" id="mSet">DEFINIÇÕES</button>
         ${mode!=='fight'?'<button class="btn" id="mHelp">COMO JOGAR</button>':''}</div>`);
@@ -4614,7 +5166,9 @@ async function start(){
   S=choice==='new'?null:load();
   let fresh=false;if(!S||!S.roster){newGame();fresh=true}
   S.gymName=S.gymName||'Ginásio Esperança';S.logo=S.logo||0;
-  for(const a of S.roster){migrateHist(a);migrateStyles(a);initBody(a,2);if(a.fight){migrateStyles(a.fight.opp);initBody(a.fight.opp,clamp(a.tier+1,1,5))}for(const o of a.offers||[]){migrateStyles(o.opp);initBody(o.opp,clamp(a.tier+1,1,5))}}
+  for(const a of S.roster){migrateHist(a);migrateStyles(a);initBody(a,2);if(a.fight){migrateStyles(a.fight.opp);initBody(a.fight.opp,2)}for(const o of a.offers||[]){migrateStyles(o.opp);initBody(o.opp,2)}}
+  if(!S.W||!S.W.R){S.W=null;genWorld();for(const a of S.roster){delete a.car;delete a.tier;delete a.rank;carK(a);a.offers=[];a.fight=null}} // carreira e mundo (3A-4): saves de teste de antes recomeçam a carreira
+  S.reg=S.reg||0;S.hof=S.hof||[];for(const a of S.roster)carK(a);
   for(const a of S.roster){normSkills(a);a.combos=a.combos||knownCombos(a).map(c=>c.id);a.recovery=a.recovery||0;a.ment=a.ment||rollMental();for(const[k]of ATTRS){if(a.attrs[k]==null)a.attrs[k]=k==='queixo'?50:10;if(a.cap[k]==null)a.cap[k]=a.attrs[k]+5}if(a.gift===undefined){a.gift=null;a.giftKnown=true}a.weeks=a.weeks||0}
   if(!Array.isArray(S.coaches)){S.coaches=startCoaches();for(const a of S.roster){a.coach=null;autoCoach(a)}} // treinadores (3A-1)
   for(const a of S.roster){const T=techK(a);T.k=T.k.filter(k=>TECH[k]);if(T.l&&!TECH[T.l])T.l=null;if(T.fg&&!T.k.includes(T.fg))T.fg=null; // técnicas (3A-3)
