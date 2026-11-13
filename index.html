@@ -325,6 +325,8 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .crows{gap:4px;min-height:0;overflow:hidden}
 .r.cr{grid-template-columns:26px 1fr auto;gap:7px;padding:3px 6px}
 .r.cr canvas{width:26px;height:26px;image-rendering:pixelated;border:1px solid var(--line);background:#3a2d22}
+.r.crd .cinfo{overflow:hidden;min-width:0} .r.crd p{white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .r.crd.rare{border-color:var(--gold)} .r.crd p.warn{font-size:15px;color:#e8806f} .cact b{font-family:var(--f-display);font-size:8px;font-weight:400;color:var(--gold)}
+.gseg button{font-size:16px;padding:6px 2px} .cbn{font-weight:400;color:var(--gold)}
 .cinfo{background:none;border:0;padding:0;text-align:left;color:var(--fg);cursor:pointer;min-width:0;font:inherit}
 .r .cl,.tco .cl{display:flex;gap:5px;align-items:center;font-family:var(--f-display);font-size:8px;color:var(--muted);letter-spacing:.05em;margin:2px 0 1px;white-space:nowrap}
 .r.cr p{font-size:15px;line-height:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .r .cl strong{display:inline;font-size:9px;color:var(--fg)} .r.cr p b{font-weight:400;color:var(--fg)}
@@ -419,6 +421,7 @@ button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 .why i{font-style:normal;font-family:var(--f-display);font-size:10.5px;line-height:1.2;color:var(--muted)}
 .why b.tip{font-weight:400;color:var(--gold)}
 .why.g{border-left-color:var(--green)} .why.g i{color:var(--green)} .why.b{border-left-color:var(--red)} .why.b i{color:#ff6b5a}
+.why.c{border-left-color:var(--gold)} .why.c i{color:var(--gold)} .why b.ctip,.meta b.ctip{font-weight:400;color:var(--gold)}
 .atab{display:grid;grid-template-columns:1fr 64px 64px;gap:2px 8px;font-size:16px;background:var(--panel2);border:2px solid var(--line);padding:5px 8px;align-items:baseline}
 .atab b{font-family:var(--f-display);font-size:8px;color:var(--muted);font-weight:400;letter-spacing:.06em;text-align:right}
 .atab b:first-child{text-align:left} .atab b.me{color:#ff9a86} .atab b.op{color:#9cc4ec}
@@ -547,7 +550,12 @@ const TUNE=Object.assign({hitDiv:350,hvy:1.55,resK:.3,qk:.45,mk:.45,cleanMul:6,n
      retAge/retQx/retGap/retConv reforma dos nossos (idade, Queixo, semanas entre cartões, chance de convencer); crowdC efeito do público na confiança, crowdThr Confiança de quem
      cresce com o público contra; licPop/rookPop/galaPop popularidade (fãs na 3B). */
   amLic:3,mandW:39,t3W:36,champMinW:26,keepP:.4,inact:20,wFight:[8,17],wLuck:6,wDraw:.04,wKO:[.18,.25],wRet:[33,36],rkPool:26,chal:[.8,.12],chalGap:5,chalCd:2,
-  retAge:33,retQx:22,retGap:8,retConv:.75,crowdC:6,crowdThr:65,licPop:2,rookPop:[6,5,3,3],galaPop:4},window.__TUNE||{});
+  retAge:33,retQx:22,retGap:8,retConv:.75,crowdC:6,crowdThr:65,licPop:2,rookPop:[6,5,3,3],galaPop:4,
+  /* 3A-5 cartas de treino (por afinar na fase 7): cFoc chance por semana de treino com o foco TÉCNICAS de ganhar uma comum; cFight chance de o treinador
+     sugerir uma carta depois de uma luta, por escalão (Bairro → Lenda); cFightR chance de essa carta ser rara (só Lenda); cBuy preço de uma comum na Loja,
+     cStock cartas à venda por estação; cBuyRare chance de uma rara aparecer à venda (desligado: ver depois de testar) e cBuyRareP o preço dela;
+     cTop lugares do ranking que contam como "top 5" (vitória = rara). Os efeitos e custos de cada carta estão no próprio catálogo (CARDS). */
+  cFoc:.07,cFight:[.3,.4,.5,.6,.7],cFightR:[0,0,0,0,.25],cBuy:900,cStock:3,cBuyRare:0,cBuyRareP:3000,cTop:5},window.__TUNE||{});
 /* carácter de cada categoria na luta (3A-2, interpolado das 4 antigas; por afinar na fase 7): vol golpes, dmg dano, flash quedas relâmpago, cost fôlego.
    Mais leve = mais rápido e menos KOs; mais pesado = mais potência e KOs, mais lento. Leve = antigo Ligeiro (referência 1). */
 const CATMOD={Mosca:{vol:1.35,dmg:.78,flash:.45,cost:.85},Galo:{vol:1.3,dmg:.82,flash:.52,cost:.88},Pena:{vol:1.25,dmg:.85,flash:.6,cost:.9},Leve:{vol:1,dmg:1,flash:1,cost:1},
@@ -830,7 +838,7 @@ function techLack(a,id){ // o que falta para poder aprender (texto curto) ou ''
 /* lugares na build: pela carreira (careerLv: amador, Nacional, Europeu, Mundial), +1 campeão do mundo, +1 com Ring IQ muito alto */
 function techSlots(a){const S0=TUNE.slots,b=(S0[careerLv(a)]??S0[S0.length-1])+((a.titles||[]).some(t=>t.startsWith('Mundial'))?1:0);
   return Math.min(TUNE.slotMax,b)+((a.attrs.iq||0)>=TUNE.slotIQ?1:0)}
-function techBoost(a){return 1} // gancho para as cartas (3A-5): multiplica a velocidade de aprender a técnica em curso
+function techBoost(a){const c=cardOf(a);return c&&c.tb?c.tb:1} // cartas (3A-5): multiplica a velocidade de aprender a técnica em curso
 /* velocidade de aprender a técnica (1 = normal): Técnica (mais nas básicas), Disciplina e Concentração, treinador do estilo natural (ou Ring IQ nas de
    contra-ataque), nível do atleta nesse estilo, escalão e ligação do treinador, foco TÉCNICAS, cartas (techBoost); as avançadas mais devagar. */
 function techSpeed(a,id){
@@ -905,7 +913,7 @@ function newGame(){
   S={week:1,money:500,pop:5,members:4,up:{},eq:{saco:1,sparring:1,corda:0,pera:0,pads:0,pesos:0,esquiva:0,pneu:0,bola:0},
     roster:[rui],sel:0,tab:'gym',sub:'ficha',shopSub:'eq',gsub:'res',coaches:startCoaches(),
     rivals:[{n:'Academia Tubarão',lvl:0},{n:'Boxe Clube Ribeira',lvl:0},{n:'Punhos de Aço',lvl:1},{n:'Ginásio Estrela do Norte',lvl:0},{n:'Clube Leões da Margem',lvl:2}],
-    log:[],seen:false,reg:0,hof:[]};
+    log:[],seen:false,reg:0,hof:[],cards:[]};
   rui.car.y0=1;
   assignCoach(rui,S.coaches.find(c=>c.st===rui.style),true);
   genWorld();
@@ -964,6 +972,7 @@ function weightDay(a){ // um dia: o peso anda para o alvo do foco (não mexe na 
   else{t=a.nw+TUNE.wTopA;r=TUNE.wUpA}
   const d=t-a.kg,v=d<0&&a.focus!=='peso'?r*TUNE.wSlow:r;
   a.kg=r2(a.kg+clamp(d,-v,v)+R(-.03,.03));
+  {const c=cardOf(a);if(c&&c.kg&&!(a.injury>0||a.recovery>0))a.kg=r2(c.kg<0?Math.max(Math.min(a.kg,wFloor(a)),a.kg+c.kg):a.kg+c.kg)} // carta (3A-5): dieta, serra, sofá
 }
 function wiVerdict(cat,kg){ // resultado da pesagem
   const L=CAT_LIM[cat];if(L==null)return{r:'livre'};
@@ -1411,7 +1420,6 @@ function rookieEnd(){ // prémios e ranking inicial: campeão n.º 10, perdeu a 
   if(!ours.length)return[];
   const myC=ours.map(a=>{const ci=catIdx(a.cat),C=T.C[ci];const p=rkPos(RK(a.cat,0),a.id);return `<p class="hint">${a.cat}: campeão ${nm(C.F.w)}. ${a.nick} começa no ${posTxt(p)} do ranking Nacional.</p>`}).join('');
   return[{title:'TORNEIO ROOKIE · PRÉMIOS',body:`${myC}<div class="awl"><p><small>MELHOR DO TORNEIO</small>${nm(mvp)}</p><p><small>PRÉMIO TÉCNICO</small>${nm(tec)}</p><p><small>PRÉMIO KO</small>${nm(ko)}${ko!=null&&st(ko)?` · KO no R${st(ko).rd}`:''}</p></div>`,opts:[{t:'VER RANKING',cls:'gold',fn:()=>{S.tab='fights';S.fsub='rank';S.rkv=null}},{t:'CONTINUAR'}]}]}
-function awardHook(a,src,k){} // gancho para as cartas (3A-5): prémios grandes dão cartas raras; fãs na 3B
 /* ---- os nossos atletas: licença, propostas, desafios, títulos, subir de nível, reforma ---- */
 function license(a){const c=carK(a);c.am=false;c.li=S.week;c.L=0;c.lf=S.week;const R=RK(a.cat,0);rkInsert(R,a.id,Math.min(19,R.l.length));
   fanBonus(a,TUNE.licPop);note(`${a.nick} tirou a licença de profissional!`);toast(`<b>${a.nick}</b> · licença de profissional!`)}
@@ -1600,18 +1608,166 @@ function careerResult(a,f,r){ // depois de uma luta nossa: amador e licença, To
     out.push(won?(s<3?`<b class="gd">Passa ${['às meias-finais','à final regional','à Final Nacional Rookie'][s]} do Torneio Rookie!</b>${r.draw?' (empate: passou por ter acertado mais)':''}`:`<b class="gd">CAMPEÃO ROOKIE ${a.cat.toUpperCase()}!</b> Começa no n.º 10 do ranking Nacional.`)
       :`Fica pelas ${['quartos de final','meias-finais','final regional','Final Nacional'][s]} do Torneio Rookie.${r.draw?' (empate: passou o outro, que acertou mais)':''}`);
     return out}
-  const R=RK(a.cat,L),p0=rkPos(R,a.id);
+  const R=RK(a.cat,L),p0=rkPos(R,a.id),q0=b?rkPos(R,b.i):-1;
+  if(r.win&&k!=='ti'&&q0>=1&&q0<=TUNE.cTop)awardHook(a,'top5',L); // vitória contra o top 5: carta rara (3A-5)
   if(b)boutApply(a.id,b.i,res,{c:a.cat,L,kind:k,mand:f.mand,how:r.how,rd});
   const p1=rkPos(R,a.id);
   if(k==='ti'){
     if(R.c===a.id){if(p0===0){c.df=(c.df||0)+1;out.push(`<b class="gd">Defendeu o título ${RLV[L]}!</b> (${c.df}.ª defesa)${f.mand?' Próxima obrigatória daqui a 9 meses.':''}`)}
-      else{a.titles.push(`${RLV[L]} (${a.cat})`);c.ys[2]++;c.df=0;out.push(`<b class="gd">${a.nick} é campeão ${RLV[L]}!</b>${L<2?` Vai poder entrar no ranking ${RLV[L+1]}.`:catDone(a)?' Completou a categoria: pode mudar de peso.':''} Defesa obrigatória de 9 em 9 meses.`);note(`${a.nick} ganhou o título ${RLV[L]}!`)}}
+      else{a.titles.push(`${RLV[L]} (${a.cat})`);c.ys[2]++;c.df=0;awardHook(a,'title',L);out.push(`<b class="gd">${a.nick} é campeão ${RLV[L]}!</b>${L<2?` Vai poder entrar no ranking ${RLV[L+1]}.`:catDone(a)?' Completou a categoria: pode mudar de peso.':''} Defesa obrigatória de 9 em 9 meses.`);note(`${a.nick} ganhou o título ${RLV[L]}!`)}}
     else if(p0===0){out.push(`Perdeu o título ${RLV[L]}: fica ex-campeão${p1>0?`, ${posTxt(p1)} do ranking`:''}.`);(c.ex=c.ex||[]).push(RLV[L])}
     else out.push(`Não foi desta. Ranking ${RLV[L]}: ${posTxt(p1)}.`)}
   else if(k==='el'&&r.win)out.push(`<b class="gd">Ganhou a eliminatória:</b> é o desafiador obrigatório ao título ${RLV[L]} (n.º 1).`);
   else out.push(`Ranking ${RLV[L]}: ${posTxt(p0)} → ${posTxt(p1)}.${p1===1?' É o desafiador obrigatório!':''}`);
   const pp=rkPos(RK(a.cat,c.L),a.id);if(pp>=0){const bp=c.bp;if(!bp||c.L>bp[0]||(c.L===bp[0]&&pp<bp[1]))c.bp=[c.L,pp]}
   return out}
+
+/* ================= CARDS (3A-5: cartas de treino) =================
+   As cartas são do ginásio (S.cards: uma mão partilhada por todos os atletas, sem limite) e usam-se num atleta quando se quer. Cada carta tem um efeito
+   e um custo (efeito secundário) no próprio catálogo, para obrigar a pensar quando a usar. Comuns (r 0) com efeitos básicos; raras (r 1) mais fortes.
+   Campos: wk semanas (0 = efeito logo); at multiplicador do ganho diário por atributo e rest o dos outros (custo); skm experiência dos golpes e defesas,
+   skp peso extra de certos golpes/defesas no treino; tb velocidade de aprender a técnica em curso (techBoost); kg kg por dia enquanto dura; qx Queixo
+   ganho ao todo; ao usar: conf confiança (número ou [mín, máx] ao acaso), fat fadiga, fee euros, kgNow kg de uma vez, rec semanas a menos de recuperação
+   ou lesão (need 'rest': só a quem está parado); end no fim: rec semanas a recuperar, iq Ring IQ como numa luta (× TUNE.iqFight).
+   Um atleta só faz uma carta de semanas de cada vez (a.cd = {c, w semanas que faltam}); a recuperar ou lesionado a carta fica em pausa.
+   Fontes: foco TÉCNICAS (comuns, TUNE.cFoc), o treinador depois das lutas (fightCard: a carta certa para o que faltou; mais e melhores com o escalão,
+   raras só com Lenda), prémios grandes (awardHook: títulos, Torneio Rookie, gala, vitórias contra o top 5 → raras), Loja (comuns caras; raras desligadas,
+   TUNE.cBuyRare). Ganchos para a 3B: cardGive(id, origem, frase) com origem 'parceiro' (negócios parceiros), 'visita' (visitas e eventos: raras),
+   'objetivo' (objetivos curtos: comuns). ---- */
+const CARDS={
+  corrida:{n:'Corrida na praia',r:0,wk:2,at:{resistencia:2.5,pes:2},rest:.7,s:'Resistência e Pés ▲▲',sc:'resto do treino ▼',
+    d:'Duas semanas a correr na areia ao nascer do sol: a Resistência e os Pés sobem muito mais depressa.',c:'Passa as manhãs fora: o resto do treino rende menos (−30%).'},
+  escadaria:{n:'Escadaria da Sé',r:0,wk:2,at:{forca:2,resistencia:2},rest:.8,fat:20,s:'Força e Resistência ▲▲',sc:'cansativo',
+    d:'Subir e descer a escadaria velha da cidade com um saco às costas: a Força das pernas e a Resistência sobem muito.',c:'Esgota: fica cansado (se lutar logo a seguir, chega pior) e o resto rende menos (−20%).'},
+  dieta:{n:'Semana de dieta',r:0,wk:1,kg:-.22,rest:.6,s:'peso ▼▼ (~1,5 kg)',sc:'atributos ▼',
+    d:'Uma semana de pratos medidos e nada de doces: perde cerca de 1,5 kg.',c:'Com pouca comida, os atributos sobem devagar nessa semana (−40%).'},
+  pads:{n:'Tarde de pads',r:0,wk:2,at:{tecnica:2,velocidade:1.6,forca:.4,resistencia:.4},skm:1.5,s:'Técnica e Velocidade ▲▲ · golpes ▲',sc:'Força e Resistência ▼',
+    d:'Tardes inteiras a afinar golpes nas luvas de foco do treinador: Técnica, Velocidade e golpes sobem mais depressa.',c:'Muito tempo parado a afinar: a Força e a Resistência quase não sobem.'},
+  videos:{n:'Vídeos de combates antigos',r:0,wk:2,at:{iq:2.5},rest:.75,tb:1.6,kg:.03,s:'Ring IQ ▲▲ · técnica em curso ▲',sc:'resto ▼ · peso ▲',
+    d:'Cassetes velhas de grandes combates, vistas e revistas com o treinador: o Ring IQ sobe e a técnica que está a aprender entra mais depressa.',c:'Muito tempo sentado: o resto rende menos (−25%) e ganha um pouco de peso (~0,4 kg).'},
+  spar:{n:'Sparring na academia vizinha',r:0,wk:1,at:{defesa:2.5,iq:1.6},skp:{bloqueio:3,aparar:3,cabeca:3},fat:25,conf:[-5,4],s:'Defesa e Ring IQ ▲▲',sc:'cansado · confiança ?',
+    d:'Uma semana de sparring com gente que não conhece: a Defesa e o Ring IQ sobem e as defesas treinam-se mais.',c:'Leva pancada a sério: fica cansado e a confiança pode subir ou descer um pouco.'},
+  festa:{n:'Festa no bairro',r:0,wk:0,conf:12,kgNow:1,s:'confiança +12',sc:'+1 kg',
+    d:'O bairro todo junta-se para o apoiar: a confiança sobe logo.',c:'Come de mais: ganha 1 kg de uma vez (cuidado perto da pesagem).'},
+  fisio:{n:'Fisioterapia',r:0,wk:0,rec:1,fee:100,need:'rest',s:'−1 semana parado',sc:'100 €',
+    d:'Sessões de fisioterapia: uma semana a menos de recuperação (ou de lesão) e tira o cansaço.',c:'A academia paga 100 €. Só serve a quem está a recuperar ou lesionado.'},
+  rio:{n:'Treino junto ao rio',r:1,wk:3,at:{pes:3,velocidade:2.5,tecnica:2},rest:.5,skm:.5,s:'Pés, Velocidade e Técnica ▲▲▲',sc:'fora do ginásio',
+    d:'Três semanas numa casa junto ao rio, a treinar nas margens e nas pedras: Pés, Velocidade e Técnica sobem muito mais depressa.',c:'Longe do ginásio e do equipamento: o resto rende metade e os golpes e defesas quase não sobem.'},
+  lenha:{n:'Cortar lenha na serra',r:1,wk:3,at:{forca:3,resistencia:1.5},skm:.5,qx:1.5,kg:-.07,s:'Força ▲▲▲ · Queixo ▲',sc:'perde peso · golpes ▼',
+    d:'Três semanas a rachar lenha e a carregar troncos na serra: a Força sobe muito e até o Queixo endurece um pouco (o que quase nunca se treina).',c:'Trabalho duro longe do ginásio: perde ~1,5 kg e os golpes e defesas quase não sobem.'},
+  campeao:{n:'Sparring com um campeão',r:1,wk:1,at:{defesa:2,iq:3},tb:1.5,conf:12,end:{rec:1,iq:2},s:'Ring IQ ▲▲▲ · confiança +12',sc:'1 semana a recuperar',
+    d:'Um campeão aceita uma semana de sparring com ele: o Ring IQ sobe muito, a técnica em curso entra mais depressa e a confiança dispara.',c:'Leva castigo: no fim fica 1 semana a recuperar, sem treinar.'},
+  mpes:{n:'Estágio com um mestre de pés',r:1,wk:2,at:{pes:3.5},skp:{pes:6},rest:.6,s:'Pés ▲▲▲ · defesa de pés ▲▲',sc:'resto ▼',
+    d:'Um velho mestre do jogo de pés fica duas semanas só para ele: os Pés e a defesa de pés sobem muito.',c:'Só pés: o resto do treino rende menos (−40%).'},
+  mestre:{n:'Lições de um velho campeão',r:1,wk:3,tb:2.5,skm:2,rest:.6,s:'técnica em curso ▲▲▲ · golpes ▲▲',sc:'atributos ▼',
+    d:'Um ex-campeão passa três semanas a corrigir-lhe os pormenores: a técnica que está a aprender entra muito mais depressa e os golpes e defesas sobem o dobro.',c:'Pouco treino físico: os atributos sobem devagar (−40%).'},
+  termas:{n:'Termas do vale',r:1,wk:0,rec:3,conf:8,fee:300,need:'rest',s:'−3 semanas parado · confiança +8',sc:'300 €',
+    d:'Uma estadia nas termas: três semanas a menos de recuperação (ou de lesão), sem cansaço e com mais confiança.',c:'A academia paga 300 €. Só serve a quem está a recuperar ou lesionado.'}};
+const RAR=['COMUM','RARA'],COMMONS=Object.keys(CARDS).filter(k=>!CARDS[k].r),RARES=Object.keys(CARDS).filter(k=>CARDS[k].r);
+/* o que faltou na luta (grupo do motivo da análise) → [carta comum, carta rara, o que o treinador viu] */
+const CFIT={dist:['corrida','mpes','perdeu a batalha da distância'],trap:['corrida','rio','passou muito tempo encostado às cordas'],ant:['corrida','mpes','foi apanhado a entrar'],
+  reach:['corrida','mpes','não conseguia passar os braços dele'],stam:['corrida','lenha','ficou sem fôlego'],bodyw:['escadaria','lenha','sofreu muito ao corpo'],liver:['escadaria','lenha','sofreu muito ao corpo'],
+  kd:['spar','lenha','foi ao tapete'],trade:['pads','mestre','foi menos preciso'],ctr:['spar','campeao','levou counters a mais'],cc:['pads','mestre','levou cross-counters'],
+  ccm:['videos','mestre','tentou o cross-counter sem timing'],tech:['videos','mestre','não tinha resposta para a técnica dele'],conf:['festa','campeao','não confiava no que sabe'],
+  form:['festa','campeao','chegou fora de forma'],style:['videos','campeao','não leu bem o estilo dele'],talk:['videos','campeao','não entrou no plano do canto'],
+  body:['videos','campeao','não tirou partido do corpo'],mark:['pads','mestre','magoou a mão'],wi:['dieta','lenha','chegou acima do peso'],attr:['corrida','rio','estava menos bem preparado']};
+const CFIT_A={forca:['escadaria','lenha','tinha menos Força'],velocidade:['pads','rio','era mais lento'],resistencia:['corrida','lenha','tinha menos fôlego'],queixo:['spar','lenha','sentiu muito os golpes'],
+  tecnica:['pads','mestre','tinha menos Técnica'],defesa:['spar','campeao','defendeu mal'],pes:['corrida','mpes','tinha menos Pés'],iq:['videos','campeao','leu pior a luta']};
+const CDEF={Outboxer:['corrida','rio'],'In-fighter':['escadaria','lenha'],Puncher:['pads','mestre']}; // sem nada a apontar: o forte do estilo do treinador
+const CSRC={foco:'foco TÉCNICAS',luta:'treinador depois da luta',rookie:'Torneio Rookie',gala:'gala',title:'título',top5:'vitória contra o top 5',loja:'Loja',parceiro:'negócio parceiro',visita:'visita',objetivo:'objetivo'};
+function cardOf(a){return a&&a.cd&&CARDS[a.cd.c]?CARDS[a.cd.c]:null}
+function cardAt(a,k){const c=cardOf(a);if(!c)return 1;return c.at&&c.at[k]!=null?c.at[k]:(c.rest??1)} // no ganho diário de cada atributo (attrRate)
+function cardGive(id,src,msg){ // uma carta nova para o ginásio (todas as fontes passam por aqui)
+  const c=CARDS[id];if(!c)return null;S.cards=S.cards||[];const x={c:id,w:S.week,s:src};S.cards.push(x);
+  S.cst=S.cst||{};const n=S.cst[src]=S.cst[src]||[0,0];n[c.r]++;
+  note(msg);toast(`<b>CARTA ${RAR[c.r]}</b> · ${msg}`,'',TIME.noticeMs);return x}
+function awardHook(a,src,k){ // prémios grandes (Torneio Rookie, gala, títulos, vitórias contra o top 5): uma carta rara
+  if(!a||!S.roster.includes(a))return;
+  if(src==='rookie'||src==='gala'){const key=`${src}${yearOf()}${a.id}`;S.cawd=(S.cawd||[]).slice(-12);if(S.cawd.includes(key))return;S.cawd.push(key)} // uma rara por atleta em cada torneio/gala
+  const id=src==='rookie'&&k===2?'mestre':src==='rookie'&&k===3?'lenha':pick(RARES);
+  const lab={rookie:'Prémio do Torneio Rookie',gala:'Prémio da gala',title:'Título',top5:'Vitória contra o top 5'}[src]||'Prémio';
+  cardGive(id,src,`${lab}: ${a.nick} ganhou para o ginásio a carta rara ${CARDS[id].n}.`)}
+function fightCard(a,an){ // depois da luta o treinador vê o que faltou e dá a carta certa (mais vezes e melhor com mais escalão; raras só Lenda)
+  const c=coachOf(a);if(!c||!an||Math.random()>=TUNE.cFight[c.t])return '';
+  const rare=Math.random()<TUNE.cFightR[c.t];let m=null;
+  let at=null; // onde a análise mostra a carta: no motivo que a pediu (w0-w2, p), na linha da pesagem (wi) ou numa linha própria
+  if(an.wi&&an.wi.r==='acima'){m=CFIT.wi;at='wi'}
+  const L=[...(an.why||[]).map((x,i)=>[x,'w'+i]),...(an.plus?[[an.plus,'p']]:[])].filter(([x])=>x.s<0);
+  for(const[x,w]of L){if(m)break;m=x.g==='attr'?(CFIT_A[x.k]||CFIT.attr):CFIT[x.g]||null;if(m)at=w}
+  if(!m){const d=CDEF[c.st]||CDEF.Puncher;m=[d[0],d[1],'está em boa fase e quer aproveitar']}
+  const id=rare?m[1]:m[0],t=`${c.n} viu que o ${a.nick} ${m[2]}: carta ${CARDS[id].n}.`;
+  an.cs={c:id,t:`o ${a.nick} ${m[2]}`,co:c.n,at};cardGive(id,'luta',t);
+  return `<p class="hint"><b style="color:var(--gold)">${t}</b> Fica nas cartas do ginásio (Ginásio → Cartas).</p>`}
+function cardFocus(a){ // fim de uma semana de treino com o foco TÉCNICAS: às vezes uma comum
+  if(a.focus!=='tec'||Math.random()>=TUNE.cFoc)return null;const id=pick(COMMONS);
+  return cardGive(id,'foco',`Treino de técnicas: o ${a.nick} ganhou para o ginásio a carta ${CARDS[id].n}.`)}
+function cardWeek(a){ // fim de uma semana de treino com uma carta: conta a semana; no fim, os efeitos finais
+  const c=cardOf(a);if(!c)return null;if(--a.cd.w>0)return null;
+  const id=a.cd.c;delete a.cd;let t='';
+  if(c.end){if(c.end.iq)gain(a,'iq',TUNE.iqFight*c.end.iq,1);if(c.end.rec){a.recovery=Math.max(a.recovery||0,c.end.rec);t=` Fica ${c.end.rec} semana a recuperar.`}}
+  note(`${a.nick} acabou a carta ${c.n}.${t}`);return 'acabou '+c.n}
+function cardResting(a){return a.injury>0||a.recovery>0}
+function cardLack(a,id){ // porque não pode usar esta carta agora (ou '')
+  const c=CARDS[id];if(c.need==='rest'&&!cardResting(a))return 'não está parado';
+  if(c.wk&&cardOf(a))return `a fazer ${cardOf(a).n}`;
+  if(c.fee&&S.money<c.fee)return `faltam ${fmt(c.fee-S.money)} €`;return ''}
+function cardKg(c){return(c.kgNow||0)+(c.kg||0)*(c.wk||0)*TIME.days}
+function cardUse(a,id){
+  const i=(S.cards||[]).findIndex(x=>x.c===id);if(i<0||cardLack(a,id))return false;const c=CARDS[id];
+  S.cards.splice(i,1);
+  if(c.fee)S.money=Math.max(0,S.money-c.fee);
+  if(c.conf!=null){const v=Array.isArray(c.conf)?RI(c.conf[0],c.conf[1]):c.conf;a.conf=clamp(a.conf+v,0,100)}
+  if(c.fat)a.fatigue=clamp((a.fatigue||0)+c.fat,0,100);
+  if(c.kgNow)a.kg=r2(a.kg+c.kgNow);
+  if(c.rec){let n=c.rec;const j=Math.min(a.injury||0,n);a.injury=(a.injury||0)-j;n-=j;a.recovery=Math.max(0,(a.recovery||0)-n);a.fatigue=0}
+  if(c.wk)a.cd={c:id,w:c.wk};
+  SFX.play('buy');note(`${a.nick}: carta ${c.n}${c.wk?` (${c.wk} semana${c.wk>1?'s':''})`:''}.`);
+  toast(`<b>${a.nick}</b> · ${c.n}${c.wk?` · ${c.wk} sem.`:''}`);return true}
+function cardInfo(id){const c=CARDS[id],H=(S.cards||[]).filter(x=>x.c===id),n=H.length,src=[...new Set(H.map(x=>CSRC[x.s]||x.s))].join(', ');
+  return info(c.n.toUpperCase(),`<p class="hint"><span class="tag ${c.r?'m':''}">${RAR[c.r]}</span> ${c.wk?`${c.wk} semana${c.wk>1?'s':''}`:'efeito imediato'}${n?` · tens ${n} (${src})`:''}</p>
+    <p class="hint"><b class="good">Efeito:</b> ${c.d}</p><p class="hint"><b class="warn">Custo:</b> ${c.c}</p>${c.wk?'<p class="hint">Um atleta faz uma carta de cada vez. A recuperar ou lesionado, fica em pausa.</p>':''}`,'FECHAR')}
+function cardPreview(a,id){ // o que esta carta faz a este atleta agora (peso, luta marcada, pausa)
+  const c=CARDS[id],L=[],dk=cardKg(c);
+  if(dk){const k1=r2(a.kg+dk),Lm=CAT_LIM[a.cat];L.push(`Peso: ${kgs(a.kg)} kg → cerca de ${kgs(k1)} kg${Lm!=null?` (limite ${kgs(Lm)})`:''}.`)}
+  if(a.fight){const w=weeksTo(a);if(c.wk&&w<=c.wk+(c.end&&c.end.rec?1:0))L.push(`<span class="warn">A luta é daqui a ${w} semana${w===1?'':'s'}: ${c.end&&c.end.rec?'pode ter de recuperar em cima da luta':'ainda vai a meio da carta'}.</span>`);
+    else if(c.fat&&w<=3)L.push(`<span class="warn">A luta é daqui a ${w} semana${w===1?'':'s'}: pode chegar cansado.</span>`);
+    else if(c.kgNow&&w<=1)L.push('<span class="warn">A pesagem está à porta.</span>')}
+  if(c.wk&&cardResting(a))L.push('Está parado: a carta começa quando voltar a treinar.');
+  return L.map(t=>`<p class="hint">${t}</p>`).join('')}
+async function cardPick(id){ // usar: escolher o atleta → confirmar com o efeito secundário
+  const c=CARDS[id];if(!c||!(S.cards||[]).some(x=>x.c===id))return;
+  const ord=S.roster.slice().sort((p,q)=>catIdx(p.cat)-catIdx(q.cat));
+  const o=await card({title:`${c.n.toUpperCase()} · PARA QUEM?`,body:`<p class="hint">${c.s} · <span class="warn">${c.sc}</span>${c.wk?` · ${c.wk} sem.`:''}</p>`,
+    opts:[...ord.map(a=>{const lk=cardLack(a,id),cd=cardOf(a);return{t:`${a.nick} · ${a.cat}<small>${lk||(cd?`a fazer ${cd.n}`:cardResting(a)?'parado':a.fight?`luta daqui a ${weeksTo(a)} sem.`:'livre')}</small>`,cls:'prep',dis:!!lk,a}}),{t:'CANCELAR'}]});
+  if(!o||!o.a)return;const a=o.a;
+  const y=await card({title:`${c.n.toUpperCase()} · ${a.nick.toUpperCase()}`,body:`<p class="hint"><b class="good">Efeito:</b> ${c.d}</p><p class="hint"><b class="warn">Custo:</b> ${c.c}</p>${cardPreview(a,id)}`,
+    opts:[{t:'USAR',cls:'gold',ok:1},{t:'CANCELAR'}]});
+  if(y&&y.ok&&cardUse(a,id))render()}
+function cardStock(){ // Loja: comuns à venda (renova a cada estação); raras desligadas por agora (TUNE.cBuyRare)
+  const s=Math.floor((S.week-1)/13);
+  if(!S.csh||S.csh.s!==s){const l=[];const pool=COMMONS.slice();for(let i=0;i<TUNE.cStock&&pool.length;i++){
+      const r=Math.random()<TUNE.cBuyRare;l.push(r?pick(RARES):pool.splice(RI(0,pool.length-1),1)[0])}
+    S.csh={s,l,b:l.map(()=>0)}}
+  return S.csh}
+function cardPrice(id){return CARDS[id].r?TUNE.cBuyRareP:TUNE.cBuy}
+function cardBuy(i){const st=cardStock(),id=st.l[i];if(id==null||st.b[i])return;const p=cardPrice(id);if(S.money<p)return;
+  S.money-=p;st.b[i]=1;SFX.play('buy');cardGive(id,'loja',`Compraste a carta ${CARDS[id].n}.`);render()}
+let cardPg=0;
+function panelCards(){
+  const H=S.cards||[],g={};for(const x of H)g[x.c]=(g[x.c]||0)+1;
+  const ids=Object.keys(g).filter(k=>CARDS[k]).sort((p,q)=>CARDS[q].r-CARDS[p].r||CARDS[p].n.localeCompare(CARDS[q].n));
+  const act=S.roster.filter(a=>cardOf(a)),CPG=act.length?3:4; // cartas por página (cabe no ecrã com a linha "a fazer")
+  const pages=Math.max(1,Math.ceil(ids.length/CPG));cardPg=clamp(cardPg,0,pages-1);
+  const rows=ids.slice(cardPg*CPG,cardPg*CPG+CPG).map(id=>{const c=CARDS[id];
+    return `<div class="r crd ${c.r?'rare':''}"><button class="cinfo" data-cinf="${id}"><span class="cl"><strong>${c.n.toUpperCase()}${g[id]>1?` ×${g[id]}`:''}</strong><span class="tag ${c.r?'m':''}">${RAR[c.r]}</span></span><p>${c.s}</p><p class="warn">${c.wk?`${c.wk} sem. · `:''}${c.sc}</p></button><button class="btn gold" data-cuse="${id}">USAR</button></div>`}).join('');
+  return `<div class="chh"><h3>CARTAS DO GINÁSIO · ${H.length}</h3>${pages>1?`<div class="hpg"><button class="btn" data-cpg="-1" ${cardPg?'':'disabled'}>◀</button>${cardPg+1}/${pages}<button class="btn" data-cpg="1" ${cardPg<pages-1?'':'disabled'}>▶</button></div>`:'<span class="meta">para qualquer atleta</span>'}</div>
+    ${ids.length?`<div class="rows">${rows}</div>`:`<div class="empty">Ainda não há cartas. As comuns ganham-se com o foco TÉCNICAS, depois das lutas (o treinador sugere uma) e na Loja; as raras com títulos, Torneio Rookie, gala, vitórias contra o top 5 e treinadores Lenda.</div>`}
+    ${act.length?`<div class="meta cact"><b>A FAZER</b> ${act.map(a=>`${a.nick}: ${cardOf(a).n} (${a.cd.w} sem.${cardResting(a)?', em pausa':''})`).join(' · ')}</div>`:''}`}
+function panelShopCards(){
+  const st=cardStock(),nx=13-((S.week-1)%13);
+  return `<div class="meta">Cartas de treino para o ginásio (usam-se em Ginásio → Cartas). Novas cartas à venda daqui a ${nx} semana${nx>1?'s':''}.</div><div class="rows">${st.l.map((id,i)=>{const c=CARDS[id],p=cardPrice(id);
+    return `<div class="r crd ${c.r?'rare':''}"><button class="cinfo" data-cinf="${id}"><span class="cl"><strong>${c.n.toUpperCase()}</strong><span class="tag ${c.r?'m':''}">${RAR[c.r]}</span></span><p>${c.s}</p><p class="warn">${c.wk?`${c.wk} sem. · `:''}${c.sc}</p></button>
+    ${st.b[i]?'<span class="meta">VENDIDA</span>':`<button class="btn ${S.money>=p?'gold':''}" data-cbuy="${i}" ${S.money<p?'disabled':''}>${fmt(p)} €</button>`}</div>`}).join('')}</div>`}
 
 /* ================= SOUND (8-bit, generated) ================= */
 const SFX=(()=>{let ctx=null,master=null,nb=null,on=true,amb=null;
@@ -1714,8 +1870,9 @@ function selector(){ // 4 lugares (SLOTS), por ordem de categoria; os vazios no 
   return `<div class="seg">${cells.join('')}</div>`;
 }
 function panelGym(){
-  const gs=`<div class="seg"><button data-gsub="res" class="${S.gsub!=='coach'&&S.gsub!=='hall'?'on':''}">Ginásio</button><button data-gsub="coach" class="${S.gsub==='coach'?'on':''}">Treinadores</button><button data-gsub="hall" class="${S.gsub==='hall'?'on':''}">Hall da fama</button></div>`;
+  const nC=(S.cards||[]).length,gs=`<div class="seg gseg"><button data-gsub="res" class="${!['coach','cards','hall'].includes(S.gsub)?'on':''}">Ginásio</button><button data-gsub="coach" class="${S.gsub==='coach'?'on':''}">Treinadores</button><button data-gsub="cards" class="${S.gsub==='cards'?'on':''}">Cartas${nC?` <b class="cbn">${nC}</b>`:''}</button><button data-gsub="hall" class="${S.gsub==='hall'?'on':''}">Hall da fama</button></div>`;
   if(S.gsub==='coach')return gs+panelCoaches();
+  if(S.gsub==='cards')return gs+panelCards();
   if(S.gsub==='hall')return gs+panelHall();
   const fees=S.members*ECON.fee+sponsors(),WC=weeklyCosts(),sal=WC.total;
   const fights=S.roster.filter(a=>a.fight).map(a=>{const w=weeksTo(a);return `<div class="r"><div><strong>${a.nick} vs ${a.fight.opp.nick}</strong><p>${w===0?'Esta semana!':`Daqui a ${w} semana${w>1?'s':''}`} · ${fightLabel(a.fight)} · ${a.fight.rounds} rounds${a.fight.purse?` · ${fmt(a.fight.purse)} €`:''}</p></div></div>`}).join('');
@@ -1904,6 +2061,7 @@ function improving(a){ // o que está a subir, por palavras (sem números), a pa
   const out=[],c=coachOf(a),ln=(ic,t,cls)=>out.push(`<p class="${cls||''}"><em>${ic}</em><span>${t}</span></p>`);
   if(a.injury>0)ln('×',`<span class="warn">Lesionado: ${a.injury} semana${a.injury>1?'s':''} sem treinar.</span>`);
   else if(a.recovery>0)ln('×',`<span class="warn">A recuperar da luta: ${a.recovery} semana${a.recovery>1?'s':''} sem treinar.</span>`);
+  {const c=cardOf(a);if(c)ln('★',`A fazer: <b class="gd">${c.n}</b> (${a.cd.w} sem.)${cardResting(a)?' · em pausa':''}`,'hi')} // carta (3A-5)
   const w=attrW(),ks=ATTRS.map(([k])=>k).filter(k=>k!=='queixo'),r=Object.fromEntries(ks.map(k=>[k,attrRate(a,k,w)])),mx=Math.max(...Object.values(r))||1;
   const hi=ks.filter(k=>r[k]>=mx*.66),mid=ks.filter(k=>r[k]<mx*.66&&r[k]>=mx*.36),lo=ks.filter(k=>r[k]<mx*.36);
   const why=g=>c&&g.every(k=>(STY_ATTR[c.st][k]||1)>1)?' <i>(o forte dele)</i>':g.length===1&&g[0]==='resistencia'?' <i>(corrida diária)</i>':g.every(k=>a.cap[k]-a.attrs[k]<4)?' <i>(perto do limite)</i>':'';
@@ -1938,7 +2096,8 @@ function panelFights(){
   return h;
 }
 function panelShop(){
-  const sub=`<div class="seg"><button data-shop="eq" class="${S.shopSub==='eq'?'on':''}">Equipamento</button><button data-shop="up" class="${S.shopSub==='up'?'on':''}">Instalações</button></div>`;
+  const sub=`<div class="seg"><button data-shop="eq" class="${S.shopSub==='eq'?'on':''}">Equipamento</button><button data-shop="up" class="${S.shopSub==='up'?'on':''}">Instalações</button><button data-shop="cards" class="${S.shopSub==='cards'?'on':''}">Cartas</button></div>`;
+  if(S.shopSub==='cards')return sub+panelShopCards();
   if(S.shopSub==='eq'){
     return sub+`<div class="meta">Os atletas treinam sozinhos com o que o ginásio tem. Cada peça traz mais sócios (+2 lugares).</div><div class="scrolly"><div class="rows">${Object.entries(EQ).map(([id,e])=>{const have=S.eq[id]||0,max=have>=e.max,c=max?0:e.cost[have];
       return `<div class="r"><div><strong>${e.n} · ${have}/${e.max}</strong><p>${e.d}</p></div>
@@ -2003,7 +2162,7 @@ function info(title,body,btn='CONTINUAR'){
 }
 function help(){
   return info('COMO JOGAR',`<p class="hint">És o dono de um ginásio de bairro. O tempo corre sozinho: carrega em ▶ para andar, em ❚❚ para parar e em ×2 para ir mais depressa. Pára sozinho quando é preciso decidir alguma coisa.</p>
-  <p class="hint">Os lutadores treinam sozinhos todos os dias, com o equipamento do ginásio e com o seu treinador. Cada atleta tem um treinador e treina no estilo dele (Ginásio → Treinadores). Em Atletas → Treino escolhes o foco do treino; em Atletas → Ficha → TÉCNICAS, a técnica que está a aprender. Na luta, o estilo e a guarda escolhe-os o atleta.</p>
+  <p class="hint">Os lutadores treinam sozinhos todos os dias, com o equipamento do ginásio e com o seu treinador. Cada atleta tem um treinador e treina no estilo dele (Ginásio → Treinadores). Em Atletas → Treino escolhes o foco do treino; em Atletas → Ficha → TÉCNICAS, a técnica que está a aprender. As cartas de treino (Ginásio → Cartas) são do ginásio: usa-as no atleta que quiseres, mas cada uma tem um custo. Na luta, o estilo e a guarda escolhe-os o atleta.</p>
   <p class="hint">Cada atleta começa amador: com ${TUNE.amLic} lutas e pelo menos uma vitória tira a licença e entra no ranking Nacional (depois Europeu e Mundial; em Lutas → Ranking podes desafiar quem está acima). No primeiro ano de licença pode ir ao Torneio Rookie, na Primavera. As lutas marcam-se com 2 a 10 semanas de antecedência, mais nas importantes. Cada atleta luta na sua categoria de peso (no máximo 4, nunca dois na mesma): vigia o peso em Atletas → Treino e, na semana antes da luta, escolhe como chega à pesagem. No dia, dá ordens no canto entre rounds.</p>
   <p class="hint">Mais equipamento treina mais coisas e traz mais sócios, que pagam mensalidades. Às vezes aparece um talento escondido.</p>`,'VAMOS A ISSO');
 }
@@ -2032,6 +2191,10 @@ document.addEventListener('click',e=>{
   if(d.sub){S.sub=d.sub;render();return}
   if(d.shop){S.shopSub=d.shop;render();return}
   if(d.gsub){S.gsub=d.gsub;render();return}
+  if(d.cinf){if(CARDS[d.cinf])cardInfo(d.cinf);return} // cartas (3A-5)
+  if(d.cuse){cardPick(d.cuse);return}
+  if(d.cpg){cardPg+=+d.cpg;render();return}
+  if(d.cbuy!==undefined){cardBuy(+d.cbuy);return}
   if(d.sk){skillInfo(cur(),d.sk);return}
   if(d.tch){if(TECH[d.tch])techInfo(cur(),d.tch);return}
   if(d.focus){const a=cur();if(FOCUS[d.focus]&&a.focus!==d.focus){a.focus=d.focus;note(`${a.nick} muda o foco do treino: ${FOCUS[d.focus].n.toLowerCase()}.`)}render();return}
@@ -2164,22 +2327,24 @@ function coachK(a){const c=coachOf(a);return c?TUNE.coachT[c.t]*bondK(a):TUNE.no
 function sessQ(a){return clamp(.58+TUNE.confQ*(a.conf??50)+TUNE.discQ*(mv(a,'disc')-50)/50+TUNE.concQ*(mv(a,'conc')-50)/50,.35,1.1)}
 function attrRate(a,k,w,q){ // ganho de um dia no atributo k (sem o acaso)
   const c=coachOf(a),sm=c?(STY_ATTR[c.st][k]||1):1,eff=1-Math.exp(-((w||attrW())[k]||0)/TUNE.eqW0);
-  return TUNE.tDay*eff*sm*coachK(a)*(TUNE.focA[a.focus||'attrs']??1)*ageK(a)*discMul(a)*(.3+.9*(q??sessQ(a)))*clamp((a.cap[k]-a.attrs[k])/20,.06,1)}
+  return TUNE.tDay*eff*sm*coachK(a)*(TUNE.focA[a.focus||'attrs']??1)*ageK(a)*discMul(a)*(.3+.9*(q??sessQ(a)))*cardAt(a,k)*clamp((a.cap[k]-a.attrs[k])/20,.06,1)}
 function skW(a){ // peso de cada golpe/defesa no treino diário
   const st=coachSty(a),T=st?STY_TEACH[st]:[],u=a.use||{},w={};
   for(const k of[...PKEYS,...DKEYS]){const known=lvOf(a,k)>0;if(lvOf(a,k)>=5||(!known&&learnLack(a,k)))continue;
     let v=1+(T.includes(k)?TUNE.skCoach:0)+Math.min(2,(u[k]||0)*TUNE.skUse);
     const add=(g,f)=>{if(g[k]!=null)v+=g[k]*f;else if(g['*']!=null&&k in SKILLS)v+=g['*']*f};
     add(ROUT_SK,1);for(const[id,g]of Object.entries(EQ_SK))if(S.eq[id])add(g,1);
+    const cp=cardOf(a);if(cp&&cp.skp&&cp.skp[k])v+=cp.skp[k]; // carta (3A-5): certos golpes/defesas treinam-se mais
     w[k]=known?v:v*TUNE.skNew}
   return w}
 function trainDay(a,up){
   const q=clamp(sessQ(a)+R(-.1,.1),.3,1.15),w=attrW();
   for(const[k]of ATTRS){const g=attrRate(a,k,w,q);if(g>0)a.attrs[k]=clamp(a.attrs[k]+g,0,a.cap[k]+2)}
   const sw=skW(a),ks=Object.keys(sw);
-  if(ks.length){const pool=TUNE.skDay*(.3+.9*q)*coachK(a)*(TUNE.focS[a.focus||'attrs']??1);for(let n=0;n<4;n++)addXP(a,wpick(ks,k=>sw[k]),pool/4,up)}
+  if(ks.length){const pool=TUNE.skDay*(.3+.9*q)*coachK(a)*(TUNE.focS[a.focus||'attrs']??1)*((cardOf(a)||{}).skm??1);for(let n=0;n<4;n++)addXP(a,wpick(ks,k=>sw[k]),pool/4,up)}
   if(S.eq.sparring){const kn=[...PKEYS,...DKEYS].filter(k=>lvOf(a,k)>0),u=a.use||{};const k=wpick(kn,k=>1+(u[k]||0)/3);belUpd(a,k,Math.random()<.5,.5)} // sparring: a confiança vai ao sítio
   const st=coachSty(a);if(st)addStyleXP(a,st,TUNE.styWk/TIME.days*coachK(a)*(.3+.9*q),up,true);
+  {const c=cardOf(a);if(c&&c.qx){const g=c.qx/(c.wk*TIME.days);a.attrs.queixo+=g;a.cap.queixo=Math.max(a.cap.queixo||0,a.attrs.queixo)}} // carta: o Queixo endurece um pouco
 }
 function weekTrain(a){ // fim da semana: ligação ao treinador, outros estilos a descer devagar, idade
   const c=coachOf(a),out=[];
@@ -2214,7 +2379,8 @@ function weekEnd(){
     const k=a.wk;
     if(k.rev)reveals.push(k.rev);
     const bu=weekTrain(a);delete a.wk;
-    if(!k.rest){const tc=techWeek(a);if(tc){techCards.push(tc);k.up.push('técnica '+TECH[knownT(a).at(-1)].n)}}
+    if(!k.rest){const tc=techWeek(a);if(tc){techCards.push(tc);k.up.push('técnica '+TECH[knownT(a).at(-1)].n)}
+      const ce=cardWeek(a);if(ce)k.up.push(ce);const cf=cardFocus(a);if(cf)k.up.push('carta '+CARDS[cf.c].n)} // cartas (3A-5)
     if(k.rest==='inj'){lines.push(`<b>${a.nick}</b> esteve a recuperar da lesão.`);short.push(`${a.nick}: lesionado`);evo.push({id:a.id,n:a.nick,it:['<i>lesionado</i>']});continue}
     if(k.rest==='rec'){a.recovery--;lines.push(`<b>${a.nick}</b> descansou depois da luta. ${a.recovery?`Faltam ${a.recovery} semana${a.recovery>1?'s':''} de recuperação.`:'Já pode voltar a treinar.'}`);short.push(`${a.nick}: ${a.recovery?'a recuperar da luta':'pronto para treinar'}`);evo.push({id:a.id,n:a.nick,it:[a.recovery?'<i>a recuperar da luta</i>':'<i>pronto para treinar</i>']});continue}
     const ds=ATTRS.map(([x])=>[x,a.attrs[x]-k.b[x]]).filter(([,d])=>d>=.1).sort((p,q)=>q[1]-p[1]);
@@ -2298,6 +2464,7 @@ async function advanceWeek(){
 window.__week=()=>advanceWeek();
 window.__fstate=()=>F?{pops:(F.pl||[]).slice(),log:F.log.map(e=>e.t),mk:[mkWords(F.me),mkWords(F.op)],sty:[F.me.style,F.op.style],grd:[F.me.guard,F.op.guard],tq:[F.me.tq,F.op.tq]}:null; // para os testes
 window.__S=()=>S; // para os testes (3A-4: preparar carreiras e o mundo)
+window.__CARD={techBoost:i=>techBoost(S.roster[i]),techSpeed:(i,id)=>techSpeed(S.roster[i],id),rate:(i,k)=>attrRate(S.roster[i],k),give:(id,src)=>cardGive(id,src||'teste','Carta de teste.'),award:(i,src,k)=>awardHook(S.roster[i],src,k)}; // para os testes (3A-5: cartas)
 window.__clock=()=>S&&{week:S.week,wt:S.wt||0,step:S.wstep||0,run:!!S.run,spd:S.spd||1,busy};
 document.addEventListener('visibilitychange',()=>{if(document.hidden&&S&&S.run){S.run=false;save();drawClock()}});
 /* ---- velocidade de aprender (tema 9.1, passo A4; 3A-1): golpes, defesas, atributos e estilos.
@@ -4129,6 +4296,7 @@ function finishFight(){
    if(mk.eye){rec=Math.min(5,rec+1);html+='<p class="hint"><span class="warn">O olho fechado precisa de tempo: mais uma semana de recuperação.</span></p>'}}
   html+=careerResult(a,f,r).map(t=>`<p class="hint">${t}</p>`).join(''); // licença, Rookie, ranking, títulos (3A-4)
   html+=afterFight(a,r);
+  html+=fightCard(a,F.an); // o treinador sugere uma carta para o que faltou (3A-5)
   a.recovery=rec;a.fatigue=clamp(a.fatigue+25,0,100);a.fight=null;
   if(catMoves(a).length){html+=`<p class="hint"><b style="color:var(--gold)">${a.nick} ${catWhy(a)}: pode mudar de categoria (Atletas → Treino).</b></p>`;note(`${a.nick} pode mudar de categoria.`)}
   {const m=revealGift(a,'na luta');if(m)html+=`<p class="hint"><b style="color:var(--gold)">${m}</b></p>`}
@@ -4290,7 +4458,7 @@ function anReasons(win,draw){
   const pickR=s=>{const used=new Set(),out=[];for(const x of R.filter(x=>s==null||x.s===s).sort((p,q)=>q.sc-p.sc)){if(used.has(x.g))continue;used.add(x.g);out.push(x);if(out.length>=3)break}return out};
   const main=draw?pickR(null):pickR(win?1:-1);
   const plus=draw?null:pickR(win?-1:1).filter(x=>x.sc>=4)[0]||null;
-  const sp=x=>{const[t,tip]=x.t.split('|');return{s:x.s,t,tip:tip||'',sc:+x.sc.toFixed(1)}};
+  const sp=x=>{const[t,tip]=x.t.split('|');return{s:x.s,t,tip:tip||'',sc:+x.sc.toFixed(1),g:x.g,k:x.k||undefined}};
   return{why:main.map(sp),plus:plus?sp(plus):null};
 }
 function dzOf(x){const r=o=>Object.fromEntries(Object.entries(o).map(([k,v])=>[k,Math.round(v)]));const D=x.dx; // distância e ringue (A3), para a análise do A4
@@ -4379,14 +4547,16 @@ function showAnalysis(an,back,tab){
   const head=(a,b,c)=>`<b>${a}</b><b class="me">${b}</b><b class="op">${c}</b>`;
   let body='';
   if(tab==='res'){
-    const wl=(x,tip=true)=>`<div class="why ${x.s>0?'g':'b'}"><i>${x.s>0?'▲':'▼'}</i><span>${x.t}${tip&&x.tip?` <b class="tip">${x.tip}</b>`:''}</span></div>`;
+    const cs=an.cs&&CARDS[an.cs.c]?an.cs:null,ct=w=>cs&&cs.at===w?` <b class="ctip">★ Carta ${CARDS[cs.c].n}.</b>`:''; // carta do treinador (3A-5)
+    const wl=(x,tip=true,w)=>`<div class="why ${x.s>0?'g':'b'}"><i>${x.s>0?'▲':'▼'}</i><span>${x.t}${tip&&x.tip?` <b class="tip">${x.tip}</b>`:''}${ct(w)}</span></div>`;
     body=`<div class="anend">${an.end}</div>
       <div class="kv"><div><small>PONTOS</small><b><em class="cme">${an.card[0]}</em>-<em class="cop">${an.card[1]}</em></b></div><div><small>ACERTOS</small><b><em class="cme">${pct(an.acc[0])}</em> <em class="cop">${pct(an.acc[1])}</em></b></div><div><small>QUEDAS (TU-ELE)</small><b><em class="cme">${an.kd[0]}</em>-<em class="cop">${an.kd[1]}</em></b></div></div>
-      <div class="meta">Estilos: ${an.mSty} vs ${an.oSty}${an.sx?` · tu em ${an.sx}`:''}</div>${an.cr?`<div class="meta">${an.cr.n} · ${fmt(an.cr.c)} pessoas${an.cr.fx?` · público ${an.cr.fx>0?'a favor':'contra'}: confiança ${an.cr.fx>0?'+':''}${an.cr.fx}`:''}</div>`:''}
-      ${an.wi?`<div class="meta">${an.wi.c} · pesagem: tu ${kgs(an.wi.k)} kg, ele ${kgs(an.wi.o)} kg${an.wi.l!=null?` (limite ${kgs(an.wi.l)})`:''}${WI_TXT[an.wi.r]?` · <span class="${WI_TXT[an.wi.r][1]}">${WI_TXT[an.wi.r][0]}</span>`:''}</div>`:''}
+      <div class="meta">${an.mSty} vs ${an.oSty}${an.sx?` · tu em ${an.sx}`:''}</div>${an.cr?`<div class="meta fitx">${an.cr.n} · ${fmt(an.cr.c)} pessoas${an.cr.fx?` · público ${an.cr.fx>0?'a favor':'contra'} (${an.cr.fx>0?'+':''}${an.cr.fx})`:''}</div>`:''}
+      ${an.wi?`<div class="meta">Pesagem: tu ${kgs(an.wi.k)}, ele ${kgs(an.wi.o)} kg${an.wi.l!=null?` (limite ${kgs(an.wi.l)})`:''}${WI_TXT[an.wi.r]?` · <span class="${WI_TXT[an.wi.r][1]}">${WI_TXT[an.wi.r][0]}</span>`:''}${ct('wi')}</div>`:''}
       <h3>${an.res==='V'?'AS CHAVES DA VITÓRIA':an.res==='D'?'PORQUE PERDESTE':'O QUE PESOU'}</h3>
-      ${an.why.length?an.why.map(x=>wl(x)).join(''):`<div class="why"><i>=</i><span>${an.how==='KO'?'Luta equilibrada decidida por um golpe. No ringue tudo pode acontecer.':'Luta muito equilibrada: nenhum fator se destacou. Decidiu-se nos pormenores.'}</span></div>`}
-      ${an.plus?`<h3>${an.plus.s>0?'MAS CORREU BEM':'APESAR DE'}</h3>${wl(an.plus,an.res!=='V')}`:''}`;
+      ${an.why.length?an.why.map((x,i)=>wl(x,true,'w'+i)).join(''):`<div class="why"><i>=</i><span>${an.how==='KO'?'Luta equilibrada decidida por um golpe. No ringue tudo pode acontecer.':'Luta muito equilibrada: nenhum fator se destacou. Decidiu-se nos pormenores.'}</span></div>`}
+      ${an.plus?`<div class="${cs&&cs.at==='p'?'':'fitx'}" style="display:contents"><h3>${an.plus.s>0?'MAS CORREU BEM':'APESAR DE'}</h3>${wl(an.plus,an.res!=='V','p')}</div>`:''}
+      ${cs&&!/^w|^p|^wi/.test(cs.at||'')?`<div class="why c"><i>★</i><span>${cs.co} viu que ${cs.t}: deu a carta <b class="tip">${CARDS[cs.c].n}</b>.</span></div>`:''}`;
   }else if(tab==='golpes'){
     const ks=PK.filter(k=>an.ps[0][k]||an.ps[1][k]);
     const c=(x,k)=>x[k]?`${x[k][1]}/${x[k][0]}`:'-';
@@ -4443,6 +4613,7 @@ function showAnalysis(an,back,tab){
   }
   const s=modal(hd+`<div class="anb">${body}</div><button class="btn gold big" id="anBack">${back?'VOLTAR':'FECHAR'}</button>`);
   s.classList.add('an');
+  {const ab=s.querySelector('.anb');for(const x of[...s.querySelectorAll('.fitx')].reverse()){if(!ab||ab.scrollHeight<=ab.clientHeight+1)break;x.remove()}} // ecrã fixo: sem lugar, sai o menos importante (o "mas correu bem", depois o público)
   s.querySelectorAll('[data-ant]').forEach(b=>b.onclick=()=>showAnalysis(an,back,b.dataset.ant));
   s.querySelector('#anBack').onclick=()=>{if(back)back();else closeModal()};
 }
@@ -5169,6 +5340,7 @@ async function start(){
   for(const a of S.roster){migrateHist(a);migrateStyles(a);initBody(a,2);if(a.fight){migrateStyles(a.fight.opp);initBody(a.fight.opp,2)}for(const o of a.offers||[]){migrateStyles(o.opp);initBody(o.opp,2)}}
   if(!S.W||!S.W.R){S.W=null;genWorld();for(const a of S.roster){delete a.car;delete a.tier;delete a.rank;carK(a);a.offers=[];a.fight=null}} // carreira e mundo (3A-4): saves de teste de antes recomeçam a carreira
   S.reg=S.reg||0;S.hof=S.hof||[];for(const a of S.roster)carK(a);
+  S.cards=(Array.isArray(S.cards)?S.cards:[]).filter(x=>x&&CARDS[x.c]);for(const a of S.roster)if(a.cd&&!cardOf(a))delete a.cd; // cartas (3A-5)
   for(const a of S.roster){normSkills(a);a.combos=a.combos||knownCombos(a).map(c=>c.id);a.recovery=a.recovery||0;a.ment=a.ment||rollMental();for(const[k]of ATTRS){if(a.attrs[k]==null)a.attrs[k]=k==='queixo'?50:10;if(a.cap[k]==null)a.cap[k]=a.attrs[k]+5}if(a.gift===undefined){a.gift=null;a.giftKnown=true}a.weeks=a.weeks||0}
   if(!Array.isArray(S.coaches)){S.coaches=startCoaches();for(const a of S.roster){a.coach=null;autoCoach(a)}} // treinadores (3A-1)
   for(const a of S.roster){const T=techK(a);T.k=T.k.filter(k=>TECH[k]);if(T.l&&!TECH[T.l])T.l=null;if(T.fg&&!T.k.includes(T.fg))T.fg=null; // técnicas (3A-3)
