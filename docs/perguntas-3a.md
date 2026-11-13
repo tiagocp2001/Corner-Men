@@ -44,3 +44,15 @@
 10. O escalão do treinador de um ex-atleta vem dos títulos. Se o ginásio ficar vazio, chega um miúdo novo.
 11. Ficha: o potencial passou para junto da confiança; a linha do corpo saiu (está em Estilos); "a recuperar" mostra "recupera N sem.".
 12. No teste de 3 anos o atleta chegou ao n.º 10 sem título — a progressão parece lenta (equilíbrio).
+
+## 3A-5 Cartas
+1. Catálogo de 14 cartas (8 comuns, 6 raras) com nomes e números de exemplo (Escadaria da Sé, Termas do vale…).
+2. Só uma carta de várias semanas de cada vez por atleta (as instantâneas não contam).
+3. A carta fica em pausa enquanto o atleta recupera ou está lesionado.
+4. As cartas de recuperação só funcionam num atleta que está parado.
+5. Algumas cartas custam dinheiro (fisioterapia, termas).
+6. Só o atleta com treinador recebe cartas das lutas; probabilidade pelo escalão (Bairro 30% … Lenda 70%; só o Lenda dá raras).
+7. Uma carta rara por atleta em cada Torneio Rookie ou gala.
+8. Loja: 3 comuns por estação a 900 €, cada uma uma vez por estação; raras na loja desligadas.
+9. Foco Técnicas: 7% por semana de uma comum.
+10. O ecrã RESUMO da análise foi encurtado para caber (sai primeiro o "mas correu bem").
