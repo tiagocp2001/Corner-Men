@@ -65,3 +65,4 @@ Tudo confirmado, exceto:
 - **3A-5:** as cartas parecem muito difíceis de ganhar → **lembrar o Tiago de ajustar na fase 7 (equilíbrio)**.
 - 3A-4.10 e 3A-5.2: explicados na conversa.
 - Publicar a 3A: sim (v15).
+- **3A-4.10 (mudado):** com a equipa de treinadores cheia, o ex-atleta pode ficar trocando por um dos treinadores (tabela de comparação: estilo, escalão, salário, quem treina). O atleta treinado pelo que sai passa para o ex-atleta (perde a ligação; muda de estilo principal se for diferente).

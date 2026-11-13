@@ -1517,10 +1517,15 @@ async function retireNow(a){
   const e={n:a.name,k:a.nick,c:a.cat,st:a.style,rec:{...a.rec},ti:(a.titles||[]).slice(),aw:(c.aw2||[]).slice(),y0:c.y0||1,y1:yearOf(),age:a.age,lk:a.look,bp:bp||null,pro:!c.am};
   (S.hof=S.hof||[]).push(e);leaveWorld(a);S.roster=S.roster.filter(x=>x!==a);S.sel=0;note(`${a.nick} reformou-se: entra no hall da fama do ginásio.`);
   const t=coachTierOf(a),room=S.coaches.length<CMAX;let n=null;
+  const exCoach=()=>{const nc=makeCoach(a.style,t,`${a.name.split(' ')[0]} "${a.nick}"`);nc.ex=1;nc.lk=a.look;note(`${a.nick} fica no ginásio como treinador ${a.style}.`);return nc};
   if(!S.roster.length){n=makeAthlete(pick(CATS.slice(1,6)),{boost:2});S.roster.push(n);S.sel=0;amOffer(n,true)} // o ginásio nunca fica vazio: chega um miúdo novo
   await card({title:`REFORMA · ${a.nick.toUpperCase()}`,body:`<p class="hint">${a.name} "${a.nick}" pendura as luvas: ${a.rec.w}V ${a.rec.l}D ${a.rec.d}E (${a.rec.ko} KO)${e.ti.length?` · ${e.ti.length} título${e.ti.length>1?'s':''}: ${e.ti.join(', ')}`:''}. Entra no hall da fama do ginásio.</p>
-    <p class="hint">${room?`Pode ficar no ginásio como treinador ${a.style} (${CT[t].n}${t?', pelo que ganhou':''}).`:'Gostava de ficar como treinador, mas a equipa está cheia.'}</p>`,
-    opts:[...(room?[{t:`FICA COMO TREINADOR<small>${a.style} · ${CT[t].n} · ${CT[t].sal} €/sem quando treina</small>`,cls:'gold',fn:()=>{const nc=makeCoach(a.style,t,`${a.name.split(' ')[0]} "${a.nick}"`);nc.ex=1;nc.lk=a.look;S.coaches.push(nc);note(`${a.nick} fica no ginásio como treinador ${a.style}.`)}}]:[]),{t:'OBRIGADO, CAMPEÃO'}]});
+    <p class="hint">${room?`Pode ficar no ginásio como treinador ${a.style} (${CT[t].n}${t?', pelo que ganhou':''}).`:`Quer ficar como treinador ${a.style} (${CT[t].n}${t?', pelo que ganhou':''}), mas a equipa está cheia: podes trocá-lo por um dos teus.`}</p>
+    ${room?'':`<table class="cmpT" style="width:100%;font-size:13px;border-collapse:collapse"><tr><th></th><th>Estilo</th><th>Escalão</th><th>€/sem</th><th>Treina</th></tr>
+      <tr style="color:#e8c860"><td>${a.nick}</td><td>${a.style}</td><td>${CT[t].n}</td><td>${CT[t].sal}</td><td>—</td></tr>
+      ${S.coaches.map(c=>{const w=athOf(c);return`<tr><td>${c.n}</td><td>${c.st}</td><td>${CT[c.t].n}</td><td>${c.sal}</td><td>${w?w.nick:'ninguém'}</td></tr>`}).join('')}</table>`}`,
+    opts:[...(room?[{t:`FICA COMO TREINADOR<small>${a.style} · ${CT[t].n} · ${CT[t].sal} €/sem quando treina</small>`,cls:'gold',fn:()=>{S.coaches.push(exCoach())}}]
+      :S.coaches.map(c=>{const w=athOf(c);return{t:`TROCAR POR ${c.n.toUpperCase()}<small>${c.st} · ${CT[c.t].n}${w?` · ${w.nick} perde a ligação${c.st!==a.style?` e passa a ${a.style}`:''}`:' · não treina ninguém'}</small>`,fn:()=>{const nc=exCoach();S.coaches=S.coaches.filter(x=>x!==c);S.coaches.push(nc);note(`${c.n} sai do ginásio.`);if(w)assignCoach(w,nc)}}})),{t:room?'OBRIGADO, CAMPEÃO':'NÃO FICA'}]});
   if(n){autoCoach(n);note(`${n.name} "${n.nick}" chega ao ginásio.`);
     await info('UM MIÚDO NOVO',`<p class="hint">No dia seguinte aparece à porta ${n.name} "${n.nick}", ${n.age} anos, ${n.cat}. Quer ser como o ${a.nick}. Começa como amador.</p>`,'BEM-VINDO')}
 }
