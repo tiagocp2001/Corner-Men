@@ -56,3 +56,12 @@
 8. Loja: 3 comuns por estação a 900 €, cada uma uma vez por estação; raras na loja desligadas.
 9. Foco Técnicas: 7% por semana de uma comum.
 10. O ecrã RESUMO da análise foi encurtado para caber (sai primeiro o "mas correu bem").
+
+## Respostas do Tiago (13 nov 2026)
+Tudo confirmado, exceto:
+- **3A-1.4:** fica assim por agora; mais tarde muda a forma como aparecem os candidatos a treinador.
+- **3A-2.5:** a ideia é o atleta aparecer e o jogador escolher a categoria em que entra (fica para depois).
+- **3A-3.9:** a regra do fígado fica assim; talvez mude no equilíbrio (fase 7).
+- **3A-5:** as cartas parecem muito difíceis de ganhar → **lembrar o Tiago de ajustar na fase 7 (equilíbrio)**.
+- 3A-4.10 e 3A-5.2: explicados na conversa.
+- Publicar a 3A: sim (v15).

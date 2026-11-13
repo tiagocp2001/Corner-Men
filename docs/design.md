@@ -15,7 +15,7 @@
 | 4 | **Ginásio como mapa — funcionamento** (tocar no escritório, balneário, porta; desenhos simples) | Por decidir |
 | 5 | Guia — fase B: combinações e fintas, guarda canhota, estilos híbridos | Por decidir |
 | 6 | Guia — fase C: treinos novos, plano de combate e pesagem, faltas, taças sazonais | Por decidir |
-| 7 | Equilíbrio (KOs, estratégias, economia) com simulações | Depois |
+| 7 | Equilíbrio (KOs, estratégias, economia) com simulações (lembrar: cartas mais fáceis de ganhar, regra do fígado, KOs no topo, progressão da carreira lenta) | Depois |
 | 8 | **Fase visual:** guia de estilo (pessoas da luta e do ginásio no estilo dos pugilistas novos), **vista de costas (o nosso atleta) e de frente (o adversário)**, pessoal à volta do ringue (juízes, TV, fotógrafos, locutor de smoking), câmara larga → aproximação, árbitro a dar início, levantar depois da queda, proteção de cabeça no amador, ecrã gigante, animações finas, ginásio bonito, update visual geral | Depois |
 | 9 | Adiados: dinheiro no fim de jogo, golpe especial; **vários idiomas** (o jogo está todo em PT-PT dentro do `index.html`; traduzir obriga a juntar todos os textos num sítio) | Depois |
 
