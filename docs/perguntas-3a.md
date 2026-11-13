@@ -30,3 +30,17 @@
 8. Técnicas básicas pedem golpe nível 1 e ~16 num atributo.
 9. Regra do fígado: sem a técnica acontece 35% das vezes e um pouco pior; com ela 1,8×.
 10. A técnica do fígado parece forte (64% contra igual sem ela) — fica para o equilíbrio.
+
+## 3A-4 Carreira e mundo
+1. A região do ginásio (Norte/Sul) escolhe-se ao criar o ginásio (Norte por omissão).
+2. Amadores sem ranking; adversários amadores inventados; licença automática ao cumprir 3 lutas + 1 vitória.
+3. Números de exemplo: ~52–65 pugilistas por categoria (400–530 no total), bolsas, rounds (nacional 4, top 10 6, Europeu 8, Mundial 10; eliminatórias 8/10/12; títulos 10/12/12), semanas de preparação.
+4. Subir no ranking: ganhar a alguém acima → fica com o lugar dele; a alguém abaixo → +1; perder com alguém acima → 0–1 abaixo. Ex-campeão vai para o n.º 3.
+5. Pugilistas do mundo nunca descem de nível; todos os anos entram rookies novos; depois do Torneio Rookie desistem os que ficam abaixo do n.º 26 nacional.
+6. "Top 3 muito tempo" = 36 semanas. Campeões do mundo sobem de nível ao fim de 26 semanas e mantêm o título 40% das vezes. Sem desafiador obrigatório, o prazo da defesa adia 8 semanas.
+7. Desafiar: aceita 80% − 12% por cada lugar acima; espera de 2 semanas entre desafios.
+8. Torneio Rookie sem empates: passa quem acertou mais golpes.
+9. Gala no Inverno, semana 12. Há "reformar já" além da luta de despedida. Convencer a não se reformar: 75%, cada vez ×0,6.
+10. O escalão do treinador de um ex-atleta vem dos títulos. Se o ginásio ficar vazio, chega um miúdo novo.
+11. Ficha: o potencial passou para junto da confiança; a linha do corpo saiu (está em Estilos); "a recuperar" mostra "recupera N sem.".
+12. No teste de 3 anos o atleta chegou ao n.º 10 sem título — a progressão parece lenta (equilíbrio).
