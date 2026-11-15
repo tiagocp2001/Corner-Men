@@ -33,7 +33,7 @@ A fonte do jogo é o **`index.html` do repositório** (até à v9 era um artefac
 
 ## Arquitetura do jogo (`index.html`)
 
-Tudo dentro de uma IIFE num único `<script>`. Sem dependências externas além das letras do Google Fonts (Silkscreen para títulos, números, placard e botões; VT323 para textos compridos). Gráficos em `<canvas>` desenhados à mão (pixel art com `fillRect`), som gerado com Web Audio. Estado guardado em `localStorage`.
+Tudo dentro de uma IIFE num único `<script>`. Hoje sem dependências externas além das letras do Google Fonts (Silkscreen para títulos, números, placard e botões; VT323 para textos compridos); o Tiago autorizou usar dependências externas quando fizerem falta (ex.: three.js para cenários 2.5D — ver «Direção de arte e cenários» em `docs/design.md`). Gráficos em `<canvas>` desenhados à mão (pixel art com `fillRect`), som gerado com Web Audio. Estado guardado em `localStorage`.
 
 Secções (procurar pelos comentários `/* ===== X ===== */`):
 

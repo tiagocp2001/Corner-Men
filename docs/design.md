@@ -151,6 +151,12 @@ Aqui ficam as decisões de design do jogo, tema a tema. É a referência para qu
 
 Estados usados: **Em aberto** (a discutir) · **Decidido** (pronto a implementar) · **Implementado** (já está no jogo).
 
+## Direção de arte e cenários (em estudo, nov 2026)
+
+- **Pugilistas:** estilo aprovado = chibi da referência 1 (vista 3/4, contorno preto, ~40×58). Para as 8 direções usou-se um esqueleto humano 3D (pose por ângulos, cotovelos afastados como no desenho, joelhos ~150°, pé de trás ~45°, calcanhar de trás 1 px no ar) como guia; a pintura das 8 vistas foi feita por um agente (versão 8).
+- **PixelLab (pixellab.ai) em avaliação:** é a melhor ferramenta encontrada para rodar e animar (8 direções, animações prontas de boxe, animação por esqueleto com poses nossas). Teste a partir das nossas imagens (vista de frente + desenho 3/4) manteve o estilo e a cara. Pesquisa completa em `docs/pesquisa-pixellab.md`. Por decidir: assinatura, quantas direções são precisas no ringue (2–4 ou 8 — o Tiago quer os pugilistas a andar à volta um do outro), peças trocáveis por cor no código vs reanimar.
+- **Cenários em 2.5D (direção do Tiago, decidir melhor mais tarde):** inspirado no Pocket Basketball de um amigo (github.com/Guybota/Pocket-Basketball: cenário 3D na placa gráfica com three.js e bonecos em pixel art como cartões no mundo, luz tipo Super Punch-Out — ringue claro, público às escuras). **O Tiago autorizou usar dependências externas (ex.: three.js).** Não começar sem ele pedir.
+
 ## Como trabalhamos
 
 1. Os temas vêm do "Guia Completo de Boxe" do Tiago (`docs/Guia_Completo_de_Boxe.pdf`; texto pesquisável em `docs/guia-boxe.txt`), agrupados em fases por ordem de dependência.
