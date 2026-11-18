@@ -9,7 +9,7 @@ BASE = os.path.join(CAB, 'variantes', '00-corpo-base')
 # Pé que fica no chão nas pontas, por vista: 'auto' (pela forma da bota), -1 ponta à esquerda, +1 à direita,
 # 'frente' (ponta virada para nós: a bota estica). Uma entrada por bota, da esquerda para a direita da imagem.
 SPLIT = {}   # (vista 8: o Tiago preferiu como estava, botas juntas) vistas em que as duas botas se tocam: coluna onde começa a bota da direita
-PES = {'1 Frente': [-1, 'frente'], '5 Costas-dir.': [-1, 'auto'], '3 Dir. 3/4': [+1, +1], '7 Esquerda': [-1, -1]}   # as outras: 'auto'
+PES = {'1 Frente': [-1, 'frente'], '5 Costas-dir.': [+1, 'auto'], '3 Dir. 3/4': [+1, +1], '7 Esquerda': [-1, -1]}   # as outras: 'auto'
 def cls(p):
     if not p[3]: return '.'
     r, g, b = p[:3]
