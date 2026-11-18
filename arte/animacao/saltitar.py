@@ -8,6 +8,7 @@ ORD = json.load(open(os.path.join(CAB, 'ordem-vistas.json')))       # [nome Pixe
 BASE = os.path.join(CAB, 'variantes', '00-corpo-base')
 # Pé que fica no chão nas pontas, por vista: 'auto' (pela forma da bota), -1 ponta à esquerda, +1 à direita,
 # 'frente' (ponta virada para nós: a bota estica). Uma entrada por bota, da esquerda para a direita da imagem.
+SPLIT = {'8 Frente-esq.': 19}   # vistas em que as duas botas se tocam: coluna onde começa a bota da direita
 PES = {'1 Frente': [-1, 'frente'], '3 Dir. 3/4': [+1, +1], '7 Esquerda': [-1, -1]}   # as outras: 'auto'
 def cls(p):
     if not p[3]: return '.'
@@ -63,6 +64,8 @@ def info():
     r = {}
     for n, t in ORD:
         im = Image.open(os.path.join(BASE, n + '.png')).convert('RGBA'); K, A = marks(im); cs = botas(im, A)
+        if t in SPLIT and len(cs) == 1:
+            sx = SPLIT[t]; cs = [[p for p in cs[0] if p[0] < sx], [p for p in cs[0] if p[0] >= sx]]
         modos = PES.get(t, ['auto'] * len(cs))
         r[n] = (K, [ponta(c, m) for c, m in zip(cs, modos)])
     return r
