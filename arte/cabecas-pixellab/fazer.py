@@ -1,6 +1,7 @@
 # Faz a próxima cabeça da lista na PixelLab, se houver gerações grátis que cheguem.
 # Uso: python3 -I fazer.py   (correr dentro desta pasta)
 import json, subprocess, sys, re, os, time
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from PIL import Image
 AQUI = os.path.dirname(os.path.abspath(__file__))
 L = os.path.join(AQUI, 'lista.json')
@@ -42,9 +43,7 @@ def main():
         if c['estado'] == 'a gerar':
             pasta = os.path.join(AQUI, 'variantes', f'{c["n"]:02d}')
             if 'status: completed' in mcp('get_character', {'character_id': c['state_id']}) and baixar(c['state_id'], pasta):
-                comparar(pasta, base); c['estado'] = 'feita'
-                json.dump(lst, open(L, 'w'), ensure_ascii=False, indent=1)
-                print(f'FEITA (atrasada): {c["n"]}')
+                comparar(pasta, base); fim(lst, c, pasta)
     nxt = next((c for c in lst['cabecas'] if c['estado'] == 'por fazer'), None)
     if not nxt: print('TUDO FEITO'); return
     base = os.path.join(AQUI, 'variantes', '00-corpo-base')
@@ -65,10 +64,20 @@ def main():
     if not baixar(sid, pasta):
         print(f'AINDA A GERAR: {nxt["n"]} ({sid})'); return
     comparar(pasta, base)
-    nxt['estado'] = 'feita'
+    fim(lst, nxt, pasta)
+
+def fim(lst, c, pasta):
+    """Verifica o corpo píxel a píxel; se mudou, a cabeça fica para repetir."""
+    import verificar
+    r = verificar.verificar(pasta)
+    maus = [f'{d} {p:.1f}%' for d, p in r if p > verificar.LIMITE]
+    if maus:
+        c['estado'] = 'repetir'; c['porque'] = 'corpo diferente: ' + ', '.join(maus)
+    else:
+        c['estado'] = 'feita'; c.pop('porque', None)
     json.dump(lst, open(L, 'w'), ensure_ascii=False, indent=1)
-    feitas = sum(1 for c in lst['cabecas'] if c['estado'] == 'feita')
-    print(f'FEITA: {nxt["n"]} — {nxt["pt"]} | total feitas: {feitas}/40')
+    feitas = sum(1 for x in lst['cabecas'] if x['estado'] == 'feita')
+    print(('REPETIR' if maus else 'FEITA') + f': {c["n"]} — {c["pt"]}' + (f' ({c["porque"]})' if maus else '') + f' | total feitas: {feitas}/40')
 
 if __name__ == '__main__':
     main()
