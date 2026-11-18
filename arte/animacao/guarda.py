@@ -9,7 +9,7 @@ import saltitar as S
 AQUI = os.path.dirname(os.path.abspath(__file__))
 # 12 fotogramas = 2 saltos: no 1.º o peso vai para a esquerda, no 2.º para a direita
 PASSOS = ['chao', 'agacha', 'pontas', 'ar', 'pontas', 'agacha'] * 2
-LUVA = [0, -1, +1, 0, -1, +1] * 2                 # luvas: ficam para trás quando o corpo muda de direção
+LUVA = [0, 0, +1, 0, 0, 0] * 2                   # luvas: só ficam um instante para trás quando ele sobe
 PESO = [0, -1, -1, -1, -1, 0, 0, +1, +1, +1, +1, 0]  # desvio do corpo de cima (x), as botas ficam
 DUR = S.DUR * 2
 def luvas(im):
