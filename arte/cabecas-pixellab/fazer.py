@@ -44,7 +44,8 @@ def main():
             pasta = os.path.join(AQUI, 'variantes', f'{c["n"]:02d}')
             if 'status: completed' in mcp('get_character', {'character_id': c['state_id']}) and baixar(c['state_id'], pasta):
                 comparar(pasta, base); fim(lst, c, pasta)
-    nxt = next((c for c in lst['cabecas'] if c['estado'] == 'por fazer'), None)
+    nxt = next((c for c in lst['cabecas'] if c['estado'] == 'por fazer'), None) \
+          or next((c for c in lst['cabecas'] if c['estado'] == 'repetir'), None)
     if not nxt: print('TUDO FEITO'); return
     base = os.path.join(AQUI, 'variantes', '00-corpo-base')
     if not os.path.exists(os.path.join(base, 'south.png')): baixar(lst['corpo_base'], base)
