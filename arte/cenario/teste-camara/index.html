@@ -250,7 +250,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   // filas: em cada lado do ringue, viradas para o ringue
   [['f', 0], ['e', Math.PI / 2], ['d', -Math.PI / 2], ['n', Math.PI]].forEach(function (L) {
     var filas = L[0] === 'n' ? 2 : 3;
-    for (var f = 0; f < filas; f++) {
+    for (var f = (L[0] === 'e' || L[0] === 'd') ? 1 : 0; f < filas; f++) {   // nos lados, a fila junto ao ringue fica livre
       var d = (L[0] === 'n' ? 6.3 : 5.4) + f * 0.85, cor = CORES[Math.floor(rnd() * 4)];
       for (var k = -6.5; k <= 6.5; k += 0.6) {
         var x, z;
