@@ -83,13 +83,13 @@ def fontes():
     """cabeças de frente (vista 1) e de costas (vista 6) das cabeças que já existem"""
     f = []
     base = os.path.join(CAB, 'variantes', '00-corpo-base')
-    f.append((Image.open(os.path.join(base, 'south-west.png')).convert('RGBA'), Image.open(os.path.join(base, 'north.png')).convert('RGBA')))
+    f.append((Image.open(os.path.join(base, 'south-west.png')).convert('RGBA'), Image.open(os.path.join(base, 'north.png')).convert('RGBA'), Image.open(os.path.join(base, 'east.png')).convert('RGBA')))
     v1 = os.path.join(CAB, 'variantes', '01')
     if os.path.exists(os.path.join(v1, 'south-west.png')):
-        f.append((Image.open(os.path.join(v1, 'south-west.png')).convert('RGBA'), Image.open(os.path.join(v1, 'north.png')).convert('RGBA')))
-    for n in (1, 4, 5, 7):                                    # a, c, e, b (os GIFs da PixelLab)
+        f.append((Image.open(os.path.join(v1, 'south-west.png')).convert('RGBA'), Image.open(os.path.join(v1, 'north.png')).convert('RGBA'), Image.open(os.path.join(v1, 'east.png')).convert('RGBA')))
+    for n in (1, 4, 7):                                       # a, c, b (os GIFs da PixelLab; a das tranças saiu)
         if os.path.exists(f'{GIFS}{n}.gif'):
-            fr = frames_gif(n); f.append((fr[7], fr[4]))
+            fr = frames_gif(n); f.append((fr[7], fr[4], fr[2]))
     return f
 ROUPA = [((236, 72, 64), (200, 40, 40), (140, 26, 34)), ((92, 140, 230), (50, 96, 196), (30, 56, 130)),
          ((240, 238, 230), (205, 202, 192), (150, 146, 140)), ((90, 90, 100), (60, 60, 70), (36, 36, 44)),
@@ -168,13 +168,65 @@ def bracos_no_ar(pele, roupa):
             q = (x + a, y + b)
             if q not in m and 0 <= q[0] < W and 0 <= q[1] < H: px[q] = OUT + (255,)
     return im
-def fa(fonte, pose, costas, roupa, calca):
-    frente, tras = fonte
+def corpo_lado(roupa, calca, pele):
+    """sentado de perfil, virado para a direita: tronco estreito, braço à frente, coxas para a frente"""
+    m = {}
+    def put(x, y, parte): m[(x, y)] = parte
+    for y in range(20, 23):
+        for x in range(12, 16): put(x, y, 'pele')
+    for y in range(22, 35):
+        for x in range(10, 18): put(x, y, 'roupa')
+    for y in range(33, 37):
+        for x in range(10, 23): put(x, y, 'calca')
+    for y in range(23, 30):                                   # braço ao longo do tronco
+        for x in range(13, 17): put(x, y, 'braco' if y < 26 else 'pele')
+    for y in range(29, 32):                                   # antebraço para a frente, mão no joelho
+        for x in range(15, 22): put(x, y, 'pele')
+    im = Image.new('RGBA', (W, H)); px = im.load()
+    rampas = {'pele': pele, 'roupa': roupa, 'calca': calca, 'braco': roupa}
+    for (x, y), parte in m.items():
+        r = rampas[parte]
+        t = 1
+        if parte in ('roupa', 'calca') and x <= 11: t = 0
+        if parte in ('roupa', 'calca') and x >= 16: t = 2
+        if parte == 'braco': t = 0 if x == 13 else 1
+        if parte == 'pele' and y >= 29: t = 0 if y == 29 else (2 if y == 31 else 1)
+        px[x, y] = r[t] + (255,)
+    for (x, y) in m:                                          # braço separado do tronco por uma linha escura
+        if m[(x, y)] in ('braco', 'pele') and m.get((x - 1, y)) == 'roupa' and 23 <= y < 29: px[x - 1, y] = roupa[2] + (255,)
+    for (x, y) in list(m):
+        for a, b in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+            q = (x + a, y + b)
+            if q not in m and 0 <= q[0] < W and 0 <= q[1] < H and not px[q][3]: px[q] = OUT + (255,)
+    return im
+def limpa(im):
+    """tapa buracos de 1 píxel e tira pontos pretos soltos"""
+    px = im.load()
+    for _ in range(2):
+        for y in range(1, H - 1):
+            for x in range(1, W - 1):
+                n4 = [px[x - 1, y], px[x + 1, y], px[x, y - 1], px[x, y + 1]]
+                cheios = [q for q in n4 if q[3]]
+                if not px[x, y][3] and len(cheios) >= 3:
+                    claros = [q for q in cheios if sum(q[:3]) >= 60]
+                    px[x, y] = (min(claros, key=lambda q: sum(q[:3])) if claros else cheios[0])
+                elif px[x, y][3] and sum(px[x, y][:3]) < 60:
+                    viz = sum(1 for a in (-1, 0, 1) for b in (-1, 0, 1) if (a or b) and px[x + a, y + b][3])
+                    if viz <= 2: px[x, y] = (0, 0, 0, 0)
+    return im
+def fa(fonte, pose, costas, roupa, calca, lado=None):
+    frente, tras, perfil = fonte
+    if lado:                                                  # 'dir' ou 'esq' (o da esquerda é o espelho)
+        head, rampa, hh = cabeca(perfil)
+        im = corpo_lado(roupa, calca, rampa)
+        im.alpha_composite(head, (0, 21 - hh))
+        im = limpa(im)
+        return im.transpose(Image.FLIP_LEFT_RIGHT) if lado == 'esq' else im
     head, rampa, hh = cabeca(tras if costas else frente)
     im = corpo(pose, costas, roupa, calca, rampa)
     im.alpha_composite(head, (0, 21 - hh))                    # primeiro a camisola e o pescoço, depois a cabeça recortada por cima
     if pose == 'bracos': im.alpha_composite(bracos_no_ar(rampa, roupa))
-    return im
+    return limpa(im)
 if __name__ == '__main__':
     F = fontes(); print('cabeças:', len(F))
     random.seed(3)
