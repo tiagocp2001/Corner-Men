@@ -11,7 +11,7 @@
 }
 html, body { height: 100%; }
 body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font-size: 18px; overflow: hidden; }
-.app { height: 100%; display: flex; flex-direction: column; max-width: 480px; margin: 0 auto;
+.app { height: 100vh; height: 100dvh; max-height: 100%; display: flex; flex-direction: column; max-width: 480px; margin: 0 auto;
   padding-left: max(0px, env(safe-area-inset-left, 0px)); padding-right: max(0px, env(safe-area-inset-right, 0px)); }
 .placard { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; padding: 8px 12px;
   background: var(--panel); border-bottom: 2px solid var(--line); font-family: var(--f-title); font-size: 11px; }
@@ -42,13 +42,12 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   </div>
   <div class="stage"><canvas id="cv"></canvas><div class="tag" id="tag">AMADOR · PAVILHÃO MUNICIPAL</div></div>
   <div class="desk">
-    <div class="line" id="desc"><b>CÂMARA D</b>…</div>
+    <div class="line" id="desc"><b>CÂMARA TV</b>…</div>
     <div class="ctrl">
-      <button id="camA" type="button">Câmara A</button>
-      <button id="camB" type="button">Câmara B</button>
-      <button id="camC" type="button">Câmara C</button>
-      <button id="camD" type="button" aria-pressed="true">Câmara D</button>
-      <button id="roda" type="button">Andar à volta</button>
+      <button id="camTV" type="button" aria-pressed="true">Câmara TV</button>
+      <button id="camD" type="button">Ringue todo</button>
+      <button id="camE" type="button">Cenário</button>
+      <button id="roda" type="button" aria-pressed="true">Mexer</button>
     </div>
   </div>
 </div>
@@ -58,12 +57,11 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
 (function () {
   // ---------- câmaras a comparar (todas do nosso lado do ringue, como a câmara principal da TV) ----------
   var CAMS = {
-    A: { el: 20, dist: 8.5,  fov: 42, txt: 'Baixa e perto (20°). Bonecos grandes; a câmara segue-os e não se vê o ringue todo.' },
-    B: { el: 30, dist: 11.5, fov: 40, txt: 'Média (30°). Ringue quase todo, bonecos ainda grandes. Ângulo perto do dos bonecos.' },
-    C: { el: 42, dist: 15,   fov: 38, txt: 'Alta e longe (42°). Ringue todo e público; bonecos mais pequenos.' },
-    D: { el: 25, dist: 16.5, fov: 38, txt: '25°, a ver o ringue todo. Câmara parada ao centro do ringue.' }
+    TV: { el: 25, dist: 16.5, fov: 38, txt: '25°. Aproxima-se quando estão perto um do outro e afasta-se quando vão para as cordas ou se separam.' },
+    D:  { el: 25, dist: 16.5, fov: 38, txt: '25°, parada, a ver o ringue todo.' },
+    E:  { el: 32, dist: 27,   fov: 50, txt: 'Cenário completo: a câmara dá a volta ao pavilhão.' }
   };
-  var cam = 'D', rodar = false;
+  var cam = 'TV', rodar = true;
   var SCALE = 2; // render a metade da resolução para ficar com píxeis grandes como os bonecos
 
   var cv = document.getElementById('cv');
@@ -113,6 +111,15 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     box(2 * R, 0.05, 0.05, col, 0, H + hh, R); box(2 * R, 0.05, 0.05, col, 0, H + hh, -R);
     box(0.05, 0.05, 2 * R, col, R, H + hh, 0); box(0.05, 0.05, 2 * R, col, -R, H + hh, 0);
   });
+  // escadas: no canto vermelho (lado esquerdo) e no canto azul (lado direito), encostadas ao estrado
+  function escada(sx, z) {
+    for (var i = 0; i < 4; i++) {
+      var hh = H * (4 - i) / 4;
+      box(0.38, hh, 1.0, 0x8a8f99, sx * (R + 0.6 + 0.19 + i * 0.38), hh / 2, z);
+    }
+    [-0.5, 0.5].forEach(function (o) { box(1.6, 0.05, 0.05, 0xb8bcc4, sx * (R + 1.35), H + 0.75, z + o); });
+  }
+  escada(-1, R - 0.7); escada(1, -R + 0.7);
   // estrutura de luz por cima do ringue
   [[0, 7, R + 0.4, 2 * R + 0.8, 0.12], [0, 7, -R - 0.4, 2 * R + 0.8, 0.12]].forEach(function (t) { box(t[3], 0.12, 0.12, 0x444448, t[0], t[1], t[2]); });
   [[R + 0.4], [-R - 0.4]].forEach(function (t) { box(0.12, 0.12, 2 * R + 0.8, 0x444448, t[0], 7, 0); });
@@ -201,12 +208,32 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   });
 
   // ---------- câmara e tamanho ----------
-  var alvo = new THREE.Vector3(0, H + 0.9, 0), alvoSuave = alvo.clone();
-  function poeCamara() {
+  var alvo = new THREE.Vector3(0, H + 0.9, 0), alvoSuave = alvo.clone(), dSuave = 16.5, orb = 0;
+  function poeCamara(dt) {
     var c = CAMS[cam], e = c.el * Math.PI / 180;
-    var foco = cam === 'A' ? alvoSuave : cam === 'D' ? new THREE.Vector3(0, H + 0.6, 0) : new THREE.Vector3(alvoSuave.x * 0.4, H + 0.9, alvoSuave.z * 0.4);
     camera.fov = c.fov;
-    camera.position.set(foco.x, foco.y + Math.sin(e) * c.dist, foco.z + Math.cos(e) * c.dist);
+    scene.fog.far = cam === 'E' ? 80 : 34; scene.fog.near = cam === 'E' ? 30 : 16;
+    if (cam === 'E') {                                   // cenário completo: volta lenta ao pavilhão
+      orb += dt * 0.00012;
+      var hd = Math.cos(e) * c.dist;
+      camera.position.set(Math.sin(orb) * hd, Math.sin(e) * c.dist, Math.cos(orb) * hd);
+      camera.lookAt(0, 1.5, 0); camera.updateProjectionMatrix(); return;
+    }
+    var foco, d;
+    if (cam === 'D') { foco = new THREE.Vector3(0, H + 0.6, 0); d = c.dist; }
+    else {                                               // câmara TV: enquadra os dois com folga
+      var mid = alvoSuave;
+      var W = Math.max(Math.abs(A.pos.x - mid.x), Math.abs(B.pos.x - mid.x)) + 1.2;
+      W = Math.max(W, Math.abs(A.pos.z - B.pos.z) * 0.45 + 1.3);
+      var edge = Math.max(Math.abs(A.pos.x), Math.abs(A.pos.z), Math.abs(B.pos.x), Math.abs(B.pos.z));
+      if (edge > 1.7) W = W + (R + 0.8 - W) * Math.min(1, (edge - 1.7) / 1.0);   // perto das cordas: mostra as cordas
+      var hh = Math.atan(Math.tan(c.fov * Math.PI / 360) * camera.aspect);
+      var want = Math.min(16.5, Math.max(8.5, W / Math.tan(hh)));
+      dSuave += (want - dSuave) * Math.min(1, dt * 0.0025);
+      d = dSuave;
+      foco = new THREE.Vector3(mid.x * 0.75, H + 0.8, mid.z * 0.75);
+    }
+    camera.position.set(foco.x, foco.y + Math.sin(e) * d, foco.z + Math.cos(e) * d);
     camera.lookAt(foco); camera.updateProjectionMatrix();
   }
   function tamanho() {
@@ -218,30 +245,36 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
 
   // ---------- botões ----------
   var desc = document.getElementById('desc');
+  var NOMES = { TV: 'CÂMARA TV', D: 'RINGUE TODO', E: 'CENÁRIO' };
   function escolhe(k) {
     cam = k;
-    ['A', 'B', 'C', 'D'].forEach(function (x) { document.getElementById('cam' + x).setAttribute('aria-pressed', x === k ? 'true' : 'false'); });
-    desc.innerHTML = '<b>CÂMARA ' + k + '</b>' + CAMS[k].txt;
+    ['TV', 'D', 'E'].forEach(function (x) { document.getElementById('cam' + x).setAttribute('aria-pressed', x === k ? 'true' : 'false'); });
+    desc.innerHTML = '<b>' + NOMES[k] + '</b>' + CAMS[k].txt;
   }
-  ['A', 'B', 'C', 'D'].forEach(function (k) { document.getElementById('cam' + k).addEventListener('click', function () { escolhe(k); }); });
+  ['TV', 'D', 'E'].forEach(function (k) { document.getElementById('cam' + k).addEventListener('click', function () { escolhe(k); }); });
   document.getElementById('roda').addEventListener('click', function () {
     rodar = !rodar; this.setAttribute('aria-pressed', rodar ? 'true' : 'false');
   });
-  escolhe('D');
+  escolhe('TV');
 
   // ---------- ciclo ----------
-  var ang = Math.PI * 0.75, last = performance.now();
+  var ang = Math.PI * 0.75, tm = 0, last = performance.now();
   function frame(now) {
     var dt = Math.min(100, now - last); last = now;
-    if (rodar) ang += dt * 0.00025;
-    var rr = 1.25;
-    A.pos.set(Math.cos(ang) * rr, 0, Math.sin(ang) * rr);
-    B.pos.set(-A.pos.x, 0, -A.pos.z);
+    var sep = 2.5, cx = 0, cz = 0;
+    if (rodar) {                                          // andam pelo ringue: aproximam-se, afastam-se, vão às cordas
+      tm += dt; ang += dt * 0.00025;
+      sep = 2.3 + 0.9 * Math.sin(tm * 0.0007);
+      cx = 1.6 * Math.sin(tm * 0.00031); cz = 1.1 * Math.sin(tm * 0.00047 + 1);
+    }
+    var ox = Math.cos(ang) * sep / 2, oz = Math.sin(ang) * sep / 2, lim = R - 0.45;
+    A.pos.set(Math.max(-lim, Math.min(lim, cx + ox)), 0, Math.max(-lim, Math.min(lim, cz + oz)));
+    B.pos.set(Math.max(-lim, Math.min(lim, cx - ox)), 0, Math.max(-lim, Math.min(lim, cz - oz)));
     A.face.set(B.pos.x - A.pos.x, B.pos.z - A.pos.z).normalize();
     B.face.set(-A.face.x, -A.face.y);
     alvo.set((A.pos.x + B.pos.x) / 2, H + 0.9, (A.pos.z + B.pos.z) / 2);
-    alvoSuave.lerp(alvo, 0.08);
-    poeCamara();
+    alvoSuave.lerp(alvo, Math.min(1, dt * 0.004));
+    poeCamara(dt);
     poeLutador(A, dt); poeLutador(B, dt);
     fans.forEach(function (F) {
       if (F.fixo) return;
