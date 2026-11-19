@@ -288,7 +288,9 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
       camera.lookAt(0, 1.5, 0); camera.updateProjectionMatrix(); return;
     }
     var foco, d;
-    if (cam === 'D') { foco = new THREE.Vector3(0, H + 0.6, 0); d = c.dist; }
+    var hh0 = Math.atan(Math.tan(c.fov * Math.PI / 360) * camera.aspect);
+    var dLonge = (R + 2.2) / Math.tan(hh0);               // distância que mostra o ringue todo com folga, em qualquer ecrã
+    if (cam === 'D') { foco = new THREE.Vector3(0, H + 0.6, 0); d = dLonge; }
     else {                                               // câmara TV: enquadra os dois com folga
       var mid = alvoSuave;
       var W = Math.max(Math.abs(A.pos.x - mid.x), Math.abs(B.pos.x - mid.x)) + 1.2;
@@ -296,7 +298,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
       var edge = Math.max(Math.abs(A.pos.x), Math.abs(A.pos.z), Math.abs(B.pos.x), Math.abs(B.pos.z));
       if (edge > 1.7) W = W + (R + 0.8 - W) * Math.min(1, (edge - 1.7) / 1.0);   // perto das cordas: mostra as cordas
       var hh = Math.atan(Math.tan(c.fov * Math.PI / 360) * camera.aspect);
-      var want = Math.min(16.5, Math.max(8.5, W / Math.tan(hh)));
+      var want = Math.min(dLonge, Math.max(8.5, W / Math.tan(hh)));
       dSuave += (want - dSuave) * Math.min(1, dt * 0.0025);
       d = dSuave;
       foco = new THREE.Vector3(mid.x * 0.75, H + 0.8, mid.z * 0.75);
