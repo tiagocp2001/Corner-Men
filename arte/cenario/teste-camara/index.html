@@ -42,11 +42,12 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   </div>
   <div class="stage"><canvas id="cv"></canvas><div class="tag" id="tag">AMADOR · PAVILHÃO MUNICIPAL</div></div>
   <div class="desk">
-    <div class="line" id="desc"><b>CÂMARA B</b>…</div>
+    <div class="line" id="desc"><b>CÂMARA D</b>…</div>
     <div class="ctrl">
       <button id="camA" type="button">Câmara A</button>
-      <button id="camB" type="button" aria-pressed="true">Câmara B</button>
+      <button id="camB" type="button">Câmara B</button>
       <button id="camC" type="button">Câmara C</button>
+      <button id="camD" type="button" aria-pressed="true">Câmara D</button>
       <button id="roda" type="button">Andar à volta</button>
     </div>
   </div>
@@ -59,9 +60,10 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   var CAMS = {
     A: { el: 20, dist: 8.5,  fov: 42, txt: 'Baixa e perto (20°). Bonecos grandes; a câmara segue-os e não se vê o ringue todo.' },
     B: { el: 30, dist: 11.5, fov: 40, txt: 'Média (30°). Ringue quase todo, bonecos ainda grandes. Ângulo perto do dos bonecos.' },
-    C: { el: 42, dist: 15,   fov: 38, txt: 'Alta e longe (42°). Ringue todo e público; bonecos mais pequenos.' }
+    C: { el: 42, dist: 15,   fov: 38, txt: 'Alta e longe (42°). Ringue todo e público; bonecos mais pequenos.' },
+    D: { el: 25, dist: 16.5, fov: 38, txt: '25°, a ver o ringue todo. Câmara parada ao centro do ringue.' }
   };
-  var cam = 'B', rodar = false;
+  var cam = 'D', rodar = false;
   var SCALE = 2; // render a metade da resolução para ficar com píxeis grandes como os bonecos
 
   var cv = document.getElementById('cv');
@@ -202,7 +204,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   var alvo = new THREE.Vector3(0, H + 0.9, 0), alvoSuave = alvo.clone();
   function poeCamara() {
     var c = CAMS[cam], e = c.el * Math.PI / 180;
-    var foco = cam === 'A' ? alvoSuave : new THREE.Vector3(alvoSuave.x * 0.4, H + 0.9, alvoSuave.z * 0.4);
+    var foco = cam === 'A' ? alvoSuave : cam === 'D' ? new THREE.Vector3(0, H + 0.6, 0) : new THREE.Vector3(alvoSuave.x * 0.4, H + 0.9, alvoSuave.z * 0.4);
     camera.fov = c.fov;
     camera.position.set(foco.x, foco.y + Math.sin(e) * c.dist, foco.z + Math.cos(e) * c.dist);
     camera.lookAt(foco); camera.updateProjectionMatrix();
@@ -218,14 +220,14 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   var desc = document.getElementById('desc');
   function escolhe(k) {
     cam = k;
-    ['A', 'B', 'C'].forEach(function (x) { document.getElementById('cam' + x).setAttribute('aria-pressed', x === k ? 'true' : 'false'); });
+    ['A', 'B', 'C', 'D'].forEach(function (x) { document.getElementById('cam' + x).setAttribute('aria-pressed', x === k ? 'true' : 'false'); });
     desc.innerHTML = '<b>CÂMARA ' + k + '</b>' + CAMS[k].txt;
   }
-  ['A', 'B', 'C'].forEach(function (k) { document.getElementById('cam' + k).addEventListener('click', function () { escolhe(k); }); });
+  ['A', 'B', 'C', 'D'].forEach(function (k) { document.getElementById('cam' + k).addEventListener('click', function () { escolhe(k); }); });
   document.getElementById('roda').addEventListener('click', function () {
     rodar = !rodar; this.setAttribute('aria-pressed', rodar ? 'true' : 'false');
   });
-  escolhe('B');
+  escolhe('D');
 
   // ---------- ciclo ----------
   var ang = Math.PI * 0.75, last = performance.now();
