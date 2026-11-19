@@ -228,12 +228,13 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   }
   function poeFan(F) { var row = F.costas ? (F.pose === 1 ? 4 : 3) : F.pose; F.t.offset.set(F.v / 32, 1 - (row + 1) / 5); }
   // corredores das portas dos balneários até às escadas (sem cadeiras)
-  var CORR = [[[-4.4, 4.4], [-7.5, 4.4]], [[-7.5, 4.4], [-9, -HZ]], [[4.4, -4.4], [9, -HZ]]];
+  // vermelho: da escada sai a direito para a esquerda, a cortar as filas, e sobe por trás delas até à porta
+  var CORR = [[[-4.4, 4.4], [-8.6, 4.4]], [[-8.6, 4.4], [-9, -HZ]], [[4.4, -4.4], [9, -HZ]]];
   function noCorredor(x, z) {
     return CORR.some(function (c) {
       var ax = c[0][0], az = c[0][1], bx = c[1][0], bz = c[1][1], dx = bx - ax, dz = bz - az;
       var t = Math.max(0, Math.min(1, ((x - ax) * dx + (z - az) * dz) / (dx * dx + dz * dz)));
-      return Math.hypot(x - ax - t * dx, z - az - t * dz) < 1.0;
+      return Math.hypot(x - ax - t * dx, z - az - t * dz) < 1.1;
     });
   }
   var CORES = [0x2f62b0, 0xc8382e, 0xe8e6df, 0x2f62b0];
