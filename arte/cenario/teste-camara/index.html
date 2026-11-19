@@ -44,8 +44,8 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   <div class="desk">
     <div class="line" id="desc"><b>TV TRIPÉ</b>…</div>
     <div class="ctrl">
-      <button id="camTV" type="button" aria-pressed="true">TV tripé</button>
-      <button id="camD" type="button">Ringue todo</button>
+      <button id="camD" type="button" aria-pressed="true">Ringue todo</button>
+      <button id="camTV" type="button">TV tripé</button>
       <button id="camE" type="button">Cenário</button>
       <button id="roda" type="button" aria-pressed="true">Mexer</button>
     </div>
@@ -61,11 +61,11 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     D:  { el: 25, dist: 16.5, fov: 38, txt: '25°, parada, a ver o ringue todo.' },
     E:  { el: 34, dist: 30,   fov: 46, txt: 'Cenário completo, visto do nosso lado: o ringue, o público, as portas dos balneários ao fundo.' }
   };
-  var cam = 'TV', rodar = true;
-  var SCALE = 2; // render a metade da resolução para ficar com píxeis grandes como os bonecos
+  var cam = 'D', rodar = true;
+  var SCALE = 1 / Math.min(3, window.devicePixelRatio || 1); // resolução total do ecrã (nítido); os bonecos continuam em pixel art
 
   var cv = document.getElementById('cv');
-  var renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: false });
+  var renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: true });
   renderer.setPixelRatio(1);
   var scene = new THREE.Scene();
   scene.background = new THREE.Color(0x16181c);
@@ -90,7 +90,9 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     p.position.set(x, y, z); p.rotation.y = ry; scene.add(p); return p;
   }
   function letreiro(txt, w, h, fundo, cor, px) {   // texto pintado num canvas (placas e faixas)
-    var c = document.createElement('canvas'); c.width = w; c.height = h; var g = c.getContext('2d');
+    var K = 4;                                       // desenha 4x maior para as letras ficarem nítidas
+    var c = document.createElement('canvas'); c.width = w * K; c.height = h * K; var g = c.getContext('2d');
+    g.scale(K, K);
     g.fillStyle = fundo; g.fillRect(0, 0, w, h); g.fillStyle = cor;
     g.font = 'bold ' + (px || Math.round(h * 0.6)) + 'px monospace'; g.textAlign = 'center'; g.textBaseline = 'middle';
     g.fillText(txt, w / 2, h / 2 + 1);
@@ -320,7 +322,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   document.getElementById('roda').addEventListener('click', function () {
     rodar = !rodar; this.setAttribute('aria-pressed', rodar ? 'true' : 'false');
   });
-  escolhe('TV');
+  escolhe('D');
 
   // ---------- ciclo ----------
   var ang = Math.PI * 0.75, tm = 0, last = performance.now();
