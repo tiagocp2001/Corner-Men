@@ -59,16 +59,16 @@ def cabeca(im):
         else:                                   # ao lado do pescoço: desce enquanto houver cara, sem entrar nos ombros
             y = top
             while y < h and not ok(x, y) and y < rn: y += 1
-            while y + 1 <= rn + 1 and ok(x, y + 1): y += 1
-            lim[x] = min(y, rn + 1)
-    out = Image.new('RGBA', (W, rn - top + 3)); po = out.load()
+            while y + 1 <= rn + 2 and ok(x, y + 1): y += 1
+            lim[x] = min(y, rn + 2)
+    out = Image.new('RGBA', (W, rn - top + 4)); po = out.load()
     for x in range(w):
         X = x - cx + W // 2
         if not 0 <= X < W: continue
         for y in range(top, lim[x] + 1):
             if ok(x, y): po[X, y - top] = px[x, y]
     # restos soltos dos ombros ao lado do pescoço (linhas finas fora da cara) saem
-    for yy in range(max(0, rn - top - 1), out.size[1]):
+    for yy in range(rn - top + 1, out.size[1]):
         for X in range(W):
             if not po[X, yy][3]: continue
             viz = sum(1 for a in (-1, 0, 1) for b in (-1, 0, 1) if (a or b) and 0 <= X + a < W and 0 <= yy + b < out.size[1] and po[X + a, yy + b][3])
@@ -83,13 +83,13 @@ def fontes():
     """cabeças de frente (vista 1) e de costas (vista 6) das cabeças que já existem"""
     f = []
     base = os.path.join(CAB, 'variantes', '00-corpo-base')
-    f.append((Image.open(os.path.join(base, 'south-west.png')).convert('RGBA'), Image.open(os.path.join(base, 'north.png')).convert('RGBA'), Image.open(os.path.join(base, 'east.png')).convert('RGBA')))
+    f.append((Image.open(os.path.join(base, 'south-west.png')).convert('RGBA'), Image.open(os.path.join(base, 'north.png')).convert('RGBA'), Image.open(os.path.join(base, 'south.png')).convert('RGBA'), Image.open(os.path.join(base, 'west.png')).convert('RGBA')))
     v1 = os.path.join(CAB, 'variantes', '01')
     if os.path.exists(os.path.join(v1, 'south-west.png')):
-        f.append((Image.open(os.path.join(v1, 'south-west.png')).convert('RGBA'), Image.open(os.path.join(v1, 'north.png')).convert('RGBA'), Image.open(os.path.join(v1, 'east.png')).convert('RGBA')))
+        f.append((Image.open(os.path.join(v1, 'south-west.png')).convert('RGBA'), Image.open(os.path.join(v1, 'north.png')).convert('RGBA'), Image.open(os.path.join(v1, 'south.png')).convert('RGBA'), Image.open(os.path.join(v1, 'west.png')).convert('RGBA')))
     for n in (1, 4, 7):                                       # a, c, b (os GIFs da PixelLab; a das tranças saiu)
         if os.path.exists(f'{GIFS}{n}.gif'):
-            fr = frames_gif(n); f.append((fr[7], fr[4], fr[2]))
+            fr = frames_gif(n); f.append((fr[7], fr[4], fr[0], fr[6]))
     return f
 ROUPA = [((236, 72, 64), (200, 40, 40), (140, 26, 34)), ((92, 140, 230), (50, 96, 196), (30, 56, 130)),
          ((240, 238, 230), (205, 202, 192), (150, 146, 140)), ((90, 90, 100), (60, 60, 70), (36, 36, 44)),
@@ -212,17 +212,13 @@ def limpa(im):
                     px[x, y] = (min(claros, key=lambda q: sum(q[:3])) if claros else cheios[0])
                 elif px[x, y][3] and sum(px[x, y][:3]) < 60:
                     viz = sum(1 for a in (-1, 0, 1) for b in (-1, 0, 1) if (a or b) and px[x + a, y + b][3])
-                    if viz <= 2: px[x, y] = (0, 0, 0, 0)
+                    if viz <= 1: px[x, y] = (0, 0, 0, 0)
     return im
 def fa(fonte, pose, costas, roupa, calca, lado=None):
-    frente, tras, perfil = fonte
-    if lado:                                                  # 'dir' ou 'esq' (o da esquerda é o espelho)
-        head, rampa, hh = cabeca(perfil)
-        im = corpo_lado(roupa, calca, rampa)
-        im.alpha_composite(head, (0, 21 - hh))
-        im = limpa(im)
-        return im.transpose(Image.FLIP_LEFT_RIGHT) if lado == 'esq' else im
-    head, rampa, hh = cabeca(tras if costas else frente)
+    frente, tras, dir34, esq34 = fonte
+    # de lado: a cabeça a 3/4 (vistas 2 e 8), virada para o ringue; de perfil as luvas tapam o queixo dos atletas
+    src = (dir34 if lado == 'dir' else esq34) if lado else (tras if costas else frente)
+    head, rampa, hh = cabeca(src)
     im = corpo(pose, costas, roupa, calca, rampa)
     im.alpha_composite(head, (0, 21 - hh))                    # primeiro a camisola e o pescoço, depois a cabeça recortada por cima
     if pose == 'bracos': im.alpha_composite(bracos_no_ar(rampa, roupa))
