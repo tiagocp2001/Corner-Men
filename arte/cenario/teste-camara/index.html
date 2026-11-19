@@ -40,7 +40,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     <div class="clock">R1<br>2:14</div>
     <div class="b">K. ADEBAYO<div class="bar"><i></i></div></div>
   </div>
-  <div class="stage"><canvas id="cv"></canvas><div class="tag" id="tag">AMADOR · PAVILHÃO MUNICIPAL</div></div>
+  <div class="stage"><canvas id="cv"></canvas><div class="tag" id="tag">AMADOR · PAVILHÃO DESPORTIVO MUNICIPAL</div></div>
   <div class="desk">
     <div class="line" id="desc"><b>CÂMARA TV</b>…</div>
     <div class="ctrl">
@@ -68,14 +68,12 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   var renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: false });
   renderer.setPixelRatio(1);
   var scene = new THREE.Scene();
-  scene.background = new THREE.Color(0x0d0b10);
-  scene.fog = new THREE.Fog(0x0d0b10, 16, 34);
-  var camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+  scene.background = new THREE.Color(0x16181c);
+  scene.fog = new THREE.Fog(0x16181c, 40, 90);
+  var camera = new THREE.PerspectiveCamera(40, 1, 0.1, 120);
 
-  // ---------- luz: pavilhão de amadores (luzes acesas, ringue mais claro) ----------
-  scene.add(new THREE.HemisphereLight(0x9aa0b4, 0x2a2018, 0.55));
-  var spot = new THREE.SpotLight(0xfff1d6, 1.4, 30, Math.PI / 4.2, 0.5, 1);
-  spot.position.set(0, 9, 0); spot.target.position.set(0, 1, 0); scene.add(spot); scene.add(spot.target);
+  // ---------- luz: pavilhão municipal, luzes do teto a iluminar tudo por igual ----------
+  scene.add(new THREE.HemisphereLight(0xe8eef8, 0x5a4a38, 0.95));
   var dir = new THREE.DirectionalLight(0xffffff, 0.35); dir.position.set(-4, 10, 6); scene.add(dir);
 
   function box(w, h, d, color, x, y, z, emiss) {
@@ -83,23 +81,75 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     if (emiss) m.emissive = new THREE.Color(emiss);
     var b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); b.position.set(x, y, z); scene.add(b); return b;
   }
+  function chao(w, d, color, x, z, y) {         // faixa pintada no chão
+    var p = new THREE.Mesh(new THREE.PlaneGeometry(w, d), new THREE.MeshBasicMaterial({ color: color }));
+    p.rotation.x = -Math.PI / 2; p.position.set(x, y || 0.01, z); scene.add(p); return p;
+  }
+  function parede(w, h, color, x, y, z, ry, mat) { // plano virado para dentro (de fora não se vê)
+    var p = new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat || new THREE.MeshLambertMaterial({ color: color }));
+    p.position.set(x, y, z); p.rotation.y = ry; scene.add(p); return p;
+  }
+  function letreiro(txt, w, h, fundo, cor, px) {   // texto pintado num canvas (placas e faixas)
+    var c = document.createElement('canvas'); c.width = w; c.height = h; var g = c.getContext('2d');
+    g.fillStyle = fundo; g.fillRect(0, 0, w, h); g.fillStyle = cor;
+    g.font = 'bold ' + (px || Math.round(h * 0.6)) + 'px monospace'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillText(txt, w / 2, h / 2 + 1);
+    var t = new THREE.CanvasTexture(c); t.magFilter = THREE.NearestFilter; t.minFilter = THREE.NearestFilter;
+    return new THREE.MeshBasicMaterial({ map: t });
+  }
 
-  // ---------- pavilhão ----------
-  var floor = new THREE.Mesh(new THREE.PlaneGeometry(60, 60), new THREE.MeshLambertMaterial({ color: 0x6b4a2e }));
-  floor.rotation.x = -Math.PI / 2; scene.add(floor);
-  // linhas do campo de pavilhão (pintadas no chão)
-  [[-10, 0, 0.12, 20], [10, 0, 0.12, 20], [0, -10, 20, 0.12]].forEach(function (l) {
-    var p = new THREE.Mesh(new THREE.PlaneGeometry(l[2], l[3]), new THREE.MeshBasicMaterial({ color: 0xc9b27a }));
-    p.rotation.x = -Math.PI / 2; p.position.set(l[0], 0.01, l[1]); scene.add(p);
+  // ---------- pavilhão desportivo municipal (28 x 40 m) ----------
+  var HX = 14, HZ = 20, HT = 10;
+  chao(2 * HX, 2 * HZ, 0xb98a55, 0, 0, 0);                         // piso de madeira
+  // linhas do futsal (brancas) e do basquete (amarelas)
+  [[20, 0.1, 0, -18], [20, 0.1, 0, 18], [0.1, 36, -10, 0], [0.1, 36, 10, 0], [20, 0.1, 0, 0]].forEach(function (l) { chao(l[0], l[1], 0xf2efe6, l[2], l[3], 0.012); });
+  var circ = new THREE.Mesh(new THREE.RingGeometry(2.9, 3.0, 40), new THREE.MeshBasicMaterial({ color: 0xf2efe6 }));
+  circ.rotation.x = -Math.PI / 2; circ.position.y = 0.012; scene.add(circ);
+  [-1, 1].forEach(function (s) {
+    chao(4.9, 0.08, 0xe0b02a, 0, s * 12.2, 0.013); chao(0.08, 5.8, 0xe0b02a, -2.45, s * 15.1, 0.013); chao(0.08, 5.8, 0xe0b02a, 2.45, s * 15.1, 0.013);
   });
-  box(60, 14, 0.5, 0x2c3a44, 0, 7, -18);          // parede do fundo
-  box(0.5, 14, 60, 0x283640, -18, 7, 0);          // paredes dos lados
-  box(0.5, 14, 60, 0x283640, 18, 7, 0);
-  box(10, 2.2, 0.2, 0x1a2a20, 0, 8.6, -17.6, 0x0c2a14); // placard do pavilhão
+  // paredes: meio-muro verde em baixo, creme em cima
+  [[2 * HX, 0, -HZ, 0], [2 * HX, 0, HZ, Math.PI], [2 * HZ, -HX, 0, Math.PI / 2], [2 * HZ, HX, 0, -Math.PI / 2]].forEach(function (w) {
+    parede(w[0], 2.5, 0x2f6b55, w[1], 1.25, w[2], w[3]);
+    parede(w[0], HT - 2.5, 0xd8cfb3, w[1], 2.5 + (HT - 2.5) / 2, w[2], w[3]);
+  });
+  var teto = new THREE.Mesh(new THREE.PlaneGeometry(2 * HX, 2 * HZ), new THREE.MeshLambertMaterial({ color: 0x5b5f66 }));
+  teto.rotation.x = Math.PI / 2; teto.position.y = HT; scene.add(teto);
+  // janelas altas nas paredes dos lados
+  for (var zz = -16; zz <= 16; zz += 4) {
+    parede(2.6, 1.3, 0, -HX + 0.02, 7.6, zz, Math.PI / 2, new THREE.MeshBasicMaterial({ color: 0x9fc3d8 }));
+    parede(2.6, 1.3, 0, HX - 0.02, 7.6, zz, -Math.PI / 2, new THREE.MeshBasicMaterial({ color: 0x9fc3d8 }));
+  }
+  // luzes fluorescentes do teto
+  for (var lx = -9; lx <= 9; lx += 4.5) for (var lz = -16; lz <= 16; lz += 5.3) box(2.2, 0.12, 0.35, 0xffffff, lx, HT - 0.4, lz, 0xf4f6ff);
+  // espaldares de ginástica na parede da direita
+  for (var ez = -14; ez <= -4; ez += 1.1) {
+    box(0.08, 2.6, 0.08, 0x9b6a3a, HX - 0.15, 1.3, ez); box(0.08, 2.6, 0.08, 0x9b6a3a, HX - 0.15, 1.3, ez + 0.9);
+    for (var ey = 0.3; ey < 2.6; ey += 0.28) box(0.05, 0.05, 0.9, 0xb98050, HX - 0.15, ey, ez + 0.45);
+  }
+  // tabelas de basquete levantadas nas paredes do fundo e da frente
+  [-1, 1].forEach(function (s) {
+    box(1.8, 1.05, 0.06, 0xf4f4f4, 0, 5.2, s * (HZ - 0.4)); box(0.6, 0.45, 0.07, 0xd84a2a, 0, 5.0, s * (HZ - 0.42));
+    box(0.1, 0.1, 1.2, 0x666666, 0, 5.8, s * (HZ - 0.9));
+  });
+  // balizas de futsal arrumadas no canto do fundo à esquerda
+  [-12.2, -10.6].forEach(function (gx) {
+    box(0.08, 2, 0.08, 0xf2f2f2, gx, 1, -HZ + 0.6); box(0.08, 2, 0.08, 0xf2f2f2, gx, 1, -HZ + 3.6); box(0.08, 0.08, 3, 0xf2f2f2, gx, 2, -HZ + 2.1);
+  });
+  // placard eletrónico e faixa do clube na parede do fundo
+  parede(4, 1.6, 0, 6, 6.3, -HZ + 0.03, 0, letreiro('CASA 0  0 VISIT', 160, 64, '#101210', '#ff4a2a', 22));
+  parede(9, 1.1, 0, -2, 3.2, -HZ + 0.03, 0, letreiro('C.B. DO BAIRRO · NOITE DE BOXE AMADOR', 360, 44, '#f3efe2', '#1d3f8a', 14));
+  // portas dos balneários: a do canto vermelho na parede da esquerda, a do canto azul no fundo à direita
+  var PORTAS = [[-HX + 0.03, 9, Math.PI / 2], [9, -HZ + 0.03, 0]];
+  PORTAS.forEach(function (p) {
+    parede(1.8, 2.3, 0x6a4a30, p[0], 1.15, p[1], p[2]);
+    var sx = p[2] ? 0.04 : 0, sz = p[2] ? 0 : 0.04;
+    parede(2.2, 0.45, 0, p[0] + sx, 2.65, p[1] + sz, p[2], letreiro('BALNEÁRIOS', 120, 24, '#1d4f9a', '#ffffff', 15));
+  });
 
-  // ---------- ringue (6,1 m por dentro; estrado a 1 m) ----------
-  var R = 3.05, H = 1.0;
-  box(2 * R + 1.2, H, 2 * R + 1.2, 0x1d2b5a, 0, H / 2, 0);          // estrado (saia azul)
+  // ---------- ringue montado para o evento (6,1 m por dentro; estrado a 0,8 m) ----------
+  var R = 3.05, H = 0.8;
+  box(2 * R + 1.2, H, 2 * R + 1.2, 0x2a2b31, 0, H / 2, 0);          // estrado (saia escura)
   var lona = box(2 * R + 1.0, 0.04, 2 * R + 1.0, 0xc8ccd6, 0, H + 0.02, 0); // lona
   var corners = [[-R, R, 0xd8342c], [R, -R, 0x2f6fd6], [R, R, 0xeeeeee], [-R, -R, 0xeeeeee]]; // vermelho à frente-esq., azul ao fundo-dir.
   corners.forEach(function (c) {
@@ -114,8 +164,8 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   // escadas: na diagonal, encostadas ao canto vermelho e ao canto azul, sem corrimão
   function escada(cx, cz) {
     var g = new THREE.Group(), m = new THREE.MeshLambertMaterial({ color: 0x8a8f99 });
-    for (var i = 0; i < 4; i++) {
-      var hh = H * (4 - i) / 4, st = new THREE.Mesh(new THREE.BoxGeometry(0.95, hh, 0.36), m);
+    for (var i = 0; i < 3; i++) {
+      var hh = H * (3 - i) / 3, st = new THREE.Mesh(new THREE.BoxGeometry(0.95, hh, 0.36), m);
       st.position.set(0, hh / 2, 0.18 + i * 0.36); g.add(st);
     }
     var out = new THREE.Vector2(cx, cz).normalize();        // sai do canto para fora, na diagonal
@@ -124,10 +174,6 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     scene.add(g);
   }
   escada(-R, R); escada(R, -R);
-  // estrutura de luz por cima do ringue
-  [[0, 7, R + 0.4, 2 * R + 0.8, 0.12], [0, 7, -R - 0.4, 2 * R + 0.8, 0.12]].forEach(function (t) { box(t[3], 0.12, 0.12, 0x444448, t[0], t[1], t[2]); });
-  [[R + 0.4], [-R - 0.4]].forEach(function (t) { box(0.12, 0.12, 2 * R + 0.8, 0x444448, t[0], 7, 0); });
-  [[-2, -2], [2, -2], [-2, 2], [2, 2]].forEach(function (p) { box(0.5, 0.25, 0.5, 0x222222, p[0], 6.85, p[1], 0xfff0c0); });
 
   // ---------- texturas (pixel art) ----------
   var loader = new THREE.TextureLoader();
@@ -169,45 +215,66 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     L.sh.position.set(L.pos.x, H + 0.05, L.pos.z);
   }
 
-  // ---------- fãs nas bancadas (3 lados) e mesa dos juízes ----------
+  // ---------- público: cadeiras de plástico à volta do ringue, uma bancada pequena ao fundo ----------
   var rnd = (function (s) { return function () { s = (s * 16807) % 2147483647; return s / 2147483647; }; })(42);
   var fans = [];
   function fan(x, y, z, costas, tint) {
     var t = TF.clone(); t.needsUpdate = true; t.repeat.set(1 / 32, 1 / 5);
     var v = Math.floor(rnd() * 32);
-    var m = new THREE.SpriteMaterial({ map: t, transparent: true, alphaTest: 0.5, color: tint });
+    var m = new THREE.SpriteMaterial({ map: t, transparent: true, alphaTest: 0.5, color: tint || 0xffffff });
     var s = new THREE.Sprite(m); s.center.set(0.5, 0); s.scale.set(0.62, 0.93, 1); s.position.set(x, y, z); scene.add(s);
     var F = { t: t, v: v, costas: costas, pose: 0, timer: rnd() * 4000 };
     fans.push(F); poeFan(F); return F;
   }
   function poeFan(F) { var row = F.costas ? (F.pose === 1 ? 4 : 3) : F.pose; F.t.offset.set(F.v / 32, 1 - (row + 1) / 5); }
-  function bancada(lado) {
-    for (var row = 0; row < 7; row++) {
-      var d = 7.5 + row * 0.9, h = row * 0.45;
-      var along = 18;
-      // degrau
-      if (lado === 'fundo') box(along, 0.45, 0.9, 0x4a4f5a, 0, h + 0.22, -d);
-      if (lado === 'esq') box(0.9, 0.45, along, 0x4a4f5a, -d, h + 0.22, 0);
-      if (lado === 'dir') box(0.9, 0.45, along, 0x4a4f5a, d, h + 0.22, 0);
-      for (var k = -along / 2 + 0.5; k < along / 2; k += 0.62) {
-        if (rnd() > 0.42) continue;                              // pavilhão de amadores: muitos lugares vazios
-        var shade = 0.95 - row * 0.07, tint = new THREE.Color(shade, shade, shade);
-        if (lado === 'fundo') fan(k, h + 0.45, -d + 0.1, false, tint);
-        if (lado === 'esq') fan(-d + 0.1, h + 0.45, k, false, tint);
-        if (lado === 'dir') fan(d - 0.1, h + 0.45, k, false, tint);
+  // corredores das portas dos balneários até às escadas (sem cadeiras)
+  var CORR = [[[-4.4, 4.4], [-HX, 9]], [[4.4, -4.4], [9, -HZ]]];
+  function noCorredor(x, z) {
+    return CORR.some(function (c) {
+      var ax = c[0][0], az = c[0][1], bx = c[1][0], bz = c[1][1], dx = bx - ax, dz = bz - az;
+      var t = Math.max(0, Math.min(1, ((x - ax) * dx + (z - az) * dz) / (dx * dx + dz * dz)));
+      return Math.hypot(x - ax - t * dx, z - az - t * dz) < 1.0;
+    });
+  }
+  var CORES = [0x2f62b0, 0xc8382e, 0xe8e6df, 0x2f62b0];
+  function cadeira(x, z, ry, cor) {
+    var g = new THREE.Group(), m = new THREE.MeshLambertMaterial({ color: cor });
+    var a = new THREE.Mesh(new THREE.BoxGeometry(0.44, 0.05, 0.42), m); a.position.y = 0.44; g.add(a);
+    var c = new THREE.Mesh(new THREE.BoxGeometry(0.44, 0.42, 0.05), m); c.position.set(0, 0.67, -0.2); g.add(c);
+    var p = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.42, 0.36), new THREE.MeshLambertMaterial({ color: 0x55585e })); p.position.y = 0.21; g.add(p);
+    g.position.set(x, 0, z); g.rotation.y = ry; scene.add(g);
+  }
+  // filas: em cada lado do ringue, viradas para o ringue
+  [['f', 0], ['e', Math.PI / 2], ['d', -Math.PI / 2], ['n', Math.PI]].forEach(function (L) {
+    var filas = L[0] === 'n' ? 2 : 3;
+    for (var f = 0; f < filas; f++) {
+      var d = 5.4 + f * 0.85, cor = CORES[Math.floor(rnd() * 4)];
+      for (var k = -6.5; k <= 6.5; k += 0.6) {
+        var x, z;
+        if (L[0] === 'f') { x = k; z = -d; } else if (L[0] === 'n') { x = k; z = d; }
+        else if (L[0] === 'e') { x = -d; z = k; } else { x = d; z = k; }
+        if (noCorredor(x, z)) continue;
+        cadeira(x, z, L[1], cor);
+        if (rnd() < 0.42) fan(x, 0.47, z + (L[0] === 'n' ? 0.05 : 0), L[0] === 'n');   // do nosso lado vêem-se de costas
       }
     }
+  });
+  // bancada pequena e recolhível só ao fundo
+  for (var row = 0; row < 4; row++) {
+    var d = 10.5 + row * 0.85, h = row * 0.42;
+    box(12, 0.42, 0.85, 0x6b6f78, 0, h + 0.21, -d);
+    for (var k2 = -5.6; k2 <= 5.6; k2 += 0.6) if (rnd() < 0.3) fan(k2, h + 0.42, -d + 0.1, false);
   }
-  bancada('fundo'); bancada('esq'); bancada('dir');
-  // mesas: 5 juízes (amador), cronometrista com gongo e médico
+  // mesas de dobrar com toalha: juízes (5 no amador), cronometrista com gongo e médico
+  function mesa(x, z, w, d) { box(w, 0.04, d, 0xece9e0, x, 0.74, z); box(w - 0.1, 0.7, d - 0.1, 0xd9d5c8, x, 0.37, z); }
   [[0, -R - 1.6, 3], [-R - 1.6, 0, 1], [R + 1.6, 0, 1], [-R - 1.6, -2.2, 1], [R + 1.6, 2.2, 1]].forEach(function (m) {
     var horiz = m[2] > 1;
-    box(horiz ? 3.2 : 0.8, 0.75, horiz ? 0.8 : 1.4, 0x2b2f3a, m[0], 0.38, m[1]);
+    mesa(m[0], m[1], horiz ? 3.2 : 0.8, horiz ? 0.8 : 1.2);
     var n = horiz ? 3 : 1;
     for (var i = 0; i < n; i++) {
       var off = (i - (n - 1) / 2) * 1.0;
       var x = horiz ? m[0] + off : m[0] + (m[0] < 0 ? -0.6 : 0.6), z = horiz ? m[1] - 0.6 : m[1];
-      var F = fan(x, 0.55, z, false, new THREE.Color(0.85, 0.85, 0.85)); F.v = 3; F.fixo = true; poeFan(F);
+      var F = fan(x, 0.45, z, false); F.v = 3; F.fixo = true; poeFan(F);
     }
   });
 
@@ -216,7 +283,6 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   function poeCamara(dt) {
     var c = CAMS[cam], e = c.el * Math.PI / 180;
     camera.fov = c.fov;
-    scene.fog.far = cam === 'E' ? 80 : 34; scene.fog.near = cam === 'E' ? 30 : 16;
     if (cam === 'E') {                                   // cenário completo: volta lenta ao pavilhão
       orb += dt * 0.00012;
       var hd = Math.cos(e) * c.dist;
