@@ -234,3 +234,24 @@ if __name__ == '__main__':
         f = fa(F[fi], pose, costas, ROUPA[ri], CALCA[i % 3])
         out.alpha_composite(f.resize((W*Z, H*Z), Image.NEAREST), (40*Z + 20 + i*48*Z//1, 20*Z))
     out.save(sys.argv[1] if len(sys.argv) > 1 else os.path.join(AQUI, 'amostra.png'))
+
+# ---------- fãs com as caras novas (desenhadas de raiz em caras.py) ----------
+import caras as CR
+VISTAS_FA = [('frente', 'sentado'), ('frente', 'bracos'), ('frente', 'palmas'), ('costas', 'sentado'), ('costas', 'bracos'),
+             ('dir', 'sentado'), ('dir', 'bracos'), ('esq', 'sentado'), ('esq', 'bracos')]
+def fa_novo(d, vista, pose, roupa, calca):
+    f, c, r, l = CR.vistas(d)
+    head = {'frente': f, 'costas': c, 'dir': r, 'esq': l}[vista]
+    im = corpo(pose, vista == 'costas', roupa, calca, d['pele'])
+    im.alpha_composite(head, ((W - CR.W) // 2, 22 - 16))   # o queixo assenta na gola (cara por cima da camisola)
+    if pose == 'bracos': im.alpha_composite(bracos_no_ar(d['pele'], roupa))
+    return limpa(im)
+def atlas_novo(n, seed=7):
+    """atlas: n fãs em colunas; linhas = VISTAS_FA (28x40 cada)"""
+    D = CR.gerar(n, seed); random.seed(seed + 1)
+    out = Image.new('RGBA', (W * n, H * len(VISTAS_FA)))
+    for i, d in enumerate(D):
+        roupa = random.choice(ROUPA); calca = random.choice(CALCA)
+        for r, (v, pose) in enumerate(VISTAS_FA):
+            out.paste(fa_novo(d, v, pose, roupa, calca), (i * W, r * H))
+    return out
