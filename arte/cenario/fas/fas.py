@@ -13,30 +13,71 @@ def lum(p): return .3*p[0] + .59*p[1] + .11*p[2]
 def isred(p): return p[0] > 110 and p[0] > 2.2*p[1] and p[0] > p[2] + 40
 def isskin(p): return p[3] and p[0] > 90 and p[0] > p[2] + 25 and p[0] >= p[1] and p[1] > 0.35*p[0] and not isred(p)
 def cabeca(im):
-    """recorta a cabeça (do topo ao queixo) e devolve-a centrada numa tela de 28 de largura, mais a rampa de pele"""
+    """recorta a cabeça pela forma dela: cabelo, cara e queixo (até à linha do maxilar); pescoço e ombros ficam de fora.
+    Devolve a cabeça numa tela de 28 de largura, a rampa de pele e a linha do pescoço (onde assenta a gola)."""
     px = im.load(); w, h = im.size
+    # luvas = manchas vermelhas grandes (os lábios, pequenos, ficam na cara)
+    red = {(x, y) for y in range(h) for x in range(w) if px[x, y][3] and isred(px[x, y])}
+    luva = set(); vis = set()
+    for p in red:
+        if p in vis: continue
+        st = [p]; comp = []
+        while st:
+            q = st.pop()
+            if q in vis or q not in red: continue
+            vis.add(q); comp.append(q); st += [(q[0] + a, q[1] + b) for a in (-1, 0, 1) for b in (-1, 0, 1)]
+        if len(comp) >= 12: luva |= set(comp)
+    ok = lambda x, y: 0 <= x < w and 0 <= y < h and px[x, y][3] and (x, y) not in luva
+    dark = lambda x, y: px[x, y][3] and sum(px[x, y][:3]) < 60
     ys = [y for y in range(h) if any(px[x, y][3] for x in range(w))]; top = ys[0]
-    fim = top + 21
-    for y in range(top + 12, top + 24):            # pára antes das luvas
-        if sum(1 for x in range(w) if px[x, y][3] and isred(px[x, y])) >= 3: fim = min(fim, y - 1); break
     xs = [x for y in range(top, top + 6) for x in range(w) if px[x, y][3]]; cx = round(sum(xs) / len(xs))
-    out = Image.new('RGBA', (W, 22)); po = out.load()
-    for y in range(top, fim + 1):
-        for x in range(w):
-            p = px[x, y]
-            X = x - cx + W // 2
-            if p[3] and 0 <= X < W and not isred(p): po[X, y - top] = p
-    hh = fim - top + 1
-    # corta o pescoço do atleta: fica só a cara até ao queixo (a última linha com a cara ainda larga)
-    larg = [sum(1 for X in range(W) if po[X, y][3]) for y in range(hh)]
-    queixo = max(y for y in range(hh) if larg[y] >= 8)
-    for y in range(queixo + 1, hh):
-        for X in range(W): po[X, y] = (0, 0, 0, 0)
-    fim = top + queixo
-    pele = Counter(p[:3] for y in range(top, fim) for x in range(w) for p in [px[x, y]] if isskin(p))
+    def corrida(y):
+        x0 = cx
+        if not ok(x0, y):
+            cand = [x for x in range(w) if ok(x, y)]
+            if not cand: return None
+            x0 = min(cand, key=lambda x: abs(x - cx))
+        l = x0
+        while ok(l - 1, y): l -= 1
+        r = x0
+        while ok(r + 1, y): r += 1
+        return l, r
+    # pescoço: a linha mais estreita por baixo da cara (antes das luvas)
+    cand = []
+    for y in range(top + 14, min(h, top + 27)):
+        if sum(1 for x in range(w) if (x, y) in luva) >= 3: break
+        c = corrida(y)
+        if c and c[1] - c[0] >= 2: cand.append((c[1] - c[0], y, c))
+    _, rn, (nl, nr) = min(cand)
+    lim = {}
+    for x in range(w):
+        if nl <= x <= nr:                       # no pescoço: a cabeça acaba na linha preta do maxilar
+            j = rn
+            for y in range(rn, rn - 4, -1):
+                if dark(x, y): j = y; break
+            lim[x] = j
+        else:                                   # ao lado do pescoço: desce enquanto houver cara, sem entrar nos ombros
+            y = top
+            while y < h and not ok(x, y) and y < rn: y += 1
+            while y + 1 <= rn + 1 and ok(x, y + 1): y += 1
+            lim[x] = min(y, rn + 1)
+    out = Image.new('RGBA', (W, rn - top + 3)); po = out.load()
+    for x in range(w):
+        X = x - cx + W // 2
+        if not 0 <= X < W: continue
+        for y in range(top, lim[x] + 1):
+            if ok(x, y): po[X, y - top] = px[x, y]
+    # restos soltos dos ombros ao lado do pescoço (linhas finas fora da cara) saem
+    for yy in range(max(0, rn - top - 1), out.size[1]):
+        for X in range(W):
+            if not po[X, yy][3]: continue
+            viz = sum(1 for a in (-1, 0, 1) for b in (-1, 0, 1) if (a or b) and 0 <= X + a < W and 0 <= yy + b < out.size[1] and po[X + a, yy + b][3])
+            longe = X < nl - cx + W // 2 - 3 or X > nr - cx + W // 2 + 3
+            if longe and viz <= 3: po[X, yy] = (0, 0, 0, 0)
+    pele = Counter(px[x, y][:3] for y in range(top, rn) for x in range(w) if isskin(px[x, y]))
     tons = sorted([c for c, _ in pele.most_common(6)], key=lum, reverse=True)
     rampa = (tons[0], tons[len(tons)//2], tons[-1]) if tons else ((240, 190, 150), (215, 160, 120), (170, 110, 80))
-    return out, rampa, fim - top + 1
+    return out, rampa, rn - top
 def frames_gif(n): return [f.convert('RGBA') for f in ImageSequence.Iterator(Image.open(f'{GIFS}{n}.gif'))]
 def fontes():
     """cabeças de frente (vista 1) e de costas (vista 6) das cabeças que já existem"""
@@ -131,7 +172,7 @@ def fa(fonte, pose, costas, roupa, calca):
     frente, tras = fonte
     head, rampa, hh = cabeca(tras if costas else frente)
     im = corpo(pose, costas, roupa, calca, rampa)
-    im.alpha_composite(head, (0, 22 - hh))                    # primeiro a camisola, depois a cara por cima (o queixo assenta na gola)
+    im.alpha_composite(head, (0, 21 - hh))                    # primeiro a camisola e o pescoço, depois a cabeça recortada por cima
     if pose == 'bracos': im.alpha_composite(bracos_no_ar(rampa, roupa))
     return im
 if __name__ == '__main__':
