@@ -246,11 +246,27 @@ def fa_novo(d, vista, pose, roupa, calca):
     im.alpha_composite(head, ((W - CR.W) // 2, 22 - 16))   # o queixo assenta na gola (cara por cima da camisola)
     if pose == 'bracos': im.alpha_composite(bracos_no_ar(d['pele'], roupa))
     return limpa(im)
+OFICIAIS = [((84, 96, 140), (52, 62, 104), (30, 36, 66)),     # supervisor: casaco azul-escuro
+            ((60, 60, 66), (36, 36, 42), (20, 20, 24)),       # cronometrista: pólo preto
+            ((248, 248, 246), (218, 218, 214), (164, 164, 168))]  # médico: bata branca
+def oficial(d, vista, roupa):
+    """oficiais da mesa do gongo: roupa própria e gola branca de camisa"""
+    im = fa_novo(d, vista, 'sentado', roupa, CALCA[1]); px = im.load()
+    for x in range(11, 17):
+        for y in (22, 23):
+            if px[x, y][3] and sum(px[x, y][:3]) > 60: px[x, y] = (236, 236, 232, 255)
+    if roupa is OFICIAIS[0]:                                  # crachá dourado no peito (de frente)
+        if vista == 'frente': px[17, 26] = (240, 196, 60, 255); px[17, 27] = (200, 150, 40, 255)
+    return im
 def atlas_novo(n, seed=7):
-    """atlas: n fãs em colunas; linhas = VISTAS_FA (28x40 cada)"""
-    D = CR.gerar(n, seed); random.seed(seed + 1)
-    out = Image.new('RGBA', (W * n, H * len(VISTAS_FA)))
-    for i, d in enumerate(D):
+    """atlas: n fãs em colunas + 3 oficiais no fim; linhas = VISTAS_FA (28x40 cada)"""
+    D = CR.gerar(n + 3, seed); random.seed(seed + 1)
+    out = Image.new('RGBA', (W * (n + 3), H * len(VISTAS_FA)))
+    for j in range(3):
+        d = dict(D[n + j]); d['estilo'] = random.choice(['curto', 'rapado', 'risca', 'entradas', 'careca']); d['mulher'] = False
+        for r, (v, pose) in enumerate(VISTAS_FA):
+            out.paste(oficial(d, v, OFICIAIS[j]), ((n + j) * W, r * H))
+    for i, d in enumerate(D[:n]):
         roupa = random.choice(ROUPA); calca = random.choice(CALCA)
         for r, (v, pose) in enumerate(VISTAS_FA):
             out.paste(fa_novo(d, v, pose, roupa, calca), (i * W, r * H))

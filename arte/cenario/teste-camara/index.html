@@ -49,6 +49,9 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
       <button id="camE" type="button">Cenário</button>
       <button id="roda" type="button" aria-pressed="true">Mexer</button>
     </div>
+    <div class="ctrl" id="lot" aria-label="Público">
+      <button type="button" data-p="0">0%</button><button type="button" data-p="25">25%</button><button type="button" data-p="50" aria-pressed="true">50%</button><button type="button" data-p="75">75%</button><button type="button" data-p="100">100%</button>
+    </div>
   </div>
 </div>
 
@@ -223,15 +226,15 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   // ---------- público: cadeiras de plástico à volta do ringue, uma bancada pequena ao fundo ----------
   var rnd = (function (s) { return function () { s = (s * 16807) % 2147483647; return s / 2147483647; }; })(42);
   var fans = [];
-  // fãs: atlas de 40 pessoas x 9 vistas/poses (28x40 cada, a ~32 px por metro, como os atletas)
+  // fãs: atlas de 40 pessoas + 3 oficiais da mesa (colunas 40-42) x 9 vistas/poses (28x40 cada, a ~32 px por metro, como os atletas)
   // linhas: 0-2 de frente (sentado, braços, palmas), 3-4 de costas, 5-6 virados para a direita, 7-8 virados para a esquerda
-  var NF = 40, LIN = 9, BASE = { f: 0, n: 3, e: 5, d: 7 };
+  var NF = 43, LIN = 9, BASE = { f: 0, n: 3, e: 5, d: 7 };
   function fan(x, y, z, lado, tint) {
     var t = TF.clone(); t.needsUpdate = true; t.repeat.set(1 / NF, 1 / LIN);
-    var v = Math.floor(rnd() * NF);
+    var v = Math.floor(rnd() * 40);
     var m = new THREE.SpriteMaterial({ map: t, transparent: true, alphaTest: 0.5, color: tint || 0xffffff });
     var s = new THREE.Sprite(m); s.center.set(0.5, 1.5 / 40); s.scale.set(28 / 32, 40 / 32, 1); s.position.set(x, y, z); scene.add(s);
-    var F = { t: t, v: v, lado: lado, pose: 0, timer: rnd() * 4000 };
+    var F = { t: t, v: v, s: s, k: rnd(), lado: lado, pose: 0, timer: rnd() * 4000 };
     fans.push(F); poeFan(F); return F;
   }
   function poeFan(F) {
@@ -271,7 +274,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
         if (POSTAS.some(function (p) { return p[2] !== L[0] && Math.abs(p[0] - x) < 0.7 && Math.abs(p[1] - z) < 0.7; })) continue;   // nos cantos, as filas de lados diferentes não se cruzam
         POSTAS.push([x, z, L[0]]);
         cadeira(x, z, L[1], cor);
-        if (rnd() < 0.42) fan(x, 0.42, z + (L[0] === 'n' ? 0.05 : 0), L[0]);   // cada lado vê-se virado para o ringue
+        fan(x, 0.42, z + (L[0] === 'n' ? 0.05 : 0), L[0]);   // cada lado vê-se virado para o ringue
       }
     }
   });
@@ -279,7 +282,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   for (var row = 0; row < 4; row++) {
     var d = 10.5 + row * 0.85, h = row * 0.42;
     box(12, 0.42, 0.85, 0x6b6f78, 0, h + 0.21, -d);
-    for (var k2 = -5.6; k2 <= 5.6; k2 += 0.6) if (rnd() < 0.3) fan(k2, h + 0.4, -d + 0.1, 'f');
+    for (var k2 = -5.6; k2 <= 5.6; k2 += 0.6) fan(k2, h + 0.4, -d + 0.1, 'f');
   }
   // mesa do cronometrista (com o gongo), do supervisor e do médico: do lado da câmara, de costas para nós
   function mesa(x, z, w, d) { box(w, 0.04, d, 0xece9e0, x, 0.74, z); box(w - 0.1, 0.7, d - 0.1, 0xd9d5c8, x, 0.37, z); }
@@ -287,7 +290,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   var gongo = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.17, 0.03, 20), new THREE.MeshLambertMaterial({ color: 0xd4a52a, emissive: 0x3a2a00 }));
   gongo.rotation.x = Math.PI / 2; gongo.position.set(-0.7, 1.0, R + 1.25); scene.add(gongo);
   box(0.04, 0.5, 0.04, 0x444444, -0.95, 0.99, R + 1.25); box(0.04, 0.5, 0.04, 0x444444, -0.45, 0.99, R + 1.25); box(0.54, 0.04, 0.04, 0x444444, -0.7, 1.23, R + 1.25);
-  [-0.2, 0.6, 1.4].forEach(function (x) { var F = fan(x, 0.42, R + 1.95, 'n'); F.fixo = true; poeFan(F); cadeira(x, R + 2.0, Math.PI, 0x55585e); });
+  [-0.2, 0.6, 1.4].forEach(function (x, j) { var F = fan(x, 0.42, R + 1.95, 'n'); F.fixo = true; F.v = 40 + j; poeFan(F); cadeira(x, R + 2.0, Math.PI, 0x55585e); });
 
   // ---------- câmara e tamanho ----------
   var alvo = new THREE.Vector3(0, H + 0.9, 0), alvoSuave = alvo.clone(), fovSuave = 38;
@@ -330,6 +333,13 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     rodar = !rodar; this.setAttribute('aria-pressed', rodar ? 'true' : 'false');
   });
   escolhe('D');
+  // lotação: cada lugar tem um fã com um número ao acaso; vê-se se o número for menor que a lotação
+  function lotacao(p) {
+    fans.forEach(function (F) { F.s.visible = F.fixo || F.k < p / 100; });
+    document.querySelectorAll('#lot button').forEach(function (b) { b.setAttribute('aria-pressed', +b.dataset.p === p ? 'true' : 'false'); });
+  }
+  document.querySelectorAll('#lot button').forEach(function (b) { b.addEventListener('click', function () { lotacao(+b.dataset.p); }); });
+  lotacao(50);
 
   // ---------- ciclo ----------
   var ang = Math.PI * 0.75, tm = 0, last = performance.now();
