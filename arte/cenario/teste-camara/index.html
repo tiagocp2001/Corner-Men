@@ -139,8 +139,8 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   // placard eletrónico e faixa do clube na parede do fundo
   parede(4, 1.6, 0, 6, 6.3, -HZ + 0.03, 0, letreiro('CASA 0  0 VISIT', 160, 64, '#101210', '#ff4a2a', 22));
   parede(9, 1.1, 0, -2, 3.2, -HZ + 0.03, 0, letreiro('C.B. DO BAIRRO · NOITE DE BOXE AMADOR', 360, 44, '#f3efe2', '#1d3f8a', 14));
-  // portas dos balneários: a do canto vermelho na parede da esquerda, a do canto azul no fundo à direita
-  var PORTAS = [[-HX + 0.03, 9, Math.PI / 2], [9, -HZ + 0.03, 0]];
+  // portas dos balneários: as duas na parede do fundo (a câmara vê-as sempre de frente): vermelho à esquerda, azul à direita
+  var PORTAS = [[-9, -HZ + 0.03, 0], [9, -HZ + 0.03, 0]];
   PORTAS.forEach(function (p) {
     parede(1.8, 2.3, 0x6a4a30, p[0], 1.15, p[1], p[2]);
     var sx = p[2] ? 0.04 : 0, sz = p[2] ? 0 : 0.04;
@@ -228,7 +228,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   }
   function poeFan(F) { var row = F.costas ? (F.pose === 1 ? 4 : 3) : F.pose; F.t.offset.set(F.v / 32, 1 - (row + 1) / 5); }
   // corredores das portas dos balneários até às escadas (sem cadeiras)
-  var CORR = [[[-4.4, 4.4], [-HX, 9]], [[4.4, -4.4], [9, -HZ]]];
+  var CORR = [[[-4.4, 4.4], [-7.5, 4.4]], [[-7.5, 4.4], [-9, -HZ]], [[4.4, -4.4], [9, -HZ]]];
   function noCorredor(x, z) {
     return CORR.some(function (c) {
       var ax = c[0][0], az = c[0][1], bx = c[1][0], bz = c[1][1], dx = bx - ax, dz = bz - az;
