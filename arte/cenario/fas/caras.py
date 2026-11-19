@@ -183,7 +183,7 @@ def gerar(n, seed=1):
         estilo = random.choice(ESTILOS)
         mulher = estilo in ('comprido', 'rabo', 'carrapito', 'bandolete') or (estilo in ('afro', 'trancas', 'franja') and random.random() < .5)
         cab = random.choice(CABELOS[:5]) if random.random() < .88 else CABELOS[5]
-        extra = random.choice([None, None, 'bigode', 'oculos', 'oculos', 'escuros', 'pera', 'rala']) if not mulher else random.choice([None, None, 'oculos', 'escuros', 'brinco', 'brinco'])
+        extra = random.choice([None, None, None, None, 'bigode', 'oculos', 'escuros', 'pera', 'rala']) if not mulher else random.choice([None, None, None, 'oculos', 'escuros', 'brinco', 'brinco'])
         out.append(dict(pele=random.choice(PELES), cab=cab, estilo=estilo, barba=(not mulher) and random.random() < 0.25,
                         mulher=mulher, bone=random.choice(BONES), extra=extra))
     return out
