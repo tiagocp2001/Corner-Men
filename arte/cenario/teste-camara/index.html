@@ -226,9 +226,9 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   // ---------- público: cadeiras de plástico à volta do ringue, uma bancada pequena ao fundo ----------
   var rnd = (function (s) { return function () { s = (s * 16807) % 2147483647; return s / 2147483647; }; })(42);
   var fans = [];
-  // fãs: atlas de 40 pessoas + 3 oficiais da mesa (colunas 40-42) x 9 vistas/poses (28x40 cada, a ~32 px por metro, como os atletas)
+  // fãs: atlas de 40 pessoas + 3 oficiais da mesa (colunas 40-42) + 2 comentadores (43-44) x 9 vistas/poses (28x40 cada, a ~32 px por metro, como os atletas)
   // linhas: 0-2 de frente (sentado, braços, palmas), 3-4 de costas, 5-6 virados para a direita, 7-8 virados para a esquerda
-  var NF = 43, LIN = 9, BASE = { f: 0, n: 3, e: 5, d: 7 };
+  var NF = 45, LIN = 9, BASE = { f: 0, n: 3, e: 5, d: 7 };
   function fan(x, y, z, lado, tint) {
     var t = TF.clone(); t.needsUpdate = true; t.repeat.set(1 / NF, 1 / LIN);
     var v = Math.floor(rnd() * 40);
@@ -258,7 +258,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     var a = new THREE.Mesh(new THREE.BoxGeometry(0.44, 0.05, 0.42), m); a.position.y = 0.44; g.add(a);
     var c = new THREE.Mesh(new THREE.BoxGeometry(0.44, 0.42, 0.05), m); c.position.set(0, 0.67, -0.2); g.add(c);
     var p = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.42, 0.36), new THREE.MeshLambertMaterial({ color: 0x55585e })); p.position.y = 0.21; g.add(p);
-    g.position.set(x, 0, z); g.rotation.y = ry; scene.add(g);
+    g.position.set(x, 0, z); g.rotation.y = ry; scene.add(g); return g;
   }
   // filas: em cada lado do ringue, viradas para o ringue
   [['f', 0], ['e', Math.PI / 2], ['d', -Math.PI / 2], ['n', Math.PI]].forEach(function (L) {
@@ -270,6 +270,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
         if (L[0] === 'f') { x = k; z = -d; } else if (L[0] === 'n') { x = k; z = d; }
         else if (L[0] === 'e') { x = -d; z = k; } else { x = d; z = k; }
         if (noCorredor(x, z)) continue;
+        if (L[0] === 'f' && f <= 1 && Math.abs(x) < 1.7) continue;   // mesa dos comentadores
         if (Math.abs(x) > 5.6 && z < -3.5) continue;   // cantos de trás livres (ao lado das entradas)
         if (POSTAS.some(function (p) { return p[2] !== L[0] && Math.abs(p[0] - x) < 0.7 && Math.abs(p[1] - z) < 0.7; })) continue;   // nos cantos, as filas de lados diferentes não se cruzam
         POSTAS.push([x, z, L[0]]);
@@ -291,6 +292,20 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   gongo.rotation.x = Math.PI / 2; gongo.position.set(-0.7, 1.0, R + 1.25); scene.add(gongo);
   box(0.04, 0.5, 0.04, 0x444444, -0.95, 0.99, R + 1.25); box(0.04, 0.5, 0.04, 0x444444, -0.45, 0.99, R + 1.25); box(0.54, 0.04, 0.04, 0x444444, -0.7, 1.23, R + 1.25);
   [-0.2, 0.6, 1.4].forEach(function (x, j) { var F = fan(x, 0.42, R + 1.95, 'n'); F.fixo = true; F.v = 40 + j; poeFan(F); cadeira(x, R + 2.0, Math.PI, 0x55585e); });
+
+  // mesa dos comentadores: do outro lado do ringue, virados para a câmara (pano com o nome da rádio)
+  // num estrado baixo, para se verem por cima do ringue
+  var EY = 0.7; box(2.8, EY, 1.6, 0x4a4e58, 0, EY / 2, -5.05);
+  box(2.4, 0.04, 0.6, 0xece9e0, 0, EY + 0.74, -4.75); box(2.3, 0.7, 0.5, 0xd9d5c8, 0, EY + 0.37, -4.75);
+  var pano = new THREE.Mesh(new THREE.PlaneGeometry(2.3, 0.62), letreiro('RÁDIO LOCAL', 92, 24, '#1f3a6b', '#f2d36b'));
+  pano.position.set(0, EY + 0.4, -4.49); scene.add(pano);
+  box(0.36, 0.02, 0.26, 0x2b2b30, 0.05, EY + 0.77, -4.8); box(0.36, 0.24, 0.02, 0x2b2b30, 0.05, EY + 0.89, -4.93);   // portátil
+  box(0.32, 0.2, 0.01, 0x7fb4e0, 0.05, EY + 0.89, -4.915, 0x2a4a70);
+  [-0.55, 0.55].forEach(function (x, j) {
+    box(0.02, 0.22, 0.02, 0x333333, x, EY + 0.87, -4.7); box(0.06, 0.08, 0.06, 0x1a1a1a, x, EY + 1.0, -4.7);   // microfone de pé
+    var F = fan(x, EY + 0.42, -5.3, 'f'); F.fixo = true; F.v = 43 + j; poeFan(F);
+    var g = cadeira(x, -5.35, 0, 0x55585e); g.position.y = EY;
+  });
 
   // ---------- câmara e tamanho ----------
   var alvo = new THREE.Vector3(0, H + 0.9, 0), alvoSuave = alvo.clone(), fovSuave = 38;

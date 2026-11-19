@@ -258,14 +258,50 @@ def oficial(d, vista, roupa):
     if roupa is OFICIAIS[0]:                                  # crachá dourado no peito (de frente)
         if vista == 'frente': px[17, 26] = (240, 196, 60, 255); px[17, 27] = (200, 150, 40, 255)
     return im
+COMENT = [((150, 186, 222), (104, 140, 186), (66, 92, 132)),   # comentador: camisa azul-clara
+          ((128, 112, 100), (92, 78, 68), (58, 48, 42))]      # analista: casaco castanho
+def comentador(d, vista, roupa):
+    """comentadores: camisa/casaco com gola branca e auscultadores"""
+    im = oficial(d, vista, roupa); px = im.load()
+    hx0, hx1, hy0 = (W - CR.W) // 2, (W - CR.W) // 2 + CR.W, 22 - 16
+    rows = {}
+    for y in range(hy0, hy0 + 14):
+        xs = [x for x in range(hx0, hx1) if px[x, y][3]]
+        if xs: rows[y] = (min(xs), max(xs))
+    if not rows: return im
+    top = min(rows); ear = top + 8
+    BAND, HI, CUP = (96, 96, 106, 255), (150, 150, 160, 255), (34, 34, 40, 255)
+    if vista in ('frente', 'costas'):
+        for y in range(top, ear):                                  # arco por cima da cabeça, colado ao contorno
+            l, r = rows[y]; px[l + 1, y] = BAND; px[r - 1, y] = BAND
+        l, r = rows[top]
+        for x in range(l + 1, r): px[x, top] = BAND
+        for x in range(l + 3, r - 2): px[x, top] = HI if x % 3 == 0 else BAND
+        l, r = rows.get(ear, rows[max(rows)])
+        for y in range(ear, ear + 4):                              # conchas nas orelhas
+            for x in (l - 1, l, r, r + 1): px[x, y] = CUP if x in (l - 1, r + 1) else BAND
+        if vista == 'frente':                                      # microfone de haste até à boca
+            for i, (x, y) in enumerate([(l + 1, ear + 4), (l + 2, ear + 5), (l + 3, ear + 5), (l + 4, ear + 5)]):
+                px[x, y] = CUP if i == 3 else BAND
+    else:                                                          # de lado: concha no meio da cabeça
+        l, r = rows[ear]; cx = l + round((r - l) * (0.4 if vista == 'dir' else 0.6))
+        for y in range(top, ear): px[cx, y] = BAND
+        for y in range(ear - 1, ear + 4):
+            for x in range(cx - 1, cx + 2): px[x, y] = CUP if y in (ear - 1, ear + 3) or x != cx else BAND
+    return im
 def atlas_novo(n, seed=7):
-    """atlas: n fãs em colunas + 3 oficiais no fim; linhas = VISTAS_FA (28x40 cada)"""
-    D = CR.gerar(n + 3, seed); random.seed(seed + 1)
-    out = Image.new('RGBA', (W * (n + 3), H * len(VISTAS_FA)))
+    """atlas: n fãs em colunas + 3 oficiais + 2 comentadores no fim; linhas = VISTAS_FA (28x40 cada)"""
+    D = CR.gerar(n + 5, seed); random.seed(seed + 1)
+    out = Image.new('RGBA', (W * (n + 5), H * len(VISTAS_FA)))
     for j in range(3):
         d = dict(D[n + j]); d['estilo'] = random.choice(['curto', 'rapado', 'risca', 'entradas', 'careca']); d['mulher'] = False
         for r, (v, pose) in enumerate(VISTAS_FA):
             out.paste(oficial(d, v, OFICIAIS[j]), ((n + j) * W, r * H))
+    for j in range(2):                                            # comentador e analista (colunas n+3, n+4)
+        d = dict(D[n + 3 + j]); d['mulher'] = False
+        d['estilo'] = ['curto', 'entradas'][j]; d['extra'] = [None, 'bigode'][j]
+        for r, (v, pose) in enumerate(VISTAS_FA):
+            out.paste(comentador(d, v, COMENT[j]), ((n + 3 + j) * W, r * H))
     for i, d in enumerate(D[:n]):
         roupa = random.choice(ROUPA); calca = random.choice(CALCA)
         for r, (v, pose) in enumerate(VISTAS_FA):
