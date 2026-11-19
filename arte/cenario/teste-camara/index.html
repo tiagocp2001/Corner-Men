@@ -258,7 +258,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
         if (L[0] === 'f') { x = k; z = -d; } else if (L[0] === 'n') { x = k; z = d; }
         else if (L[0] === 'e') { x = -d; z = k; } else { x = d; z = k; }
         if (noCorredor(x, z)) continue;
-        if (Math.abs(x) > 5.9 && z < -4.3) continue;   // cantos de trás livres (ao lado das entradas)
+        if (Math.abs(x) > 5.6 && z < -3.5) continue;   // cantos de trás livres (ao lado das entradas)
         if (POSTAS.some(function (p) { return p[2] !== L[0] && Math.abs(p[0] - x) < 0.7 && Math.abs(p[1] - z) < 0.7; })) continue;   // nos cantos, as filas de lados diferentes não se cruzam
         POSTAS.push([x, z, L[0]]);
         cadeira(x, z, L[1], cor);
