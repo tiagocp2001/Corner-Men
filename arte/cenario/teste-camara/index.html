@@ -168,6 +168,8 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
       var hh = H * (3 - i) / 3, st = new THREE.Mesh(new THREE.BoxGeometry(0.95, hh, 0.36), m);
       st.position.set(0, hh / 2, 0.18 + i * 0.36); g.add(st);
     }
+    var pat = new THREE.Mesh(new THREE.BoxGeometry(0.95, H, 0.5), m);   // patamar: liga o degrau de cima ao ringue
+    pat.position.set(0, H / 2, -0.25); g.add(pat);
     var out = new THREE.Vector2(cx, cz).normalize();        // sai do canto para fora, na diagonal
     g.position.set(cx + out.x * 0.75, 0, cz + out.y * 0.75);
     g.rotation.y = Math.atan2(out.x, out.y);
@@ -228,8 +230,8 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   }
   function poeFan(F) { var row = F.costas ? (F.pose === 1 ? 4 : 3) : F.pose; F.t.offset.set(F.v / 32, 1 - (row + 1) / 5); }
   // corredores das portas dos balneários até às escadas (sem cadeiras)
-  // vermelho: da escada sai a direito para a esquerda, a cortar as filas, e sobe por trás delas até à porta
-  var CORR = [[[-4.4, 4.4], [-8.6, 4.4]], [[-8.6, 4.4], [-9, -HZ]], [[4.4, -4.4], [9, -HZ]]];
+  // corredores simétricos: de cada porta (fundo) na diagonal até ao canto de trás do ringue desse lado
+  var CORR = [[[-4.4, -4.4], [-9, -HZ]], [[4.4, -4.4], [9, -HZ]]];
   function noCorredor(x, z) {
     return CORR.some(function (c) {
       var ax = c[0][0], az = c[0][1], bx = c[1][0], bz = c[1][1], dx = bx - ax, dz = bz - az;
@@ -249,7 +251,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   [['f', 0], ['e', Math.PI / 2], ['d', -Math.PI / 2], ['n', Math.PI]].forEach(function (L) {
     var filas = L[0] === 'n' ? 2 : 3;
     for (var f = 0; f < filas; f++) {
-      var d = 5.4 + f * 0.85, cor = CORES[Math.floor(rnd() * 4)];
+      var d = (L[0] === 'n' ? 6.3 : 5.4) + f * 0.85, cor = CORES[Math.floor(rnd() * 4)];
       for (var k = -6.5; k <= 6.5; k += 0.6) {
         var x, z;
         if (L[0] === 'f') { x = k; z = -d; } else if (L[0] === 'n') { x = k; z = d; }
@@ -266,18 +268,13 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     box(12, 0.42, 0.85, 0x6b6f78, 0, h + 0.21, -d);
     for (var k2 = -5.6; k2 <= 5.6; k2 += 0.6) if (rnd() < 0.3) fan(k2, h + 0.42, -d + 0.1, false);
   }
-  // mesas de dobrar com toalha: juízes (5 no amador), cronometrista com gongo e médico
+  // mesa do cronometrista (com o gongo), do supervisor e do médico: do lado da câmara, de costas para nós
   function mesa(x, z, w, d) { box(w, 0.04, d, 0xece9e0, x, 0.74, z); box(w - 0.1, 0.7, d - 0.1, 0xd9d5c8, x, 0.37, z); }
-  [[0, -R - 1.6, 3], [-R - 1.6, 0, 1], [R + 1.6, 0, 1], [-R - 1.6, -2.2, 1], [R + 1.6, 2.2, 1]].forEach(function (m) {
-    var horiz = m[2] > 1;
-    mesa(m[0], m[1], horiz ? 3.2 : 0.8, horiz ? 0.8 : 1.2);
-    var n = horiz ? 3 : 1;
-    for (var i = 0; i < n; i++) {
-      var off = (i - (n - 1) / 2) * 1.0;
-      var x = horiz ? m[0] + off : m[0] + (m[0] < 0 ? -0.6 : 0.6), z = horiz ? m[1] - 0.6 : m[1];
-      var F = fan(x, 0.45, z, false); F.v = 3; F.fixo = true; poeFan(F);
-    }
-  });
+  mesa(0.6, R + 1.35, 3.2, 0.7);
+  var gongo = new THREE.Mesh(new THREE.CylinderGeometry(0.17, 0.17, 0.03, 20), new THREE.MeshLambertMaterial({ color: 0xd4a52a, emissive: 0x3a2a00 }));
+  gongo.rotation.x = Math.PI / 2; gongo.position.set(-0.7, 1.0, R + 1.25); scene.add(gongo);
+  box(0.04, 0.5, 0.04, 0x444444, -0.95, 0.99, R + 1.25); box(0.04, 0.5, 0.04, 0x444444, -0.45, 0.99, R + 1.25); box(0.54, 0.04, 0.04, 0x444444, -0.7, 1.23, R + 1.25);
+  [-0.2, 0.6, 1.4].forEach(function (x) { var F = fan(x, 0.45, R + 1.95, true); F.v = 3; F.fixo = true; poeFan(F); cadeira(x, R + 2.0, Math.PI, 0x55585e); });
 
   // ---------- câmara e tamanho ----------
   var alvo = new THREE.Vector3(0, H + 0.9, 0), alvoSuave = alvo.clone(), dSuave = 16.5, orb = 0;
