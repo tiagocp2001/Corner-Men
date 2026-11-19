@@ -1,0 +1,256 @@
+<title>Câmara do Ringue</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Silkscreen&family=VT323&display=swap">
+<style>
+/* Ecrã da luta em pé (telemóvel): placard em cima, ringue 3D no meio, mesa dos comentadores em baixo. Um só visual escuro, como o jogo. */
+:root {
+  --bg: #121016; --panel: #1d1922; --line: #3a3140; --fg: #f1e6d6; --dim: #a4978a;
+  --red: #d8342c; --blue: #2f6fd6; --gold: #f2c14e;
+  --f-title: 'Silkscreen', 'Courier New', monospace; --f-text: 'VT323', 'Courier New', monospace;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font-size: 18px; overflow: hidden; }
+.app { height: 100%; display: flex; flex-direction: column; max-width: 480px; margin: 0 auto;
+  padding-left: max(0px, env(safe-area-inset-left, 0px)); padding-right: max(0px, env(safe-area-inset-right, 0px)); }
+.placard { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; padding: 8px 12px;
+  background: var(--panel); border-bottom: 2px solid var(--line); font-family: var(--f-title); font-size: 11px; }
+.placard .b { text-align: right; }
+.bar { height: 6px; margin-top: 4px; background: #000; border: 1px solid var(--line); }
+.bar i { display: block; height: 100%; }
+.a .bar i { background: var(--red); width: 88%; } .b .bar i { background: var(--blue); width: 76%; margin-left: auto; }
+.clock { font-size: 14px; color: var(--gold); text-align: center; line-height: 1.2; }
+.stage { position: relative; flex: 1; min-height: 0; background: #000; }
+#cv { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; }
+.tag { position: absolute; left: 8px; top: 8px; font-family: var(--f-title); font-size: 9px; background: rgba(0,0,0,.6);
+  padding: 3px 6px; color: var(--gold); letter-spacing: .05em; }
+.desk { background: var(--panel); border-top: 2px solid var(--line); padding: 8px 12px 10px; display: flex; flex-direction: column; gap: 8px; }
+.line { min-height: 44px; font-size: 19px; line-height: 1.1; color: var(--fg); }
+.line b { font-family: var(--f-title); font-size: 10px; color: var(--gold); font-weight: 400; display: block; margin-bottom: 2px; }
+.ctrl { display: flex; gap: 6px; flex-wrap: wrap; }
+.ctrl button { flex: 1 1 0; min-width: 0; font-family: var(--f-title); font-size: 10px; padding: 8px 4px; background: #2a2430;
+  color: var(--fg); border: 2px solid var(--line); cursor: pointer; }
+.ctrl button[aria-pressed="true"] { background: var(--gold); color: #1a1410; border-color: var(--gold); }
+.ctrl button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+</style>
+
+<div class="app">
+  <div class="placard">
+    <div class="a">RUI COSTA<div class="bar"><i></i></div></div>
+    <div class="clock">R1<br>2:14</div>
+    <div class="b">K. ADEBAYO<div class="bar"><i></i></div></div>
+  </div>
+  <div class="stage"><canvas id="cv"></canvas><div class="tag" id="tag">AMADOR · PAVILHÃO MUNICIPAL</div></div>
+  <div class="desk">
+    <div class="line" id="desc"><b>CÂMARA B</b>…</div>
+    <div class="ctrl">
+      <button id="camA" type="button">Câmara A</button>
+      <button id="camB" type="button" aria-pressed="true">Câmara B</button>
+      <button id="camC" type="button">Câmara C</button>
+      <button id="roda" type="button">Andar à volta</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function () {
+  // ---------- câmaras a comparar (todas do nosso lado do ringue, como a câmara principal da TV) ----------
+  var CAMS = {
+    A: { el: 20, dist: 8.5,  fov: 42, txt: 'Baixa e perto (20°). Bonecos grandes; a câmara segue-os e não se vê o ringue todo.' },
+    B: { el: 30, dist: 11.5, fov: 40, txt: 'Média (30°). Ringue quase todo, bonecos ainda grandes. Ângulo perto do dos bonecos.' },
+    C: { el: 42, dist: 15,   fov: 38, txt: 'Alta e longe (42°). Ringue todo e público; bonecos mais pequenos.' }
+  };
+  var cam = 'B', rodar = false;
+  var SCALE = 2; // render a metade da resolução para ficar com píxeis grandes como os bonecos
+
+  var cv = document.getElementById('cv');
+  var renderer = new THREE.WebGLRenderer({ canvas: cv, antialias: false });
+  renderer.setPixelRatio(1);
+  var scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x0d0b10);
+  scene.fog = new THREE.Fog(0x0d0b10, 16, 34);
+  var camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+
+  // ---------- luz: pavilhão de amadores (luzes acesas, ringue mais claro) ----------
+  scene.add(new THREE.HemisphereLight(0x9aa0b4, 0x2a2018, 0.55));
+  var spot = new THREE.SpotLight(0xfff1d6, 1.4, 30, Math.PI / 4.2, 0.5, 1);
+  spot.position.set(0, 9, 0); spot.target.position.set(0, 1, 0); scene.add(spot); scene.add(spot.target);
+  var dir = new THREE.DirectionalLight(0xffffff, 0.35); dir.position.set(-4, 10, 6); scene.add(dir);
+
+  function box(w, h, d, color, x, y, z, emiss) {
+    var m = new THREE.MeshLambertMaterial({ color: color });
+    if (emiss) m.emissive = new THREE.Color(emiss);
+    var b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); b.position.set(x, y, z); scene.add(b); return b;
+  }
+
+  // ---------- pavilhão ----------
+  var floor = new THREE.Mesh(new THREE.PlaneGeometry(60, 60), new THREE.MeshLambertMaterial({ color: 0x6b4a2e }));
+  floor.rotation.x = -Math.PI / 2; scene.add(floor);
+  // linhas do campo de pavilhão (pintadas no chão)
+  [[-10, 0, 0.12, 20], [10, 0, 0.12, 20], [0, -10, 20, 0.12]].forEach(function (l) {
+    var p = new THREE.Mesh(new THREE.PlaneGeometry(l[2], l[3]), new THREE.MeshBasicMaterial({ color: 0xc9b27a }));
+    p.rotation.x = -Math.PI / 2; p.position.set(l[0], 0.01, l[1]); scene.add(p);
+  });
+  box(60, 14, 0.5, 0x2c3a44, 0, 7, -18);          // parede do fundo
+  box(0.5, 14, 60, 0x283640, -18, 7, 0);          // paredes dos lados
+  box(0.5, 14, 60, 0x283640, 18, 7, 0);
+  box(10, 2.2, 0.2, 0x1a2a20, 0, 8.6, -17.6, 0x0c2a14); // placard do pavilhão
+
+  // ---------- ringue (6,1 m por dentro; estrado a 1 m) ----------
+  var R = 3.05, H = 1.0;
+  box(2 * R + 1.2, H, 2 * R + 1.2, 0x1d2b5a, 0, H / 2, 0);          // estrado (saia azul)
+  var lona = box(2 * R + 1.0, 0.04, 2 * R + 1.0, 0xc8ccd6, 0, H + 0.02, 0); // lona
+  var corners = [[-R, R, 0xd8342c], [R, -R, 0x2f6fd6], [R, R, 0xeeeeee], [-R, -R, 0xeeeeee]]; // vermelho à frente-esq., azul ao fundo-dir.
+  corners.forEach(function (c) {
+    box(0.16, 1.55, 0.16, 0x9aa0a6, c[0], H + 0.78, c[1]);            // poste
+    box(0.3, 1.2, 0.3, c[2], c[0] * 0.97, H + 0.85, c[1] * 0.97);     // almofada do canto
+  });
+  [0.45, 0.85, 1.25].forEach(function (hh, i) {                       // 3 cordas por lado
+    var col = [0xd8342c, 0xf2f2f2, 0x2f6fd6][i];
+    box(2 * R, 0.05, 0.05, col, 0, H + hh, R); box(2 * R, 0.05, 0.05, col, 0, H + hh, -R);
+    box(0.05, 0.05, 2 * R, col, R, H + hh, 0); box(0.05, 0.05, 2 * R, col, -R, H + hh, 0);
+  });
+  // estrutura de luz por cima do ringue
+  [[0, 7, R + 0.4, 2 * R + 0.8, 0.12], [0, 7, -R - 0.4, 2 * R + 0.8, 0.12]].forEach(function (t) { box(t[3], 0.12, 0.12, 0x444448, t[0], t[1], t[2]); });
+  [[R + 0.4], [-R - 0.4]].forEach(function (t) { box(0.12, 0.12, 2 * R + 0.8, 0x444448, t[0], 7, 0); });
+  [[-2, -2], [2, -2], [-2, 2], [2, 2]].forEach(function (p) { box(0.5, 0.25, 0.5, 0x222222, p[0], 6.85, p[1], 0xfff0c0); });
+
+  // ---------- texturas (pixel art) ----------
+  var loader = new THREE.TextureLoader();
+  function tex(url) {
+    return new Promise(function (ok) {
+      loader.load(url, function (t) { t.magFilter = THREE.NearestFilter; t.minFilter = THREE.NearestFilter; t.generateMipmaps = false; ok(t); });
+    });
+  }
+  Promise.all([tex('lutador-a.png'), tex('lutador-b.png'), tex('fas.png')]).then(function (T) { arranca(T[0], T[1], T[2]); });
+  function arranca(TA, TB, TF) {
+
+  // ---------- pugilistas: cartões que olham sempre para a câmara; a vista escolhe-se pelo ângulo ----------
+  // ordem das vistas no atlas: 1 Frente, 2 Frente-dir., 3 Dir. 3/4, 4 Direita, 5 Costas-dir., 6 Costas, 7 Esquerda, 8 Frente-esq.
+  var VANG = [0, 45, 72, 100, 140, 195, 270, 315];
+  var DUR = [90, 100, 80, 110, 80, 100, 90, 100, 80, 110, 80, 100];
+  function lutador(base) {
+    var t = base.clone(); t.needsUpdate = true; t.repeat.set(1 / 12, 1 / 8);
+    var s = new THREE.Sprite(new THREE.SpriteMaterial({ map: t, transparent: true, alphaTest: 0.5 }));
+    s.center.set(0.5, 1.5 / 60); s.scale.set(1.85 * 40 / 60, 1.85, 1); scene.add(s);
+    var sh = new THREE.Mesh(new THREE.CircleGeometry(0.42, 16), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.35 }));
+    sh.rotation.x = -Math.PI / 2; sh.scale.set(1, 0.55, 1); scene.add(sh);
+    return { s: s, t: t, sh: sh, pos: new THREE.Vector3(), face: new THREE.Vector2(1, 0), f: 0, acc: 0 };
+  }
+  var A = lutador(TA), B = lutador(TB);
+  B.f = 5;
+  function vista(L) {
+    var to = new THREE.Vector2(camera.position.x - L.pos.x, camera.position.z - L.pos.z).normalize();
+    var right = new THREE.Vector2(to.y, -to.x);
+    var ang = Math.atan2(L.face.dot(right), L.face.dot(to)) * 180 / Math.PI; if (ang < 0) ang += 360;
+    var best = 0, bd = 999;
+    VANG.forEach(function (v, i) { var d = Math.abs(((ang - v + 540) % 360) - 180); if (d < bd) { bd = d; best = i; } });
+    return best;
+  }
+  function poeLutador(L, dt) {
+    L.acc += dt; while (L.acc > DUR[L.f]) { L.acc -= DUR[L.f]; L.f = (L.f + 1) % 12; }
+    var v = vista(L);
+    L.t.offset.set(L.f / 12, 1 - (v + 1) / 8);
+    L.s.position.set(L.pos.x, H + 0.04, L.pos.z);
+    L.sh.position.set(L.pos.x, H + 0.05, L.pos.z);
+  }
+
+  // ---------- fãs nas bancadas (3 lados) e mesa dos juízes ----------
+  var rnd = (function (s) { return function () { s = (s * 16807) % 2147483647; return s / 2147483647; }; })(42);
+  var fans = [];
+  function fan(x, y, z, costas, tint) {
+    var t = TF.clone(); t.needsUpdate = true; t.repeat.set(1 / 32, 1 / 5);
+    var v = Math.floor(rnd() * 32);
+    var m = new THREE.SpriteMaterial({ map: t, transparent: true, alphaTest: 0.5, color: tint });
+    var s = new THREE.Sprite(m); s.center.set(0.5, 0); s.scale.set(0.62, 0.93, 1); s.position.set(x, y, z); scene.add(s);
+    var F = { t: t, v: v, costas: costas, pose: 0, timer: rnd() * 4000 };
+    fans.push(F); poeFan(F); return F;
+  }
+  function poeFan(F) { var row = F.costas ? (F.pose === 1 ? 4 : 3) : F.pose; F.t.offset.set(F.v / 32, 1 - (row + 1) / 5); }
+  function bancada(lado) {
+    for (var row = 0; row < 7; row++) {
+      var d = 7.5 + row * 0.9, h = row * 0.45;
+      var along = 18;
+      // degrau
+      if (lado === 'fundo') box(along, 0.45, 0.9, 0x4a4f5a, 0, h + 0.22, -d);
+      if (lado === 'esq') box(0.9, 0.45, along, 0x4a4f5a, -d, h + 0.22, 0);
+      if (lado === 'dir') box(0.9, 0.45, along, 0x4a4f5a, d, h + 0.22, 0);
+      for (var k = -along / 2 + 0.5; k < along / 2; k += 0.62) {
+        if (rnd() > 0.42) continue;                              // pavilhão de amadores: muitos lugares vazios
+        var shade = 0.95 - row * 0.07, tint = new THREE.Color(shade, shade, shade);
+        if (lado === 'fundo') fan(k, h + 0.45, -d + 0.1, false, tint);
+        if (lado === 'esq') fan(-d + 0.1, h + 0.45, k, false, tint);
+        if (lado === 'dir') fan(d - 0.1, h + 0.45, k, false, tint);
+      }
+    }
+  }
+  bancada('fundo'); bancada('esq'); bancada('dir');
+  // mesas: 5 juízes (amador), cronometrista com gongo e médico
+  [[0, -R - 1.6, 3], [-R - 1.6, 0, 1], [R + 1.6, 0, 1], [-R - 1.6, -2.2, 1], [R + 1.6, 2.2, 1]].forEach(function (m) {
+    var horiz = m[2] > 1;
+    box(horiz ? 3.2 : 0.8, 0.75, horiz ? 0.8 : 1.4, 0x2b2f3a, m[0], 0.38, m[1]);
+    var n = horiz ? 3 : 1;
+    for (var i = 0; i < n; i++) {
+      var off = (i - (n - 1) / 2) * 1.0;
+      var x = horiz ? m[0] + off : m[0] + (m[0] < 0 ? -0.6 : 0.6), z = horiz ? m[1] - 0.6 : m[1];
+      var F = fan(x, 0.55, z, false, new THREE.Color(0.85, 0.85, 0.85)); F.v = 3; F.fixo = true; poeFan(F);
+    }
+  });
+
+  // ---------- câmara e tamanho ----------
+  var alvo = new THREE.Vector3(0, H + 0.9, 0), alvoSuave = alvo.clone();
+  function poeCamara() {
+    var c = CAMS[cam], e = c.el * Math.PI / 180;
+    var foco = cam === 'A' ? alvoSuave : new THREE.Vector3(alvoSuave.x * 0.4, H + 0.9, alvoSuave.z * 0.4);
+    camera.fov = c.fov;
+    camera.position.set(foco.x, foco.y + Math.sin(e) * c.dist, foco.z + Math.cos(e) * c.dist);
+    camera.lookAt(foco); camera.updateProjectionMatrix();
+  }
+  function tamanho() {
+    var r = cv.parentNode.getBoundingClientRect();
+    renderer.setSize(Math.max(1, Math.round(r.width / SCALE)), Math.max(1, Math.round(r.height / SCALE)), false);
+    camera.aspect = r.width / r.height; camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', tamanho);
+
+  // ---------- botões ----------
+  var desc = document.getElementById('desc');
+  function escolhe(k) {
+    cam = k;
+    ['A', 'B', 'C'].forEach(function (x) { document.getElementById('cam' + x).setAttribute('aria-pressed', x === k ? 'true' : 'false'); });
+    desc.innerHTML = '<b>CÂMARA ' + k + '</b>' + CAMS[k].txt;
+  }
+  ['A', 'B', 'C'].forEach(function (k) { document.getElementById('cam' + k).addEventListener('click', function () { escolhe(k); }); });
+  document.getElementById('roda').addEventListener('click', function () {
+    rodar = !rodar; this.setAttribute('aria-pressed', rodar ? 'true' : 'false');
+  });
+  escolhe('B');
+
+  // ---------- ciclo ----------
+  var ang = Math.PI * 0.75, last = performance.now();
+  function frame(now) {
+    var dt = Math.min(100, now - last); last = now;
+    if (rodar) ang += dt * 0.00025;
+    var rr = 1.25;
+    A.pos.set(Math.cos(ang) * rr, 0, Math.sin(ang) * rr);
+    B.pos.set(-A.pos.x, 0, -A.pos.z);
+    A.face.set(B.pos.x - A.pos.x, B.pos.z - A.pos.z).normalize();
+    B.face.set(-A.face.x, -A.face.y);
+    alvo.set((A.pos.x + B.pos.x) / 2, H + 0.9, (A.pos.z + B.pos.z) / 2);
+    alvoSuave.lerp(alvo, 0.08);
+    poeCamara();
+    poeLutador(A, dt); poeLutador(B, dt);
+    fans.forEach(function (F) {
+      if (F.fixo) return;
+      F.timer -= dt;
+      if (F.timer < 0) { F.pose = rnd() < 0.15 ? 1 : (rnd() < 0.25 ? 2 : 0); F.timer = 600 + rnd() * 3000; poeFan(F); }
+    });
+    renderer.render(scene, camera);
+    requestAnimationFrame(frame);
+  }
+  tamanho();
+  requestAnimationFrame(frame);
+  }
+})();
+</script>
