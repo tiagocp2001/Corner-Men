@@ -111,15 +111,19 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     box(2 * R, 0.05, 0.05, col, 0, H + hh, R); box(2 * R, 0.05, 0.05, col, 0, H + hh, -R);
     box(0.05, 0.05, 2 * R, col, R, H + hh, 0); box(0.05, 0.05, 2 * R, col, -R, H + hh, 0);
   });
-  // escadas: no canto vermelho (lado esquerdo) e no canto azul (lado direito), encostadas ao estrado
-  function escada(sx, z) {
+  // escadas: na diagonal, encostadas ao canto vermelho e ao canto azul, sem corrimão
+  function escada(cx, cz) {
+    var g = new THREE.Group(), m = new THREE.MeshLambertMaterial({ color: 0x8a8f99 });
     for (var i = 0; i < 4; i++) {
-      var hh = H * (4 - i) / 4;
-      box(0.38, hh, 1.0, 0x8a8f99, sx * (R + 0.6 + 0.19 + i * 0.38), hh / 2, z);
+      var hh = H * (4 - i) / 4, st = new THREE.Mesh(new THREE.BoxGeometry(0.95, hh, 0.36), m);
+      st.position.set(0, hh / 2, 0.18 + i * 0.36); g.add(st);
     }
-    [-0.5, 0.5].forEach(function (o) { box(1.6, 0.05, 0.05, 0xb8bcc4, sx * (R + 1.35), H + 0.75, z + o); });
+    var out = new THREE.Vector2(cx, cz).normalize();        // sai do canto para fora, na diagonal
+    g.position.set(cx + out.x * 0.75, 0, cz + out.y * 0.75);
+    g.rotation.y = Math.atan2(out.x, out.y);
+    scene.add(g);
   }
-  escada(-1, R - 0.7); escada(1, -R + 0.7);
+  escada(-R, R); escada(R, -R);
   // estrutura de luz por cima do ringue
   [[0, 7, R + 0.4, 2 * R + 0.8, 0.12], [0, 7, -R - 0.4, 2 * R + 0.8, 0.12]].forEach(function (t) { box(t[3], 0.12, 0.12, 0x444448, t[0], t[1], t[2]); });
   [[R + 0.4], [-R - 0.4]].forEach(function (t) { box(0.12, 0.12, 2 * R + 0.8, 0x444448, t[0], 7, 0); });
