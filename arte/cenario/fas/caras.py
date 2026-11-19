@@ -9,7 +9,7 @@ PELES = [((252, 214, 176), (236, 176, 136), (204, 128, 96)), ((248, 190, 140), (
 CABELOS = [((74, 62, 58), (38, 30, 28), (16, 12, 12)), ((132, 92, 60), (92, 62, 40), (58, 38, 26)),
            ((176, 128, 76), (134, 92, 52), (94, 62, 36)), ((240, 212, 128), (210, 172, 86), (164, 126, 58)),
            ((214, 118, 62), (172, 82, 44), (124, 54, 30)), ((222, 222, 222), (176, 176, 180), (126, 126, 132))]
-ESTILOS = ['curto', 'rapado', 'careca', 'caracois', 'comprido', 'rabo', 'bone', 'franja', 'afro', 'risca', 'moicano', 'carrapito', 'trancas', 'gorro', 'curto', 'rapado']
+ESTILOS = ['curto', 'rapado', 'careca', 'caracois', 'comprido', 'rabo', 'bone', 'franja', 'afro', 'risca', 'carrapito', 'trancas', 'gorro', 'entradas', 'topete', 'medio', 'bandolete', 'curto', 'rapado', 'curto']
 W, H = 16, 19
 # contorno da cabeça (cara) por linha: (x0, x1) de pele
 FORMA = {2: (5, 10), 3: (3, 12), 4: (3, 12), 5: (3, 12), 6: (2, 13), 7: (2, 13), 8: (2, 13), 9: (2, 13), 10: (2, 13),
@@ -28,7 +28,8 @@ def cabelo_mask(estilo, vista):
         if estilo == 'careca': return set()
         if estilo == 'rapado': return topo(9)
         if estilo in ('bone', 'gorro'): return {(x, y) for (x, y) in cara if 6 <= y <= 11}
-        if estilo == 'moicano': return {(x, y) for x in range(6, 10) for y in range(0, 13)} | {(x, y) for (x, y) in cara if y <= 9 and 6 <= x <= 9}
+        if estilo == 'medio': return topo(12, 0, 1) | {(x, y) for x in range(2, 14) for y in range(12, 15)}
+        if estilo == 'bandolete': return topo(12, 0, 1) | {(x, y) for x in range(2, 14) for y in range(12, 17)}
         if estilo == 'afro': return topo(12, 0, 3) | {(x, y) for x in range(0, 16) for y in range(0, 12) if (x - 7.5) ** 2 / 64 + (y - 6) ** 2 / 49 <= 1}
         if estilo == 'carrapito': return topo(12, 0, 1) | {(x, y) for x in range(5, 11) for y in range(-2, 2)}
         m = topo(12, 0, 2 if estilo == 'caracois' else 1)
@@ -39,7 +40,10 @@ def cabelo_mask(estilo, vista):
     if estilo == 'afro':
         m = topo(5, 3, 2) | {(x, y) for x in (0, 1, 14, 15) for y in range(2, 10)} | {(x, y) for x in range(1, 15) for y in range(0, 3)}
     elif estilo == 'risca': m = topo(5, 2, 1)
-    elif estilo == 'moicano': m = {(x, y) for x in range(6, 10) for y in range(0, 6)} | {(x, y) for (x, y) in cara if y <= 3 and 6 <= x <= 9}
+    elif estilo == 'entradas': m = {(x, y) for (x, y) in cara if y <= 4 and not (5 <= x <= 10 and y >= 2)} | {(x, y) for (x, y) in cara if y <= 7 and (x <= 3 or x >= 12)}
+    elif estilo == 'topete': m = topo(4, 2, 2) | {(x, y) for x in range(4, 11) for y in range(0, 2)}
+    elif estilo == 'medio': m = topo(5, 2, 1) | {(x, y) for x in (1, 2, 13, 14) for y in range(5, 13)}
+    elif estilo == 'bandolete': m = topo(5, 2, 1) | {(x, y) for x in (1, 2, 13, 14) for y in range(6, 16)}
     elif estilo == 'carrapito': m = topo(4, 2, 1) | {(x, y) for x in range(6, 10) for y in range(0, 1)}
     elif estilo == 'trancas': m = topo(4, 3)
     elif estilo == 'gorro': m = set()
@@ -65,6 +69,9 @@ def cara(pele, cab, estilo, barba, vista, mulher=False, bone=((222, 64, 54), (18
         for y in (8, 9, 10): pix[(3, y)] = 'orelha'
     for h in cabelo_mask(estilo, vista):
         if 0 <= h[0] < W and 0 <= h[1] < H: pix[h] = 'cabelo'
+    if estilo == 'bandolete' and vista != 'costas':
+        for x in range(3, 13):
+            if (x, 3) in pix: pix[(x, 3)] = 'aba'
     if estilo == 'gorro':
         for y in range(0, 7):
             if y in FORMA:
@@ -103,9 +110,11 @@ def cara(pele, cab, estilo, barba, vista, mulher=False, bone=((222, 64, 54), (18
             if estilo in ('caracois', 'afro'):
                 if x % 3 == 1 and y % 3 == 1: t = 0
                 elif (x % 3 == 0) != (y % 3 == 0) and (x * 7 + y * 3) % 5 < 2: t = 2
-            elif estilo in ('curto', 'franja', 'risca', 'carrapito', 'moicano'):
+            elif estilo in ('curto', 'franja', 'risca', 'carrapito', 'topete', 'entradas', 'medio', 'bandolete'):
                 if y == y0 + 2 and x % 4 == 2: t = 2         # algumas madeixas marcadas
                 if estilo == 'risca' and x == 5 and y <= y0 + 3: t = 0
+            elif estilo in ('comprido', 'rabo', 'medio', 'bandolete') and y > 7:
+                if x % 3 == 0: t = 2
             elif estilo in ('comprido', 'rabo'):
                 if y > 7 and x % 3 == 0: t = 2               # fios a descer
             elif estilo == 'rapado':
@@ -130,6 +139,23 @@ def cara(pele, cab, estilo, barba, vista, mulher=False, bone=((222, 64, 54), (18
         if extra == 'bigode':
             for x in range(boca[0] - 1, boca[1] + 1):
                 if (x, 12) in pix: p[x, 12] = cab[1] + (255,)
+        if extra == 'escuros':                                # óculos de sol
+            for ex in olhos:
+                for x in range(ex - 1, ex + 3):
+                    for y in (8, 9, 10):
+                        if (x, y) in pix: p[x, y] = (34, 30, 40, 255)
+                if (ex, 8) in pix: p[ex, 8] = (120, 130, 150, 255)
+            for x in range(olhos[0] + 2, olhos[1] - 1):
+                if (x, 8) in pix: p[x, 8] = (34, 30, 40, 255)
+        if extra == 'pera':
+            for x in range(boca[0], boca[1]):
+                if (x, 14) in pix: p[x, 14] = cab[1] + (255,)
+            if (boca[0], 15) in pix: p[boca[0], 15] = cab[1] + (255,)
+        if extra == 'rala':
+            for (x, y) in list(pix):
+                if pix[(x, y)] == 'pele' and y >= 12 and (x + y) % 2 == 0 and (vista == 'frente' or x >= 5): p[x, y] = pele[2] + (255,)
+        if extra == 'brinco' and vista == 'frente':
+            p[1, 11] = (240, 200, 60, 255)
         if extra == 'oculos':                                 # armação fina e escura à volta dos olhos, com ponte
             ARM = (70, 64, 80)
             for ex in olhos:
@@ -155,10 +181,9 @@ def gerar(n, seed=1):
     random.seed(seed); out = []
     for i in range(n):
         estilo = random.choice(ESTILOS)
-        mulher = estilo in ('comprido', 'rabo', 'carrapito') or (estilo in ('afro', 'trancas', 'franja') and random.random() < .5)
+        mulher = estilo in ('comprido', 'rabo', 'carrapito', 'bandolete') or (estilo in ('afro', 'trancas', 'franja') and random.random() < .5)
         cab = random.choice(CABELOS[:5]) if random.random() < .88 else CABELOS[5]
-        extra = None if mulher else random.choice([None, None, None, 'bigode', 'oculos'])
-        if mulher and random.random() < .15: extra = 'oculos'
+        extra = random.choice([None, None, 'bigode', 'oculos', 'oculos', 'escuros', 'pera', 'rala']) if not mulher else random.choice([None, None, 'oculos', 'escuros', 'brinco', 'brinco'])
         out.append(dict(pele=random.choice(PELES), cab=cab, estilo=estilo, barba=(not mulher) and random.random() < 0.25,
                         mulher=mulher, bone=random.choice(BONES), extra=extra))
     return out
@@ -170,8 +195,8 @@ def vistas(d):
     return f, c, r, r.transpose(Image.FLIP_LEFT_RIGHT)
 if __name__ == '__main__':
     import sys
-    D = gerar(12, 11); Z = 10
-    out = Image.new('RGBA', (12 * 18 * Z + 44 * Z, 4 * 21 * Z), (60, 60, 70, 255))
+    D = gerar(16, 23); Z = 8
+    out = Image.new('RGBA', (16 * 18 * Z + 44 * Z, 4 * 21 * Z), (60, 60, 70, 255))
     atl = Image.open('/home/user/Corner-Men/arte/cabecas-pixellab/variantes/00-corpo-base/south-west.png').convert('RGBA').crop((0, 0, 40, 28))
     out.alpha_composite(atl.resize((40 * Z, 28 * Z), Image.NEAREST), (0, 0))
     for i, d in enumerate(D):
