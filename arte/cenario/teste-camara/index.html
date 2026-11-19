@@ -290,7 +290,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     var foco, d;
     // não recua mais do que 16,5 m (senão fica no teto do pavilão): para ver mais, abre a lente
     function lente(W, dist) { var hh = Math.atan(W / dist); return Math.max(c.fov, 2 * Math.atan(Math.tan(hh) / camera.aspect) * 180 / Math.PI); }
-    if (cam === 'D') { foco = new THREE.Vector3(0, H + 0.6, 0); d = 16.5; camera.fov = lente(R + 2.0, d); }
+    if (cam === 'D') { foco = new THREE.Vector3(0, H + 0.6, 0); d = 16.5; camera.fov = lente(R + 2.9, d); }
     else {                                               // câmara TV: enquadra os dois com folga
       var mid = alvoSuave;
       var fx = mid.x * 0.55;
