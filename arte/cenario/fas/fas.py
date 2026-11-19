@@ -26,10 +26,13 @@ def cabeca(im):
             p = px[x, y]
             X = x - cx + W // 2
             if p[3] and 0 <= X < W and not isred(p): po[X, y - top] = p
-    hh = fim - top + 1                               # tira restos dos ombros que ficam junto ao queixo
-    for y in range(max(0, hh - 3), hh):
-        for X in range(W):
-            if abs(X - W // 2) > 6 and po[X, y][3]: po[X, y] = (0, 0, 0, 0)
+    hh = fim - top + 1
+    # corta o pescoço do atleta: fica só a cara até ao queixo (a última linha com a cara ainda larga)
+    larg = [sum(1 for X in range(W) if po[X, y][3]) for y in range(hh)]
+    queixo = max(y for y in range(hh) if larg[y] >= 8)
+    for y in range(queixo + 1, hh):
+        for X in range(W): po[X, y] = (0, 0, 0, 0)
+    fim = top + queixo
     pele = Counter(p[:3] for y in range(top, fim) for x in range(w) for p in [px[x, y]] if isskin(p))
     tons = sorted([c for c, _ in pele.most_common(6)], key=lum, reverse=True)
     rampa = (tons[0], tons[len(tons)//2], tons[-1]) if tons else ((240, 190, 150), (215, 160, 120), (170, 110, 80))
@@ -128,7 +131,7 @@ def fa(fonte, pose, costas, roupa, calca):
     frente, tras = fonte
     head, rampa, hh = cabeca(tras if costas else frente)
     im = corpo(pose, costas, roupa, calca, rampa)
-    im.alpha_composite(head, (0, 20 - hh))                    # a cabeça fica por cima do pescoço (vê-se o pescoço antes da gola)
+    im.alpha_composite(head, (0, 22 - hh))                    # primeiro a camisola, depois a cara por cima (o queixo assenta na gola)
     if pose == 'bracos': im.alpha_composite(bracos_no_ar(rampa, roupa))
     return im
 if __name__ == '__main__':
