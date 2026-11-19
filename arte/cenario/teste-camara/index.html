@@ -57,7 +57,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
 (function () {
   // ---------- câmaras a comparar (todas do nosso lado do ringue, como a câmara principal da TV) ----------
   var CAMS = {
-    TV: { el: 25, dist: 16.5, fov: 38, txt: '25°. Acompanha a luta para os lados; aproxima-se e afasta-se pouco e devagar.' },
+    TV: { el: 25, dist: 16.5, fov: 38, txt: '25°, distância fixa. Acompanha a luta devagar e só um pouco.' },
     D:  { el: 25, dist: 16.5, fov: 38, txt: '25°, parada, a ver o ringue todo.' },
     E:  { el: 34, dist: 30,   fov: 46, txt: 'Cenário completo, visto do nosso lado: o ringue, o público, as portas dos balneários ao fundo.' }
   };
@@ -278,7 +278,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   [-0.2, 0.6, 1.4].forEach(function (x) { var F = fan(x, 0.45, R + 1.95, true); F.v = 3; F.fixo = true; poeFan(F); cadeira(x, R + 2.0, Math.PI, 0x55585e); });
 
   // ---------- câmara e tamanho ----------
-  var alvo = new THREE.Vector3(0, H + 0.9, 0), alvoSuave = alvo.clone(), dSuave = 12;
+  var alvo = new THREE.Vector3(0, H + 0.9, 0), alvoSuave = alvo.clone(), fovSuave = 38;
   function poeCamara(dt) {
     var c = CAMS[cam], e = c.el * Math.PI / 180;
     camera.fov = c.fov;
@@ -293,17 +293,18 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     if (cam === 'D') { foco = new THREE.Vector3(0, H + 0.6, 0); d = 16.5; camera.fov = lente(R + 2.0, d); }
     else {                                               // câmara TV: enquadra os dois com folga
       var mid = alvoSuave;
-      var W = Math.max(Math.abs(A.pos.x - mid.x), Math.abs(B.pos.x - mid.x)) + 1.2;
+      var fx = mid.x * 0.55;
+      var W = Math.max(Math.abs(A.pos.x - fx), Math.abs(B.pos.x - fx)) + 1.2;
       W = Math.max(W, Math.abs(A.pos.z - B.pos.z) * 0.45 + 1.3);
       var edge = Math.max(Math.abs(A.pos.x), Math.abs(A.pos.z), Math.abs(B.pos.x), Math.abs(B.pos.z));
       if (edge > 1.7) W = W + (R + 0.8 - W) * Math.min(1, (edge - 1.7) / 1.0);   // perto das cordas: mostra as cordas
       var hh = Math.atan(Math.tan(c.fov * Math.PI / 360) * camera.aspect);
       // pouca aproximação: a distância mexe pouco e devagar; o resto faz-se a acompanhar a luta para os lados
-      var want = Math.min(13.5, Math.max(11, W / Math.tan(hh)));
-      dSuave += (want - dSuave) * Math.min(1, dt * 0.0008);
-      d = dSuave;
-      camera.fov = lente(W, d);
-      foco = new THREE.Vector3(mid.x, H + 0.8, mid.z * 0.85);
+      // distância fixa; segue a luta só em parte e devagar; a lente só abre se alguém for ficar de fora
+      d = 13;
+      fovSuave += (lente(W, d) - fovSuave) * Math.min(1, dt * 0.001);
+      camera.fov = fovSuave;
+      foco = new THREE.Vector3(mid.x * 0.55, H + 0.8, mid.z * 0.35);
     }
     camera.position.set(foco.x, foco.y + Math.sin(e) * d, foco.z + Math.cos(e) * d);
     camera.lookAt(foco); camera.updateProjectionMatrix();
@@ -345,7 +346,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     A.face.set(B.pos.x - A.pos.x, B.pos.z - A.pos.z).normalize();
     B.face.set(-A.face.x, -A.face.y);
     alvo.set((A.pos.x + B.pos.x) / 2, H + 0.9, (A.pos.z + B.pos.z) / 2);
-    alvoSuave.lerp(alvo, Math.min(1, dt * 0.003));
+    alvoSuave.lerp(alvo, Math.min(1, dt * 0.0012));
     poeCamara(dt);
     poeLutador(A, dt); poeLutador(B, dt);
     fans.forEach(function (F) {
