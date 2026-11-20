@@ -8,15 +8,21 @@ import saltitar as S, guarda as G, andar as A
 AQUI = os.path.dirname(os.path.abspath(__file__))
 INCLINA = [0, 0, 1, 1, 1, 0] * 2      # no ar o corpo de cima vai 1 píxel para onde ele se desloca
 TRAS_NO_AR = [0, 0, 0, 0, 1, 0] * 2   # a descer, o pé de trás ainda vem no ar (aterra depois do da frente)
-def inclina(im, K, v, n):
-    if not n: return im
+def cintura(im):
+    """linha de cima dos calções (o elástico branco)"""
+    px = im.load()
+    return next(y for y in range(30, 52) if sum(1 for x in range(40) if S.cls(px[x, y]) == 'w') >= 4)
+def inclina(im, C, v, n):
+    """o corpo dobra pela cintura (linha C) só para o lado para onde vai; calções e pernas ficam inteiros.
+    Para a frente/para trás no ecrã (vistas de frente e de costas) não se mexe: não há linhas vazias."""
+    if not n or not v[0]: return im
     out = Image.new('RGBA', im.size); po, pi = out.load(), im.load()
     for y in range(60):
         for x in range(40):
-            if y > K: po[x, y] = pi[x, y]
+            if y >= C: po[x, y] = pi[x, y]
             else:
-                X, Y = x - n*v[0], y - n*v[1]
-                if 0 <= X < 40 and 0 <= Y <= K: po[x, y] = pi[X, Y]
+                X = x - n*v[0]
+                if 0 <= X < 40: po[x, y] = pi[X, y]
     return out
 def levanta(im, L0, perna, n):
     if not n or not perna: return im
@@ -32,6 +38,7 @@ def gif(pastas, saida):
     bases = {n: Image.open(os.path.join(S.BASE, n + '.png')).convert('RGBA') for n, _ in S.ORD}
     ML = {n: G.mascara_img(G.luvas(bases[n])) for n, _ in S.ORD}
     PE = {n: A.pernas(bases[n], t) for n, t in S.ORD}
+    CI = {n: cintura(bases[n]) for n, _ in S.ORD}
     Z, PAD, LAB = 4, 4, 28; frames = []
     for i, (kind, lu) in enumerate(zip(G.PASSOS, G.LUVA)):
         lift = 1 if kind == 'ar' else 0
@@ -43,8 +50,8 @@ def gif(pastas, saida):
                 ox, oy = k*40*Z, r*(60+PAD)*Z; w = 14 - 2*lift; cx = 20 + INCLINA[i]*v[0]
                 dr.ellipse((ox+(cx-w)*Z, oy+57*Z, ox+(cx+w)*Z, oy+60*Z), fill=(38, 38, 46, 255))
                 im = Image.open(os.path.join(pasta, n + '.png')).convert('RGBA')
-                im2 = levanta(inclina(im, K, v, INCLINA[i]), L0, tras, TRAS_NO_AR[i])
-                ml2 = inclina(ML[n], K, v, INCLINA[i])
+                im2 = levanta(inclina(im, CI[n], v, INCLINA[i]), L0, tras, TRAS_NO_AR[i])
+                ml2 = inclina(ML[n], CI[n], v, INCLINA[i])
                 fr.alpha_composite(G.fotograma(im2, K, toes, kind, lu, 0, ml2).resize((40*Z, 60*Z), Image.NEAREST), (ox, oy))
         frames.append(fr.convert('RGB'))
     frames[0].save(saida, save_all=True, append_images=frames[1:], duration=G.DUR, loop=0)
