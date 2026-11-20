@@ -33,6 +33,26 @@ def levanta(im, L0, perna, n):
         Y = y - round(n * (y - L0) / h)
         if 0 <= Y < 60: po[x, Y] = pi[x, y]
     return out
+DIRS = ['frente', 'tras', 'esq', 'dir']   # para onde ele vai, em relação ao sítio para onde está virado
+def mover(t, d):
+    """vetor no ecrã (x para a direita, y para nós) para onde ele se desloca, na vista t"""
+    fx, fy = A.FRENTE[t]
+    return {'frente': (fx, fy), 'tras': (-fx, -fy), 'dir': (-fy, fx), 'esq': (fy, -fx)}[d]
+def preparar():
+    """dados de cada vista tirados do corpo base (luvas, pernas, cintura, pés)"""
+    I = S.info(); P = {}
+    for n, t in S.ORD:
+        b = Image.open(os.path.join(S.BASE, n + '.png')).convert('RGBA')
+        P[n] = dict(K=I[n][0], toes=I[n][1], ml=G.mascara_img(G.luvas(b)), pe=A.pernas(b, t), c=cintura(b))
+    return P
+def quadro(im, P, n, t, d, i):
+    """fotograma i (0-11) do deslocar na direção d: a perna que fica para trás aterra depois"""
+    p = P[n]; m = mover(t, d); L0, fr, tr = p['pe']
+    proj = lambda c: (sum(q[0]*m[0] + q[1]*m[1] for q in c) / len(c)) if c else 99
+    atras = min([fr, tr], key=proj)
+    kind, lu = G.PASSOS[i], G.LUVA[i]
+    im2 = levanta(inclina(im, p['c'], m, INCLINA[i]), L0, atras, TRAS_NO_AR[i])
+    return G.fotograma(im2, p['K'], p['toes'], kind, lu, 0, inclina(p['ml'], p['c'], m, INCLINA[i]))
 def gif(pastas, saida):
     I = S.info(); f2 = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf', 18)
     bases = {n: Image.open(os.path.join(S.BASE, n + '.png')).convert('RGBA') for n, _ in S.ORD}

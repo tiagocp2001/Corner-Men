@@ -3,23 +3,26 @@ import sys, os, random
 from PIL import Image
 AQUI = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, os.path.join(AQUI, '..', '..', 'animacao'))
-import saltitar as S, guarda as G
+import saltitar as S, guarda as G, deslocar as D
+ANIMS = ['guarda'] + D.DIRS          # linhas do atlas: animação * 8 + vista
+def azular(f):
+    px = f.load()
+    for y in range(60):
+        for x in range(40):
+            p = px[x, y]
+            if p[3] and S.cls(p) == 'r':
+                px[x, y] = (int(p[0]*.16), int(p[0]*.42), min(255, int(p[0]*1.02)), 255)
+    return f
 def atlas(pasta, azul=False):
-    I = S.info(); out = Image.new('RGBA', (40*12, 60*8))
+    """pugilista: guarda + deslocar (frente, trás, esq., dir.), 8 vistas x 12 fotogramas cada"""
+    P = D.preparar(); out = Image.new('RGBA', (40*12, 60*8*len(ANIMS)))
     for r, (n, t) in enumerate(S.ORD):
-        im = Image.open(os.path.join(pasta, n + '.png')).convert('RGBA')
-        ml = G.mascara_img(G.luvas(Image.open(os.path.join(S.BASE, n + '.png')).convert('RGBA')))
-        K, toes = I[n]
-        for c, (kind, lu, pe) in enumerate(zip(G.PASSOS, G.LUVA, G.PESO)):
-            f = G.fotograma(im, K, toes, kind, lu, pe, ml)
-            if azul:
-                px = f.load()
-                for y in range(60):
-                    for x in range(40):
-                        p = px[x, y]
-                        if p[3] and S.cls(p) == 'r':
-                            px[x, y] = (int(p[0]*.16), int(p[0]*.42), min(255, int(p[0]*1.02)), 255)
-            out.paste(f, (c*40, r*60))
+        im = Image.open(os.path.join(pasta, n + '.png')).convert('RGBA'); p = P[n]
+        for a, an in enumerate(ANIMS):
+            for c in range(12):
+                if an == 'guarda': f = G.fotograma(im, p['K'], p['toes'], G.PASSOS[c], G.LUVA[c], G.PESO[c], p['ml'])
+                else: f = D.quadro(im, P, n, t, an, c)
+                out.paste(azular(f) if azul else f, (c*40, (a*8 + r)*60))
     return out
 # ---- fãs: 12x18, poses: 0 sentado, 1 braços no ar, 2 palmas (de frente); 3 sentado, 4 braços (de costas)
 PELE = [(249,207,166),(233,165,127),(217,147,95),(184,112,70),(140,74,51),(104,50,35)]
@@ -63,4 +66,3 @@ def fas():
 if __name__ == '__main__':
     atlas(S.BASE).save(os.path.join(AQUI, 'lutador-a.png'))
     atlas(sys.argv[1], azul=True).save(os.path.join(AQUI, 'lutador-b.png'))
-    fas().save(os.path.join(AQUI, 'fas.png'))

@@ -48,7 +48,9 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
       <button id="camTV" type="button">TV tripé</button>
       <button id="camE" type="button">Cenário</button>
       <button id="camP" type="button">Testes</button>
-      <button id="roda" type="button" aria-pressed="true">Mexer</button>
+    </div>
+    <div class="ctrl" id="mov" aria-label="Movimento">
+      <button type="button" data-m="auto" aria-pressed="true">Livre</button><button type="button" data-m="ft">Frente/trás</button><button type="button" data-m="lados">De lado</button><button type="button" data-m="parado">Parados</button>
     </div>
     <div class="ctrl" id="dst" aria-label="Distância">
       <button type="button" data-d="0.95">Longe</button><button type="button" data-d="0.85" aria-pressed="true">Meio</button><button type="button" data-d="0.75">Perto</button>
@@ -69,7 +71,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     P:  { el: 20, dist: 5.5, fov: 34, txt: 'Perto dos pugilistas e a segui-los, para ver bem as animações.' },
     E:  { el: 34, dist: 25,   fov: 46, txt: 'Cenário completo, visto do nosso lado: o ringue, o público, as portas dos balneários ao fundo.' }
   };
-  var cam = 'D', rodar = true;
+  var cam = 'D', MOV = 'auto';
   var SCALE = 1 / Math.min(3, window.devicePixelRatio || 1); // resolução total do ecrã (nítido); os bonecos continuam em pixel art
 
   var cv = document.getElementById('cv');
@@ -203,14 +205,14 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   var VANG = [0, 45, 72, 100, 140, 195, 270, 315];
   var DUR = [90, 100, 80, 110, 80, 100, 90, 100, 80, 110, 80, 100];
   function lutador(base) {
-    var t = base.clone(); t.needsUpdate = true; t.repeat.set(1 / 12, 1 / 8);
+    var t = base.clone(); t.needsUpdate = true; t.repeat.set(1 / 12, 1 / 40);   // atlas: 5 animações (guarda, frente, trás, esq., dir.) x 8 vistas
     // de pé na vertical (só roda à volta de si para olhar a câmara): a cabeça fica sempre por cima dos pés, dentro das cordas
     var g = new THREE.PlaneGeometry(1, 1); g.translate(0, 0.5 - 1.5 / 60, 0);
     var s = new THREE.Mesh(g, new THREE.MeshBasicMaterial({ map: t, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide }));
     s.scale.set(1.85 * 40 / 60, 1.85, 1); scene.add(s);
     var sh = new THREE.Mesh(new THREE.CircleGeometry(0.42, 16), new THREE.MeshBasicMaterial({ color: 0x000000, transparent: true, opacity: 0.35 }));
     sh.rotation.x = -Math.PI / 2; sh.scale.set(1, 0.55, 1); scene.add(sh);
-    return { s: s, t: t, sh: sh, pos: new THREE.Vector3(), face: new THREE.Vector2(1, 0), f: 0, acc: 0 };
+    return { s: s, t: t, sh: sh, pos: new THREE.Vector3(), prev: null, vel: new THREE.Vector2(), face: new THREE.Vector2(1, 0), f: 0, acc: 0 };
   }
   var A = lutador(TA), B = lutador(TB);
   B.f = 5;
@@ -225,7 +227,12 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   function poeLutador(L, dt) {
     L.acc += dt; while (L.acc > DUR[L.f]) { L.acc -= DUR[L.f]; L.f = (L.f + 1) % 12; }
     var v = vista(L);
-    L.t.offset.set(L.f / 12, 1 - (v + 1) / 8);
+    // para onde se está a mexer, em relação ao adversário: guarda, frente, trás, esquerda ou direita
+    if (L.prev && dt > 0) L.vel.lerp(new THREE.Vector2((L.pos.x - L.prev.x) / dt * 1000, (L.pos.z - L.prev.z) / dt * 1000), Math.min(1, dt * 0.01));
+    L.prev = L.pos.clone();
+    var fw = L.vel.dot(L.face), rt = L.vel.x * -L.face.y + L.vel.y * L.face.x, an = 0;
+    if (L.vel.length() > 0.15) an = Math.abs(fw) >= Math.abs(rt) ? (fw > 0 ? 1 : 2) : (rt > 0 ? 4 : 3);
+    L.t.offset.set(L.f / 12, 1 - (an * 8 + v + 1) / 40);
     L.s.position.set(L.pos.x, H + 0.04, L.pos.z);
     var cx = camera.position.x - L.pos.x, cz = camera.position.z - L.pos.z, cy = camera.position.y - H - 0.9;
     L.s.rotation.y = Math.atan2(cx, cz);
@@ -355,9 +362,10 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     desc.innerHTML = '<b>' + NOMES[k] + '</b>' + CAMS[k].txt;
   }
   ['TV', 'D', 'E', 'P'].forEach(function (k) { document.getElementById('cam' + k).addEventListener('click', function () { escolhe(k); }); });
-  document.getElementById('roda').addEventListener('click', function () {
-    rodar = !rodar; this.setAttribute('aria-pressed', rodar ? 'true' : 'false');
-  });
+  document.querySelectorAll('#mov button').forEach(function (b) { b.addEventListener('click', function () {
+    MOV = b.dataset.m;
+    document.querySelectorAll('#mov button').forEach(function (o) { o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
+  }); });
   escolhe('D');
   // lotação: cada lugar tem um fã com um número ao acaso; vê-se se o número for menor que a lotação
   function lotacao(p) {
@@ -378,12 +386,17 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   function frame(now) {
     var dt = Math.min(100, now - last); last = now;
     var cx = 0, cz = 0;
-    if (rodar) {                                          // andam pelo ringue: aproximam-se, afastam-se, vão às cordas
-      tm += dt; ang += dt * 0.00025;
+    if (MOV !== 'parado') tm += dt;
+    if (MOV === 'auto') {                                 // andam pelo ringue: aproximam-se, afastam-se, vão às cordas
+      ang += dt * 0.00025;
       cx = 1.6 * Math.sin(tm * 0.00031); cz = 1.1 * Math.sin(tm * 0.00047 + 1);
+    } else if (MOV === 'ft') {                            // um avança e o outro recua, depois ao contrário
+      var u = 1.0 * Math.sin(tm * 0.0006); cx = -Math.cos(ang) * u; cz = -Math.sin(ang) * u;
+    } else if (MOV === 'lados') {                         // rodam um à volta do outro
+      ang += dt * 0.0012 * (Math.sin(tm * 0.0004) > 0 ? 1 : -1);   // para um lado ~8 s, depois para o outro
     }
     sepSuave += (DIST - sepSuave) * Math.min(1, dt * 0.004);           // chega à nova distância em ~1 s
-    var sep = sepSuave + (rodar ? 0.08 * Math.sin(tm * 0.002) : 0);    // pequeno vai-e-vem
+    var sep = sepSuave + (MOV === 'auto' ? 0.08 * Math.sin(tm * 0.002) : 0);    // pequeno vai-e-vem
     var ox = Math.cos(ang) * sep / 2, oz = Math.sin(ang) * sep / 2, lim = R - 0.45;
     A.pos.set(Math.max(-lim, Math.min(lim, cx + ox)), 0, Math.max(-lim, Math.min(lim, cz + oz)));
     B.pos.set(Math.max(-lim, Math.min(lim, cx - ox)), 0, Math.max(-lim, Math.min(lim, cz - oz)));
