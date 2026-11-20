@@ -328,7 +328,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     var foco, d;
     // não recua mais do que 16,5 m (senão fica no teto do pavilão): para ver mais, abre a lente
     function lente(W, dist) { var hh = Math.atan(W / dist); return Math.max(c.fov, 2 * Math.atan(Math.tan(hh) / camera.aspect) * 180 / Math.PI); }
-    if (cam === 'D') { foco = new THREE.Vector3(0, H + 0.6, 0); d = 16.5; camera.fov = lente(R + 2.9, d); }
+    if (cam === 'D') { foco = new THREE.Vector3(0, H + 0.6, 0); d = 16.5; camera.fov = lente(R + 1.9, d); }
     else if (cam === 'TV') {                             // tripé: posição fixa, só roda para apontar ao meio dos dois
       var p0 = new THREE.Vector3(0, H + 0.8 + Math.sin(e) * c.dist, Math.cos(e) * c.dist);
       camera.position.copy(p0); camera.lookAt(alvoSuave.x, H + 0.8, alvoSuave.z); camera.updateProjectionMatrix(); return;
