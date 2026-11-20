@@ -10,7 +10,7 @@ DIRS = ['south','south-east','east','north-east','north','north-west','west','so
 def mcp(tool, args):
     out = subprocess.run([sys.executable, '-I', os.path.join(AQUI, 'mcp.py'), tool, json.dumps(args)],
                          capture_output=True, text=True).stdout
-    d = json.loads(out)
+    d = json.loads(out, strict=False)
     return '\n'.join(c.get('text', '') for c in d['result']['content'])
 
 def disponivel():

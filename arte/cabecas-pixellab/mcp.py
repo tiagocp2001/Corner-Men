@@ -32,4 +32,4 @@ if __name__ == '__main__':
         for t in r['result']['tools']: print(t['name'], '|', t.get('description', '')[:150].replace('\n', ' '))
     else:
         r = tool(sys.argv[1], json.loads(sys.argv[2]) if len(sys.argv) > 2 else {})
-        print(json.dumps(r, ensure_ascii=False)[:6000])
+        print(json.dumps(r, ensure_ascii=False))
