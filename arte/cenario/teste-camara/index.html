@@ -299,8 +299,8 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   box(2.4, 0.04, 0.6, 0xece9e0, 0, EY + 0.74, -4.75); box(2.3, 0.7, 0.5, 0xd9d5c8, 0, EY + 0.37, -4.75);
   var pano = new THREE.Mesh(new THREE.PlaneGeometry(2.3, 0.62), letreiro('RÁDIO LOCAL', 92, 24, '#1f3a6b', '#f2d36b'));
   pano.position.set(0, EY + 0.4, -4.49); scene.add(pano);
-  box(0.36, 0.02, 0.26, 0x2b2b30, 0.05, EY + 0.77, -4.8); box(0.36, 0.24, 0.02, 0x2b2b30, 0.05, EY + 0.89, -4.93);   // portátil
-  box(0.32, 0.2, 0.01, 0x7fb4e0, 0.05, EY + 0.89, -4.915, 0x2a4a70);
+  box(0.36, 0.02, 0.26, 0x2b2b30, 0.05, EY + 0.77, -4.85); box(0.36, 0.24, 0.02, 0x2b2b30, 0.05, EY + 0.89, -4.72);   // portátil: ecrã virado para os comentadores
+  box(0.32, 0.2, 0.01, 0x7fb4e0, 0.05, EY + 0.89, -4.735, 0x2a4a70);
   [-0.55, 0.55].forEach(function (x, j) {
     box(0.02, 0.22, 0.02, 0x333333, x, EY + 0.87, -4.7); box(0.06, 0.08, 0.06, 0x1a1a1a, x, EY + 1.0, -4.7);   // microfone de pé
     var F = fan(x, EY + 0.42, -5.3, 'f'); F.fixo = true; F.v = 43 + j; poeFan(F);
