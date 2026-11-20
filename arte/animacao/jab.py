@@ -105,7 +105,7 @@ def quadro(im, t, base, ext, inc):
     alc = (9 if lado else 8 if fx else 0) * ext
     if fx: dx = fx * alc
     elif fy > 0: dx = (W2/2 - cx) * 0.6 * ext                            # de frente: vem para nós, para o meio
-    else: dx = (cx - W2/2) * 0.25 * ext                                  # de costas: sai pelo lado do ombro
+    else: dx = (W2/2 - cx) * 0.3 * ext                                   # de costas: vai para a frente, junto à cabeça
     dy = (fy * 2 if fy > 0 else -4) * ext if not fx else (fy * 2 * ext - (1 if lado else 0) * ext)
     esc = 1 + (0.5 if fy > 0 else -0.2 if fy < 0 else 0) * ext * (1 if not fx else 0.4)
     L = luva.resize((max(1, round(luva.width*esc)), max(1, round(luva.height*esc))), Image.NEAREST)
@@ -113,12 +113,12 @@ def quadro(im, t, base, ext, inc):
     # ombro: atrás da luva da guarda, um pouco acima
     ox, oy = cx - fx*4 + inc*fx, y0 + 2
     dr = ImageDraw.Draw(corpo)
-    if fy >= 0 or fx:                                               # de costas o braço fica escondido pelo corpo
+    if True:                                                        # de costas vê-se o braço por cima do ombro
         braco(dr, (ox, oy), (nx - fx*L.width*0.3, ny), pele, cont)
     out = corpo.copy()
     if fy < 0 and not fx:                                           # de costas: a luva passa por trás da cabeça/ombro
         tmp = Image.new('RGBA', out.size); tmp.alpha_composite(L, (round(nx - L.width/2), round(ny - L.height/2)))
-        tmp.alpha_composite(corpo); return tmp
+        tmp.alpha_composite(corpo); return tmp   # a luva fica atrás do corpo e do braço (está mais longe)
     out.alpha_composite(L, (round(nx - L.width/2), round(ny - L.height/2)))
     return out
 
