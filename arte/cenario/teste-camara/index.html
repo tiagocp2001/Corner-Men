@@ -53,7 +53,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
       <button type="button" data-m="auto" aria-pressed="true">Livre</button><button type="button" data-m="ft">Frente/trás</button><button type="button" data-m="lados">De lado</button><button type="button" data-m="parado">Parados</button>
     </div>
     <div class="ctrl" id="dst" aria-label="Distância">
-      <button type="button" data-d="0.95">Longe</button><button type="button" data-d="0.85" aria-pressed="true">Meio</button><button type="button" data-d="0.75">Perto</button>
+      <button type="button" data-d="livre">Livre</button><button type="button" data-d="0.95">Longe</button><button type="button" data-d="0.85" aria-pressed="true">Meio</button><button type="button" data-d="0.75">Perto</button>
     </div>
     <div class="ctrl" id="lot" aria-label="Público">
       <button type="button" data-p="0">0%</button><button type="button" data-p="25">25%</button><button type="button" data-p="50" aria-pressed="true">50%</button><button type="button" data-p="75">75%</button><button type="button" data-p="100">100%</button>
@@ -231,7 +231,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     if (L.prev && dt > 0) L.vel.lerp(new THREE.Vector2((L.pos.x - L.prev.x) / dt * 1000, (L.pos.z - L.prev.z) / dt * 1000), Math.min(1, dt * 0.01));
     L.prev = L.pos.clone();
     var fw = L.vel.dot(L.face), rt = L.vel.x * -L.face.y + L.vel.y * L.face.x, an = 0;
-    if (L.vel.length() > 0.15) an = Math.abs(fw) >= Math.abs(rt) ? (fw > 0 ? 1 : 2) : (rt > 0 ? 4 : 3);
+    if (L.vel.length() > 0.08) an = Math.abs(fw) >= Math.abs(rt) ? (fw > 0 ? 1 : 2) : (rt > 0 ? 4 : 3);
     L.t.offset.set(L.f / 12, 1 - (an * 8 + v + 1) / 40);
     L.s.position.set(L.pos.x, H + 0.04, L.pos.z);
     var cx = camera.position.x - L.pos.x, cz = camera.position.z - L.pos.z, cy = camera.position.y - H - 0.9;
@@ -375,9 +375,10 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   document.querySelectorAll('#lot button').forEach(function (b) { b.addEventListener('click', function () { lotacao(+b.dataset.p); }); });
   lotacao(50);
   // distância entre os dois (centro a centro): longe 0,95 m · meio 0,85 m · perto 0,75 m
-  var DIST = 0.85, sepSuave = 0.85;
+  // Livre: de 2 a 4 s muda sozinho para uma das três distâncias
+  var DIST = 0.85, sepSuave = 0.85, DLIVRE = false, dTimer = 0;
   document.querySelectorAll('#dst button').forEach(function (b) { b.addEventListener('click', function () {
-    DIST = +b.dataset.d;
+    DLIVRE = b.dataset.d === 'livre'; if (!DLIVRE) DIST = +b.dataset.d; dTimer = 0;
     document.querySelectorAll('#dst button').forEach(function (o) { o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
   }); });
 
@@ -395,7 +396,8 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     } else if (MOV === 'lados') {                         // rodam um à volta do outro
       ang += dt * 0.0012 * (Math.sin(tm * 0.0004) > 0 ? 1 : -1);   // para um lado ~8 s, depois para o outro
     }
-    sepSuave += (DIST - sepSuave) * Math.min(1, dt * 0.004);           // chega à nova distância em ~1 s
+    if (DLIVRE && (dTimer -= dt) <= 0) { DIST = [0.95, 0.85, 0.75][Math.floor(Math.random() * 3)]; dTimer = 2000 + Math.random() * 2000; }
+    var dS = DIST - sepSuave, pS = dt * 0.00025; sepSuave += Math.abs(dS) < pS ? dS : Math.sign(dS) * pS;   // a 0,25 m/s: um ou dois saltos
     var sep = sepSuave + (MOV === 'auto' ? 0.08 * Math.sin(tm * 0.002) : 0);    // pequeno vai-e-vem
     var ox = Math.cos(ang) * sep / 2, oz = Math.sin(ang) * sep / 2, lim = R - 0.45;
     A.pos.set(Math.max(-lim, Math.min(lim, cx + ox)), 0, Math.max(-lim, Math.min(lim, cz + oz)));
