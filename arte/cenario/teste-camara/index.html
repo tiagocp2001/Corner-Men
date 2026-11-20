@@ -50,7 +50,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
       <button id="roda" type="button" aria-pressed="true">Mexer</button>
     </div>
     <div class="ctrl" id="dst" aria-label="Distância">
-      <button type="button" data-d="1.25">Longe</button><button type="button" data-d="0.9" aria-pressed="true">Meio</button><button type="button" data-d="0.7">Perto</button>
+      <button type="button" data-d="1.05">Longe</button><button type="button" data-d="0.9" aria-pressed="true">Meio</button><button type="button" data-d="0.7">Perto</button>
     </div>
     <div class="ctrl" id="lot" aria-label="Público">
       <button type="button" data-p="0">0%</button><button type="button" data-p="25">25%</button><button type="button" data-p="50" aria-pressed="true">50%</button><button type="button" data-p="75">75%</button><button type="button" data-p="100">100%</button>
@@ -363,7 +363,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   }
   document.querySelectorAll('#lot button').forEach(function (b) { b.addEventListener('click', function () { lotacao(+b.dataset.p); }); });
   lotacao(50);
-  // distância entre os dois (centro a centro): longe 1,25 m · meio 0,9 m · perto 0,7 m
+  // distância entre os dois (centro a centro): longe 1,05 m · meio 0,9 m · perto 0,7 m
   var DIST = 0.9, sepSuave = 0.9;
   document.querySelectorAll('#dst button').forEach(function (b) { b.addEventListener('click', function () {
     DIST = +b.dataset.d;
