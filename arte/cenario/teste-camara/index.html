@@ -47,6 +47,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
       <button id="camD" type="button" aria-pressed="true">Ringue todo</button>
       <button id="camTV" type="button">TV tripé</button>
       <button id="camE" type="button">Cenário</button>
+      <button id="camP" type="button">Testes</button>
       <button id="roda" type="button" aria-pressed="true">Mexer</button>
     </div>
     <div class="ctrl" id="dst" aria-label="Distância">
@@ -65,6 +66,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   var CAMS = {
     TV: { el: 25, dist: 11, fov: 38, txt: 'Câmara num tripé: não sai do sítio nem faz zoom, só roda para apontar aos pugilistas.' },
     D:  { el: 25, dist: 16.5, fov: 38, txt: '25°, parada, a ver o ringue todo.' },
+    P:  { el: 20, dist: 5.5, fov: 34, txt: 'Perto dos pugilistas e a segui-los, para ver bem as animações.' },
     E:  { el: 34, dist: 25,   fov: 46, txt: 'Cenário completo, visto do nosso lado: o ringue, o público, as portas dos balneários ao fundo.' }
   };
   var cam = 'D', rodar = true;
@@ -326,9 +328,10 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
       camera.lookAt(0, 1, -3); camera.updateProjectionMatrix(); return;
     }
     var foco, d;
+    if (cam === 'P') { foco = new THREE.Vector3(alvoSuave.x, H + 0.85, alvoSuave.z); d = c.dist; }
     // não recua mais do que 16,5 m (senão fica no teto do pavilão): para ver mais, abre a lente
     function lente(W, dist) { var hh = Math.atan(W / dist); return Math.max(c.fov, 2 * Math.atan(Math.tan(hh) / camera.aspect) * 180 / Math.PI); }
-    if (cam === 'D') { foco = new THREE.Vector3(0, H + 0.6, 0); d = 16.5; camera.fov = lente(R + 1.9, d); }
+    if (cam === 'D') { foco = new THREE.Vector3(0, H + 0.6, 0); d = 16.5; camera.fov = lente(R + 2.9, d); }
     else if (cam === 'TV') {                             // tripé: posição fixa, só roda para apontar ao meio dos dois
       var p0 = new THREE.Vector3(0, H + 0.8 + Math.sin(e) * c.dist, Math.cos(e) * c.dist);
       camera.position.copy(p0); camera.lookAt(alvoSuave.x, H + 0.8, alvoSuave.z); camera.updateProjectionMatrix(); return;
@@ -345,13 +348,13 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
 
   // ---------- botões ----------
   var desc = document.getElementById('desc');
-  var NOMES = { TV: 'TV TRIPÉ', D: 'RINGUE TODO', E: 'CENÁRIO' };
+  var NOMES = { TV: 'TV TRIPÉ', D: 'RINGUE TODO', E: 'CENÁRIO', P: 'TESTES' };
   function escolhe(k) {
     cam = k;
-    ['TV', 'D', 'E'].forEach(function (x) { document.getElementById('cam' + x).setAttribute('aria-pressed', x === k ? 'true' : 'false'); });
+    ['TV', 'D', 'E', 'P'].forEach(function (x) { document.getElementById('cam' + x).setAttribute('aria-pressed', x === k ? 'true' : 'false'); });
     desc.innerHTML = '<b>' + NOMES[k] + '</b>' + CAMS[k].txt;
   }
-  ['TV', 'D', 'E'].forEach(function (k) { document.getElementById('cam' + k).addEventListener('click', function () { escolhe(k); }); });
+  ['TV', 'D', 'E', 'P'].forEach(function (k) { document.getElementById('cam' + k).addEventListener('click', function () { escolhe(k); }); });
   document.getElementById('roda').addEventListener('click', function () {
     rodar = !rodar; this.setAttribute('aria-pressed', rodar ? 'true' : 'false');
   });
