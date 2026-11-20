@@ -49,6 +49,9 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
       <button id="camE" type="button">Cenário</button>
       <button id="roda" type="button" aria-pressed="true">Mexer</button>
     </div>
+    <div class="ctrl" id="dst" aria-label="Distância">
+      <button type="button" data-d="1.6">Longe</button><button type="button" data-d="1.1" aria-pressed="true">Meio</button><button type="button" data-d="0.7">Perto</button>
+    </div>
     <div class="ctrl" id="lot" aria-label="Público">
       <button type="button" data-p="0">0%</button><button type="button" data-p="25">25%</button><button type="button" data-p="50" aria-pressed="true">50%</button><button type="button" data-p="75">75%</button><button type="button" data-p="100">100%</button>
     </div>
@@ -360,17 +363,24 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   }
   document.querySelectorAll('#lot button').forEach(function (b) { b.addEventListener('click', function () { lotacao(+b.dataset.p); }); });
   lotacao(50);
+  // distância entre os dois (centro a centro): longe 1,6 m · meio 1,1 m · perto 0,7 m
+  var DIST = 1.1, sepSuave = 1.1;
+  document.querySelectorAll('#dst button').forEach(function (b) { b.addEventListener('click', function () {
+    DIST = +b.dataset.d;
+    document.querySelectorAll('#dst button').forEach(function (o) { o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
+  }); });
 
   // ---------- ciclo ----------
   var ang = Math.PI * 0.75, tm = 0, last = performance.now();
   function frame(now) {
     var dt = Math.min(100, now - last); last = now;
-    var sep = 2.5, cx = 0, cz = 0;
+    var cx = 0, cz = 0;
     if (rodar) {                                          // andam pelo ringue: aproximam-se, afastam-se, vão às cordas
       tm += dt; ang += dt * 0.00025;
-      sep = 2.3 + 0.9 * Math.sin(tm * 0.0007);
       cx = 1.6 * Math.sin(tm * 0.00031); cz = 1.1 * Math.sin(tm * 0.00047 + 1);
     }
+    sepSuave += (DIST - sepSuave) * Math.min(1, dt * 0.004);           // chega à nova distância em ~1 s
+    var sep = sepSuave + (rodar ? 0.08 * Math.sin(tm * 0.002) : 0);    // pequeno vai-e-vem
     var ox = Math.cos(ang) * sep / 2, oz = Math.sin(ang) * sep / 2, lim = R - 0.45;
     A.pos.set(Math.max(-lim, Math.min(lim, cx + ox)), 0, Math.max(-lim, Math.min(lim, cz + oz)));
     B.pos.set(Math.max(-lim, Math.min(lim, cx - ox)), 0, Math.max(-lim, Math.min(lim, cz - oz)));
