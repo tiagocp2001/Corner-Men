@@ -53,7 +53,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
       <button type="button" data-m="auto" aria-pressed="true">Livre</button><button type="button" data-m="ft">Frente/trás</button><button type="button" data-m="lados">De lado</button><button type="button" data-m="parado">Parados</button>
     </div>
     <div class="ctrl" id="dst" aria-label="Distância">
-      <button type="button" data-d="livre">Livre</button><button type="button" data-d="0.95">Longe</button><button type="button" data-d="0.85" aria-pressed="true">Meio</button><button type="button" data-d="0.75">Perto</button>
+      <button type="button" data-d="livre">Livre</button><button type="button" data-d="1.2">Fora</button><button type="button" data-d="0.95">Longe</button><button type="button" data-d="0.85" aria-pressed="true">Meio</button><button type="button" data-d="0.75">Perto</button>
     </div>
     <div class="ctrl" id="lot" aria-label="Público">
       <button type="button" data-p="0">0%</button><button type="button" data-p="25">25%</button><button type="button" data-p="50" aria-pressed="true">50%</button><button type="button" data-p="75">75%</button><button type="button" data-p="100">100%</button>
@@ -374,7 +374,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   }
   document.querySelectorAll('#lot button').forEach(function (b) { b.addEventListener('click', function () { lotacao(+b.dataset.p); }); });
   lotacao(50);
-  // distância entre os dois (centro a centro): longe 0,95 m · meio 0,85 m · perto 0,75 m
+  // distância entre os dois (centro a centro): fora de alcance 1,2 m (só visual, por decidir na luta) · longe 0,95 m · meio 0,85 m · perto 0,75 m
   // Livre: de 2 a 4 s muda sozinho para uma das três distâncias
   var DIST = 0.85, sepSuave = 0.85, DLIVRE = false, dTimer = 0;
   document.querySelectorAll('#dst button').forEach(function (b) { b.addEventListener('click', function () {
@@ -396,7 +396,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     } else if (MOV === 'lados') {                         // rodam um à volta do outro
       ang += dt * 0.0012 * (Math.sin(tm * 0.0004) > 0 ? 1 : -1);   // para um lado ~8 s, depois para o outro
     }
-    if (DLIVRE && (dTimer -= dt) <= 0) { DIST = [0.95, 0.85, 0.75][Math.floor(Math.random() * 3)]; dTimer = 2000 + Math.random() * 2000; }
+    if (DLIVRE && (dTimer -= dt) <= 0) { DIST = [1.2, 0.95, 0.95, 0.85, 0.85, 0.75, 0.75][Math.floor(Math.random() * 7)]; dTimer = 2000 + Math.random() * 2000; }   // fora de alcance de vez em quando
     var dS = DIST - sepSuave, pS = dt * 0.00025; sepSuave += Math.abs(dS) < pS ? dS : Math.sign(dS) * pS;   // a 0,25 m/s: um ou dois saltos
     var sep = sepSuave + (MOV === 'auto' ? 0.08 * Math.sin(tm * 0.002) : 0);    // pequeno vai-e-vem
     var ox = Math.cos(ang) * sep / 2, oz = Math.sin(ang) * sep / 2, lim = R - 0.45;
