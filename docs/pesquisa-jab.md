@@ -2,7 +2,9 @@
 
 Guarda ortodoxa (pé esquerdo à frente), jab de esquerda à cabeça. Objetivo: animar um boneco de ~40×60 px com um esqueleto 3D (pelvis, rotação de ancas e peito ≤ 20°, inclinação do tronco, cabeça, pulsos, pés, cotovelos).
 
-> **Nota sobre as fontes.** A rede desta sessão não deixou abrir as páginas diretamente (expertboxing.com e os repositórios das universidades deram erro de acesso). Toda a informação veio do motor de pesquisa, que lê as páginas e devolve excertos. Por isso marco sempre o que é **[fonte]** (dito por uma fonte, com link) e o que é **[estimativa]** (valor meu, coerente com as fontes, para a animação). Onde as fontes não dão números (graus de rotação, percentagem de peso), digo-o.
+> **Fontes e marcas.** Li por inteiro: o guia do jab do **Expert Boxing** (Johnny N, *How to Throw a Jab* e *The Ultimate Boxing Jab Guide*) e os guias de guarda dele; o artigo de **Stanley et al. 2018** (PDF completo, com as tabelas); a **tese da METU** (Middle East Technical University, 2011: 30 pugilistas, captura de movimento a 240 Hz). O resto (Boxing News, Precision Striking, Human Kinetics, Tony Jeffries, outros estudos) foi lido através de excertos da pesquisa web. **[fonte]** = dito por uma fonte (com link); **[estimativa]** = valor meu, coerente com as fontes, para a animação.
+>
+> **O que mudou em relação à primeira versão:** o peso **não** vai para a frente (fica ao centro; a perna de trás empurra); o corpo **quase não roda** (é o braço e o ombro que trabalham); o braço estica em **~100 ms**; a guarda fica com os pés mais juntos de trás para a frente; no impacto o braço pode ainda não estar todo esticado.
 
 ---
 
@@ -10,10 +12,9 @@ Guarda ortodoxa (pé esquerdo à frente), jab de esquerda à cabeça. Objetivo: 
 
 ### Fases
 
-Os estudos dividem o jab de maneiras diferentes:
-
-- **Lenetsky et al. (2020)** definiram as fases com plataformas de força, EMG e vídeo rápido. Notaram que a descrição antiga em duas fases (arranque e execução) **não mostra duas coisas que os treinadores acham essenciais**: a **rotação da mão (pronação, palma para baixo)** e a **subida do ombro da frente para proteger o queixo no impacto**. Nos golpes retos (jab e direto) a força no chão empurra **para a frente, em direção ao alvo** (nos ganchos é mais para o lado). **[fonte]** ([PubMed](https://pubmed.ncbi.nlm.nih.gov/30789570/), [JSCR](https://journals.lww.com/nsca-jscr/fulltext/2020/04000/defining_the_phases_of_boxing_punches__a.22.aspx))
-- O estudo com sensores inerciais (*Dynamic inertial analysis of the technical boxing gesture of Jab*, 2022) divide o jab em **três fases seguidas**, a começar pela preparação; a fase de execução e a torção do tronco foram as que mais distinguiram um pugilista menos experiente de um de elite (o menos experiente demora mais na execução). **[fonte]** ([PDF efsupit](http://efsupit.ro/images/stories/martie2022/Art%2083.pdf), [ResearchGate](https://www.researchgate.net/publication/359684836_Dynamic_inertial_analysis_of_the_technical_boxing_gesture_of_Jab))
+- **Expert Boxing** divide o jab básico em 3 passos (guarda → esticar a luva → rodar o braço), mas avisa que **"na realidade, tudo acontece ao mesmo tempo"**: o braço sai depressa e roda enquanto sai, e a luva chega fechada e rodada no mesmo instante em que se expira com força. Depois **"puxa-se a mão a direito para trás"**. **[fonte]** ([Expert Boxing](https://expertboxing.com/how-to-throw-a-jab))
+- **Lenetsky et al. (2020)**: a descrição antiga em duas fases (arranque e execução) **não mostra a rotação da mão (palma para baixo) nem a subida do ombro da frente para tapar o queixo**, que os treinadores consideram essenciais. Nos golpes retos, o empurrão no chão vai **para a frente, para o alvo**. **[fonte]** ([PubMed](https://pubmed.ncbi.nlm.nih.gov/30789570/))
+- **Stanley 2018** mede do **arranque** (o início de um pequeno contra-movimento: a mão desce um pouco antes de sair) até ao **contacto** (um fotograma antes de tocar no alvo). **[fonte]** ([PDF Chester](https://chesterrep.openrepository.com/bitstream/handle/10034/621889/IJPAS%20(2018).pdf?sequence=1&isAllowed=y))
 
 Para a animação usamos 5 fases: **guarda → arranque → extensão → impacto → regresso**.
 
@@ -21,18 +22,19 @@ Para a animação usamos 5 fases: **guarda → arranque → extensão → impact
 
 | Medida | Valor | Fonte |
 |---|---|---|
-| Jab, do arranque ao contacto, golpe máximo contra saco (15 amadores) | **405 ms** — o mais curto dos 6 golpes | Stanley et al. 2018 ([Chester](https://chesterrep.openrepository.com/bitstream/handle/10034/621889/IJPAS%20(2018).pdf?sequence=1&isAllowed=y), [T&F](https://www.tandfonline.com/doi/abs/10.1080/24748668.2018.1525651)) |
-| Jab isolado com força máxima | **587 ± 166 ms**; direto 553 ± 211 ms; em combinação são mais rápidos | Piorkowski, Lees & Barton 2011, citado noutro artigo ([ResearchGate](https://www.researchgate.net/publication/51115734_Single_maximal_versus_combination_punch_kinematics)) |
-| Velocidade da mão no contacto | ~9,3 m/s golpe isolado; 7,5–8,0 m/s em combinação | Piorkowski 2011 |
-| Velocidade de pico do jab | elite 7,16 m/s, juniores 6,32 m/s | Liu et al. 2022 ([Frontiers](https://frontiersin.org/articles/10.3389/fphys.2022.1015154/full)) |
-| Quando a velocidade do ombro é máxima | aos **87 %** do movimento (ou seja, mesmo antes do contacto) | Stanley 2018 |
-| Quando a perna da frente faz mais força no chão | aos **84 %** do movimento (a mais tardia dos golpes) | Stanley 2018 |
-| Ida vs regresso (jab de treino, movimento inteiro) | ida 0,84 s (46 %), regresso 0,99 s (54 %) — o regresso é ~10 % mais longo | estudo ucraniano 2025 ([sportpedagogy](https://sportpedagogy.org.ua/index.php/ppcs/article/view/3486)) |
-| Direto de um pesado profissional (referência) | 100 ms | Atha et al. 1985, citado |
+| Jab, do arranque ao contacto (15 amadores, força máxima contra um alvo) | **405 ± 150 ms**, o mais curto dos 6 golpes (direto 495, ganchos 586–657, uppercuts 606–627 ms) | Stanley 2018, Tabela 2a |
+| Velocidade de pico do punho no jab | **5,85 ± 0,85 m/s** (a mais baixa dos 6 golpes; gancho da frente 11,95) | Stanley 2018 |
+| Quando o **ombro** atinge a velocidade máxima | aos **87 ± 7 %** do movimento | Stanley 2018 |
+| Quando o **cotovelo** atinge a velocidade máxima | aos **98 ± 2 %** — mesmo no contacto | Stanley 2018 |
+| Ordem | ombro → cotovelo (o ombro atinge o pico ~12 % antes do cotovelo) | Stanley 2018 |
+| Golpe reto, **só a execução** do braço | **~100 ms** em média; a ação toda: elite 446 ms, sem competição 663 ms | Filimonov et al. 1985, citado na tese METU ([PDF](https://open.metu.edu.tr/bitstream/handle/11511/21166/index.pdf?sequence=1&isAllowed=y), p. 21–22) |
+| Golpes retos em geral | 357 ± 178 ms | vários estudos citados em Stanley 2018 |
+| Jab isolado com força máxima | 587 ± 166 ms (em combinação são mais rápidos) | Piorkowski et al. 2011, citado ([ResearchGate](https://www.researchgate.net/publication/51115734_Single_maximal_versus_combination_punch_kinematics)) |
+| Ida vs regresso (gesto de treino) | ida 46 %, regresso 54 % — o regresso é um pouco mais longo | estudo de 2025 ([sportpedagogy](https://sportpedagogy.org.ua/index.php/ppcs/article/view/3486)) |
 
-**Como ler isto.** Os 400–600 ms dos laboratórios contam desde o primeiro movimento do corpo (o empurrão no chão), com força máxima contra um saco; o estudo de 2025 (1,8 s) é um gesto de treino lento e não serve para o tempo. Nenhuma fonte deu o tempo de um jab rápido num combate. **[estimativa]** Um jab rápido de combate: ~120–180 ms a ir, ~150–200 ms a voltar (o regresso um pouco mais longo, como no estudo de 2025). Na animação, o golpe inteiro deve durar **~400–450 ms**, com um fotograma de impacto um pouco mais longo para se ler. Isto bate com o `jab.py` de hoje (440 ms).
+**Como ler isto.** Os ~400 ms contam desde o primeiro movimento de preparação, num golpe de força máxima; a parte em que **o braço realmente estica é curta, ~100 ms** **[fonte: Filimonov via METU]**. O ombro acelera primeiro e o cotovelo só atinge a velocidade máxima mesmo no contacto, ou seja, **a mão acelera até ao fim** **[fonte: Stanley]**.
 
-**Importante para o ritmo:** a velocidade **acelera até ao fim** (pico aos 84–87 %). O arranque é curto e quase não se vê; a mão percorre mais distância nos últimos fotogramas da ida. Não pôr a mão a andar a velocidade igual.
+**Na animação [estimativa]:** golpe inteiro **~400 ms** (bate com os 405 ms do Stanley): extensão em ~100 ms (3 fotogramas curtos), impacto parado ~80 ms para se ler, regresso ~170 ms (um pouco mais longo do que a ida). Não pôr a mão a andar a velocidade igual: pouca distância no 1.º fotograma da ida, muita no último.
 
 ---
 
@@ -40,75 +42,81 @@ Para a animação usamos 5 fases: **guarda → arranque → extensão → impact
 
 ### Guarda (ponto de partida e de chegada)
 
-- **Pés:** à largura dos ombros, joelhos ligeiramente dobrados, queixo para baixo, mãos em cima, olhos no adversário **[fonte: Expert Boxing, via pesquisa]** ([expertboxing](https://expertboxing.com/how-to-throw-a-jab)). Calcanhar de trás **levantado**, apoio na planta do pé de trás; pé da frente apontado para o adversário (ou 10–15° para dentro), pé de trás a ~45° para fora **[fonte: guias de guarda]** ([Honour & Glory](https://www.honourandglory.co.uk/blog/boxing-stance-and-guard)).
-- **Peso:** **50/50**, ou um pouco mais atrás (55/45) **[fonte: guias; não é um dado medido]**.
-- **Mão da frente:** à altura da cara, à frente; **mão de trás encostada à bochecha/queixo**; cotovelos em baixo, a proteger as costelas **[fonte]**.
-- **Tronco:** de lado em relação ao adversário (ombro esquerdo à frente), ligeiramente para a frente.
+- **Expert Boxing:** "mãos em cima, cotovelos para dentro, **ancas entre os pés**, joelhos ligeiramente dobrados e **calcanhar de trás levantado**. Pé da frente ligeiramente em ângulo, apontado para o adversário; pé de trás a **~45°** na diagonal." Corpo e mãos descontraídos. Pés **"mais ou menos à largura dos ombros"**. **[fonte]** ([guia do jab](https://expertboxing.com/how-to-throw-a-jab), [largura da guarda](https://expertboxing.com/perfect-boxing-stance-width))
+- **Tese METU (definição usada no estudo):** pés à largura dos ombros; o pé esquerdo **15–20 cm à frente** e o de trás **~10 cm atrás** do plano do tronco; **mão esquerda à altura da cabeça**, **luva direita à altura do queixo**, as duas **ao lado da linha central** do corpo. **[fonte]** Para uma pessoa de 1,78 m: afastamento de trás para a frente ~25–30 cm ≈ **0,15 H**; de lado ≈ largura dos ombros ≈ **0,22 H**.
+- **Peso:** ancas ao meio = **50/50** **[fonte: Expert Boxing]**.
+- **Mão da frente:** Expert Boxing diz que o jab "começa com a **palma virada para ti**" **[fonte]**.
+- **Não "carregar" o jab:** "não puxes a mão da frente para ti nem baixes as ancas para preparar" **[fonte: Expert Boxing]**. (No laboratório viu-se um pequeno contra-movimento da mão, mas o Expert Boxing e a Boxing News dizem que denuncia o golpe: **não o animar**.)
 
 ### Arranque
 
-- O pé de trás **empurra o chão** e as ancas avançam um pouco **[fonte]** ([Fight Encyclopedia](https://fightencyclopedia.com/blog/blog-how-to-throw-a-perfect-jab-biomechanics); Human Kinetics: "pushing off the ball of the foot" — [excerto](https://canada.humankinetics.com/blogs/excerpt/how-to-throw-successful-jabs)). A força do jab começa com a **extensão do joelho de trás, que põe a pelvis a rodar** (estudo de biomecânica citado na pesquisa).
-- A mão sai **diretamente**, sem recuar nem baixar antes (baixar a mão primeiro denuncia o golpe e torna o caminho mais longo) **[fonte]** ([guia de erros](https://kostudio.co/blogs/news/how-to-throw-a-jab-in-boxing)).
-- Sequência do mais perto do centro para a ponta: pernas → anca → ombro → cotovelo → mão (Stanley 2018: o jab segue esta ordem "proximal-distal") **[fonte]**.
+- **Expert Boxing:** "**NADA MAIS SE MEXE.** Mexe só o braço da frente. **Não passes o peso para a frente nem para trás, mantém o peso ao centro.**" **[fonte]**
+- **Stanley 2018:** no jab a **perna de trás faz ~71 % da força no chão**, mais do que em qualquer outro golpe (pico: perna de trás 1,56 N/kg, perna da frente 0,63 N/kg); a travagem na perna da frente é **muito pequena** (oito vezes menor do que no gancho de trás). A perna de trás "empurra o punho ao longo do eixo frente-trás"; o jab "depende menos da rotação do tronco". **[fonte]**
+- Ou seja: **a perna de trás empurra, mas o peso não passa para a frente** e o corpo não avança de forma visível. A primeira versão deste relatório (peso 60/40 à frente) estava errada.
+- A mão sai **diretamente**, sem recuar nem baixar antes **[fonte: Expert Boxing, Boxing News]**.
 
 ### Extensão
 
-- O braço vai **em linha reta, do ombro**, "como um soco por dentro de um cano" **[fonte: Boxing News]** ([Fight School: The Jab](https://boxingnewsonline.net/features/fight-school-the-jab/)).
-- **Cotovelo por baixo/por dentro**, sem abrir para o lado ("chicken wing"); o cotovelo a abrir tira força e velocidade **[fonte]** ([Healthy Principles](https://www.healthyprinciples.co.uk/common-jab-mistakes/), [FightCamp](https://blog.joinfightcamp.com/training/6-tips-to-throw-the-perfect-jab/)).
-- **Rotação do punho no último terço** do caminho (o Human Kinetics diz "a meio") até ficar **palma para baixo / polegar para o chão** no fim; a rotação mesmo antes do impacto é o que dá o "estalo" **[fonte]** ([Precision Striking](https://precisionstriking.com/how-to-punch/), Human Kinetics).
-- **Ancas e ombros rodam pouco:** "uma pequena rotação de anca adiciona torção sem tornar o jab mais lento"; "o resto do corpo fica quieto, sem rodar demais" **[fonte]** (Expert Boxing; [Fight Encyclopedia](https://fightencyclopedia.com/blog/blog-how-to-throw-a-perfect-jab-biomechanics); Papazoglou: "ligeiro pivô na anca e no ombro" — [PDF](http://www.papazoglouboxing.gr/files/pdf/the_left_jab.pdf)). Boxing News: o pé da frente pressiona o chão, a anca vira e o **ombro da frente completa "um quarto de volta"** (dito como imagem, não em graus) **[fonte]**. Os treinadores irlandeses descrevem o jab com **menos flexão do pé e do joelho de trás e menos rotação das ancas do que o direto** **[fonte]** ([T&F 2025](https://www.tandfonline.com/doi/pdf/10.1080/24748668.2025.2481693)). **Nenhuma fonte dá graus.**
+- **Braço:** sai descontraído e rápido, "como um chicote", com os nós dos dedos à frente. Fechar o punho cedo torna o golpe mais lento **[fonte: Expert Boxing]**. Vai **em linha reta, do ombro** **[fonte: Boxing News]** ([Fight School](https://boxingnewsonline.net/features/fight-school-the-jab/)). Tese METU: o jab é "um golpe curto e reto, feito a **esticar o cotovelo com a rotação do ombro**"; ganchos e uppercuts usam o tronco todo, o jab não **[fonte]**.
+- **Cotovelo:** "traz o cotovelo **a direito, para a frente**, por trás do jab, e não para o lado"; o cotovelo para o lado ("chicken wing") é mais fraco, denuncia o golpe e é menos direto **[fonte: Expert Boxing]**.
+- **Rotação do braço:** "**enquanto a luva estica**, roda o braço da frente todo — ombro, cotovelo, punho — de maneira a que o golpe chegue **com a palma para baixo e o ombro rodado para cima a tapar o queixo**" **[fonte: Expert Boxing]**. Outras fontes: rotação no último terço do caminho (Precision Striking) ou a meio (Human Kinetics) **[fonte]**. Para a animação: a rotação acontece **ao longo da extensão**, a acabar no impacto.
+- **Ancas e tronco:** "Não rodes o pé nem o corpo: **isso já não é um jab**, é um 'direto de esquerda'"; "num jab bem feito **o corpo não roda**" **[fonte: Expert Boxing]**. Outros guias falam de "uma pequena rotação de anca" e de um "quarto de volta" do ombro da frente (Boxing News, Papazoglou) **[fonte]**. **Nenhuma fonte dá graus.** Na tese METU, num jab de **força máxima** contra saco, o ombro da frente deslocou-se **~20 cm (principiantes) a ~33 cm (elite)** e o pulso **~70–80 cm** **[fonte: Fig. 14 e 16]**: num golpe de força máxima, o tronco e o ombro também viajam bastante (é mais um "power jab"). O jab rápido, que é o da animação principal, usa muito menos.
 
 ### Impacto
 
-- **Braço quase esticado**, cotovelo "macio" no contacto (não trancado) **[fonte: Human Kinetics]**. O manual de West Point diz que o braço estica todo, com o cotovelo como uma dobradiça, e palma para baixo **[fonte]** ([West Point](https://www.scribd.com/document/175877216/US-Army-Boxing-West-Point-Trainers-Manual-51p)). Para a animação: ~95 % do comprimento do braço.
-- **Ombro da frente sobe** e tapa o queixo (defesa contra o direto do adversário) **[fonte: Expert Boxing, Precision Striking, Lenetsky]**.
-- **Cabeça:** queixo em baixo, **atrás do ombro da frente**, sem inclinar para a frente (inclinar deixa a cabeça exposta) **[fonte: Expert Boxing]**.
-- **Mão de trás colada à bochecha**; baixá-la é o erro clássico (fica aberto ao direto) **[fonte]**.
-- **Peso:** passa para a frente — "o peso passa firmemente para o pé da frente" (um guia) ou "fica centrado" (Expert Boxing) **[fonte, em desacordo]**. No laboratório, o jab foi o **único golpe com diferença clara entre a força das duas pernas** e o que tem **menos força na perna da frente** (Stanley 2018) — ou seja, a perna de trás empurra e a da frente trava pouco. **[estimativa]** 50/50 → ~60/40 (frente) no impacto.
-- Expira no golpe **[fonte: Tony Jeffries]** ([Sanabul](https://sanabulsports.com/blogs/techniques/boxing-basics-how-to-throw-a-jab-sanabul)).
+- **Ombro da frente levantado** a tapar o queixo; dá mais alcance e protege dos counters por cima. Não levantar o ombro é "erro de amador" **[fonte: Expert Boxing]**.
+- **Cabeça atrás do ombro**: "uma regra sábia é manter a cabeça ATRÁS DO OMBRO"; ir com a cabeça à frente tira equilíbrio e força e tira peso do pé de trás **[fonte: Expert Boxing]**.
+- **Punho fecha só no instante do impacto** e o corpo contrai "só por uma fração de segundo" **[fonte: Expert Boxing]**; expira-se com força no golpe **[fonte: Expert Boxing, Tony Jeffries]**.
+- **Ângulo do cotovelo:** num golpe reto, o cotovelo começa em **50–70°** e chega ao impacto em **110–130°** (Filimonov, via METU) **[fonte]** — o golpe toca **antes de o braço estar todo esticado**. Human Kinetics: "cotovelo macio no contacto" **[fonte]**. Com esses ângulos, o pulso fica a **~0,85–0,9 L** do ombro no contacto **[estimativa por geometria]**; no fim (se não tocar em nada) pode ir até ~0,95 L.
+- **Pernas:** não esticar ("popping up"): ficar em baixo ou até "baixar um pouco (uma polegada)" dá mais força e equilíbrio **[fonte: Expert Boxing]**. Os grandes pugilistas "baixam ligeiramente as ancas só quando batem" **[fonte: Expert Boxing, guia da guarda]**.
+- **Mão de trás junto à cara**; baixá-la deixa-te aberto ao gancho de esquerda e denuncia o direto **[fonte: Expert Boxing]**.
+- **Altura:** no estudo da METU o alvo estava **à altura do ombro** do pugilista **[fonte]** — para um adversário da mesma altura, a mão bate um pouco acima da altura do próprio ombro (queixo).
 
 ### Regresso
 
-- A mão volta **pelo mesmo caminho**, depressa, até à guarda, para proteger o queixo **[fonte]**. O Tony Jeffries põe a "posição de regresso" entre as 4 qualidades do jab (velocidade, força, precisão, regresso) **[fonte]** ([The Ready Room](https://www.thereadyroom.net/videos/tony-jeffries-how-to-throw-a-jab)).
-- O punho desfaz a rotação, o ombro desce, o peso volta ao centro.
+- "Depois de acabar o jab, **puxa-o a direito para trás**" **[fonte: Expert Boxing]**; pelo mesmo caminho até à guarda, sem baixar a mão **[fonte: Boxing News]**. O punho desfaz a rotação e o ombro desce.
 
 ---
 
 ## 3. Variantes
 
-- **Jab parado:** sem mexer os pés, a distância certa. O mais simples e o mais rápido.
-- **Jab com passo (step jab):** o pé da frente avança um pouco e chega **pouco antes ou ao mesmo tempo** que a mão; o de trás vem atrás **[fonte: Papazoglou, Boxing News, Tony Jeffries "sync your foot with hand"]**. Mais alcance e um pouco mais de força.
-- **Power jab:** passo e peso por trás do golpe, corpo "a afundar" um pouco; o peso vai quase todo para o pé da frente **[fonte: Expert Boxing / Wikipedia, via pesquisa]** ([5 types of jabs](https://expertboxing.com/5-types-of-jabs), [Wikipedia](https://en.wikipedia.org/wiki/Jab)).
-- **Jab de recuo (backstep):** o pé de trás recua ao mesmo tempo que a mão sai; fraco, mas trava quem vem a entrar **[fonte: Expert Boxing]**.
-- **Jab ao corpo:** dobra-se os joelhos para baixar o corpo (não se aponta a mão para baixo a partir de pé); é menos usado porque expõe ao counter **[fonte: Wikipedia]**.
-- **Pivot jab:** jab e pivô no pé da frente para sair do sítio.
+- **Jab parado (básico):** o descrito acima: só o braço e o ombro se mexem **[fonte: Expert Boxing]**.
+- **Step jab:** "dá um passo com o pé da frente (**só umas polegadas**) enquanto bates"; "recupera o **pé de trás** enquanto recuperas o braço". Erro mais comum: passo grande demais (o golpe chega antes de o pé assentar). **[fonte: Expert Boxing]** Algumas polegadas ≈ 5–10 cm ≈ **0,03–0,06 H** **[estimativa]**. Na versão de 2008, Johnny N chamava ao step jab o "jab normal".
+- **Back-step jab:** bate a recuar o pé de trás e recupera o da frente com o braço **[fonte: Expert Boxing]**.
+- **Power jab:** jab a **baixar ligeiramente as ancas** ("parece uma queda"); a mão chega quando as ancas "travam" a descida; "sente-se, não se vê" **[fonte: Expert Boxing]**. Na versão de 2008: passo + um pouco de rotação do corpo + ângulo **[fonte]**.
+- **Body jab:** step jab dobrando **os joelhos e a cintura**, sem se agachar demais nem olhar para o corpo; mais a empurrar do que a estalar **[fonte: Expert Boxing]**.
+- **Pivot jab:** jab a rodar o corpo enquanto o pé de trás roda por trás (sentido dos ponteiros do relógio na guarda ortodoxa); erro: rodar demais **[fonte: Expert Boxing]**.
+- **Tapper / space-maker / double jab / counter jab:** variações táticas **[fonte: Expert Boxing 2008]**.
 
-**Animação principal:** o **jab parado** (sem passo), com um pequeno avanço da pelvis. Começa e acaba no mesmo sítio, encaixa em todas as distâncias e o jogo já desloca os lutadores à parte. O jab com passo fica como segunda animação (precisa de mover o boneco para a frente: "root motion").
+**Animação principal:** o **jab parado**. Começa e acaba no mesmo sítio e é exatamente o "jab básico" das fontes. O step jab fica como segunda animação (passo pequeno).
 
 ---
 
 ## 4. Erros que fazem o jab parecer errado (evitar na animação)
 
-1. **Baixar a mão de trás** — tem de ficar colada à cara o tempo todo **[fonte]**.
-2. **Cotovelo a abrir para o lado** (chicken wing) — o cotovelo vai por baixo; só no fim, com a palma para baixo, aponta para fora **[fonte]**.
-3. **Puxar o braço devagar ou baixar a mão no regresso** — o regresso é rápido e à altura da cara **[fonte: Boxing News]**.
-4. **Inclinar demais / cabeça à frente** — a cabeça fica atrás do ombro; leaning in é "dos erros mais comuns" **[fonte]**. **[estimativa]** regra prática: o nariz não passa à frente do joelho da frente.
-5. **Rodar demais** — o jab roda pouco; rodar muito torna-o lento e parece um direto **[fonte]**.
-6. **Recuar ou baixar a mão antes de bater** (denunciar o golpe) **[fonte]**.
-7. **Rodar o punho cedo** — a rotação é no fim, para a mão ir reta **[fonte]**.
-8. **Ombro da frente em baixo no impacto** — queixo à mostra **[fonte]**.
-9. **[estimativa]** Mão a andar a velocidade constante: tira o "estalo".
-10. **[estimativa]** Esticar o braço para além do comprimento real (o braço "estica" no desenho) — nunca passar de ~0,95–1,0 do comprimento do braço.
+Os 6 erros do Expert Boxing **[fonte]**:
+1. **Cotovelo a sair para o lado** (chicken wing).
+2. **Baixar a mão de trás.**
+3. **Ir com a cabeça à frente** — a cabeça fica atrás do ombro.
+4. **Não levantar o ombro da frente.**
+5. **Esticar as pernas / subir com o jab** — as pernas ficam dobradas, as ancas não sobem.
+6. **Rodar o pé ou o corpo** — isso já é um direto de esquerda, não um jab.
+
+Outros:
+7. **Carregar o golpe** (puxar a mão para trás ou baixá-la antes) **[fonte: Expert Boxing, Boxing News]**.
+8. **Regresso lento ou com a mão baixa** **[fonte: Boxing News]**.
+9. **Passar o peso para a frente** **[fonte: Expert Boxing; Stanley mostra que o jab assenta na perna de trás]**.
+10. **[estimativa]** Mão a andar a velocidade constante (perde o "estalo"); braço a esticar para além do comprimento real.
 
 ---
 
 ## 5. Diferença para o direto (para mais tarde)
 
-- O direto é a mão de trás e é **conduzido pelo pé de trás**: o **calcanhar de trás roda para fora (pivô)** e as ancas e ombros rodam **muito** em direção ao alvo **[fonte]** ([Wikipedia](https://en.wikipedia.org/wiki/Cross_(boxing)), [Dynamic Striking](https://dynamicstriking.com/blogs/news/cross-boxing)). Guias falam de 45–90° de pivô do pé (valor sem fonte primária).
-- O peso passa mais claramente do pé de trás para o da frente **[fonte]**; mais flexão do pé e do joelho de trás **[fonte: treinadores irlandeses]**.
-- A mão de trás cruza a linha central; a mão do jab volta para a cara **[fonte]**.
-- Golpe mais forte (num estudo 1702 N vs 1262 N do jab; na elite as forças ficam parecidas) **[fonte]** e ligeiramente mais lento a reagir **[fonte: Loturco et al. 2015]** ([USP](https://repositorio.usp.br/item/002735639)).
-- **[estimativa]** Ancas ~40–50°, peito ~50–60°: **passa o limite de 20° do esqueleto**. Será preciso subir o limite para o direto (ou fazer de conta com o ombro/pulso).
+- O direto é a mão de trás e é conduzido pelo pé de trás: **calcanhar de trás roda para fora (pivô)**, ancas e ombros rodam **muito** **[fonte]** ([Wikipedia](https://en.wikipedia.org/wiki/Cross_(boxing)), [Dynamic Striking](https://dynamicstriking.com/blogs/news/cross-boxing)).
+- **Stanley 2018:** o direto demora 495 ms (jab 405), com o punho mais rápido (6,97 vs 5,85 m/s); a perna da frente trava muito mais (−62,5 vs −10,1 N·s/kg) e as duas pernas fazem forças parecidas (1,06 / 1,21 N/kg), ou seja, **o peso passa para a frente e trava na perna da frente**, ao contrário do jab **[fonte]**.
+- Treinadores irlandeses: o direto é como o jab mas **com mais rotação do tronco, do pé e do joelho de trás** **[fonte]** ([T&F 2025](https://www.tandfonline.com/doi/pdf/10.1080/24748668.2025.2481693)).
+- Expert Boxing: depois de um jab bem feito (sem rotação), o direto sai mais depressa, porque o corpo não rodou para o lado contrário **[fonte]**.
+- **[estimativa]** Ancas ~40–50°, peito ~50–60°: **passa o limite de 20° do esqueleto**. Será preciso subir o limite para o direto.
 
 ---
 
@@ -116,70 +124,82 @@ Para a animação usamos 5 fases: **guarda → arranque → extensão → impact
 
 ### Convenções
 
-- **H** = altura do corpo (pés ao topo da cabeça). **L** = comprimento do braço (ombro ao pulso).
-- **Pelvis** (dx, dz, dy) em fração de H, relativa à guarda: dx + = para a **direita** do pugilista, dz + = para a **frente** (para o adversário), dy + = para **cima**.
-- **Ancas / peito:** graus à volta do eixo vertical, **relativos à guarda** (a guarda já está de lado). **+ = o ombro/anca esquerda vai para a frente** (o sentido do jab). O direto seria negativo.
-- **Tronco:** inclinação em graus, **além** da que já tem na guarda (~5° para a frente). Frente + = para o adversário; lado + = para a direita (para trás, o lado da mão de trás).
-- **Cabeça:** rotação relativa ao peito (− = contraria o peito para os olhos ficarem no alvo); inclinação + = queixo para baixo, além da guarda.
-- **Pulso da frente / de trás:** (frente, dentro, cima) em fração de L, **relativo ao ombro do mesmo lado**; "dentro" = para a linha central do corpo.
-- **Punho:** rotação do antebraço; 0° = polegar para cima (guarda), 90° = palma para baixo.
-- **Cotovelo:** para onde aponta a ponta do cotovelo.
-- **Pés:** relativos à pelvis inicial, em fração de H: **frente (−0,07; +0,16)** e **trás (+0,07; −0,16)** (dx; dz) — afastamento total ~0,32 H, à largura dos ombros de lado **[estimativa a partir de "largura dos ombros"]**. No jab parado **os pés não mudam de sítio**.
+- **H** = altura do corpo. **L** = comprimento do braço (ombro → pulso).
+- **Pelvis** (dx, dz, dy) em fração de H, relativa à guarda: dx + = para a **direita** do pugilista, dz + = para a **frente**, dy + = para **cima**.
+- **Ancas / peito:** graus à volta do eixo vertical, **relativos à guarda**; **+ = o lado esquerdo vai para a frente** (o sentido do jab). O direto seria negativo.
+- **Tronco:** inclinação em graus **além** da guarda. Frente + = para o adversário; lado + = para a direita (o ombro esquerdo sobe).
+- **Cabeça:** rotação relativa ao peito (− = contraria o peito, para os olhos ficarem no alvo); inclinação + = queixo para baixo.
+- **Pulsos:** (frente, dentro, cima) em fração de L, **relativos ao ombro do mesmo lado**; "dentro" = para a linha central.
+- **Punho:** rotação do antebraço; **0° = palma virada para a cara** (guarda, Expert Boxing), **90° = palma para baixo**.
+- **Pés** (fixos no jab parado), relativos à pelvis, em fração de H: **frente (−0,11; +0,09)**, **trás (+0,11; −0,06)** (dx; dz) — pés à largura dos ombros de lado, ~0,15 H de trás para a frente **[fonte: definição da METU, convertida para H = 1,78 m]**. Pé da frente apontado para o adversário, pé de trás a ~45°, calcanhar de trás levantado **[fonte: Expert Boxing]**.
 
 ### Tabela
 
-| F | Fase | ms | Pelvis dx / dz / dy (×H) | Ancas | Peito | Tronco frente / lado | Cabeça rot. / incl. / lado | Pulso frente (f, d, c ×L) | Punho | Cotovelo frente | Pulso trás (f, d, c ×L) | Peso frente | Pés / joelhos |
+| F | Fase | ms | Pelvis dx / dz / dy (×H) | Ancas | Peito | Tronco frente / lado | Cabeça rot. / incl. | Pulso frente (f / d / c ×L) | Punho | Cotovelo frente | Pulso trás (f / d / c ×L) | Peso frente | Pernas |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| 0 | Guarda | 60 | 0 / 0 / 0 | 0° | 0° | 0° / 0° | 0° / 0° / 0° | 0,40 / 0,10 / 0,15 | 0° | para baixo | 0,30 / 0,30 / 0,20 | 50 % | calc. trás levantado ~0,015 H; joelhos ~15–20° dobrados |
-| 1 | Arranque | 40 | −0,002 / +0,005 / 0 | +2° | +2° | +1° / 0° | −2° / 0° / 0° | 0,48 / 0,10 / 0,13 | 0° | para baixo | igual | 52 % | pé de trás empurra |
-| 2 | Extensão 1 | 40 | −0,003 / +0,010 / 0 | +4° | +7° | +2° / +1° | −5° / +1° / +1° | 0,62 / 0,11 / 0,10 | 10° | baixo, por dentro | igual | 55 % | joelho de trás começa a esticar |
-| 3 | Extensão 2 | 40 | −0,004 / +0,015 / −0,003 | +6° | +13° | +3° / +2° | −10° / +2° / +3° | 0,82 / 0,12 / 0,07 | 45° | baixo-fora (~30°) | igual (mais junto ao queixo) | 58 % | |
-| 4 | **Impacto** | 80 | −0,005 / +0,020 / −0,005 | +8° | +18° | +4° / +3° | −14° / +3° / +5° | **0,95 / 0,12 / 0,05** | **90°** | para fora (horizontal) | 0,30 / 0,32 / 0,20 | **~60 %** | calc. trás +0,005 H; joelho trás −5°, frente +3° |
-| 5 | Regresso 1 | 50 | −0,004 / +0,015 / −0,003 | +6° | +12° | +3° / +2° | −10° / +2° / +3° | 0,78 / 0,12 / 0,08 | 60° | baixo-fora | igual | 57 % | |
-| 6 | Regresso 2 | 60 | −0,002 / +0,007 / 0 | +3° | +5° | +1° / +1° | −4° / +1° / +1° | 0,55 / 0,11 / 0,12 | 20° | para baixo | igual | 53 % | |
-| 7 | Guarda | 60 | 0 / 0 / 0 | 0° | 0° | 0° / 0° | 0° / 0° / 0° | 0,40 / 0,10 / 0,15 | 0° | para baixo | 0,30 / 0,30 / 0,20 | 50 % | = F0 |
+| 0 | Guarda | 60 | 0 / 0 / 0 | 0° | 0° | 0° / 0° | 0° / 0° | 0,40 / 0,05 / 0,25 | 0° | para baixo | 0,30 / 0,25 / 0,15 | 50 % | joelhos dobrados ~15–20°, calc. trás levantado |
+| 1 | Arranque | 30 | 0 / 0 / 0 | +1° | +2° | 0° / +1° | −2° / 0° | 0,50 / 0,06 / 0,22 | 15° | baixo, para a frente | igual | 50 % | perna de trás começa a empurrar |
+| 2 | Extensão 1 | 30 | 0 / +0,002 / −0,002 | +2° | +5° | +1° / +2° | −4° / +1° | 0,66 / 0,08 / 0,16 | 40° | para a frente, por baixo do punho | igual | 50 % | |
+| 3 | Extensão 2 | 40 | 0 / +0,004 / −0,004 | +3° | +8° | +1° / +3° | −6° / +2° | 0,82 / 0,10 / 0,10 | 70° | para a frente / a rodar para fora | igual | 50 % | |
+| 4 | **Impacto** | 80 | 0 / +0,005 / −0,006 | +3° | +10° | +2° / +4° | −8° / +3° | **0,90 / 0,12 / 0,07** | **90°** | para fora (braço quase reto, ~120–150°) | 0,30 / 0,27 / 0,15 | **50 %** | ancas "afundam" ~0,006 H (≈1 cm); sem esticar |
+| 5 | Regresso 1 | 50 | 0 / +0,004 / −0,004 | +2° | +7° | +1° / +3° | −5° / +2° | 0,74 / 0,09 / 0,12 | 60° | para a frente | igual | 50 % | |
+| 6 | Regresso 2 | 60 | 0 / +0,002 / −0,002 | +1° | +3° | 0° / +1° | −2° / +1° | 0,54 / 0,06 / 0,20 | 25° | para baixo | igual | 50 % | |
+| 7 | Guarda | 60 | 0 / 0 / 0 | 0° | 0° | 0° / 0° | 0° / 0° | 0,40 / 0,05 / 0,25 | 0° | para baixo | 0,30 / 0,25 / 0,15 | 50 % | = F0 |
 
-Total ~430 ms (F1–F7 ≈ 370 ms). Em loop, o F7 é igual ao F0: pode-se saltar um deles.
+Total ~410 ms; extensão F1–F3 = 100 ms; regresso F5–F7 = 170 ms. Em loop, o F7 é igual ao F0.
 
 ### O que é fonte e o que é estimativa na tabela
 
-- **Das fontes (qualitativo):** ordem dos movimentos (pernas → anca → ombro → mão); ancas e peito rodam **pouco** e o peito mais do que as ancas ("quarto de volta" do ombro); velocidade máxima perto do fim; punho palma para baixo no fim, a rodar no último terço; braço quase esticado (cotovelo macio); ombro da frente a subir e queixo atrás dele; cabeça sem ir para a frente; mão de trás fixa na bochecha; cotovelos por baixo; regresso pelo mesmo caminho e um pouco mais longo do que a ida; peso de ~50/50 para a frente; calcanhar de trás levantado; pés sem passo no jab parado; duração total de ~400 ms (Stanley 2018).
-- **Estimativas minhas (números):** todos os graus (ancas 8°, peito 18°, tronco 4°/3°, cabeça), as frações de H e de L, os 60 % de peso, a altura do calcanhar e os ângulos dos joelhos, e a divisão dos milissegundos por fotograma. Escolhidos para respeitar o limite de 20° e para se lerem num boneco de 40×60 px (onde 0,02 H ≈ 1 píxel).
+- **Das fontes:**
+  - **Tempos:** total ~405 ms e extensão ~100 ms. A mão acelera até ao fim (ombro no pico aos 87 %, cotovelo aos 98 %) e o regresso é um pouco mais longo do que a ida.
+  - **Peso e pés:** o peso fica ao centro (**50 % constante**; Expert Boxing, e Stanley com a perna de trás a fazer 71 % da força e quase nenhuma travagem à frente). Os pés não mexem e o calcanhar de trás fica levantado. A guarda tem os pés à largura dos ombros e ~25–30 cm de trás para a frente (METU).
+  - **Corpo:** quase não roda (Expert Boxing "o corpo não roda"; METU "extensão do cotovelo com rotação do ombro"; Stanley "menos dependente do tronco"). As ancas não sobem e podem baixar um pouco. A cabeça fica atrás do ombro.
+  - **Braço do jab:** mão da frente à altura da cabeça e mão de trás à altura do queixo, as duas ao lado da linha central (METU). O punho vai da palma para a cara até à palma para baixo, a rodar durante a extensão. O cotovelo vem para a frente, não para o lado. O ombro da frente sobe a tapar o queixo. O braço não está todo esticado no contacto (110–130° no cotovelo; Filimonov) e o alvo fica à altura do ombro.
+- **Estimativas minhas (números):**
+  - Rotação e inclinação: os graus de rotação (ancas 3°, peito 10° — o peito representa o "ombro a rodar e a subir"; nenhuma fonte dá graus), a inclinação lateral de 4° (para o ombro subir num esqueleto sem omoplata) e a rotação da cabeça.
+  - Posições: as frações de L dos pulsos, o afundar de 0,006 H e os 0,005 H de avanço da pelvis (praticamente nada, 1 cm).
+  - Tempos: a divisão dos milissegundos por fotograma.
 
 ### Dicas para o boneco de 40×60 px
 
-- A 60 px de altura, o avanço da pelvis (0,02 H) é **~1 píxel** — chega para se notar o peso a ir para a frente.
-- O que mais se lê é: **a mão a sair reta e depressa, o ombro da frente a subir, a mão de trás quieta na cara**. Se só houver píxeis para três coisas, são essas.
-- A rotação do punho mal se vê a esta escala: pode desenhar-se como a luva a ficar mais "achatada" no fotograma de impacto.
+- A esta escala, **o corpo fica praticamente parado** (a pelvis mexe < 1 píxel): o que se lê é **a mão a sair reta e depressa, o ombro da frente a subir, a cabeça a ficar atrás dele e a mão de trás quieta na cara**.
+- Se a animação parecer "morta" por o corpo não mexer, a opção mais fiel às fontes é **1 píxel de afundar no impacto** (o "sentar no golpe"), e **não** inclinar ou rodar mais.
+- A rotação do punho mal se vê: pode desenhar-se como a luva a ficar mais "achatada" no impacto.
 
 ### Variante com passo (para depois)
 
-Igual, mais: pé da frente avança **~0,06–0,08 H** entre F1 e F4 (chega com o impacto ou um pouco antes); pé de trás segue a mesma distância em F5–F7; a pelvis avança de vez +0,06–0,08 H (o boneco fica mais à frente). **[estimativa; ordem do passo: fonte]**
+Igual, mais **[fonte: Expert Boxing; valores: estimativa]**: o pé da frente avança **~0,03–0,06 H** entre F1 e F4 (assenta **antes ou com** o impacto, nunca depois); o pé de trás segue a mesma distância em F5–F7, junto com o braço a voltar; a pelvis avança de vez a mesma distância.
+
+### Power jab (para depois)
+
+Como o básico, mas com as ancas a descer ~0,01–0,015 H durante a extensão, a parar no impacto **[fonte: Expert Boxing; valor: estimativa]**. No golpe de força máxima, o ombro viaja até ~0,19 H (METU, elite) — aí a rotação do peito pode ir aos ~20° **[estimativa]**.
 
 ---
 
 ## Fontes
 
-- Expert Boxing (Johnny N): [How to throw a jab](https://expertboxing.com/how-to-throw-a-jab), [5 types of jabs](https://expertboxing.com/5-types-of-jabs), [The ultimate boxing jab guide](https://expertboxing.com/the-ultimate-boxing-jab-guide) — lidos através de excertos da pesquisa.
-- Precision Striking: [How to Punch: the 8 basic punches](https://precisionstriking.com/how-to-punch/)
+**Lidas por inteiro:**
+- Expert Boxing (Johnny N): [How to Throw a Jab](https://expertboxing.com/how-to-throw-a-jab) (2012), [The Ultimate Boxing Jab Guide](https://expertboxing.com/the-ultimate-boxing-jab-guide) (2008), [Perfect Boxing Stance Width](https://expertboxing.com/perfect-boxing-stance-width)
+- Stanley, Thomson, Smith & Lamb (2018), *An analysis of the three-dimensional kinetics and kinematics of maximal effort punches among amateur boxers*, IJPAS 18(5): [PDF Chester](https://chesterrep.openrepository.com/bitstream/handle/10034/621889/IJPAS%20(2018).pdf?sequence=1&isAllowed=y) — Tabelas 2a e 2b.
+- Tese METU (2011), *3D Kinematic Analysis of Three Different Punches in Amateur Boxing*: [PDF](https://open.metu.edu.tr/bitstream/handle/11511/21166/index.pdf?sequence=1&isAllowed=y) — definições (p. 11), revisão de Filimonov 1985 (p. 21–22), Fig. 14–16 (p. 54–56). Nota: a tese diz que os pugilistas bateram "com a mão dominante" (todos destros), o que é ambíguo para o jab; usei só as definições e as ordens de grandeza.
+
+**Lidas através de excertos da pesquisa:**
+- Precision Striking: [How to Punch](https://precisionstriking.com/how-to-punch/)
 - Boxing News: [Fight School: The Jab](https://boxingnewsonline.net/features/fight-school-the-jab/)
-- Human Kinetics (McKenzie & Kirchner, *Total Knockout Fitness*): [How to throw successful jabs](https://canada.humankinetics.com/blogs/excerpt/how-to-throw-successful-jabs)
+- Human Kinetics (*Total Knockout Fitness*): [How to throw successful jabs](https://canada.humankinetics.com/blogs/excerpt/how-to-throw-successful-jabs)
 - Tony Jeffries: [How to throw a jab](https://www.thereadyroom.net/videos/tony-jeffries-how-to-throw-a-jab), [resumo Sanabul](https://sanabulsports.com/blogs/techniques/boxing-basics-how-to-throw-a-jab-sanabul)
-- Teddy Atlas (Dynamic Striking): [Fix your jab](https://dynamicstriking.com/blogs/news/fix-your-jab-with-tips-from-teddy-atlas) — pouco detalhe técnico nos excertos.
-- fightTIPS (Shane Fazen): vídeo "5 Common Jab Mistakes" — não foi possível ler o conteúdo; só o título.
+- Teddy Atlas (Dynamic Striking): [Fix your jab](https://dynamicstriking.com/blogs/news/fix-your-jab-with-tips-from-teddy-atlas) — pouco detalhe técnico.
+- fightTIPS (Shane Fazen): vídeo "5 Common Jab Mistakes" — só o título; o conteúdo não foi lido.
 - Dimitris Papazoglou: [The Left Jab (PDF)](http://www.papazoglouboxing.gr/files/pdf/the_left_jab.pdf)
 - West Point: [Intramural Boxing Guide](https://www.scribd.com/document/175877216/US-Army-Boxing-West-Point-Trainers-Manual-51p)
 - Wikipedia: [Jab](https://en.wikipedia.org/wiki/Jab), [Cross](https://en.wikipedia.org/wiki/Cross_(boxing))
-- Erros comuns: [Healthy Principles](https://www.healthyprinciples.co.uk/common-jab-mistakes/), [FightCamp](https://blog.joinfightcamp.com/training/6-tips-to-throw-the-perfect-jab/), [KO Studio](https://kostudio.co/blogs/news/how-to-throw-a-jab-in-boxing), [Fight Encyclopedia](https://fightencyclopedia.com/blog/blog-how-to-throw-a-perfect-jab-biomechanics) (blog; usado só para confirmar o que outros dizem)
-- Biomecânica:
-  - Stanley, Thomson, Smith & Lamb (2018), *IJPAS* 18(5): [PDF Chester](https://chesterrep.openrepository.com/bitstream/handle/10034/621889/IJPAS%20(2018).pdf?sequence=1&isAllowed=y)
-  - Piorkowski, Lees & Barton (2011), *Sports Biomechanics* 10(1): [ResearchGate](https://www.researchgate.net/publication/51115734_Single_maximal_versus_combination_punch_kinematics)
-  - Lenetsky et al. (2020), *JSCR* 34(4): [PubMed](https://pubmed.ncbi.nlm.nih.gov/30789570/)
-  - Liu et al. (2022), *Frontiers in Physiology*: [artigo](https://frontiersin.org/articles/10.3389/fphys.2022.1015154/full)
-  - Dynamic inertial analysis of the Jab (2022): [PDF](http://efsupit.ro/images/stories/martie2022/Art%2083.pdf)
-  - Increasing the maximum angular velocity of the jab punch (2025): [sportpedagogy](https://sportpedagogy.org.ua/index.php/ppcs/article/view/3486)
-  - Treinadores irlandeses (2025), *IJPAS*: [PDF](https://www.tandfonline.com/doi/pdf/10.1080/24748668.2025.2481693)
-  - Kimm & Thiel (2015), *Hand speed measurements in boxing*: [PDF](https://pub.h-brs.de/frontdoor/deliver/index/docId/1685/file/Kimm_Thiel_2015_Hand_Speed_Measurements.pdf)
-  - Loturco et al. (2015), tempo de reação jab vs direto: [USP](https://repositorio.usp.br/item/002735639)
+- Lenetsky et al. (2020), JSCR: [PubMed](https://pubmed.ncbi.nlm.nih.gov/30789570/)
+- Piorkowski, Lees & Barton (2011): [ResearchGate](https://www.researchgate.net/publication/51115734_Single_maximal_versus_combination_punch_kinematics)
+- Liu et al. (2022), *Frontiers in Physiology*: [artigo](https://frontiersin.org/articles/10.3389/fphys.2022.1015154/full)
+- Jab angular velocity (2025): [sportpedagogy](https://sportpedagogy.org.ua/index.php/ppcs/article/view/3486)
+- Treinadores irlandeses (2025), IJPAS: [PDF](https://www.tandfonline.com/doi/pdf/10.1080/24748668.2025.2481693)
+- Erros comuns: [Healthy Principles](https://www.healthyprinciples.co.uk/common-jab-mistakes/), [FightCamp](https://blog.joinfightcamp.com/training/6-tips-to-throw-the-perfect-jab/)
 
-**Lacuna:** nenhuma fonte encontrada dá **graus** de rotação de ancas/peito no jab, nem a percentagem de peso em cada perna. Se for preciso, os PDFs de Stanley 2018 (Chester) e da tese METU ([PDF](https://open.metu.edu.tr/bitstream/handle/11511/21166/index.pdf?sequence=1&isAllowed=y)) devem ter ângulos nas tabelas — dá para os ler se o acesso a esses sites for autorizado nas definições de rede da sessão.
+**Lacunas:** nenhuma fonte dá **graus de rotação** de ancas/peito no jab. O Stanley 2018 só mede velocidades angulares e a tese METU só mede deslocações. O artigo de Cabral et al. (2010) sobre a rotação do tronco e da pelvis no soco pode ter esses graus, mas não o encontrei disponível.
+
+**Sites bloqueados pela rede da sessão (não contornados):** o WebFetch não conseguiu abrir expertboxing.com nem clok.uclan.ac.uk (cópia do Piorkowski 2011). O Expert Boxing acabou por ser lido com `curl`, já com o acesso autorizado; o clok.uclan.ac.uk não voltei a tentar.
