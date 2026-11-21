@@ -216,7 +216,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   }
   var A = lutador(TA), B = lutador(TB);
   // jab do Rui (PixelLab, por esqueleto): só existe a vista 4 (de lado, virado para a direita); 8 fotogramas de 64x60
-  var JDUR = [110, 70, 70, 80, 180, 100, 110, 110];   // ~0,8 s (o real é ~0,4 s: mais devagar para se ver)
+  var JDUR = [80, 50, 50, 60, 130, 70, 80, 80];   // 0,6 s (o real é ~0,4 s: um pouco mais devagar para se ver)
   A.tj = TJ.clone(); A.tj.needsUpdate = true; A.tj.repeat.set(1 / 8, 1);
   A.matG = A.s.material;
   A.matJ = new THREE.MeshBasicMaterial({ map: A.tj, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide });
