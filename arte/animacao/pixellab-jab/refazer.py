@@ -26,7 +26,16 @@ def preso_cabeca(gr):
         d(req)
         for q, b in zip(req['poses'], base): q['head'] = b['head']   # a cabeça mexe como na versão A (queixo a baixar e a acompanhar)
     return f
-pedidos = [(0, 'c1', preso_cabeca(55)), (0, 'c2', preso_cabeca(55))]
+def so_cabeca(gr):
+    d = preso(gr)
+    NOD = [2, 4, 7, 10, 10, 7, 4, 1]; TURN = [3, 5, 8, 10, 10, 8, 5, 2]
+    def f(req):
+        d(req)
+        for q, n, t in zip(req['poses'], NOD, TURN):
+            q['head'] = [t, n]; q['right_hand'] = [0.06, 0.11, 0.19]; q['right_elbow'] = [0.3, 0, -1]
+        req['action_description'] = 'boxer throws a quick left jab: only the left arm and the head move (chin tucks down behind the lead shoulder); the right glove stays still at the chin; body and legs do not move'
+    return f
+pedidos = [(0, 'h1', so_cabeca(55)), (0, 'h2', so_cabeca(55)), (0, 'h3', so_cabeca(55)), (0, 'h4', so_cabeca(55))]
 feitos = [(k, n, versao(k, n, f)) for k, n, f in pedidos]
 for _ in range(4): J.mcp('wait_for_jobs', {'timeout_seconds': 300})
 t = J.mcp('get_character', {'character_id': J.CHAR})
