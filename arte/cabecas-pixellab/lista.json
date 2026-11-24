@@ -28,17 +28,15 @@
    "n": 4,
    "pt": "Ruivo: pele muito clara com sardas, cabelo ruivo curto, cara redonda",
    "en": "short ginger red hair, freckles on nose and cheeks, round face, very pale skin",
-   "estado": "a gerar",
-   "state_id": "a4b6abac-f66f-4e8d-a9a2-4565ffe44c1f",
-   "porque": "corpo diferente: east 3.5%, west 3.2%"
+   "estado": "feita",
+   "state_id": "a4b6abac-f66f-4e8d-a9a2-4565ffe44c1f"
   },
   {
    "n": 5,
    "pt": "O certinho: pele clara, cabelo preto liso com risca ao lado, cara estreita",
    "en": "neat straight black hair with side parting, narrow face, thin chin, fair skin",
-   "estado": "repetir",
-   "state_id": "aa460d03-3cbc-40bc-859e-4f7edb3c5cdc",
-   "porque": "de frente estava a olhar para o lado"
+   "estado": "feita",
+   "state_id": "464bde09-baf3-4c63-9ca1-e234cc6b5230"
   },
   {
    "n": 6,
@@ -51,9 +49,8 @@
    "n": 7,
    "pt": "O surfista: pele clara bronzeada, cabelo louro-escuro desarrumado, nariz arrebitado",
    "en": "messy dark blond hair, upturned nose, lightly tanned fair skin",
-   "estado": "repetir",
-   "state_id": "b91245c7-32b8-4608-985f-4697db760479",
-   "porque": "de frente estava a olhar para o lado"
+   "estado": "feita",
+   "state_id": "d1c55363-55e9-4a51-9f9b-0c1ea0777fc2"
   },
   {
    "n": 8,
@@ -66,9 +63,8 @@
    "n": 9,
    "pt": "O miúdo: pele clara, franja castanha a cair na testa, cara de menino",
    "en": "brown fringe hair falling over forehead, boyish soft face, fair skin",
-   "estado": "repetir",
-   "state_id": "b00f74eb-ac0f-4558-a1db-649d23f407ae",
-   "porque": "de frente estava a olhar para o lado"
+   "estado": "feita",
+   "state_id": "3d3bae7f-0735-4bfd-9373-b5826f36f829"
   },
   {
    "n": 10,
@@ -89,8 +85,8 @@
    "n": 12,
    "pt": "Caracóis: pele clara, caracóis castanhos médios, maçãs do rosto marcadas",
    "en": "medium brown curls, high cheekbones, fair skin",
-   "estado": "repetir",
-   "state_id": "23e68064-ac44-46fd-99be-897dcfe31d49",
+   "estado": "a gerar",
+   "state_id": "9b82d0ea-02fe-46da-8bc7-3d086b3253fe",
    "porque": "de frente estava a olhar para o lado"
   },
   {
