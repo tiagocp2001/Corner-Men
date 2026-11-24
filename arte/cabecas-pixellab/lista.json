@@ -182,74 +182,87 @@
    "n": 25,
    "pt": "Inglês: pele clara, cabelo castanho-claro desarrumado, orelhas salientes",
    "en": "English, messy light brown hair, slightly protruding ears, fair skin",
-   "estado": "a gerar",
+   "estado": "feita",
    "state_id": "0d032af3-781d-4726-80f9-7621f31e741b"
   },
   {
    "n": 26,
    "pt": "Polaco: pele clara, rapado dos lados com topete louro, olhos claros, cara quadrada",
    "en": "Polish, shaved sides with blond quiff on top, light eyes, square face, fair skin",
-   "estado": "por fazer"
+   "estado": "feita",
+   "state_id": "c7b6adc2-0611-42b1-887d-7cbb34b7da88"
   },
   {
    "n": 27,
    "pt": "Grego: pele morena, cabelo preto encaracolado curto, nariz comprido e direito",
    "en": "Greek, short curly black hair, long straight nose, thick eyebrows, olive tan skin",
-   "estado": "por fazer"
+   "estado": "feita",
+   "state_id": "aa9edf3f-47f0-4977-8ede-051662098b17"
   },
   {
    "n": 28,
    "pt": "Escocês: pele clara, cabelo louro-arruivado, bigode farto, cara larga",
    "en": "Scottish, strawberry blond hair, thick moustache, wide face, pale skin",
-   "estado": "por fazer"
+   "estado": "repetir",
+   "state_id": "c32c0372-ec7c-42b0-ba4b-df8b9aebf0ce",
+   "porque": "corpo diferente: south 10.1%, south-east 9.6%, east 15.9%, north-east 16.8%, north 16.0%, north-west 12.0%, west 12.9%, south-west 10.4%"
   },
   {
    "n": 29,
    "pt": "Japonês: pele clara-amarelada, olhos rasgados, cabelo preto liso em tigela, cara oval",
    "en": "Japanese, East Asian eyes, straight black bowl-cut hair, oval face, light skin",
-   "estado": "por fazer"
+   "estado": "feita",
+   "state_id": "4f1b1528-999b-4fb8-98df-39bc8b20de9d"
   },
   {
    "n": 30,
    "pt": "Coreano: pele clara, olhos rasgados, cabelo preto espetado com madeixa à frente",
    "en": "Korean, East Asian eyes, spiky black hair with a fringe lock, slim chin, light skin",
-   "estado": "por fazer"
+   "estado": "feita",
+   "state_id": "9bdf215a-2ec0-4b8f-8721-d4703fa9bab9"
   },
   {
    "n": 31,
    "pt": "Nigeriano: pele escura retinta, rapado, nariz largo, maxilar forte, olhar sério",
    "en": "Nigerian, shaved head, broad nose, strong jaw, serious look, very dark skin",
-   "estado": "por fazer"
+   "estado": "feita",
+   "state_id": "6a28858b-67f8-4346-b55c-c860d9104afd"
   },
   {
    "n": 32,
    "pt": "Jamaicano: pele escura, dreadlocks curtos presos, barba curta",
    "en": "Jamaican, short dreadlocks tied up, short beard, dark skin",
-   "estado": "por fazer"
+   "estado": "feita",
+   "state_id": "630f5876-0329-48ae-9f47-0e899cfd4f2b"
   },
   {
    "n": 33,
    "pt": "Mexicano: pele morena, cabelo preto curto rapado dos lados, bigode ralo, cara redonda",
    "en": "Mexican, short black hair with shaved sides, thin sparse moustache, round face, brown skin",
-   "estado": "por fazer"
+   "estado": "feita",
+   "state_id": "3b8d918a-ea17-492e-a3f0-177c61708928"
   },
   {
    "n": 34,
    "pt": "Norte-americano: pele castanha, afro alto, sobrancelhas grossas, sorriso",
    "en": "African American, tall afro hair, thick eyebrows, slight smile, brown skin",
-   "estado": "por fazer"
+   "estado": "repetir",
+   "state_id": "94ae09b0-6ff8-4533-a0ea-5e2261aa542a",
+   "porque": "corpo diferente: south 3.2%"
   },
   {
    "n": 35,
    "pt": "Filipino: pele morena, olhos ligeiramente rasgados, cabelo preto liso com franja",
    "en": "Filipino, slightly almond eyes, straight black hair with fringe, small face, tan brown skin",
-   "estado": "por fazer"
+   "estado": "feita",
+   "state_id": "fefdf712-81ed-44ae-bdea-25152b258b0a"
   },
   {
    "n": 36,
    "pt": "Argentino: pele clara, cabelo castanho ondulado curto, barba fina aparada, nariz comprido",
    "en": "Argentine, short wavy brown hair, thin trimmed beard, long nose, fair skin",
-   "estado": "por fazer"
+   "estado": "a gerar",
+   "state_id": "eceb0f56-1a66-45dd-a1d7-b9cd9a9f1668"
   },
   {
    "n": 37,
