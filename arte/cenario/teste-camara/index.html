@@ -50,7 +50,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
       <button id="camP" type="button">Testes</button>
     </div>
     <div class="ctrl" id="mov" aria-label="Movimento">
-      <button type="button" data-m="auto" aria-pressed="true">Livre</button><button type="button" data-m="ft">Frente/trás</button><button type="button" data-m="lados">De lado</button><button type="button" data-m="parado">Parados</button><button type="button" data-m="jab">Jab</button>
+      <button type="button" data-m="auto" aria-pressed="true">Livre</button><button type="button" data-m="ft">Frente/trás</button><button type="button" data-m="lados">De lado</button><button type="button" data-m="parado">Parados</button><button type="button" data-m="jab" data-v="3">Jab 4</button><button type="button" data-m="jab" data-v="1">Jab 2</button>
     </div>
     <div class="ctrl" id="dst" aria-label="Distância">
       <button type="button" data-d="livre">Livre</button><button type="button" data-d="1.2">Fora</button><button type="button" data-d="0.95">Longe</button><button type="button" data-d="0.85" aria-pressed="true">Meio</button><button type="button" data-d="0.75">Perto</button>
@@ -71,7 +71,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     P:  { el: 20, dist: 5.5, fov: 34, txt: 'Perto dos pugilistas e a segui-los, para ver bem as animações.' },
     E:  { el: 34, dist: 25,   fov: 46, txt: 'Cenário completo, visto do nosso lado: o ringue, o público, as portas dos balneários ao fundo.' }
   };
-  var cam = 'D', MOV = 'auto';
+  var cam = 'D', MOV = 'auto', JV = 3;
   var SCALE = 1 / Math.min(3, window.devicePixelRatio || 1); // resolução total do ecrã (nítido); os bonecos continuam em pixel art
 
   var cv = document.getElementById('cv');
@@ -215,9 +215,9 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     return { s: s, t: t, sh: sh, pos: new THREE.Vector3(), prev: null, vel: new THREE.Vector2(), face: new THREE.Vector2(1, 0), f: 0, acc: 0 };
   }
   var A = lutador(TA), B = lutador(TB);
-  // jab do Rui (PixelLab, por esqueleto): só existe a vista 4 (de lado, virado para a direita); 8 fotogramas de 64x60
+  // jab do Rui (PixelLab, por esqueleto): vistas 4 (de lado) e 2 (frente-dir.); 8 fotogramas de 64x60
   var JDUR = [80, 50, 50, 60, 130, 70, 80, 80];   // 0,6 s (o real é ~0,4 s: um pouco mais devagar para se ver)
-  A.tj = TJ.clone(); A.tj.needsUpdate = true; A.tj.repeat.set(1 / 8, 1);
+  A.tj = TJ.clone(); A.tj.needsUpdate = true; A.tj.repeat.set(1 / 8, 1 / 2);   // linha de cima: vista 4; de baixo: vista 2
   A.matG = A.s.material;
   A.matJ = new THREE.MeshBasicMaterial({ map: A.tj, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide });
   A.jab = null; A.proxJab = 1500;
@@ -232,18 +232,18 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   }
   function poeLutador(L, dt) {
     var v = vista(L);
-    if (L.matJ && MOV === 'jab') v = 3;                   // teste do jab: o Rui sempre de lado (vista 4), a única que o jab tem
+    if (L.matJ && MOV === 'jab') v = JV;                  // teste do jab: o Rui sempre na vista escolhida (4 ou 2)
     if (L.jab) {                                          // a dar o jab: os pés ficam, depois volta ao saltitar
       L.jab.acc += dt; while (L.jab && L.jab.acc > JDUR[L.jab.f]) { L.jab.acc -= JDUR[L.jab.f]; L.jab.f++; if (L.jab.f >= 8) L.jab = null; }
       if (L.jab) {
-        L.s.material = L.matJ; L.tj.offset.set(L.jab.f / 8, 0); L.s.scale.x = 1.85 * 64 / 60;
+        L.s.material = L.matJ; L.tj.offset.set(L.jab.f / 8, JV === 3 ? 0.5 : 0); L.s.scale.x = 1.85 * 64 / 60;
         acaba(L); return;
       }
       L.s.material = L.matG; L.s.scale.x = 1.85 * 40 / 60; L.f = 0; L.acc = 0;
     }
     L.acc += dt; while (L.acc > DUR[L.f]) { L.acc -= DUR[L.f]; L.f = (L.f + 1) % 12; }
     if (L.matJ) L.proxJab -= dt;
-    if (L.matJ && MOV === 'jab' && v === 3 && L.f === 0 && L.proxJab <= 0) { L.jab = { f: 0, acc: 0 }; L.proxJab = 1800 + Math.random() * 1200; poeLutador(L, 0); return; }
+    if (L.matJ && MOV === 'jab' && L.f === 0 && L.proxJab <= 0) { L.jab = { f: 0, acc: 0 }; L.proxJab = 1800 + Math.random() * 1200; poeLutador(L, 0); return; }
     // para onde se está a mexer, em relação ao adversário: guarda, frente, trás, esquerda ou direita
     if (L.prev && dt > 0) L.vel.lerp(new THREE.Vector2((L.pos.x - L.prev.x) / dt * 1000, (L.pos.z - L.prev.z) / dt * 1000), Math.min(1, dt * 0.01));
     L.prev = L.pos.clone();
@@ -383,7 +383,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   }
   ['TV', 'D', 'E', 'P'].forEach(function (k) { document.getElementById('cam' + k).addEventListener('click', function () { escolhe(k); }); });
   document.querySelectorAll('#mov button').forEach(function (b) { b.addEventListener('click', function () {
-    MOV = b.dataset.m;
+    MOV = b.dataset.m; if (b.dataset.v) JV = +b.dataset.v;
     document.querySelectorAll('#mov button').forEach(function (o) { o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
   }); });
   escolhe('D');
@@ -413,8 +413,8 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
       cx = 1.6 * Math.sin(tm * 0.00031); cz = 1.1 * Math.sin(tm * 0.00047 + 1);
     } else if (MOV === 'ft') {                            // um avança e o outro recua, depois ao contrário
       var u = 1.0 * Math.sin(tm * 0.0006); cx = -Math.cos(ang) * u; cz = -Math.sin(ang) * u;
-    } else if (MOV === 'jab') {                           // de frente um para o outro: o Rui à esquerda, visto de lado
-      ang = Math.PI;
+    } else if (MOV === 'jab') {                           // vista 4: o Rui à esquerda, de lado; vista 2: virado 45° para a câmara
+      ang = JV === 3 ? Math.PI : Math.PI * 1.25;
     } else if (MOV === 'lados') {                         // rodam um à volta do outro
       ang += dt * 0.0012 * (Math.sin(tm * 0.0004) > 0 ? 1 : -1);   // para um lado ~8 s, depois para o outro
     }
@@ -430,6 +430,8 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     alvoSuave.lerp(alvo, Math.min(1, dt * 0.0012));
     poeCamara(dt);
     poeLutador(A, dt); poeLutador(B, dt);
+    var verAtras = MOV === 'jab' && JV === 1;            // na vista 2 o adversário fica à frente do Rui: meio transparente para se ver o jab
+    B.s.material.opacity = verAtras ? 0.45 : 1; B.s.material.alphaTest = verAtras ? 0.2 : 0.5; B.s.material.needsUpdate = true;
     fans.forEach(function (F) {
       if (F.fixo) return;
       F.timer -= dt;
