@@ -106,16 +106,17 @@
    "n": 15,
    "pt": "Rabo de cavalo: pele morena, cabelo preto liso comprido preso atrás, cara angulosa",
    "en": "long straight black hair tied back in a ponytail, angular face, tan skin",
-   "estado": "feita",
-   "state_id": "6d7e90e6-57f0-4025-8606-3bae50888b2f"
+   "estado": "a gerar",
+   "state_id": "d19ba54c-7e68-464b-8d6b-e4eefea98f41",
+   "porque": "de frente continuava a olhar para o lado",
+   "limite": 5.0
   },
   {
    "n": 16,
    "pt": "Nariz partido: pele clara, cabelo louro curto, nariz torto de boxe",
    "en": "short blond hair, crooked broken boxer nose, light eyebrows, fair skin",
-   "estado": "a gerar",
-   "state_id": "d6a42913-7b0b-4b8d-8f2c-bfa2a8484f06",
-   "porque": "de frente estava a olhar para o lado"
+   "estado": "feita",
+   "state_id": "d6a42913-7b0b-4b8d-8f2c-bfa2a8484f06"
   },
   {
    "n": 17,
@@ -135,9 +136,8 @@
    "n": 19,
    "pt": "Italiano: pele azeitonada, cabelo preto para trás com gel, nariz aquilino, maxilar forte",
    "en": "Italian, black hair slicked back with gel, aquiline nose, strong jaw, olive skin",
-   "estado": "repetir",
-   "state_id": "d6a3e5b5-a2ed-4644-adad-26f354d7084e",
-   "porque": "de frente estava a olhar para o lado"
+   "estado": "feita",
+   "state_id": "2b1f5c3c-d2ad-42a0-a5f6-47228df7f219"
   },
   {
    "n": 20,
@@ -157,9 +157,8 @@
    "n": 22,
    "pt": "Alemão: pele clara, cabelo louro curto com risca, cara estreita, queixo pontiagudo",
    "en": "German, short blond hair with side part, narrow face, pointed chin, fair skin",
-   "estado": "repetir",
-   "state_id": "7e7f86c7-a6a8-46c9-9cf6-35400277978a",
-   "porque": "de frente estava a olhar para o lado"
+   "estado": "feita",
+   "state_id": "dfe1b690-eadb-4f50-adc1-284b9f078efe"
   },
   {
    "n": 23,
@@ -179,25 +178,22 @@
    "n": 25,
    "pt": "Inglês: pele clara, cabelo castanho-claro desarrumado, orelhas salientes",
    "en": "English, messy light brown hair, slightly protruding ears, fair skin",
-   "estado": "repetir",
-   "state_id": "0d032af3-781d-4726-80f9-7621f31e741b",
-   "porque": "de frente estava a olhar para o lado"
+   "estado": "feita",
+   "state_id": "3aa44f5c-fe78-40e6-8f60-212ab727f20d"
   },
   {
    "n": 26,
    "pt": "Polaco: pele clara, rapado dos lados com topete louro, olhos claros, cara quadrada",
    "en": "Polish, shaved sides with blond quiff on top, light eyes, square face, fair skin",
-   "estado": "repetir",
-   "state_id": "c7b6adc2-0611-42b1-887d-7cbb34b7da88",
-   "porque": "de frente estava a olhar para o lado"
+   "estado": "feita",
+   "state_id": "c4092b8e-d30e-4d9d-9096-3d55b65cf443"
   },
   {
    "n": 27,
    "pt": "Grego: pele morena, cabelo preto encaracolado curto, nariz comprido e direito",
    "en": "Greek, short curly black hair, long straight nose, thick eyebrows, olive tan skin",
-   "estado": "repetir",
-   "state_id": "aa9edf3f-47f0-4977-8ede-051662098b17",
-   "porque": "de frente estava a olhar para o lado"
+   "estado": "feita",
+   "state_id": "ecc6a5ed-0e7e-43dd-9c70-6bba43d1b4e1"
   },
   {
    "n": 28,
@@ -210,8 +206,8 @@
    "n": 29,
    "pt": "Japonês: pele clara-amarelada, olhos rasgados, cabelo preto liso em tigela, cara oval",
    "en": "Japanese, East Asian eyes, straight black bowl-cut hair, oval face, light skin",
-   "estado": "repetir",
-   "state_id": "4f1b1528-999b-4fb8-98df-39bc8b20de9d",
+   "estado": "a gerar",
+   "state_id": "2160901b-7112-4739-bfe8-23f13b192fc3",
    "porque": "de frente estava a olhar para o lado"
   },
   {

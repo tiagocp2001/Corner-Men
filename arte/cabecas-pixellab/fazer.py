@@ -71,7 +71,8 @@ def fim(lst, c, pasta):
     """Verifica o corpo píxel a píxel; se mudou, a cabeça fica para repetir."""
     import verificar
     r = verificar.verificar(pasta)
-    maus = [f'{d} {p:.1f}%' for d, p in r if p > verificar.LIMITE]
+    lim = c.get('limite', verificar.LIMITE)          # cabelo comprido nas costas (rabo de cavalo) pode passar um pouco
+    maus = [f'{d} {p:.1f}%' for d, p in r if p > lim]
     if maus:
         c['estado'] = 'repetir'; c['porque'] = 'corpo diferente: ' + ', '.join(maus)
     else:
