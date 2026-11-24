@@ -24,7 +24,8 @@ def mcp(tool, args):
     return '\n'.join(c.get('text', '') for c in d['content'] if c.get('type') == 'text')
 def gerações():
     t = mcp('get_balance', {})
-    return float(re.search(r'generations_remaining: ([\d.]+)', t).group(1)) + float(re.search(r'generations_today: ([\d.]+)', t).group(1))
+    h = re.search(r'generations_today: ([\d.]+)', t)
+    return float(re.search(r'generations_remaining: ([\d.]+)', t).group(1)) + (float(h.group(1)) if h else 0)
 def desvio(k):
     return (VANG[k] - PL[ORD[k][0]] + 540) % 360 - 180
 def pedido(k):
