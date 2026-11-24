@@ -20,7 +20,13 @@ def preso(gr):
         for q in req['poses']:            # corpo preso: só o braço do jab se mexe
             q['chest'] = 0; q['hips'] = 0; q['head'] = [0, 0]; q['lean'] = [0, 0]; q['pelvis'] = [0, 0, 0]
     return f
-pedidos = [(0, 'p1', preso(55)), (0, 'p2', preso(55))]
+def preso_cabeca(gr):
+    d = preso(gr); base = J.pedido(0)['poses']
+    def f(req):
+        d(req)
+        for q, b in zip(req['poses'], base): q['head'] = b['head']   # a cabeça mexe como na versão A (queixo a baixar e a acompanhar)
+    return f
+pedidos = [(0, 'c1', preso_cabeca(55)), (0, 'c2', preso_cabeca(55))]
 feitos = [(k, n, versao(k, n, f)) for k, n, f in pedidos]
 for _ in range(4): J.mcp('wait_for_jobs', {'timeout_seconds': 300})
 t = J.mcp('get_character', {'character_id': J.CHAR})
