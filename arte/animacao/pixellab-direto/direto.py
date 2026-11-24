@@ -14,6 +14,7 @@ LEAN = [[1, 0], [2, -1], [4, -3], [6, -4], [6, -4], [4, -3], [2, -1], [0, 0]]   
 PEL = [[-0.002, 0.003, -0.002], [-0.006, 0.008, -0.004], [-0.010, 0.013, -0.006], [-0.012, 0.016, -0.007],
        [-0.012, 0.016, -0.007], [-0.008, 0.010, -0.005], [-0.003, 0.004, -0.002], [0, 0, 0]]
 NOD = [1, 2, 4, 5, 5, 3, 1, 0]
+LUVA_E = [float(v) for v in os.environ.get('LUVA_E', '-0.083,0.09').split(',')]   # luva esquerda (direita, frente) em relação ao olhar
 TURN = [0, 5, 12, 15, 15, 10, 4, 0]   # o corpo inteiro roda com os pés (o motor só deixa 20° nas ancas): + = vira o lado direito para a frente?
 def rot(v, th):                                   # roda [direita, frente] para a esquerda dele
     return [v[0] * math.cos(th) - v[1] * math.sin(th), v[0] * math.sin(th) + v[1] * math.cos(th)]
@@ -26,13 +27,15 @@ def pedido(k):
         P.append({'frame': i + 1, 'pelvis': [round(pr[0], 4), round(pr[1], 4), PEL[i][2]], 'hips': HIPS[i], 'chest': CHEST[i],
                   'lean': LEAN[i], 'head': [round(8 * s), NOD[i]],
                   'right_hand': [round(R0[j] + (alvo[j] - R0[j]) * f, 3) for j in range(3)],
-                  'left_hand': [round(v, 3) for v in rot([-0.083, 0.09], th)] + [0.2],   # a luva da frente volta para a cara, virada para onde ele olha
+                  'left_hand': [round(v, 3) for v in rot(LUVA_E, th)] + [0.21],   # a luva da frente protege o centro da cara, virada para onde ele olha
                   'right_elbow': [0.3, 0, -1] if f < 0.6 else [0.5, 0.1, -0.6], 'left_elbow': [-0.3, 0, -1],
                   'right_foot': [round(-0.012 * f, 3), round(0.008 * f, 3), 0]})
         if os.environ.get('GIRO'):                # o corpo todo roda para a esquerda dele (lado direito à frente);
             t = TURN[i] * float(os.environ['GIRO']); P[-1]['turn'] = t   # as mãos vão com ele, por isso o alvo roda ao contrário
             h = P[-1]['right_hand']; hr = rot(h[:2], math.radians(-t)); P[-1]['right_hand'] = [round(hr[0], 3), round(hr[1], 3), h[2]]
-            P[-1]['_alvo_mundo'] = h   # o pé de trás gira para dentro (aproximação)
+            P[-1]['_alvo_mundo'] = h
+            l = P[-1]['left_hand']; lr = rot(l[:2], math.radians(-t)); P[-1]['left_hand'] = [round(lr[0], 3), round(lr[1], 3), l[2]]   # a luva esquerda também não pode rodar com o corpo para trás
+            P[-1]['_luva_mundo'] = l   # o pé de trás gira para dentro (aproximação)
     return dict(character_id=J.CHAR, mode='skeleton-v3', directions=[J.ORD[k][0]], frame_count=8, poses=P,
                 action_description='boxer throws a straight right hand (cross) from an orthodox guard: rear foot pivots, hips and shoulders rotate, left glove back to the face')
 def verifica(req, k):
@@ -60,8 +63,8 @@ if __name__ == '__main__':
     if sys.argv[1:] == ['atlas']: atlas(); sys.exit(0)
     k = int(sys.argv[1]) - 1; nomes = sys.argv[2:] or ['a']
     req = pedido(k); ok, a = verifica(req, k)
-    l = req['poses'][3]['left_hand']; al = round(math.degrees(math.atan2(-l[0], l[1])))
-    print(f'vista {k + 1}: direto a {a}° (o olhar está a {J.desvio(k)}°)', 'OK' if ok else 'ERRADO', f'| luva esquerda à cara a {al}° (na guarda: 43° + desvio)')
+    l = req['poses'][3].get('_luva_mundo', req['poses'][3]['left_hand']); al = round(math.degrees(math.atan2(-l[0], l[1])))
+    print(f'vista {k + 1}: direto a {a}° (o olhar está a {J.desvio(k)}°)', 'OK' if ok else 'ERRADO', f'| luva esquerda à cara a {al}° (desvio da vista + ângulo da luva)')
     if not ok: sys.exit(1)
     if os.environ.get('SO_VERIFICA'): sys.exit(0)
     for n in nomes:
