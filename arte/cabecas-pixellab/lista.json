@@ -28,9 +28,9 @@
    "n": 4,
    "pt": "Ruivo: pele muito clara com sardas, cabelo ruivo curto, cara redonda",
    "en": "short ginger red hair, freckles on nose and cheeks, round face, very pale skin",
-   "estado": "repetir",
-   "state_id": "1cb16d79-1f6f-4e23-88fe-651b92e19749",
-   "porque": "corpo diferente: south 13.7%, south-east 12.7%, east 26.1%, north-east 30.4%, north 26.0%, north-west 25.6%, west 18.2%, south-west 15.9%"
+   "estado": "a gerar",
+   "state_id": "eb808e59-6877-4414-afb1-e65e86a2a2fe",
+   "porque": "corpo diferente: south 10.7%, south-east 10.1%, east 18.0%, north-east 17.8%, north 15.1%, north-west 11.3%, west 16.6%, south-west 11.2%"
   },
   {
    "n": 5,
@@ -282,14 +282,15 @@
    "n": 39,
    "pt": "Cubano: pele castanha-clara, cabelo preto com pente rapado, cara angulosa",
    "en": "Cuban, black hair with a shaved comb-line part, angular face, light brown skin",
-   "estado": "a gerar",
+   "estado": "feita",
    "state_id": "0faa5b8b-8866-48e9-b8e8-0fb94fdd870b"
   },
   {
    "n": 40,
    "pt": "Brasileiro: pele morena-clara, caracóis médios castanhos, sorriso aberto",
    "en": "Brazilian, medium brown curly hair, wide smile, light tan skin",
-   "estado": "por fazer"
+   "estado": "feita",
+   "state_id": "e0613058-b8ce-48d9-b2ee-72e58684dbc9"
   }
  ]
 }
