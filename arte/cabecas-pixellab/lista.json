@@ -161,26 +161,29 @@
    "n": 22,
    "pt": "Alemão: pele clara, cabelo louro curto com risca, cara estreita, queixo pontiagudo",
    "en": "German, short blond hair with side part, narrow face, pointed chin, fair skin",
-   "estado": "a gerar",
+   "estado": "feita",
    "state_id": "7e7f86c7-a6a8-46c9-9cf6-35400277978a"
   },
   {
    "n": 23,
    "pt": "Turco: pele azeitonada, cabelo preto curto e grosso, sobrancelhas grossas, nariz forte",
    "en": "Turkish, thick short black hair, very thick eyebrows, strong nose, olive skin",
-   "estado": "por fazer"
+   "estado": "feita",
+   "state_id": "c19e0170-b1fa-47af-b1c7-8e4bcd75ea27"
   },
   {
    "n": 24,
    "pt": "Francês: pele escura, afro curto bem aparado, cara fina, bigode fino",
    "en": "French, short neat afro hair, slim face, thin moustache, dark skin",
-   "estado": "por fazer"
+   "estado": "feita",
+   "state_id": "beccd750-0c57-4f32-b408-6b0fbdaa6f18"
   },
   {
    "n": 25,
    "pt": "Inglês: pele clara, cabelo castanho-claro desarrumado, orelhas salientes",
    "en": "English, messy light brown hair, slightly protruding ears, fair skin",
-   "estado": "por fazer"
+   "estado": "a gerar",
+   "state_id": "0d032af3-781d-4726-80f9-7621f31e741b"
   },
   {
    "n": 26,
