@@ -107,15 +107,14 @@
    "pt": "Rabo de cavalo: pele morena, cabelo preto liso comprido preso atrás, cara angulosa",
    "en": "long straight black hair tied back in a ponytail, angular face, tan skin",
    "estado": "feita",
-   "state_id": "7f75093c-5ea9-4e5c-b94c-41e619ab2e46",
-   "nota": "verificada a olho: a diferença é do rabo de cavalo nas costas, o corpo está igual"
+   "state_id": "6d7e90e6-57f0-4025-8606-3bae50888b2f"
   },
   {
    "n": 16,
    "pt": "Nariz partido: pele clara, cabelo louro curto, nariz torto de boxe",
    "en": "short blond hair, crooked broken boxer nose, light eyebrows, fair skin",
    "estado": "a gerar",
-   "state_id": "5db927b0-d386-4ece-9fe1-7980ae302891",
+   "state_id": "d6a42913-7b0b-4b8d-8f2c-bfa2a8484f06",
    "porque": "de frente estava a olhar para o lado"
   },
   {
