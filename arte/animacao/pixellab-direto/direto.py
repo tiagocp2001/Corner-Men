@@ -18,7 +18,7 @@ def rot(v, th):                                   # roda [direita, frente] para 
     return [v[0] * math.cos(th) - v[1] * math.sin(th), v[0] * math.sin(th) + v[1] * math.cos(th)]
 def pedido(k):
     th = math.radians(J.desvio(k)); s = J.desvio(k) / 45
-    alvo = rot([0.0, 0.25], th) + [0.22]          # cabeça do adversário, em frente ao olhar (um pouco além do alcance: o corpo roda)
+    alvo = rot([0.0, float(os.environ.get('ALCANCE', 0.25))], th) + [0.22]          # cabeça do adversário, em frente ao olhar (um pouco além do alcance: o corpo roda)
     P = []
     for i in range(8):
         f = K[i]; pr = rot(PEL[i][:2], th)
