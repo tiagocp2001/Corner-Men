@@ -14,7 +14,7 @@ def cls(p):
     r, g, b = p[:3]
     if r + g + b < 90: return 'escuro'
     if r > 110 and r > 2.2*g and r > b + 40: return 'vermelho'
-    if r > 190 and g > 190 and b > 190: return 'branco'
+    if r > 190 and g > 190 and b > 190 and max(r, g, b) - min(r, g, b) < 30: return 'branco'   # branco dos calções (pele muito clara não conta)
     return 'pele'   # pele, sombras, botas cinzentas: o tom pode mudar
 def verificar(pasta):
     res = []

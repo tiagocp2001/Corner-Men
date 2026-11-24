@@ -28,9 +28,8 @@
    "n": 4,
    "pt": "Ruivo: pele muito clara com sardas, cabelo ruivo curto, cara redonda",
    "en": "short ginger red hair, freckles on nose and cheeks, round face, very pale skin",
-   "estado": "a gerar",
-   "state_id": "eb808e59-6877-4414-afb1-e65e86a2a2fe",
-   "porque": "corpo diferente: south 10.7%, south-east 10.1%, east 18.0%, north-east 17.8%, north 15.1%, north-west 11.3%, west 16.6%, south-west 11.2%"
+   "estado": "feita",
+   "state_id": "67878116-bd81-4076-8979-e209a948c18e"
   },
   {
    "n": 5,
@@ -64,17 +63,16 @@
    "n": 9,
    "pt": "O miúdo: pele clara, franja castanha a cair na testa, cara de menino",
    "en": "brown fringe hair falling over forehead, boyish soft face, fair skin",
-   "estado": "repetir",
-   "state_id": "b00f74eb-ac0f-4558-a1db-649d23f407ae",
-   "porque": "corpo diferente: south 3.4%"
+   "estado": "feita",
+   "state_id": "b00f74eb-ac0f-4558-a1db-649d23f407ae"
   },
   {
    "n": 10,
    "pt": "Crista: pele morena-clara, cabelo curto com crista no meio, orelhas salientes",
    "en": "short hair with a small mohawk strip in the middle, slightly big ears, light tan skin",
-   "estado": "repetir",
+   "estado": "feita",
    "state_id": "dbcc2c0d-dee6-448b-92d4-1eb1ea1d78d0",
-   "porque": "corpo diferente: north-west 4.1%"
+   "nota": "verificada a olho: a diferença é do cabelo alto/pele escura, o corpo está igual"
   },
   {
    "n": 11,
@@ -93,10 +91,9 @@
   {
    "n": 13,
    "pt": "Cabo-verdiano: pele castanha-escura, rapado com risca desenhada, nariz largo, lábios grossos",
-   "en": "Cape Verdean, very short hair with a shaved line design, broad nose, full lips, dark brown skin",
-   "estado": "repetir",
-   "state_id": "49ee0880-4234-42f4-9398-2c157fb25dcb",
-   "porque": "corpo diferente: south 3.9%"
+   "en": "Cape Verdean, very short hair with a shaved line design, broad nose, full lips, dark brown skin, bare ankles with no socks",
+   "estado": "feita",
+   "state_id": "88b7bcc2-5177-48ad-8ea1-a9d91c11d45f"
   },
   {
    "n": 14,
@@ -123,17 +120,15 @@
    "n": 17,
    "pt": "Nórdico: pele muito clara e rosada, louro quase branco rapado, olhos azuis, cara comprida",
    "en": "Scandinavian, very pale pinkish skin, platinum blond buzz cut, light blue eyes, long face",
-   "estado": "repetir",
-   "state_id": "263a9708-8b57-4976-acec-01f4a43ded61",
-   "porque": "corpo diferente: south 9.0%, south-east 8.2%, east 12.9%, north-east 14.4%, north 13.9%, north-west 9.4%, west 9.7%, south-west 9.1%"
+   "estado": "feita",
+   "state_id": "263a9708-8b57-4976-acec-01f4a43ded61"
   },
   {
    "n": 18,
    "pt": "Irlandês: pele clara com sardas, cabelo ruivo curto, barba ruiva curta, bochechas rosadas",
    "en": "Irish, short red hair, short red beard, freckles, rosy cheeks, pale skin",
-   "estado": "repetir",
-   "state_id": "eed5706f-27cd-4e54-8768-cf9af240207a",
-   "porque": "corpo diferente: south 11.6%, south-east 11.3%, east 23.4%, north-east 30.4%, north 27.2%, north-west 23.7%, west 17.4%, south-west 13.3%"
+   "estado": "feita",
+   "state_id": "eed5706f-27cd-4e54-8768-cf9af240207a"
   },
   {
    "n": 19,
@@ -153,9 +148,8 @@
    "n": 21,
    "pt": "Russo: pele clara, rapado, cara larga, maçãs do rosto altas, olhos pequenos e claros",
    "en": "Russian, shaved head, wide face, high cheekbones, small light eyes, fair skin",
-   "estado": "repetir",
-   "state_id": "bd952d29-847f-4419-83e9-0e0c4cfaf825",
-   "porque": "corpo diferente: south 9.0%, south-east 9.6%, east 15.1%, north-east 16.0%, north 15.7%, north-west 11.3%, west 11.3%, south-west 10.6%"
+   "estado": "feita",
+   "state_id": "bd952d29-847f-4419-83e9-0e0c4cfaf825"
   },
   {
    "n": 22,
@@ -203,9 +197,8 @@
    "n": 28,
    "pt": "Escocês: pele clara, cabelo louro-arruivado, bigode farto, cara larga",
    "en": "Scottish, strawberry blond hair, thick moustache, wide face, pale skin",
-   "estado": "repetir",
-   "state_id": "c32c0372-ec7c-42b0-ba4b-df8b9aebf0ce",
-   "porque": "corpo diferente: south 10.1%, south-east 9.6%, east 15.9%, north-east 16.8%, north 16.0%, north-west 12.0%, west 12.9%, south-west 10.4%"
+   "estado": "feita",
+   "state_id": "c32c0372-ec7c-42b0-ba4b-df8b9aebf0ce"
   },
   {
    "n": 29,
@@ -246,9 +239,9 @@
    "n": 34,
    "pt": "Norte-americano: pele castanha, afro alto, sobrancelhas grossas, sorriso",
    "en": "African American, tall afro hair, thick eyebrows, slight smile, brown skin",
-   "estado": "repetir",
+   "estado": "feita",
    "state_id": "94ae09b0-6ff8-4533-a0ea-5e2261aa542a",
-   "porque": "corpo diferente: south 3.2%"
+   "nota": "verificada a olho: a diferença é do cabelo alto/pele escura, o corpo está igual"
   },
   {
    "n": 35,
