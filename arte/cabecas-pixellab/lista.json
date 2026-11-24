@@ -1,7 +1,7 @@
 {
  "corpo_base": "9ae6476a-9e7b-45cd-8160-c796abe153ef",
  "nota": "Corpo f (GIF 6) importado na PixelLab. Cada variante = create_character_state sobre o corpo base (~10 geracoes, gratis: +5 por dia). Calcoes e botas pintam-se depois no codigo; luvas seguem o canto.",
- "modelo_pedido": "change only the head and skin tone: young man about 20 years old, {en}; same skin tone on face and whole body; keep exactly the same body, proportions, pose, red gloves, red and white shorts and black boots",
+ "modelo_pedido": "change only the head and skin tone: young man about 20 years old, {en}, serious focused expression; same skin tone on face and whole body; keep exactly the same body, proportions, pose, red gloves, red and white shorts and black boots",
  "cabecas": [
   {
    "n": 1,
@@ -280,10 +280,10 @@
   },
   {
    "n": 40,
-   "pt": "Brasileiro: pele morena-clara, caracóis médios castanhos, sorriso aberto",
-   "en": "Brazilian, medium brown curly hair, wide smile, light tan skin",
+   "pt": "Brasileiro: pele morena-clara, caracóis médios castanhos, cara séria",
+   "en": "Brazilian, medium brown curly hair, serious focused fighter expression, mouth closed, no smile, light tan skin",
    "estado": "feita",
-   "state_id": "e0613058-b8ce-48d9-b2ee-72e58684dbc9"
+   "state_id": "906113ac-9f88-4e1b-a6ba-3802686a70cf"
   }
  ]
 }
