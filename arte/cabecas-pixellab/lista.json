@@ -107,8 +107,8 @@
    "pt": "Rabo de cavalo: pele morena, cabelo preto liso comprido preso atrás, cara angulosa",
    "en": "long straight black hair tied back in a ponytail, angular face, tan skin",
    "estado": "a gerar",
-   "state_id": "d19ba54c-7e68-464b-8d6b-e4eefea98f41",
-   "porque": "de frente continuava a olhar para o lado",
+   "state_id": "cc06cdda-67e5-48be-9142-fe47dce5e2d1",
+   "porque": "corpo diferente: east 5.9%",
    "limite": 5.0
   },
   {
@@ -206,9 +206,8 @@
    "n": 29,
    "pt": "Japonês: pele clara-amarelada, olhos rasgados, cabelo preto liso em tigela, cara oval",
    "en": "Japanese, East Asian eyes, straight black bowl-cut hair, oval face, light skin",
-   "estado": "a gerar",
-   "state_id": "2160901b-7112-4739-bfe8-23f13b192fc3",
-   "porque": "de frente estava a olhar para o lado"
+   "estado": "feita",
+   "state_id": "2160901b-7112-4739-bfe8-23f13b192fc3"
   },
   {
    "n": 30,
