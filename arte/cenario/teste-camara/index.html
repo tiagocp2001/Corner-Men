@@ -50,7 +50,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
       <button id="camP" type="button">Testes</button>
     </div>
     <div class="ctrl" id="mov" aria-label="Movimento">
-      <button type="button" data-m="auto" aria-pressed="true">Livre</button><button type="button" data-m="ft">Frente/trás</button><button type="button" data-m="lados">De lado</button><button type="button" data-m="parado">Parados</button><button type="button" data-m="jab">Jab</button>
+      <button type="button" data-m="auto" aria-pressed="true">Livre</button><button type="button" data-m="ft">Frente/trás</button><button type="button" data-m="lados">De lado</button><button type="button" data-m="parado">Parados</button><button type="button" data-m="jab">Jab</button><button type="button" data-m="jab" data-g="direto">Direto</button>
     </div>
     <div class="ctrl" id="jvs" aria-label="Vista do jab">
       <button type="button" data-j="todas">Todas</button><button type="button" data-j="0">1</button><button type="button" data-j="1">2</button><button type="button" data-j="2">3</button><button type="button" data-j="3">4</button><button type="button" data-j="4">5</button><button type="button" data-j="5">6</button><button type="button" data-j="6">7</button><button type="button" data-j="7">8</button>
@@ -74,7 +74,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     P:  { el: 20, dist: 5.5, fov: 34, txt: 'Perto dos pugilistas e a segui-los, para ver bem as animações.' },
     E:  { el: 34, dist: 25,   fov: 46, txt: 'Cenário completo, visto do nosso lado: o ringue, o público, as portas dos balneários ao fundo.' }
   };
-  var cam = 'D', MOV = 'auto', JV = 3, jTimer = 5000, JFIX = null;
+  var cam = 'D', MOV = 'auto', JV = 3, jTimer = 5000, JFIX = null, GOLPE = 'jab';
   var SCALE = 1 / Math.min(3, window.devicePixelRatio || 1); // resolução total do ecrã (nítido); os bonecos continuam em pixel art
 
   var cv = document.getElementById('cv');
@@ -200,7 +200,9 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
       loader.load(url, function (t) { t.magFilter = THREE.NearestFilter; t.minFilter = THREE.NearestFilter; t.generateMipmaps = false; ok(t); });
     });
   }
-  Promise.all([tex('lutador-a.png'), tex('lutador-b.png'), tex('fas2.png'), tex('jab-a.png'), fetch('jab-vistas.json').then(function (r) { return r.json(); }).catch(function () { return [3]; })]).then(function (T) { JVS = T[4]; arranca(T[0], T[1], T[2], T[3]); });
+  Promise.all([tex('lutador-a.png'), tex('lutador-b.png'), tex('fas2.png'), tex('jab-a.png'), fetch('jab-vistas.json').then(function (r) { return r.json(); }).catch(function () { return [3]; }), tex('direto-a.png'), fetch('direto-vistas.json').then(function (r) { return r.json(); }).catch(function () { return []; })]).then(function (T) { JVS = T[4]; DVS = T[6]; TD = T[5]; arranca(T[0], T[1], T[2], T[3]); });
+  var DVS = [], TD = null;
+  function vistasG() { return GOLPE === 'direto' ? DVS : JVS; }
   var JVS = [3];
   function arranca(TA, TB, TF, TJ) {
 
@@ -226,6 +228,10 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   A.matG = A.s.material;
   A.matJ = new THREE.MeshBasicMaterial({ map: A.tj, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide });
   A.jab = null; A.proxJab = 1500;
+  // direto (PixelLab, por esqueleto): ~0,56 s (docs/pesquisa-direto.md); vistas feitas em direto-vistas.json
+  var DDUR = [90, 80, 50, 60, 90, 60, 70, 60];
+  A.td = TD.clone(); A.td.needsUpdate = true; A.td.repeat.set(1 / 8, 1 / 8);
+  A.matD = new THREE.MeshBasicMaterial({ map: A.td, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide });
   B.f = 5;
   function vista(L) {
     var to = new THREE.Vector2(camera.position.x - L.pos.x, camera.position.z - L.pos.z).normalize();
@@ -240,16 +246,18 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     if (L.matJ && MOV === 'jab') v = JV;                  // teste do jab: o Rui sempre na vista escolhida (4 ou 2)
     if (L.jab) {                                          // a dar o jab: os pés ficam, depois volta ao saltitar
       var jm = JMULT[JV] || 1;                              // algumas vistas parecem mais rápidas: abrandam
-      L.jab.acc += dt; while (L.jab && L.jab.acc > JDUR[L.jab.f] * jm) { L.jab.acc -= JDUR[L.jab.f] * jm; L.jab.f++; if (L.jab.f >= 8) L.jab = null; }
+      var DU = L.jab.g === 'direto' ? DDUR : JDUR;
+      L.jab.acc += dt; while (L.jab && L.jab.acc > DU[L.jab.f] * jm) { L.jab.acc -= DU[L.jab.f] * jm; L.jab.f++; if (L.jab.f >= 8) L.jab = null; }
       if (L.jab) {
-        L.s.material = L.matJ; L.tj.offset.set(L.jab.f / 8, 1 - (JV + 1) / 8); L.s.scale.x = 1.85 * 64 / 60;
+        var dir = L.jab.g === 'direto', tx = dir ? L.td : L.tj;
+        L.s.material = dir ? L.matD : L.matJ; tx.offset.set(L.jab.f / 8, 1 - (JV + 1) / 8); L.s.scale.x = 1.85 * 64 / 60;
         acaba(L); return;
       }
       L.s.material = L.matG; L.s.scale.x = 1.85 * 40 / 60; L.f = 0; L.acc = 0;
     }
     L.acc += dt; while (L.acc > DUR[L.f]) { L.acc -= DUR[L.f]; L.f = (L.f + 1) % 12; }
     if (L.matJ) L.proxJab -= dt;
-    if (L.matJ && MOV === 'jab' && L.f === 0 && L.proxJab <= 0) { L.jab = { f: 0, acc: 0 }; L.proxJab = 1800 + Math.random() * 1200; poeLutador(L, 0); return; }
+    if (L.matJ && MOV === 'jab' && L.f === 0 && L.proxJab <= 0 && vistasG().indexOf(JV) >= 0) { L.jab = { f: 0, acc: 0, g: GOLPE }; L.proxJab = 1800 + Math.random() * 1200; poeLutador(L, 0); return; }
     // para onde se está a mexer, em relação ao adversário: guarda, frente, trás, esquerda ou direita
     if (L.prev && dt > 0) L.vel.lerp(new THREE.Vector2((L.pos.x - L.prev.x) / dt * 1000, (L.pos.z - L.prev.z) / dt * 1000), Math.min(1, dt * 0.01));
     L.prev = L.pos.clone();
@@ -390,12 +398,12 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   ['TV', 'D', 'E', 'P'].forEach(function (k) { document.getElementById('cam' + k).addEventListener('click', function () { escolhe(k); }); });
   function marcaJ(t) { document.querySelectorAll('#jvs button').forEach(function (o) { o.setAttribute('aria-pressed', MOV === 'jab' && o.dataset.j === t ? 'true' : 'false'); }); }
   document.querySelectorAll('#jvs button').forEach(function (b) { b.addEventListener('click', function () {   // escolher a vista do jab (liga o modo Jab)
-    JFIX = b.dataset.j === 'todas' ? null : +b.dataset.j; jTimer = 0; MOV = 'jab';
-    document.querySelectorAll('#mov button').forEach(function (o) { o.setAttribute('aria-pressed', o.dataset.m === 'jab' ? 'true' : 'false'); });
+    JFIX = b.dataset.j === 'todas' ? null : +b.dataset.j; jTimer = 0; MOV = 'jab';   // fica o golpe que estava escolhido
+    document.querySelectorAll('#mov button').forEach(function (o) { o.setAttribute('aria-pressed', o.dataset.m === 'jab' && (o.dataset.g || 'jab') === GOLPE ? 'true' : 'false'); });
     marcaJ(b.dataset.j);
   }); });
   document.querySelectorAll('#mov button').forEach(function (b) { b.addEventListener('click', function () {
-    MOV = b.dataset.m; if (MOV === 'jab') { jTimer = 0; JFIX = null; } else verVista.textContent = ''; marcaJ('todas');
+    MOV = b.dataset.m; GOLPE = b.dataset.g || 'jab'; if (MOV === 'jab') { jTimer = 0; JFIX = null; } else verVista.textContent = ''; marcaJ('todas');
     document.querySelectorAll('#mov button').forEach(function (o) { o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
   }); });
   escolhe('D');
@@ -427,9 +435,9 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
       var u = 1.0 * Math.sin(tm * 0.0006); cx = -Math.cos(ang) * u; cz = -Math.sin(ang) * u;
     } else if (MOV === 'jab') {                           // o Rui roda pelas vistas com jab, 5 s em cada
       if (JFIX !== null) JV = JFIX;
-      else { jTimer -= dt; if (jTimer <= 0) { JV = JVS[(JVS.indexOf(JV) + 1) % JVS.length]; jTimer = 5000; } }   // passa pelas vistas que já têm jab
+      else { var VS = vistasG(); jTimer -= dt; if (jTimer <= 0 && VS.length) { JV = VS[(VS.indexOf(JV) + 1) % VS.length]; jTimer = 5000; } }   // passa pelas vistas que já têm este golpe
       var fa = VANG[JV] * Math.PI / 180;                   // o Rui virado para onde essa vista olha
-      ang = Math.atan2(-Math.cos(fa), -Math.sin(fa)); verVista.textContent = 'Jab na vista ' + (JV + 1);
+      ang = Math.atan2(-Math.cos(fa), -Math.sin(fa)); verVista.textContent = (GOLPE === 'direto' ? 'Direto' : 'Jab') + ' na vista ' + (JV + 1) + (vistasG().indexOf(JV) < 0 ? ' (ainda não feito)' : '');
     } else if (MOV === 'lados') {                         // rodam um à volta do outro
       ang += dt * 0.0012 * (Math.sin(tm * 0.0004) > 0 ? 1 : -1);   // para um lado ~8 s, depois para o outro
     }
