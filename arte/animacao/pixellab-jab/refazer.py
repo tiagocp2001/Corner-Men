@@ -13,7 +13,7 @@ def direcao(gr):
         th = math.radians(gr); I = [J.LS[0] - 0.19 * math.sin(th), J.LS[1] + 0.19 * math.cos(th), 0.228]
         for q, k in zip(req['poses'], J.K): q['left_hand'] = [round(J.R0[j] + (I[j] - J.R0[j]) * k, 3) for j in range(3)]
     return f
-pedidos = [(0, 'a', direcao(55)), (0, 'b', direcao(65)), (7, 'a', lambda r: None), (7, 'b', lambda r: None)]
+pedidos = [(7, 'c', lambda r: None), (7, 'd', direcao(30)), (7, 'e', direcao(60))]
 feitos = [(k, n, versao(k, n, f)) for k, n, f in pedidos]
 for _ in range(4): J.mcp('wait_for_jobs', {'timeout_seconds': 300})
 t = J.mcp('get_character', {'character_id': J.CHAR})
