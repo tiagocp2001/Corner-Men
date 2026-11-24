@@ -72,80 +72,97 @@
    "n": 10,
    "pt": "Crista: pele morena-clara, cabelo curto com crista no meio, orelhas salientes",
    "en": "short hair with a small mohawk strip in the middle, slightly big ears, light tan skin",
-   "estado": "a gerar",
-   "state_id": "dbcc2c0d-dee6-448b-92d4-1eb1ea1d78d0"
+   "estado": "repetir",
+   "state_id": "dbcc2c0d-dee6-448b-92d4-1eb1ea1d78d0",
+   "porque": "corpo diferente: north-west 4.1%"
   },
   {
    "n": 11,
    "pt": "Bigode: pele morena, cabelo preto curto, bigode fino, sobrancelhas juntas",
    "en": "short black hair, thin moustache, joined thick eyebrows, tan skin",
-   "estado": "por fazer"
+   "estado": "feita",
+   "state_id": "f0d05e01-9245-40ae-a381-a0b26f8c6e0c"
   },
   {
    "n": 12,
    "pt": "Caracóis: pele clara, caracóis castanhos médios, maçãs do rosto marcadas",
    "en": "medium brown curls, high cheekbones, fair skin",
-   "estado": "por fazer"
+   "estado": "feita",
+   "state_id": "23e68064-ac44-46fd-99be-897dcfe31d49"
   },
   {
    "n": 13,
    "pt": "Cabo-verdiano: pele castanha-escura, rapado com risca desenhada, nariz largo, lábios grossos",
    "en": "Cape Verdean, very short hair with a shaved line design, broad nose, full lips, dark brown skin",
-   "estado": "por fazer"
+   "estado": "repetir",
+   "state_id": "49ee0880-4234-42f4-9398-2c157fb25dcb",
+   "porque": "corpo diferente: south 3.9%"
   },
   {
    "n": 14,
    "pt": "Angolano: pele escura, tranças curtas rentes à cabeça, cara redonda",
    "en": "Angolan, short cornrow braids close to the head, round face, confident look, dark skin",
-   "estado": "por fazer"
+   "estado": "feita",
+   "state_id": "33b43592-fd89-48ec-bcbe-69d501a48e3f"
   },
   {
    "n": 15,
    "pt": "Rabo de cavalo: pele morena, cabelo preto liso comprido preso atrás, cara angulosa",
    "en": "long straight black hair tied back in a ponytail, angular face, tan skin",
-   "estado": "por fazer"
+   "estado": "feita",
+   "state_id": "96820095-61a1-4745-8817-ef27178a6dd5"
   },
   {
    "n": 16,
    "pt": "Nariz partido: pele clara, cabelo louro curto, nariz torto de boxe",
    "en": "short blond hair, crooked broken boxer nose, light eyebrows, fair skin",
-   "estado": "por fazer"
+   "estado": "feita",
+   "state_id": "c8039d55-7d56-4815-8b91-7a4c3bbbfc01"
   },
   {
    "n": 17,
    "pt": "Nórdico: pele muito clara e rosada, louro quase branco rapado, olhos azuis, cara comprida",
    "en": "Scandinavian, very pale pinkish skin, platinum blond buzz cut, light blue eyes, long face",
-   "estado": "por fazer"
+   "estado": "repetir",
+   "state_id": "263a9708-8b57-4976-acec-01f4a43ded61",
+   "porque": "corpo diferente: south 9.0%, south-east 8.2%, east 12.9%, north-east 14.4%, north 13.9%, north-west 9.4%, west 9.7%, south-west 9.1%"
   },
   {
    "n": 18,
    "pt": "Irlandês: pele clara com sardas, cabelo ruivo curto, barba ruiva curta, bochechas rosadas",
    "en": "Irish, short red hair, short red beard, freckles, rosy cheeks, pale skin",
-   "estado": "por fazer"
+   "estado": "repetir",
+   "state_id": "eed5706f-27cd-4e54-8768-cf9af240207a",
+   "porque": "corpo diferente: south 11.6%, south-east 11.3%, east 23.4%, north-east 30.4%, north 27.2%, north-west 23.7%, west 17.4%, south-west 13.3%"
   },
   {
    "n": 19,
    "pt": "Italiano: pele azeitonada, cabelo preto para trás com gel, nariz aquilino, maxilar forte",
    "en": "Italian, black hair slicked back with gel, aquiline nose, strong jaw, olive skin",
-   "estado": "por fazer"
+   "estado": "feita",
+   "state_id": "d6a3e5b5-a2ed-4644-adad-26f354d7084e"
   },
   {
    "n": 20,
    "pt": "Espanhol: pele morena-clara, cabelo castanho curto, barba de três dias",
    "en": "Spanish, short brown hair, three-day stubble, dark eyebrows, light olive skin",
-   "estado": "por fazer"
+   "estado": "feita",
+   "state_id": "b7272394-ea3b-48ec-8019-5b6501f60574"
   },
   {
    "n": 21,
    "pt": "Russo: pele clara, rapado, cara larga, maçãs do rosto altas, olhos pequenos e claros",
    "en": "Russian, shaved head, wide face, high cheekbones, small light eyes, fair skin",
-   "estado": "por fazer"
+   "estado": "repetir",
+   "state_id": "bd952d29-847f-4419-83e9-0e0c4cfaf825",
+   "porque": "corpo diferente: south 9.0%, south-east 9.6%, east 15.1%, north-east 16.0%, north 15.7%, north-west 11.3%, west 11.3%, south-west 10.6%"
   },
   {
    "n": 22,
    "pt": "Alemão: pele clara, cabelo louro curto com risca, cara estreita, queixo pontiagudo",
    "en": "German, short blond hair with side part, narrow face, pointed chin, fair skin",
-   "estado": "por fazer"
+   "estado": "a gerar",
+   "state_id": "7e7f86c7-a6a8-46c9-9cf6-35400277978a"
   },
   {
    "n": 23,

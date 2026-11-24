@@ -52,6 +52,9 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     <div class="ctrl" id="mov" aria-label="Movimento">
       <button type="button" data-m="auto" aria-pressed="true">Livre</button><button type="button" data-m="ft">Frente/trás</button><button type="button" data-m="lados">De lado</button><button type="button" data-m="parado">Parados</button><button type="button" data-m="jab">Jab</button>
     </div>
+    <div class="ctrl" id="jvs" aria-label="Vista do jab">
+      <button type="button" data-j="todas">Todas</button><button type="button" data-j="0">1</button><button type="button" data-j="1">2</button><button type="button" data-j="2">3</button><button type="button" data-j="3">4</button><button type="button" data-j="4">5</button><button type="button" data-j="5">6</button><button type="button" data-j="6">7</button><button type="button" data-j="7">8</button>
+    </div>
     <div class="ctrl" id="dst" aria-label="Distância">
       <button type="button" data-d="livre">Livre</button><button type="button" data-d="1.2">Fora</button><button type="button" data-d="0.95">Longe</button><button type="button" data-d="0.85" aria-pressed="true">Meio</button><button type="button" data-d="0.75">Perto</button>
     </div>
@@ -71,7 +74,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     P:  { el: 20, dist: 5.5, fov: 34, txt: 'Perto dos pugilistas e a segui-los, para ver bem as animações.' },
     E:  { el: 34, dist: 25,   fov: 46, txt: 'Cenário completo, visto do nosso lado: o ringue, o público, as portas dos balneários ao fundo.' }
   };
-  var cam = 'D', MOV = 'auto', JV = 3, jTimer = 5000;
+  var cam = 'D', MOV = 'auto', JV = 3, jTimer = 5000, JFIX = null;
   var SCALE = 1 / Math.min(3, window.devicePixelRatio || 1); // resolução total do ecrã (nítido); os bonecos continuam em pixel art
 
   var cv = document.getElementById('cv');
@@ -383,8 +386,14 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     desc.innerHTML = '<b>' + NOMES[k] + '</b>' + CAMS[k].txt;
   }
   ['TV', 'D', 'E', 'P'].forEach(function (k) { document.getElementById('cam' + k).addEventListener('click', function () { escolhe(k); }); });
+  function marcaJ(t) { document.querySelectorAll('#jvs button').forEach(function (o) { o.setAttribute('aria-pressed', MOV === 'jab' && o.dataset.j === t ? 'true' : 'false'); }); }
+  document.querySelectorAll('#jvs button').forEach(function (b) { b.addEventListener('click', function () {   // escolher a vista do jab (liga o modo Jab)
+    JFIX = b.dataset.j === 'todas' ? null : +b.dataset.j; jTimer = 0; MOV = 'jab';
+    document.querySelectorAll('#mov button').forEach(function (o) { o.setAttribute('aria-pressed', o.dataset.m === 'jab' ? 'true' : 'false'); });
+    marcaJ(b.dataset.j);
+  }); });
   document.querySelectorAll('#mov button').forEach(function (b) { b.addEventListener('click', function () {
-    MOV = b.dataset.m; if (MOV === 'jab') jTimer = 0; else verVista.textContent = '';
+    MOV = b.dataset.m; if (MOV === 'jab') { jTimer = 0; JFIX = null; } else verVista.textContent = ''; marcaJ('todas');
     document.querySelectorAll('#mov button').forEach(function (o) { o.setAttribute('aria-pressed', o === b ? 'true' : 'false'); });
   }); });
   escolhe('D');
@@ -415,7 +424,8 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     } else if (MOV === 'ft') {                            // um avança e o outro recua, depois ao contrário
       var u = 1.0 * Math.sin(tm * 0.0006); cx = -Math.cos(ang) * u; cz = -Math.sin(ang) * u;
     } else if (MOV === 'jab') {                           // o Rui roda pelas vistas com jab, 5 s em cada
-      jTimer -= dt; if (jTimer <= 0) { JV = JVS[(JVS.indexOf(JV) + 1) % JVS.length]; jTimer = 5000; }   // passa pelas vistas que já têm jab
+      if (JFIX !== null) JV = JFIX;
+      else { jTimer -= dt; if (jTimer <= 0) { JV = JVS[(JVS.indexOf(JV) + 1) % JVS.length]; jTimer = 5000; } }   // passa pelas vistas que já têm jab
       var fa = VANG[JV] * Math.PI / 180;                   // o Rui virado para onde essa vista olha
       ang = Math.atan2(-Math.cos(fa), -Math.sin(fa)); verVista.textContent = 'Jab na vista ' + (JV + 1);
     } else if (MOV === 'lados') {                         // rodam um à volta do outro
@@ -433,7 +443,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     alvoSuave.lerp(alvo, Math.min(1, dt * 0.0012));
     poeCamara(dt);
     poeLutador(A, dt); poeLutador(B, dt);
-    var verAtras = MOV === 'jab' && (JV <= 2 || JV === 7);            // na vista 2 o adversário fica à frente do Rui: meio transparente para se ver o jab
+    var verAtras = MOV === 'jab' && (JV <= 2 || JV === 7);   // o adversário fica à frente do Rui nestas vistas            // na vista 2 o adversário fica à frente do Rui: meio transparente para se ver o jab
     B.s.material.opacity = verAtras ? 0.45 : 1; B.s.material.alphaTest = verAtras ? 0.2 : 0.5; B.s.material.needsUpdate = true;
     fans.forEach(function (F) {
       if (F.fixo) return;
