@@ -261,26 +261,29 @@
    "n": 36,
    "pt": "Argentino: pele clara, cabelo castanho ondulado curto, barba fina aparada, nariz comprido",
    "en": "Argentine, short wavy brown hair, thin trimmed beard, long nose, fair skin",
-   "estado": "a gerar",
+   "estado": "feita",
    "state_id": "eceb0f56-1a66-45dd-a1d7-b9cd9a9f1668"
   },
   {
    "n": 37,
    "pt": "Indiano: pele castanha, cabelo preto ondulado curto, sobrancelhas grossas, bigode",
    "en": "Indian, short wavy black hair, thick eyebrows, moustache, brown skin",
-   "estado": "por fazer"
+   "estado": "feita",
+   "state_id": "c84136f0-179d-4a04-8cc6-37da751295f3"
   },
   {
    "n": 38,
    "pt": "Marroquino: pele morena, rapado, barba preta aparada, nariz aquilino",
    "en": "Moroccan, shaved head, trimmed black beard, aquiline nose, tan brown skin",
-   "estado": "por fazer"
+   "estado": "feita",
+   "state_id": "f6117e2a-2817-46c0-a7ec-a5c174dfae17"
   },
   {
    "n": 39,
    "pt": "Cubano: pele castanha-clara, cabelo preto com pente rapado, cara angulosa",
    "en": "Cuban, black hair with a shaved comb-line part, angular face, light brown skin",
-   "estado": "por fazer"
+   "estado": "a gerar",
+   "state_id": "0faa5b8b-8866-48e9-b8e8-0fb94fdd870b"
   },
   {
    "n": 40,
