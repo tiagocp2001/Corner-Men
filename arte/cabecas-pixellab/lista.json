@@ -28,43 +28,52 @@
    "n": 4,
    "pt": "Ruivo: pele muito clara com sardas, cabelo ruivo curto, cara redonda",
    "en": "short ginger red hair, freckles on nose and cheeks, round face, very pale skin",
-   "estado": "por fazer"
+   "estado": "repetir",
+   "state_id": "1cb16d79-1f6f-4e23-88fe-651b92e19749",
+   "porque": "corpo diferente: south 13.7%, south-east 12.7%, east 26.1%, north-east 30.4%, north 26.0%, north-west 25.6%, west 18.2%, south-west 15.9%"
   },
   {
    "n": 5,
    "pt": "O certinho: pele clara, cabelo preto liso com risca ao lado, cara estreita",
    "en": "neat straight black hair with side parting, narrow face, thin chin, fair skin",
-   "estado": "por fazer"
+   "estado": "feita",
+   "state_id": "aa460d03-3cbc-40bc-859e-4f7edb3c5cdc"
   },
   {
    "n": 6,
    "pt": "O duro: pele morena, rapado à máquina, sobrancelha cortada por cicatriz, maxilar largo",
    "en": "buzz cut black hair, scar cutting one eyebrow, wide jaw, tan skin",
-   "estado": "por fazer"
+   "estado": "feita",
+   "state_id": "c0874a7b-44da-45b7-867f-6070e246c516"
   },
   {
    "n": 7,
    "pt": "O surfista: pele clara bronzeada, cabelo louro-escuro desarrumado, nariz arrebitado",
    "en": "messy dark blond hair, upturned nose, lightly tanned fair skin",
-   "estado": "por fazer"
+   "estado": "feita",
+   "state_id": "b91245c7-32b8-4608-985f-4697db760479"
   },
   {
    "n": 8,
    "pt": "Carrapito: pele morena, cabelo preto num carrapito pequeno, barba rala no queixo",
    "en": "black hair tied in a small top knot, sparse chin beard, tan skin",
-   "estado": "por fazer"
+   "estado": "feita",
+   "state_id": "5fef1515-086b-4861-a770-ea0c1d7c21fe"
   },
   {
    "n": 9,
    "pt": "O miúdo: pele clara, franja castanha a cair na testa, cara de menino",
    "en": "brown fringe hair falling over forehead, boyish soft face, fair skin",
-   "estado": "por fazer"
+   "estado": "repetir",
+   "state_id": "b00f74eb-ac0f-4558-a1db-649d23f407ae",
+   "porque": "corpo diferente: south 3.4%"
   },
   {
    "n": 10,
    "pt": "Crista: pele morena-clara, cabelo curto com crista no meio, orelhas salientes",
    "en": "short hair with a small mohawk strip in the middle, slightly big ears, light tan skin",
-   "estado": "por fazer"
+   "estado": "a gerar",
+   "state_id": "dbcc2c0d-dee6-448b-92d4-1eb1ea1d78d0"
   },
   {
    "n": 11,
