@@ -221,7 +221,7 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   var A = lutador(TA), B = lutador(TB);
   // jab do Rui (PixelLab, por esqueleto): 8 fotogramas de 64x60 por vista
   var JDUR = [80, 50, 50, 60, 130, 70, 80, 80];
-  var JMULT = [1.4, 1, 1, 1, 1, 1, 1, 1];               // vista 1 mais lenta (a luva vem para a câmara e passa depressa)   // 0,6 s (o real é ~0,4 s: um pouco mais devagar para se ver)
+  var JMULT = [1, 1, 1, 1, 1, 1, 1, 1];                 // velocidade por vista (1 = igual às outras)   // 0,6 s (o real é ~0,4 s: um pouco mais devagar para se ver)
   A.tj = TJ.clone(); A.tj.needsUpdate = true; A.tj.repeat.set(1 / 8, 1 / 8);   // uma linha por vista (as que já existem estão em jab-vistas.json)
   A.matG = A.s.material;
   A.matJ = new THREE.MeshBasicMaterial({ map: A.tj, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide });
