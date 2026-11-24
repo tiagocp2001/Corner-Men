@@ -14,6 +14,7 @@ LEAN = [[1, 0], [2, -1], [4, -3], [6, -4], [6, -4], [4, -3], [2, -1], [0, 0]]   
 PEL = [[-0.002, 0.003, -0.002], [-0.006, 0.008, -0.004], [-0.010, 0.013, -0.006], [-0.012, 0.016, -0.007],
        [-0.012, 0.016, -0.007], [-0.008, 0.010, -0.005], [-0.003, 0.004, -0.002], [0, 0, 0]]
 NOD = [1, 2, 4, 5, 5, 3, 1, 0]
+TURN = [0, 5, 12, 15, 15, 10, 4, 0]   # o corpo inteiro roda com os pés (o motor só deixa 20° nas ancas): + = vira o lado direito para a frente?
 def rot(v, th):                                   # roda [direita, frente] para a esquerda dele
     return [v[0] * math.cos(th) - v[1] * math.sin(th), v[0] * math.sin(th) + v[1] * math.cos(th)]
 def pedido(k):
@@ -27,11 +28,15 @@ def pedido(k):
                   'right_hand': [round(R0[j] + (alvo[j] - R0[j]) * f, 3) for j in range(3)],
                   'left_hand': [-0.083, 0.09, 0.2],                     # a luva da frente volta para a cara
                   'right_elbow': [0.3, 0, -1] if f < 0.6 else [0.5, 0.1, -0.6], 'left_elbow': [-0.3, 0, -1],
-                  'right_foot': [round(-0.012 * f, 3), round(0.008 * f, 3), 0]})   # o pé de trás gira para dentro (aproximação)
+                  'right_foot': [round(-0.012 * f, 3), round(0.008 * f, 3), 0]})
+        if os.environ.get('GIRO'):                # o corpo todo roda para a esquerda dele (lado direito à frente);
+            t = TURN[i] * float(os.environ['GIRO']); P[-1]['turn'] = t   # as mãos vão com ele, por isso o alvo roda ao contrário
+            h = P[-1]['right_hand']; hr = rot(h[:2], math.radians(-t)); P[-1]['right_hand'] = [round(hr[0], 3), round(hr[1], 3), h[2]]
+            P[-1]['_alvo_mundo'] = h   # o pé de trás gira para dentro (aproximação)
     return dict(character_id=J.CHAR, mode='skeleton-v3', directions=[J.ORD[k][0]], frame_count=8, poses=P,
                 action_description='boxer throws a straight right hand (cross) from an orthodox guard: rear foot pivots, hips and shoulders rotate, left glove back to the face')
 def verifica(req, k):
-    h = req['poses'][3]['right_hand']; a = math.degrees(math.atan2(-h[0], h[1]))
+    q = req['poses'][3]; h = q.get('_alvo_mundo', q['right_hand']); a = math.degrees(math.atan2(-h[0], h[1]))
     return abs(a - J.desvio(k)) < 3, round(a)
 if __name__ == '__main__':
     k = int(sys.argv[1]) - 1; nomes = sys.argv[2:] or ['a']
@@ -40,7 +45,7 @@ if __name__ == '__main__':
     if not ok: sys.exit(1)
     if os.environ.get('SO_VERIFICA'): sys.exit(0)
     for n in nomes:
-        r = dict(req); r['animation_name'] = f'Direto vista {k + 1} {n}'; print(J.mcp('animate_character', r).splitlines()[:1])
+        r = dict(req); r['poses'] = [{a: b for a, b in q.items() if not a.startswith('_')} for q in req['poses']]; r['animation_name'] = f'Direto vista {k + 1} {n}'; print(J.mcp('animate_character', r).splitlines()[:1])
     for _ in range(len(nomes) + 1): J.mcp('wait_for_jobs', {'timeout_seconds': 300})
     t = J.mcp('get_character', {'character_id': J.CHAR}); d = J.ORD[k][0]
     for n in nomes:
