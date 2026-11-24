@@ -26,7 +26,7 @@ def pedido(k):
         P.append({'frame': i + 1, 'pelvis': [round(pr[0], 4), round(pr[1], 4), PEL[i][2]], 'hips': HIPS[i], 'chest': CHEST[i],
                   'lean': LEAN[i], 'head': [round(8 * s), NOD[i]],
                   'right_hand': [round(R0[j] + (alvo[j] - R0[j]) * f, 3) for j in range(3)],
-                  'left_hand': [-0.083, 0.09, 0.2],                     # a luva da frente volta para a cara
+                  'left_hand': [round(v, 3) for v in rot([-0.083, 0.09], th)] + [0.2],   # a luva da frente volta para a cara, virada para onde ele olha
                   'right_elbow': [0.3, 0, -1] if f < 0.6 else [0.5, 0.1, -0.6], 'left_elbow': [-0.3, 0, -1],
                   'right_foot': [round(-0.012 * f, 3), round(0.008 * f, 3), 0]})
         if os.environ.get('GIRO'):                # o corpo todo roda para a esquerda dele (lado direito à frente);
@@ -60,7 +60,8 @@ if __name__ == '__main__':
     if sys.argv[1:] == ['atlas']: atlas(); sys.exit(0)
     k = int(sys.argv[1]) - 1; nomes = sys.argv[2:] or ['a']
     req = pedido(k); ok, a = verifica(req, k)
-    print(f'vista {k + 1}: direto a {a}° (o olhar está a {J.desvio(k)}°)', 'OK' if ok else 'ERRADO')
+    l = req['poses'][3]['left_hand']; al = round(math.degrees(math.atan2(-l[0], l[1])))
+    print(f'vista {k + 1}: direto a {a}° (o olhar está a {J.desvio(k)}°)', 'OK' if ok else 'ERRADO', f'| luva esquerda à cara a {al}° (na guarda: 43° + desvio)')
     if not ok: sys.exit(1)
     if os.environ.get('SO_VERIFICA'): sys.exit(0)
     for n in nomes:
