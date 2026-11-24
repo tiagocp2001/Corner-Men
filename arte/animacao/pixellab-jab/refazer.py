@@ -13,7 +13,14 @@ def direcao(gr):
         th = math.radians(gr); I = [J.LS[0] - 0.19 * math.sin(th), J.LS[1] + 0.19 * math.cos(th), 0.228]
         for q, k in zip(req['poses'], J.K): q['left_hand'] = [round(J.R0[j] + (I[j] - J.R0[j]) * k, 3) for j in range(3)]
     return f
-pedidos = [(7, 'c', lambda r: None), (7, 'd', direcao(30)), (7, 'e', direcao(60))]
+def preso(gr):
+    d = direcao(gr)
+    def f(req):
+        d(req)
+        for q in req['poses']:            # corpo preso: só o braço do jab se mexe
+            q['chest'] = 0; q['hips'] = 0; q['head'] = [0, 0]; q['lean'] = [0, 0]; q['pelvis'] = [0, 0, 0]
+    return f
+pedidos = [(0, 'p1', preso(55)), (0, 'p2', preso(55))]
 feitos = [(k, n, versao(k, n, f)) for k, n, f in pedidos]
 for _ in range(4): J.mcp('wait_for_jobs', {'timeout_seconds': 300})
 t = J.mcp('get_character', {'character_id': J.CHAR})
