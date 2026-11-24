@@ -1,5 +1,10 @@
 {
  "1": "south-esqueleto-2",
- "3": "east-esqueleto",
- "5": "north-jab"
+ "3": "east-jab",
+ "5": "north-jab",
+ "6": "north-west-jab",
+ "0": "south-west-jab",
+ "4": "north-east-jab",
+ "7": "west-jab",
+ "2": "south-east-jab"
 }
