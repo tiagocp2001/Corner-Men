@@ -22,7 +22,8 @@ def luva(a):
 def cabeca(vista, n):
     """cabeça (e pescoço) do atleta n nesta vista: tudo acima da linha dos ombros que não seja luva"""
     a = img(os.path.join(CAB, '00-corpo-base' if n == 0 else f'{n:02d}', vista + '.png'))
-    m = (a[..., 3] > 0) & ~luva(a); m[S[vista]:, :] = False
+    from scipy import ndimage
+    m = (a[..., 3] > 0) & ~ndimage.binary_dilation(luva(a), iterations=1); m[S[vista]:, :] = False   # sem a luva nem o contorno dela
     return a, m
 def scale2x(a):
     """Scale2x (EPX): aumenta 2x a pixel art sem desfocar"""
@@ -127,13 +128,15 @@ def troca(fr, vista, n, palpite=None):
     if sc < 0.8: _, dx, dy, ang = acha_contorno(fr0, ab, mb)         # cabeça muito inclinada: pela forma
     fr = pinta(fr0, mapa_pele(vista, n))                 # só depois troca a cor da pele do corpo
     out = fr.copy(); H, W = fr.shape[:2]
-    global LUVA_FR; LUVA_FR = luva(fr)
+    global LUVA_FR
+    from scipy import ndimage as _n0
+    LUVA_FR = _n0.binary_dilation(luva(fr), iterations=1)   # luvas e o contorno delas ficam sempre
     a2, m2 = roda(ab, mb, ang)                          # apaga a cabeça base (com folga), menos as luvas
     if ang: m2 = m2 | roda(ab, mb, ang // 2)[1] | mb     # inclinada: apaga também por onde ela passou (restos da cara antiga)
     ys, xs = np.nonzero(m2)
     for y, x in zip(ys, xs):
-        for dy2 in (-2, -1, 0, 1, 2):
-            for dx2 in (-2, -1, 0, 1, 2):
+        for dy2 in (-1, 0, 1):
+            for dx2 in (-1, 0, 1):
                 Y, X = y + dy + dy2, x + dx + dx2
                 if 0 <= Y < H and 0 <= X < W and Y < S_v - PESC + dy and not LUVA_FR[Y, X]: out[Y, X] = 0
     ys0, xs0 = np.nonzero(roda(ab, mb, ang)[1])          # a cabeça antiga inteira (também abaixo dos ombros: o queixo inclinado)
@@ -163,7 +166,7 @@ def troca(fr, vista, n, palpite=None):
             if Y < 1 or X < 1 or Y >= H - 1 or X >= W - 1: continue
             viz = [out[Y + a, X + b] for a, b in ((1, 0), (-1, 0), (0, -1), (0, 1)) if out[Y + a, X + b, 3]]
             pele = [q for q in viz if not escuro(q) and not verm(q)]
-            if len(viz) >= 2 and pele: out[Y, X] = pele[0]
+            if len(viz) >= 3 and pele: out[Y, X] = pele[0]
 
     for _ in range(3):                                   # riscos da cara antiga que ficaram no pescoço
         for Y in range(1, min(H - 1, S_v + dy + 6)):
@@ -172,9 +175,6 @@ def troca(fr, vista, n, palpite=None):
                 if nova[Y, X] or LUVA_FR[Y, X] or not escuro(p): continue
                 cima, baixo, esq, dir_ = out[Y - 1, X], out[Y + 1, X], out[Y, X - 1], out[Y, X + 1]
                 if not cima[3] and not baixo[3]: out[Y, X] = 0; continue           # risco solto fora do corpo
-                if cima[3] and baixo[3] and esq[3] and dir_[3]:                     # risco por dentro da pele
-                    viz = [q for q in (baixo, cima, esq, dir_) if not escuro(q) and not (q[0] > 150 and q[0] > 2 * q[1])]
-                    if viz: out[Y, X] = viz[0]
     from scipy import ndimage                            # limpa restos soltos (1-3 píxeis) da cara antiga
     lab, k = ndimage.label(out[..., 3] > 0, structure=np.ones((3, 3)))
     if k > 1:
