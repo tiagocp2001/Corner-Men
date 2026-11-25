@@ -10,6 +10,7 @@
   "7": "west-jab-c"
  },
  "direto": {
-  "1": "south-direto-e"
+  "1": "south-direto-e",
+  "0": "south-west-direto-d"
  }
 }
