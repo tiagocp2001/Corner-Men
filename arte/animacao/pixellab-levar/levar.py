@@ -20,10 +20,10 @@ def pedido(g, k):
     for i, (hr, hi, tf, dz, dy) in enumerate(T[g]):
         pz = rot([0, dz * H * EXAG], th)            # recua para trás do olhar
         P.append({'frame': i + 1, 'pelvis': [round(pz[0], 4), round(pz[1], 4), round(dy * H * EXAG, 4)],
-                  'lean': [round(tf * EXAG, 1), 0], 'head': [round(-hr * EXAG_CAB + (8 * J.desvio(k) / 45)), round(hi * EXAG_CAB)],
+                  'lean': [round(tf * EXAG, 1), 0], 'head': [round((-hr * EXAG_CAB if not os.environ.get('SEM_RODAR') else 0) + (8 * J.desvio(k) / 45)), round(hi * EXAG_CAB)],
                   'hips': 0, 'chest': 0})
     return dict(character_id=J.CHAR, mode='skeleton-v3', directions=[J.ORD[k][0]], frame_count=8, poses=P,
-                action_description='boxer in guard recoils as if rocked: head snaps back with the chin up, the upper body leans back a little, then he recovers to the same guard; feet stay planted. Draw only this one boxer and nothing else: no other arms, hands or gloves, no punch, no effects, no motion lines, no particles; the face keeps the same features, eyes open, serious')
+                action_description='boxer in guard recoils as if rocked: head snaps back with the chin up, the upper body leans back a little, then he recovers to the same guard; feet stay planted. Draw only this one boxer and nothing else: no other arms, hands or gloves, no punch, no effects, no motion lines, no particles; the face keeps the same features, eyes open, serious; the whole body keeps facing the same direction and never turns around')
 def verifica(req, k):
     """o corpo tem de recuar para trás do olhar: ângulo da pelvis no recuo máximo = desvio + 180°"""
     p = min(req['poses'], key=lambda q: q['pelvis'][1] * math.cos(math.radians(J.desvio(k))) - q['pelvis'][0] * math.sin(math.radians(J.desvio(k))))['pelvis']
