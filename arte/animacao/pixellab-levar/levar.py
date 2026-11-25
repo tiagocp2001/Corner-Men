@@ -23,7 +23,7 @@ def pedido(g, k):
                   'lean': [round(tf * EXAG, 1), 0], 'head': [round(-hr * EXAG_CAB + (8 * J.desvio(k) / 45)), round(hi * EXAG_CAB)],
                   'hips': 0, 'chest': 0})
     return dict(character_id=J.CHAR, mode='skeleton-v3', directions=[J.ORD[k][0]], frame_count=8, poses=P,
-                action_description=f'boxer in guard gets hit in the face by a {"jab" if g == "jab" else "hard straight punch"} from the front: head snaps back, chin up, then recovers to guard; feet stay planted. Only this boxer: no opponent, no other glove or arm, no visual effects, no motion lines, no sweat or blood particles; the face keeps the same features, eyes open, serious')
+                action_description='boxer in guard recoils as if rocked: head snaps back with the chin up, the upper body leans back a little, then he recovers to the same guard; feet stay planted. Draw only this one boxer and nothing else: no other arms, hands or gloves, no punch, no effects, no motion lines, no particles; the face keeps the same features, eyes open, serious')
 def verifica(req, k):
     """o corpo tem de recuar para trás do olhar: ângulo da pelvis no recuo máximo = desvio + 180°"""
     p = min(req['poses'], key=lambda q: q['pelvis'][1] * math.cos(math.radians(J.desvio(k))) - q['pelvis'][0] * math.sin(math.radians(J.desvio(k))))['pelvis']
