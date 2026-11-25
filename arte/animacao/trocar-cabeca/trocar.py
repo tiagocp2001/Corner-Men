@@ -52,6 +52,25 @@ def roda(a, m, ang):
                 from collections import Counter
                 out[y, x] = Counter(blk).most_common(1)[0][0]; om[y, x] = True
     return out, om
+def corta(a, m, ang, sinal=1):
+    """inclina sem redesenhar: 3 cortes (desloca linhas e colunas inteiras), os píxeis e as cores ficam iguais"""
+    if not ang: return a, m
+    t = math.radians(ang) * sinal; A, B = -math.tan(t / 2), math.sin(t)
+    h, w = m.shape; P = 24; b = np.zeros((h + 2 * P, w + 2 * P, 4), a.dtype); mm = np.zeros(b.shape[:2], bool)
+    b[P:P + h, P:P + w] = a; mm[P:P + h, P:P + w] = m; b[~mm] = 0
+    cy, cx = S_v + P, w / 2 + P
+    def sx(b, mm):
+        o = np.zeros_like(b); om = np.zeros_like(mm)
+        for y in range(b.shape[0]):
+            k = int(round(A * (y - cy))); o[y] = np.roll(b[y], k, 0); om[y] = np.roll(mm[y], k, 0)
+        return o, om
+    def sy(b, mm):
+        o = np.zeros_like(b); om = np.zeros_like(mm)
+        for x in range(b.shape[1]):
+            k = int(round(B * (x - cx))); o[:, x] = np.roll(b[:, x], k, 0); om[:, x] = np.roll(mm[:, x], k, 0)
+        return o, om
+    b, mm = sx(b, mm); b, mm = sy(b, mm); b, mm = sx(b, mm)
+    return b[P:P + h, P:P + w], mm[P:P + h, P:P + w]
 def acha(fr, ab, mb):
     """onde está a cabeça base neste fotograma: melhor (dx, dy, ângulo)"""
     best = None; H, W = fr.shape[:2]; ys, xs = np.nonzero(mb)
@@ -103,6 +122,7 @@ def troca(fr, vista, n, palpite=None):
     fr0 = fr
     ab, mb = cabeca(vista, 0); an, mn = cabeca(vista, n)
     global S_v; S_v = S[vista]
+    PESC = int(os.environ.get('PESC', 0))                # linhas do pescoço que ficam as do fotograma (só trocam de cor)
     sc, dx, dy, ang = acha(fr0, ab, mb)                  # procura a cabeça base nas cores originais
     if sc < 0.8: _, dx, dy, ang = acha_contorno(fr0, ab, mb)         # cabeça muito inclinada: pela forma
     fr = pinta(fr0, mapa_pele(vista, n))                 # só depois troca a cor da pele do corpo
@@ -115,12 +135,46 @@ def troca(fr, vista, n, palpite=None):
         for dy2 in (-2, -1, 0, 1, 2):
             for dx2 in (-2, -1, 0, 1, 2):
                 Y, X = y + dy + dy2, x + dx + dx2
-                if 0 <= Y < H and 0 <= X < W and Y < S_v + dy and not LUVA_FR[Y, X]: out[Y, X] = 0
-    an2, mn2 = roda(an, mn, ang)                        # põe a cabeça nova
+                if 0 <= Y < H and 0 <= X < W and Y < S_v - PESC + dy and not LUVA_FR[Y, X]: out[Y, X] = 0
+    ys0, xs0 = np.nonzero(roda(ab, mb, ang)[1])          # a cabeça antiga inteira (também abaixo dos ombros: o queixo inclinado)
+    for y, x in zip(ys0, xs0):
+        Y, X = y + dy, x + dx
+        if 0 <= Y < H and 0 <= X < W and not LUVA_FR[Y, X]: out[Y, X] = 0
+    from scipy import ndimage as _nd
+    sil = _nd.binary_dilation(fr0[..., 3] > 0, iterations=1)
+    if MODO == 'corte':                                  # inclina por cortes (sem redesenhar a cara)
+        ref = roda(ab, mb, ang)[1]
+        sg = max((1, -1), key=lambda g: (corta(ab, mb, ang, g)[1] & ref).sum())
+        lim = int(os.environ.get('LIM', 12)); an2, mn2 = corta(an, mn, max(-lim, min(lim, ang)), sg)   # pouca inclinação fica limpa
+    else: an2, mn2 = roda(an, mn, ang)                  # põe a cabeça nova
+    if PESC: mn2 = mn2.copy(); mn2[S_v - PESC:, :] = False
     ys, xs = np.nonzero(mn2)
     for y, x in zip(ys, xs):
         Y, X = y + dy, x + dx
-        if 0 <= Y < H and 0 <= X < W and not LUVA_FR[Y, X]: out[Y, X] = an2[y, x]
+        if 0 <= Y < H and 0 <= X < W and not LUVA_FR[Y, X]:
+            if y >= S_v - 4 and not sil[Y, X]: continue         # pescoço: só junto ao corpo do fotograma (sem riscos soltos)
+            out[Y, X] = an2[y, x]
+    nova = np.zeros(out.shape[:2], bool); nova[np.clip(ys + dy, 0, H - 1), np.clip(xs + dx, 0, W - 1)] = True
+    escuro = lambda p: p[3] and p[:3].sum() < 200
+    verm = lambda q: q[0] > 150 and q[0] > 2 * q[1]
+    for _ in range(4):                                   # buracos onde estava a cabeça antiga (o fotograma tinha desenho): tapa com a pele à volta
+        buraco = (out[..., 3] == 0) & (fr0[..., 3] > 0)
+        for Y, X in zip(*np.nonzero(buraco)):
+            if Y < 1 or X < 1 or Y >= H - 1 or X >= W - 1: continue
+            viz = [out[Y + a, X + b] for a, b in ((1, 0), (-1, 0), (0, -1), (0, 1)) if out[Y + a, X + b, 3]]
+            pele = [q for q in viz if not escuro(q) and not verm(q)]
+            if len(viz) >= 2 and pele: out[Y, X] = pele[0]
+
+    for _ in range(3):                                   # riscos da cara antiga que ficaram no pescoço
+        for Y in range(1, min(H - 1, S_v + dy + 6)):
+            for X in range(1, W - 1):
+                p = out[Y, X]
+                if nova[Y, X] or LUVA_FR[Y, X] or not escuro(p): continue
+                cima, baixo, esq, dir_ = out[Y - 1, X], out[Y + 1, X], out[Y, X - 1], out[Y, X + 1]
+                if not cima[3] and not baixo[3]: out[Y, X] = 0; continue           # risco solto fora do corpo
+                if cima[3] and baixo[3] and esq[3] and dir_[3]:                     # risco por dentro da pele
+                    viz = [q for q in (baixo, cima, esq, dir_) if not escuro(q) and not (q[0] > 150 and q[0] > 2 * q[1])]
+                    if viz: out[Y, X] = viz[0]
     from scipy import ndimage                            # limpa restos soltos (1-3 píxeis) da cara antiga
     lab, k = ndimage.label(out[..., 3] > 0, structure=np.ones((3, 3)))
     if k > 1:
@@ -128,6 +182,7 @@ def troca(fr, vista, n, palpite=None):
         for i, t in enumerate(tam):
             if t <= 3: out[lab == i + 1] = 0
     return out, sc, ang
+MODO = os.environ.get('MODO', 'corte')
 if __name__ == '__main__':
     pasta, vista, n, saida = sys.argv[1], sys.argv[2], int(sys.argv[3]), sys.argv[4]
     os.makedirs(saida, exist_ok=True)
