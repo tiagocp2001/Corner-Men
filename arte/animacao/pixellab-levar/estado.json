@@ -13,6 +13,7 @@
   "1": "south-direto-e",
   "0": "south-west-direto-d",
   "2": "south-east-direto-c",
-  "3": "east-direto-c"
+  "3": "east-direto-c",
+  "4": "north-east-direto-e"
  }
 }
