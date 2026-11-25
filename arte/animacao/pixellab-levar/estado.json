@@ -11,6 +11,7 @@
  },
  "direto": {
   "1": "south-direto-e",
-  "0": "south-west-direto-d"
+  "0": "south-west-direto-d",
+  "2": "south-east-direto-c"
  }
 }
