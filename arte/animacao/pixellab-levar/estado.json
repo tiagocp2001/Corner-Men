@@ -1,7 +1,8 @@
 {
  "jab": {
   "1": "south-jab-a",
-  "0": "south-west-jab-b"
+  "0": "south-west-jab-b",
+  "2": "south-east-jab-d"
  },
  "direto": {
   "1": "south-direto-e"

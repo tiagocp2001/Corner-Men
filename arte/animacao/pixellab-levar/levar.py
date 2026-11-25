@@ -37,10 +37,15 @@ if __name__ == '__main__':
     if not ok or os.environ.get('SO_VERIFICA'): sys.exit(0 if ok else 1)
     for n in nomes:
         r = dict(req); r['animation_name'] = f'Levar {g} vista {k + 1} {n}'; J.mcp('animate_character', r)
-    for _ in range(len(nomes) + 1): J.mcp('wait_for_jobs', {'timeout_seconds': 300})
-    t = J.mcp('get_character', {'character_id': J.CHAR}); d = J.ORD[k][0]
+    d = J.ORD[k][0]
+    def m_(t, n): return re.search(d + r': (https://backblaze\S+\{i\}\.png\S*) \(i=0\.\.(\d+)\)', t[t.find(f'Levar {g} vista {k + 1} {n}'):])
+    for _ in range(8):                                # espera até todas as versões estarem prontas (e aguenta falhas de rede)
+        try:
+            J.mcp('wait_for_jobs', {'timeout_seconds': 300}); t = J.mcp('get_character', {'character_id': J.CHAR})
+            if all(m_(t, n) for n in nomes): break
+        except Exception as e: print('rede:', e)
     for n in nomes:
-        i = t.find(f'Levar {g} vista {k + 1} {n}'); m = re.search(d + r': (https://backblaze\S+\{i\}\.png\S*) \(i=0\.\.(\d+)\)', t[i:])
+        m = m_(t, n)
         pasta = os.path.join(AQUI, f'{d}-{g}-{n}'); os.makedirs(pasta, exist_ok=True)
         for j in range(int(m.group(2)) + 1): subprocess.run(['curl', '-sS', '--retry', '5', '--retry-all-errors', '-o', os.path.join(pasta, f'{j}.png'), m.group(1).replace('{i}', str(j))], check=True)
         json.dump(req, open(os.path.join(pasta, 'pedido.json'), 'w')); print('feita', pasta)
