@@ -10,7 +10,15 @@ CAB = os.path.join(AQUI, '..', '..', 'cabecas-pixellab', 'variantes')
 DIRS = ['south', 'south-east', 'east', 'north-east', 'north', 'north-west', 'west', 'south-west']
 S = dict(zip(DIRS, [28, 26, 24, 25, 27, 26, 25, 26]))       # linha dos ombros em cada vista (verificar.py)
 def img(p): return np.array(Image.open(p).convert('RGBA')).astype(int)
-def luva(a): return (a[..., 3] > 0) & (a[..., 0] > 130) & (a[..., 0] > 2 * a[..., 1])
+def luva(a):
+    """luvas: manchas vermelhas GRANDES (os lábios, as orelhas e pontos da cara, pequenos, não contam)"""
+    r = (a[..., 3] > 0) & (a[..., 0] > 130) & (a[..., 0] > 2 * a[..., 1])
+    if r.size <= 4: return r
+    from scipy import ndimage
+    lab, k = ndimage.label(r, structure=np.ones((3, 3)))
+    if not k: return r
+    tam = ndimage.sum(r, lab, range(1, k + 1)); grandes = np.isin(lab, [i + 1 for i, t in enumerate(tam) if t >= 12])
+    return grandes
 def cabeca(vista, n):
     """cabeça (e pescoço) do atleta n nesta vista: tudo acima da linha dos ombros que não seja luva"""
     a = img(os.path.join(CAB, '00-corpo-base' if n == 0 else f'{n:02d}', vista + '.png'))
@@ -92,12 +100,14 @@ def acha_contorno(fr, ab, mb):
                 if best is None or sc > best[0]: best = (sc, dx, dy, ang)
     return best
 def troca(fr, vista, n, palpite=None):
-    fr = pinta(fr, mapa_pele(vista, n))
+    fr0 = fr
     ab, mb = cabeca(vista, 0); an, mn = cabeca(vista, n)
     global S_v; S_v = S[vista]
-    sc, dx, dy, ang = acha(fr, ab, mb)
-    if sc < 0.8: _, dx, dy, ang = acha_contorno(fr, ab, mb)          # cabeça muito inclinada: pela forma
+    sc, dx, dy, ang = acha(fr0, ab, mb)                  # procura a cabeça base nas cores originais
+    if sc < 0.8: _, dx, dy, ang = acha_contorno(fr0, ab, mb)         # cabeça muito inclinada: pela forma
+    fr = pinta(fr0, mapa_pele(vista, n))                 # só depois troca a cor da pele do corpo
     out = fr.copy(); H, W = fr.shape[:2]
+    global LUVA_FR; LUVA_FR = luva(fr)
     a2, m2 = roda(ab, mb, ang)                          # apaga a cabeça base (com folga), menos as luvas
     if ang: m2 = m2 | roda(ab, mb, ang // 2)[1] | mb     # inclinada: apaga também por onde ela passou (restos da cara antiga)
     ys, xs = np.nonzero(m2)
@@ -105,12 +115,12 @@ def troca(fr, vista, n, palpite=None):
         for dy2 in (-2, -1, 0, 1, 2):
             for dx2 in (-2, -1, 0, 1, 2):
                 Y, X = y + dy + dy2, x + dx + dx2
-                if 0 <= Y < H and 0 <= X < W and Y < S_v + dy and not luva(fr[Y:Y + 1, X:X + 1])[0, 0]: out[Y, X] = 0
+                if 0 <= Y < H and 0 <= X < W and Y < S_v + dy and not LUVA_FR[Y, X]: out[Y, X] = 0
     an2, mn2 = roda(an, mn, ang)                        # põe a cabeça nova
     ys, xs = np.nonzero(mn2)
     for y, x in zip(ys, xs):
         Y, X = y + dy, x + dx
-        if 0 <= Y < H and 0 <= X < W and not luva(fr[Y:Y + 1, X:X + 1])[0, 0]: out[Y, X] = an2[y, x]
+        if 0 <= Y < H and 0 <= X < W and not LUVA_FR[Y, X]: out[Y, X] = an2[y, x]
     from scipy import ndimage                            # limpa restos soltos (1-3 píxeis) da cara antiga
     lab, k = ndimage.label(out[..., 3] > 0, structure=np.ones((3, 3)))
     if k > 1:
