@@ -22,7 +22,7 @@ def pedido(g, k):
                   'lean': [round(tf * EXAG, 1), 0], 'head': [round(-hr * EXAG + (8 * J.desvio(k) / 45)), round(hi * EXAG)],
                   'hips': 0, 'chest': 0})
     return dict(character_id=J.CHAR, mode='skeleton-v3', directions=[J.ORD[k][0]], frame_count=8, poses=P,
-                action_description=f'boxer in guard gets hit in the face by a {"jab" if g == "jab" else "hard straight punch"} from the front: head snaps back, chin up, then recovers to guard; feet stay planted')
+                action_description=f'boxer in guard gets hit in the face by a {"jab" if g == "jab" else "hard straight punch"} from the front: head snaps back, chin up, then recovers to guard; feet stay planted. Only this boxer: no opponent, no other glove or arm, no visual effects, no motion lines, no sweat or blood particles')
 def verifica(req, k):
     """o corpo tem de recuar para trás do olhar: ângulo da pelvis no recuo máximo = desvio + 180°"""
     p = min(req['poses'], key=lambda q: q['pelvis'][1] * math.cos(math.radians(J.desvio(k))) - q['pelvis'][0] * math.sin(math.radians(J.desvio(k))))['pelvis']
