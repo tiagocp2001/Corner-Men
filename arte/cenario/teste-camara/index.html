@@ -200,7 +200,8 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
       loader.load(url, function (t) { t.magFilter = THREE.NearestFilter; t.minFilter = THREE.NearestFilter; t.generateMipmaps = false; ok(t); });
     });
   }
-  Promise.all([tex('lutador-a.png'), tex('lutador-b.png'), tex('fas2.png'), tex('jab-a.png'), fetch('jab-vistas.json').then(function (r) { return r.json(); }).catch(function () { return [3]; }), tex('direto-a.png'), fetch('direto-vistas.json').then(function (r) { return r.json(); }).catch(function () { return []; })]).then(function (T) { JVS = T[4]; DVS = T[6]; TD = T[5]; arranca(T[0], T[1], T[2], T[3]); });
+  Promise.all([tex('lutador-a.png'), tex('lutador-b.png'), tex('fas2.png'), tex('jab-a.png'), fetch('jab-vistas.json').then(function (r) { return r.json(); }).catch(function () { return [3]; }), tex('direto-a.png'), fetch('direto-vistas.json').then(function (r) { return r.json(); }).catch(function () { return []; }), tex('levar-jab-b.png'), tex('levar-direto-b.png')]).then(function (T) { JVS = T[4]; DVS = T[6]; TD = T[5]; TLJ = T[7]; TLD = T[8]; arranca(T[0], T[1], T[2], T[3]); });
+  var TLJ = null, TLD = null, HS = 0;
   var DVS = [], TD = null;
   function vistasG() { return GOLPE === 'direto' ? DVS : JVS; }
   var JVS = [3];
@@ -230,6 +231,15 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   A.jab = null; A.proxJab = 1500;
   // direto (PixelLab, por esqueleto): ~0,56 s (docs/pesquisa-direto.md); vistas feitas em direto-vistas.json
   var DDUR = [90, 80, 50, 60, 90, 60, 70, 60];
+  // reação do adversário a levar o golpe (docs/pesquisa-levar-golpe.md): começa no fotograma do contacto (1), que já é o "congelar"
+  var RDUR = { jab: [40, 80, 40, 50, 50, 50, 60, 60], direto: [40, 110, 50, 60, 60, 70, 70, 70] };
+  var HITSTOP = { jab: 80, direto: 110 };               // os dois congelam um instante quando o golpe acerta
+  var ALC = { jab: 0.62, direto: 0.88 };                // até onde chega a luva (m, do meio do corpo)
+  var AVANCO = [0, 0.3, 0.7, 1, 1, 0.6, 0.25, 0];       // quanto do passo já foi dado em cada fotograma do golpe
+  B.trs = { jab: TLJ.clone(), direto: TLD.clone() }; B.mats = {};
+  ['jab', 'direto'].forEach(function (g) { B.trs[g].needsUpdate = true; B.trs[g].repeat.set(1 / 8, 1 / 8);
+    B.mats[g] = new THREE.MeshBasicMaterial({ map: B.trs[g], transparent: true, alphaTest: 0.5, side: THREE.DoubleSide }); });
+  B.matG = B.s.material; B.reac = null;
   A.td = TD.clone(); A.td.needsUpdate = true; A.td.repeat.set(1 / 8, 1 / 8);
   A.matD = new THREE.MeshBasicMaterial({ map: A.td, transparent: true, alphaTest: 0.5, side: THREE.DoubleSide });
   B.f = 5;
@@ -243,11 +253,23 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
   }
   function poeLutador(L, dt) {
     var v = vista(L);
+    if (L.reac) {                                         // a levar o golpe (por agora só o adversário tem estas animações)
+      var RD = RDUR[L.reac.g];
+      L.reac.acc += dt; while (L.reac && L.reac.acc > RD[L.reac.f]) { L.reac.acc -= RD[L.reac.f]; L.reac.f++; if (L.reac.f >= 8) L.reac = null; }
+      if (L.reac) {
+        L.s.material = L.mats[L.reac.g]; L.trs[L.reac.g].offset.set(L.reac.f / 8, 1 - (v + 1) / 8); L.s.scale.x = 1.85 * 64 / 60;
+        acaba(L); return;
+      }
+      L.s.material = L.matG; L.s.scale.x = 1.85 * 40 / 60; L.f = 0; L.acc = 0;
+    }
     if (L.matJ && MOV === 'jab') v = JV;                  // teste do jab: o Rui sempre na vista escolhida (4 ou 2)
     if (L.jab) {                                          // a dar o jab: os pés ficam, depois volta ao saltitar
       var jm = JMULT[JV] || 1;                              // algumas vistas parecem mais rápidas: abrandam
       var DU = L.jab.g === 'direto' ? DDUR : JDUR;
       L.jab.acc += dt; while (L.jab && L.jab.acc > DU[L.jab.f] * jm) { L.jab.acc -= DU[L.jab.f] * jm; L.jab.f++; if (L.jab.f >= 8) L.jab = null; }
+      if (L.jab && L.jab.f >= 3 && !L.jab.acertou) {      // a luva chega à cara: congela e o adversário reage
+        L.jab.acertou = true; HS = HITSTOP[L.jab.g]; B.reac = { g: L.jab.g, f: 1, acc: 0 };
+      }
       if (L.jab) {
         var dir = L.jab.g === 'direto', tx = dir ? L.td : L.tj;
         L.s.material = dir ? L.matD : L.matJ; tx.offset.set(L.jab.f / 8, 1 - (JV + 1) / 8); L.s.scale.x = 1.85 * 64 / 60;
@@ -452,7 +474,12 @@ body { background: var(--bg); color: var(--fg); font-family: var(--f-text); font
     alvo.set((A.pos.x + B.pos.x) / 2, H + 0.9, (A.pos.z + B.pos.z) / 2);
     alvoSuave.lerp(alvo, Math.min(1, dt * 0.0012));
     poeCamara(dt);
-    poeLutador(A, dt); poeLutador(B, dt);
+    if (A.jab) {                                          // o atacante dá um passo só o preciso para a luva chegar à cara
+      var dd = Math.hypot(B.pos.x - A.pos.x, B.pos.z - A.pos.z), falta = Math.max(0, Math.min(0.3, dd - ALC[A.jab.g] - 0.15));
+      var av = falta * AVANCO[A.jab.f]; A.pos.x += A.face.x * av; A.pos.z += A.face.y * av;
+    }
+    var dtL = HS > 0 ? 0 : dt; HS = Math.max(0, HS - dt);   // congelar: os dois param um instante quando o golpe acerta
+    poeLutador(A, dtL); poeLutador(B, dtL);
     var verAtras = MOV === 'jab' && (JV <= 2 || JV === 7);   // o adversário fica à frente do Rui nestas vistas            // na vista 2 o adversário fica à frente do Rui: meio transparente para se ver o jab
     B.s.material.opacity = verAtras ? 0.45 : 1; B.s.material.alphaTest = verAtras ? 0.2 : 0.5; B.s.material.needsUpdate = true;
     fans.forEach(function (F) {

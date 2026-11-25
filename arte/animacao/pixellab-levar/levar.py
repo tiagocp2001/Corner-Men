@@ -49,3 +49,28 @@ if __name__ == '__main__':
         pasta = os.path.join(AQUI, f'{d}-{g}-{n}'); os.makedirs(pasta, exist_ok=True)
         for j in range(int(m.group(2)) + 1): subprocess.run(['curl', '-sS', '--retry', '5', '--retry-all-errors', '-o', os.path.join(pasta, f'{j}.png'), m.group(1).replace('{i}', str(j))], check=True)
         json.dump(req, open(os.path.join(pasta, 'pedido.json'), 'w')); print('feita', pasta)
+
+def atlas(g, azul=True):
+    """atlas do ringue para o adversário: 8 linhas (vistas) x 8 fotogramas de 64x60, luvas azuis, alinhados pelos pés"""
+    from PIL import Image
+    import numpy as np
+    sys.path.insert(0, os.path.join(J.REPO, 'arte', 'cenario', 'teste-camara'))
+    e = json.load(open(os.path.join(AQUI, 'estado.json')))[g]
+    out = Image.new('RGBA', (64 * 8, 60 * 8)); P = 12
+    for kk, pasta in e.items():
+        k = int(kk); n = J.ORD[k][0]; pasta = os.path.join(AQUI, pasta)
+        base = np.array(Image.open(os.path.join(J.CAB, 'variantes', '00-corpo-base', n + '.png')).convert('RGBA')).astype(int)
+        f0 = np.array(Image.open(os.path.join(pasta, '0.png')).convert('RGBA')).astype(int)
+        _, ox, oy = min((np.abs(f0[y:y + 60, x:x + 40] - base).sum(), x, y) for y in range(0, f0.shape[0] - 59) for x in range(0, f0.shape[1] - 39))
+        y0 = np.nonzero(f0[:, :, 3])[0].max()
+        for j in range(8):
+            f = Image.open(os.path.join(pasta, f'{j}.png')).convert('RGBA'); dy = np.nonzero(np.array(f)[:, :, 3])[0].max() - y0
+            c = f.crop((ox - P, oy + dy, ox + 40 + P, oy + dy + 60))
+            if azul:
+                a = np.array(c).astype(int); r, gg, b = a[:, :, 0], a[:, :, 1], a[:, :, 2]
+                m = (a[:, :, 3] > 0) & (r > 110) & (r > 2.2 * gg) & (r > b + 40)
+                a[m, 0], a[m, 1], a[m, 2] = (r[m] * .16).astype(int), (r[m] * .42).astype(int), np.minimum(255, (r[m] * 1.02)).astype(int)
+                c = Image.fromarray(a.astype('uint8'), 'RGBA')
+            out.paste(c, (j * 64, k * 60))
+    T = os.path.join(J.REPO, 'arte', 'cenario', 'teste-camara')
+    out.save(os.path.join(T, f'levar-{g}-b.png')); print('atlas', g, sorted(int(k) for k in e))
